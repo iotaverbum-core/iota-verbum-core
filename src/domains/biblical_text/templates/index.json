@@ -1,0 +1,11 @@
+{
+  "version": "biblical_v1",
+  "templates": [
+    "generic.json",
+    "nt.json",
+    "john.json",
+    "john_1_14.json",
+    "john_1_35_39.json",
+    "john_4_7_10.json"
+  ]
+}

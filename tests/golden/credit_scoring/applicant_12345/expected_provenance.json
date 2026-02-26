@@ -1,0 +1,14 @@
+{
+  "context": {},
+  "domain": "credit_scoring",
+  "extraction_sha256": "5262ad45d58b1ebdab2f84f671560ea65a04a6820881d44bdc34e0062d03e33a",
+  "generator_sha256": "8f84713a864cddcab1b352347080f1df7e51dd4d6e2931265943bf47f2030ac3",
+  "input_meta": {
+    "input_file": "data/credit/sample_applicant.json"
+  },
+  "input_ref": "applicant_12345",
+  "input_sha256": "f2e8c628a9935e2f50c3bc2efadccb80a75e81d3fa968fca762a57281f4f78cf",
+  "output_sha256": "30221b68db9d4f1e9939b83b4984ac811b3c2b356b0ebe49adc193c77ffcefc8",
+  "template_path": "domains/credit_scoring/templates/generic.json",
+  "template_sha256": "568dff4806ef6e052a0f890bc9bf91af7f87e90cac3aee6671fc9b8a5277f5f0"
+}

@@ -1,0 +1,16 @@
+{
+  "template_id": "biblical_nt_v1",
+  "witness_prompts": [
+    "The text moves through {action_1}. Where do you see that in your moment?",
+    "What does {frame_1} bring into focus?",
+    "Where does the scene place tension or invitation?",
+    "What is being asked of your attention here?",
+    "How might you respond without rushing?"
+  ],
+  "prayer": "Lord Jesus, be near as we read and respond.\nForm a steady witness in us.",
+  "safety_notes": [
+    "No moralizing beyond the passage.",
+    "Keep questions invitational.",
+    "Stay attentive to verbs and turns."
+  ]
+}

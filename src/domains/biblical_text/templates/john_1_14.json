@@ -1,0 +1,16 @@
+{
+  "template_id": "john_1_14_biblical_v1",
+  "witness_prompts": [
+    "Where do you notice {action_1} or {action_2} in this scene?",
+    "The passage names glory, grace, truth. What does that ask of you?",
+    "How does {frame_1} shape your moment?",
+    "What does \"dwelt among us\" suggest about presence here?",
+    "Where are you invited to witness what is seen?"
+  ],
+  "prayer": "Word who became flesh, dwell with us.\nLet grace and truth steady our seeing.",
+  "safety_notes": [
+    "Avoid certainty claims.",
+    "Keep language grounded in the text."
+  ]
+}
+

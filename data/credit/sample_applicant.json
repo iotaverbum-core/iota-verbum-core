@@ -1,0 +1,9 @@
+{
+  "applicant_id": "12345",
+  "income_monthly": 4200,
+  "debt_monthly": 2100,
+  "credit_score": 620,
+  "delinquencies_12mo": 1,
+  "employment_months": 36,
+  "collateral": null
+}

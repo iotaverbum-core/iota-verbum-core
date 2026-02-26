@@ -1,0 +1,15 @@
+{
+  "template_id": "john_1_35_39_biblical_v1",
+  "witness_prompts": [
+    "The scene begins with {action_1}. What kind of time does that place you in today?",
+    "Where do you notice the move to {action_2} or {action_3}?",
+    "The text asks, '{question_1}'. How would you answer honestly?",
+    "What does staying mean in your moment right now?",
+    "He says, 'Come and you will see.' What small step could you take?"
+  ],
+  "prayer": "Lord Jesus, teach me to ask and to follow.\nGive me grace to come and see.",
+  "safety_notes": [
+    "Keep questions invitational.",
+    "Do not rush from seeking to certainty."
+  ]
+}

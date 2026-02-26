@@ -1,0 +1,15 @@
+{
+  "template_id": "biblical_john_v1",
+  "witness_prompts": [
+    "John's scene carries {action_1}. Where do you notice it?",
+    "What does {frame_1} tell you about the movement of the passage?",
+    "Where is the scene asking for attention?",
+    "What part of the passage feels weighty?",
+    "How do you respond to {movement_1}?"
+  ],
+  "prayer": "Word of life, keep our seeing clear and steady.",
+  "safety_notes": [
+    "Stay close to the passage's language.",
+    "Invite gentle reflection."
+  ]
+}

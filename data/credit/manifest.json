@@ -1,0 +1,12 @@
+{
+  "dataset": "applicant_records_2026Q1",
+  "schema_version": "1.0",
+  "records": {
+    "applicant_12345": {
+      "file": "sample_applicant.json",
+      "sha256": "c29c1b1998f5c537028d6c80995b13087c7421f07d39857c0da8c55ac6abc6eb",
+      "record_type": "personal_loan_application",
+      "validated": true
+    }
+  }
+}

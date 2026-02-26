@@ -1,0 +1,15 @@
+{
+  "template_id": "john_4_7_10_biblical_v1",
+  "witness_prompts": [
+    "Jesus begins with '{utterance_1}'. What does that request surface for you?",
+    "The woman asks, '{question_1}'. What boundary does that name?",
+    "Jesus responds, '{utterance_3}'. What is being offered?",
+    "Where do you notice movement from need to gift?",
+    "What would it mean to receive without bargaining?"
+  ],
+  "prayer": "Jesus, You ask without coercion.\nTeach me to name my questions.\nLet Your gift become living water in me.",
+  "safety_notes": [
+    "Honor boundaries named in the passage.",
+    "Do not rush the exchange; let the dialogue breathe."
+  ]
+}

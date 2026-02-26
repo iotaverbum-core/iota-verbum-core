@@ -1,0 +1,17 @@
+{
+  "patient_id": "67890",
+  "encounter_date": "2026-02-15",
+  "vitals": {
+    "blood_pressure_systolic": 148,
+    "blood_pressure_diastolic": 94,
+    "heart_rate": 78,
+    "temperature": 98.4,
+    "o2_saturation": 97
+  },
+  "chief_complaint": "headache, dizziness for 3 days",
+  "history": {
+    "family_hypertension": true,
+    "smoking": false,
+    "age": 52
+  }
+}

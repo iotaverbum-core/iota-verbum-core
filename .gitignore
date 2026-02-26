@@ -1,0 +1,25 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyd
+*.so
+*.egg-info/
+.eggs/
+
+# Virtual environments
+.venv/
+.venv-*/
+
+# Test artifacts
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Outputs
+outputs/
+results/
+logs/
+
+# OS
+.DS_Store
+Thumbs.db

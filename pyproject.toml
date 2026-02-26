@@ -1,0 +1,42 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "iota-verbum-core"
+version = "0.1.0"
+description = "Deterministic core engine, schemas, and audit utilities for Iota Verbum."
+readme = "README.md"
+requires-python = ">=3.11"
+license = { text = "MIT" }
+authors = [{ name = "Iota Verbum" }]
+dependencies = []
+
+[project.optional-dependencies]
+dev = [
+  "pytest==8.3.4",
+  "ruff==0.6.8",
+]
+
+[project.scripts]
+deterministic-ai = "deterministic_ai:main"
+
+[tool.setuptools]
+package-dir = { "" = "src" }
+py-modules = ["deterministic_ai"]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+include = ["core", "core.*", "domains", "domains.*"]
+
+[tool.setuptools.package-data]
+domains = ["**/*.json"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+select = ["E", "F", "I"]
+
+[tool.pytest.ini_options]
+addopts = "-q"
+testpaths = ["tests"]

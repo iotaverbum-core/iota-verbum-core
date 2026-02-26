@@ -1,0 +1,8 @@
+{
+  "template_id": "credit_generic_v1",
+  "decision": "{decision}",
+  "risk_tier": "{risk_tier}",
+  "interest_rate": "{rate}",
+  "explanation": "Application {decision} based on {evidence_1}, {evidence_2}, and {evidence_3}. Risk tier: {risk_tier}. Interest rate: {rate}. Collateral: {collateral_type}."
+}
+

@@ -1,0 +1,16 @@
+{
+  "records": {
+    "John 1:14": {
+      "file": "../../data/scripture/esv_sample/john_1_14.txt",
+      "sha256": "b768d052c8fe3ef332162b63ffaf061f15bcab59824ff3ec5104bcdcce75263b"
+    },
+    "John 1:35-39": {
+      "file": "../../data/scripture/esv_sample/john_1_35_39.txt",
+      "sha256": "13e7b11049d08b9d12a903bcc9b3a8271fc4a5fdb7d0bc84bdd835a685aadd82"
+    },
+    "John 4:7-10": {
+      "file": "../../data/scripture/esv_sample/john_4_7_10.txt",
+      "sha256": "680cf47855e8b4860c68f628cdfc35e51f5459e2fd6c2cad23fa67c1b83d6670"
+    }
+  }
+}

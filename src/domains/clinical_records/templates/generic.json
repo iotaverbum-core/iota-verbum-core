@@ -1,0 +1,4 @@
+{
+  "template_id": "clinical_generic_v1",
+  "recommendation": "Patient meets criteria for hypertension based on {evidence_bp_1} and {evidence_bp_2}. Recommend: {intervention_1}, {intervention_2}. Follow-up in {follow_up_interval}."
+}

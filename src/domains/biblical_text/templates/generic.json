@@ -1,0 +1,16 @@
+{
+  "template_id": "biblical_generic_v1",
+  "witness_prompts": [
+    "Where do you notice {action_1} in this scene?",
+    "What does {frame_1} reveal about the moment?",
+    "What question does the scene place in you?",
+    "Where might {movement_1} invite a next step?",
+    "What part of this passage asks you to stay present?"
+  ],
+  "prayer": "God of nearness, keep me attentive to what the text shows.\nTeach me to respond with honesty and care.",
+  "safety_notes": [
+    "Stay close to the text; do not speculate.",
+    "Invite, do not pressure outcomes.",
+    "Keep language grounded in observable cues."
+  ]
+}

@@ -1,0 +1,12 @@
+{
+  "dataset": "patient_records_2026Q1",
+  "schema_version": "1.0",
+  "records": {
+    "patient_67890": {
+      "file": "sample_patient_record.json",
+      "sha256": "c3fe84e74559d1a7bf68083f3e6e2097f126e1084923cfd97694e0bd5ff4546f",
+      "record_type": "outpatient_screening",
+      "validated": true
+    }
+  }
+}

@@ -21,6 +21,9 @@ jobs:
       - name: Lint
         run: |
           ruff check .
+      - name: Determinism Contract Gate
+        run: |
+          test -f docs/DETERMINISM_CONTRACT.md
       - name: Reproducibility
         run: |
           chmod +x scripts/verify_reproducibility.sh

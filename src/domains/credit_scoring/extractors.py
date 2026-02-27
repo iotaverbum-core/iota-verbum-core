@@ -1,6 +1,3 @@
-from core.extraction import normalize_input
-
-
 class CreditScoringExtractors:
     domain = "credit_scoring"
 
@@ -64,7 +61,9 @@ class CreditScoringExtractors:
             },
         ]
 
-        risk_tier = context.get("risk_tier") or ("subprime_tier3" if credit_score < 640 else "prime_tier1")
+        risk_tier = context.get("risk_tier") or (
+            "subprime_tier3" if credit_score < 640 else "prime_tier1"
+        )
         decision = "approved_conditional" if dti <= 0.55 else "denied"
         if delinq > 0 and decision == "approved_conditional":
             decision = "approved_conditional"
@@ -91,7 +90,9 @@ class CreditScoringExtractors:
     def template_fallback(self, input_ref: str, context: dict, normalized_input: dict):
         return None
 
-    def build_context(self, input_ref, input_data, normalized_input, extracted, evidence_map, context):
+    def build_context(
+        self, input_ref, input_data, normalized_input, extracted, evidence_map, context
+    ):
         return {
             "applicant_id": normalized_input.get("applicant_id"),
             "risk_tier": extracted["risk_tier"],
@@ -113,7 +114,9 @@ class CreditScoringExtractors:
             "evidence_3": f"delinquencies {extracted['delinquencies']} in 12 months",
         }
 
-    def render_output(self, input_ref, input_data, normalized_input, extracted, evidence_map, rendered, context):
+    def render_output(
+        self, input_ref, input_data, normalized_input, extracted, evidence_map, rendered, context
+    ):
         output = {
             "decision": extracted["decision"],
             "risk_tier": extracted["risk_tier"],

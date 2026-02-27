@@ -126,7 +126,9 @@ def test_golden_snapshots(tmp_path: Path):
         out_dir = tmp_path / Path(golden_dir).name
         _run(base_args + ["--out", str(out_dir)])
 
-        expected = json.loads((Path(golden_dir) / "expected_output.json").read_text(encoding="utf-8"))
+        expected = json.loads(
+            (Path(golden_dir) / "expected_output.json").read_text(encoding="utf-8")
+        )
         actual = json.loads((out_dir / "output.json").read_text(encoding="utf-8"))
         assert actual == expected
 

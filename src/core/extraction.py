@@ -165,9 +165,7 @@ def resolve_references(segments, entities, pronoun_map, lookback_sentences=2):
                     }
                 )
                 continue
-            filtered.sort(
-                key=lambda c: (seg["sentence_id"] - c["sentence_id"], -c["token_start"])
-            )
+            filtered.sort(key=lambda c: (seg["sentence_id"] - c["sentence_id"], -c["token_start"]))
             chosen = filtered[0]
             rule = "recency"
             coref_links.append(
@@ -190,7 +188,9 @@ def _sentence_for_span(segments, token_start):
     return 0
 
 
-def extract_relationships(text: str, segments, verbs, entity_patterns, pronoun_map, coref_links=None):
+def extract_relationships(
+    text: str, segments, verbs, entity_patterns, pronoun_map, coref_links=None
+):
     coref_links = coref_links or []
     frames = []
     unknown_actor_state = 0
@@ -236,7 +236,19 @@ def extract_relationships(text: str, segments, verbs, entity_patterns, pronoun_m
         indirect_object = io_match.group(2).strip() if io_match else None
 
         modifiers = []
-        prep_patterns = ["in", "on", "at", "by", "with", "among", "into", "from", "about", "that day", "the next day"]
+        prep_patterns = [
+            "in",
+            "on",
+            "at",
+            "by",
+            "with",
+            "among",
+            "into",
+            "from",
+            "about",
+            "that day",
+            "the next day",
+        ]
         for prep in prep_patterns:
             m = re.search(rf"\b{re.escape(prep)}\b[^,.;!?]*", suffix)
             if m:

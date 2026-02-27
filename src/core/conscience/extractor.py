@@ -6,9 +6,8 @@ from typing import Any
 
 from core import attestation, templates
 from domains.biblical_text.extractors import BiblicalTextExtractors
-from domains.credit_scoring.extractors import CreditScoringExtractors
 from domains.clinical_records.extractors import ClinicalRecordsExtractors
-
+from domains.credit_scoring.extractors import CreditScoringExtractors
 
 DOMAIN_REGISTRY = {
     "biblical_text": {
@@ -101,9 +100,7 @@ class GroundTruthExtractor:
             "deterministic_output": deterministic_output,
             "template": template_meta,
         }
-        ground_truth_sha = attestation.compute_sha256(
-            attestation.canonicalize_json(ground_truth)
-        )
+        ground_truth_sha = attestation.compute_sha256(attestation.canonicalize_json(ground_truth))
         ground_truth["attestation_sha256"] = ground_truth_sha
         return ground_truth
 

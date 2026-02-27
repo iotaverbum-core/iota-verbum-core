@@ -1,13 +1,13 @@
-﻿import argparse
+import argparse
 import json
 from pathlib import Path
 
+from core.attestation import sha256_bytes, sha256_text, verify_attestation
 from core.manifest import resolve_input
 from core.pipeline import DeterministicPipeline
 from domains.biblical_text.extractors import BiblicalTextExtractors
-from domains.credit_scoring.extractors import CreditScoringExtractors
 from domains.clinical_records.extractors import ClinicalRecordsExtractors
-from core.attestation import verify_attestation, sha256_bytes, sha256_text
+from domains.credit_scoring.extractors import CreditScoringExtractors
 
 
 def _find_repo_root(start: Path) -> Path:
@@ -107,7 +107,9 @@ def run_pipeline(args):
     )
 
     context = _parse_context(args.context)
-    resolved = _load_input(args.domain, args.input_ref, args.input_file, args.dataset, args.manifest)
+    resolved = _load_input(
+        args.domain, args.input_ref, args.input_file, args.dataset, args.manifest
+    )
 
     output_dir = Path(args.out)
     return pipeline.process(

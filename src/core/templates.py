@@ -1,8 +1,8 @@
-﻿import json
+import json
 import re
 from pathlib import Path
 
-from core.attestation import sha256_text, sha256_bytes
+from core.attestation import sha256_text
 
 
 def _find_repo_root(start: Path) -> Path:

@@ -1,7 +1,7 @@
 import json
 from pathlib import Path
 
-from core.attestation import sha256_text, sha256_bytes
+from core.attestation import sha256_bytes, sha256_text
 
 
 def load_manifest(path: Path) -> tuple[dict, str]:

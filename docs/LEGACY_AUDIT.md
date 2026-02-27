@@ -1,8 +1,19 @@
-# Legacy Audit (Scaffold)
+﻿# Legacy Audit
 
 ## Purpose + Scope
 
-Document the current state of the legacy repository, identify what is deprecated or missing, and outline the audit steps required to validate historical artifacts and version mappings.
+Document the verified state of legacy history availability for this repository and clarify implications for version mapping.
+
+## Current Confirmed State
+
+- Legacy repository/history: Not currently available or present in this git database.
+- v2/v3/v4: referenced historically but not recoverable from current materials.
+- Implication: `v0.1.0-core` is the canonical baseline until legacy is recovered.
+
+## Evidence (Summarized)
+
+- `git rev-list --count HEAD` returned `5`.
+- Earliest commit is `"Initial core split"`.
 
 ## What Was Split Into Core (Confirmed)
 
@@ -15,26 +26,21 @@ Document the current state of the legacy repository, identify what is deprecated
 
 ## What Remains in Legacy
 
-Unknown until assessed.
+Unknown (legacy repository not present here).
 
 ## v2/v3/v4 Meaning and Status
 
-Unknown until assessed.
-
-Where to look:
-- `tests/golden/v2`, `tests/golden/v3`, `tests/golden/v4` (if present in legacy)
-- Historical scripts or docs referencing v2/v3/v4 outputs
-- Commit history and tags
+Unknown; referenced historically but not recoverable from this repository. Do not claim support until legacy is recovered.
 
 ## Risks
 
 - Missing remotes or inaccessible history.
-- Missing tags or ambiguous version markers.
-- Non-deterministic artifacts in legacy outputs.
+- Ambiguous or missing version markers.
+- Incomplete provenance for v2/v3/v4 outputs.
 
 ## Proposed Audit Steps
 
-Run locally in legacy repo:
+Run in any recovered legacy repo:
 ```powershell
 git branch -a
 git log --oneline --decorate --graph --all
@@ -44,5 +50,6 @@ Get-ChildItem -Directory
 
 ## Decisions Needed
 
-- Merge plan for legacy PR(s).
+- Merge plan for any recovered legacy history (if found).
 - Archive plan for deprecated artifacts.
+- Official stance on v2/v3/v4 until recovery is complete.

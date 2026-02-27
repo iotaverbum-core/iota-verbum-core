@@ -1,8 +1,7 @@
 import hashlib
 from pathlib import Path
 
-from core import attestation
-from core import templates
+from core import attestation, templates
 
 
 class DeterministicPipeline:
@@ -65,7 +64,10 @@ class DeterministicPipeline:
         attestation.write_text(output_dir / "attestation.sha256", output_sha256 + "\n")
         attestation.write_text(
             output_dir / "log.txt",
-            f"deterministic_ai domain={self.domain}\nfiles_written=output.json, provenance.json, attestation.sha256, log.txt\n",
+            (
+                f"deterministic_ai domain={self.domain}\n"
+                "files_written=output.json, provenance.json, attestation.sha256, log.txt\n"
+            ),
         )
 
         return {

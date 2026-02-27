@@ -1,5 +1,5 @@
-from datetime import datetime, timedelta
 import re
+from datetime import datetime, timedelta
 
 
 class ClinicalRecordsExtractors:
@@ -79,7 +79,9 @@ class ClinicalRecordsExtractors:
     def template_fallback(self, input_ref: str, context: dict, normalized_input: dict):
         return None
 
-    def build_context(self, input_ref, input_data, normalized_input, extracted, evidence_map, context):
+    def build_context(
+        self, input_ref, input_data, normalized_input, extracted, evidence_map, context
+    ):
         encounter_date = normalized_input.get("encounter_date")
         next_date = _next_assessment(encounter_date, 30)
         return {
@@ -89,17 +91,27 @@ class ClinicalRecordsExtractors:
             "risk_age": extracted["risk_factors"][0]["value"],
             "risk_family_history": extracted["risk_factors"][1]["value"],
             "risk_lifestyle": "unknown",
-            "evidence_bp_1": f"BP {extracted['vitals']['systolic']}/{extracted['vitals']['diastolic']} mmHg",
-            "evidence_bp_2": f"BP {extracted['vitals']['systolic']}/{extracted['vitals']['diastolic']} mmHg",
+            "evidence_bp_1": (
+                f"BP {extracted['vitals']['systolic']}/{extracted['vitals']['diastolic']} mmHg"
+            ),
+            "evidence_bp_2": (
+                f"BP {extracted['vitals']['systolic']}/{extracted['vitals']['diastolic']} mmHg"
+            ),
             "intervention_1": "lifestyle modification counseling",
             "intervention_2": "repeat BP measurement",
             "follow_up_interval": "2 weeks",
-            "bp_reading_1": f"{extracted['vitals']['systolic']}/{extracted['vitals']['diastolic']} mmHg",
-            "bp_reading_2": f"{extracted['vitals']['systolic']}/{extracted['vitals']['diastolic']} mmHg",
+            "bp_reading_1": (
+                f"{extracted['vitals']['systolic']}/{extracted['vitals']['diastolic']} mmHg"
+            ),
+            "bp_reading_2": (
+                f"{extracted['vitals']['systolic']}/{extracted['vitals']['diastolic']} mmHg"
+            ),
             "next_assessment_date": next_date,
         }
 
-    def render_output(self, input_ref, input_data, normalized_input, extracted, evidence_map, rendered, context):
+    def render_output(
+        self, input_ref, input_data, normalized_input, extracted, evidence_map, rendered, context
+    ):
         return {
             "assessment": extracted["assessment"],
             "evidence_map": evidence_map,
@@ -138,5 +150,3 @@ def _next_assessment(encounter_date: str | None, days: int):
         return (date + timedelta(days=days)).strftime("%Y-%m-%d")
     except ValueError:
         return "{missing:next_assessment_date}"
-
-

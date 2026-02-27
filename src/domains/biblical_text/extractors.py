@@ -1,8 +1,6 @@
 import re
-from pathlib import Path
 
-from core.extraction import normalize_input, segment, tokenize, extract_relationships
-
+from core.extraction import extract_relationships, normalize_input, segment
 
 VERB_LEXICON = {
     "am",
@@ -108,7 +106,12 @@ def _entity_meta():
     return {
         "Jesus": {"char_id": "char_jesus", "label": "Jesus", "gender": "M", "number": "S"},
         "John": {"char_id": "char_john", "label": "John", "gender": "M", "number": "S"},
-        "disciples": {"char_id": "char_disciples", "label": "disciples", "gender": "P", "number": "P"},
+        "disciples": {
+            "char_id": "char_disciples",
+            "label": "disciples",
+            "gender": "P",
+            "number": "P",
+        },
         "woman_of_Samaria": {
             "char_id": "char_woman_of_samaria",
             "label": "woman_of_Samaria",
@@ -197,7 +200,9 @@ class BiblicalTextExtractors:
     def template_fallback(self, input_ref: str, context: dict, normalized_text: str):
         return None
 
-    def build_context(self, input_ref, input_data, normalized_text, extracted, evidence_map, context):
+    def build_context(
+        self, input_ref, input_data, normalized_text, extracted, evidence_map, context
+    ):
         frames = extracted["frames"]
         frame_strings = [
             _frame_string(f["actor"], f["verb"], f["object"], f["indirect_object"]) for f in frames
@@ -229,7 +234,9 @@ class BiblicalTextExtractors:
             "movement_1": movement or "{missing:movement_1}",
         }
 
-    def render_output(self, input_ref, input_data, normalized_text, extracted, evidence_map, rendered, context):
+    def render_output(
+        self, input_ref, input_data, normalized_text, extracted, evidence_map, rendered, context
+    ):
         template_id = rendered.get("template_id") or rendered.get("id")
         return {
             "spec_version": "biblical_v1",
@@ -269,7 +276,10 @@ def _extract_verbs(text: str, segments):
                         "lemma_guess": lemma,
                         "tense_guess": tense,
                         "role": "speech_introducer" if lower in ATTRIBUTION_VERBS else "verb",
-                        "token_span": [seg["token_start"] + match.start(), seg["token_start"] + match.end()],
+                        "token_span": [
+                            seg["token_start"] + match.start(),
+                            seg["token_start"] + match.end(),
+                        ],
                         "clause_id": seg["clause_id"],
                     }
                 )
@@ -326,7 +336,9 @@ def _guess_speaker(prefix_text: str):
     window = prefix_text[-120:]
     for name in ["Jesus", "John", "Samaritan woman", "woman", "disciples"]:
         if re.search(rf"\b{name}\b", window):
-            return "woman_of_Samaria" if "woman" in name.lower() and "samar" in name.lower() else name
+            return (
+                "woman_of_Samaria" if "woman" in name.lower() and "samar" in name.lower() else name
+            )
     return "unknown"
 
 
@@ -365,7 +377,6 @@ def _build_characters(text: str, segments):
 
 
 def _build_coref_links(text: str, segments, characters):
-    label_map = {c["label"]: c for c in characters}
     candidate_mentions = []
     for char in characters:
         gender = _entity_meta().get(char["label"], {}).get("gender")
@@ -392,9 +403,7 @@ def _build_coref_links(text: str, segments, characters):
             end = seg["token_start"] + match.end()
             gender, number = PRONOUNS.get(pronoun.lower(), ("N", "S"))
             lookback = [
-                c
-                for c in candidate_mentions
-                if 0 <= seg["sentence_id"] - c["sentence_id"] <= 2
+                c for c in candidate_mentions if 0 <= seg["sentence_id"] - c["sentence_id"] <= 2
             ]
             filtered = []
             for c in lookback:

@@ -2,7 +2,7 @@
   "context": {},
   "domain": "clinical_records",
   "extraction_sha256": "964983051bba4822cf52a38392cf155ab6805bbaf7991e38e5d197027e8ad078",
-  "generator_sha256": "8f84713a864cddcab1b352347080f1df7e51dd4d6e2931265943bf47f2030ac3",
+  "generator_sha256": "97a9e30bbaf624f00ad6f087b14a4cbfb1d362b8648611008fc1aee4fe584658",
   "input_meta": {
     "input_file": "data/clinical/sample_patient_record.json"
   },

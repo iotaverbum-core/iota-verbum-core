@@ -4,7 +4,7 @@
   },
   "domain": "biblical_text",
   "extraction_sha256": "442216995d8cb9eabe6886a5d53a77845ba456a4dcbfeccfd01909e1cc6b246f",
-  "generator_sha256": "8f84713a864cddcab1b352347080f1df7e51dd4d6e2931265943bf47f2030ac3",
+  "generator_sha256": "97a9e30bbaf624f00ad6f087b14a4cbfb1d362b8648611008fc1aee4fe584658",
   "input_meta": {
     "input_file": "data/scripture/esv_sample/john_4_7_10.txt",
     "manifest_sha256": "f3d8c22447ca1529a2d4d82f14caf9253ff72ca8e0b8fda584854cd15e19e7ff"

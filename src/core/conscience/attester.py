@@ -4,7 +4,9 @@ from core import attestation
 
 
 class AttestationEngine:
-    def attest(self, ground_truth: dict, llm_output: str | None, validation: dict) -> dict:
+    def attest(
+        self, ground_truth: dict, llm_output: str | None, validation: dict
+    ) -> dict:
         ground_truth_sha = ground_truth.get("attestation_sha256")
         if not ground_truth_sha:
             ground_truth_sha = attestation.compute_sha256(

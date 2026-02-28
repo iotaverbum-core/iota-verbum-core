@@ -1,0 +1,106 @@
+{
+  "domain": "legal_contract",
+  "extraction": {
+    "defined_terms": {
+      "Agreement": "This Software Services Agreement",
+      "Confidential Information": "any non-public business, technical, financial, or operational information disclosed by either party in any form",
+      "Effective Date": "is entered into as of January 15, 2024",
+      "Implementation Plan": "The implementation plan attached as Schedule B",
+      "Service Data": "the operational records, usage logs, support tickets, and configuration details generated through Licensee's use of the Software",
+      "Software": "the hosted workflow orchestration platform described in Schedule A"
+    },
+    "effective_date": "2024-01-15",
+    "extraction_warnings": [],
+    "governing_law": {
+      "full_clause": "This Agreement shall be governed by the laws of the State of Delaware.",
+      "jurisdiction": "the State of Delaware"
+    },
+    "obligations": [
+      {
+        "offset": 1507,
+        "party": "Northwind Devices Ltd.",
+        "text": "Licensee shall restrict access to the Software to its employees and contractors who have a need to use the Software for authorized business purposes."
+      },
+      {
+        "offset": 1657,
+        "party": "Northwind Devices Ltd.",
+        "text": "Licensee must maintain current administrative contact information and shall promptly notify Licensor of any unauthorized access, suspected credential compromise, or misuse of the Software."
+      },
+      {
+        "offset": 1878,
+        "party": "Larkspur Analytics LLC",
+        "text": "Licensor shall configure the Software in accordance with the Implementation Plan within thirty (30) days after the Effective Date."
+      },
+      {
+        "offset": 2009,
+        "party": "Larkspur Analytics LLC",
+        "text": "Licensor shall provide remote onboarding sessions, administrator training materials, and standard email support during Licensor's normal business hours."
+      },
+      {
+        "offset": 2162,
+        "party": "Northwind Devices Ltd.",
+        "text": "Licensee agrees to provide timely access to personnel, systems, and information reasonably required for configuration, testing, and deployment."
+      },
+      {
+        "offset": 2306,
+        "party": "Northwind Devices Ltd.",
+        "text": "Licensee will designate a project manager who is authorized to approve milestones, coordinate user acceptance testing, and consolidate implementation feedback."
+      },
+      {
+        "offset": 2488,
+        "party": "Northwind Devices Ltd.",
+        "text": "Licensee shall pay the subscription fees set forth in Schedule C within fifteen (15) days after receipt of an undisputed invoice."
+      },
+      {
+        "offset": 2618,
+        "party": "Northwind Devices Ltd.",
+        "text": "If Licensee disputes any invoice in good faith, Licensee must give Licensor written notice describing the disputed amount and the basis for the dispute before the payment due date."
+      },
+      {
+        "offset": 3432,
+        "party": "Northwind Devices Ltd.",
+        "text": "Licensee must not remove or obscure any proprietary notice embedded in the Software, documentation, or training materials."
+      },
+      {
+        "offset": 3574,
+        "party": "Larkspur Analytics LLC",
+        "text": "Licensor shall process Service Data only for the purpose of providing, maintaining, securing, and improving the Software as permitted by this Agreement."
+      },
+      {
+        "offset": 3727,
+        "party": "Larkspur Analytics LLC",
+        "text": "Licensor must maintain administrative, technical, and physical safeguards designed to protect Service Data against unauthorized access, loss, or disclosure."
+      },
+      {
+        "offset": 3884,
+        "party": "Northwind Devices Ltd.",
+        "text": "Licensee shall remain responsible for the accuracy, quality, and legality of all Service Data submitted to the Software."
+      },
+      {
+        "offset": 4393,
+        "party": "Northwind Devices Ltd.",
+        "text": "Upon termination, Licensee shall cease all use of the Software, and Licensor shall make Service Data available for export for thirty (30) days after the effective date of termination."
+      }
+    ],
+    "parties": [
+      {
+        "name": "Larkspur Analytics LLC",
+        "role": "licensor"
+      },
+      {
+        "name": "Northwind Devices Ltd.",
+        "role": "licensee"
+      }
+    ],
+    "term": {
+      "duration_string": "one (1) year",
+      "end": "2025-01-14",
+      "start": "2024-01-15"
+    },
+    "termination_conditions": [
+      "Either party may terminate this Agreement upon thirty (30) days written notice if the other party materially breaches this Agreement and fails to cure that breach within the notice period.",
+      "Licensor may terminate this Agreement immediately upon written notice if Licensee intentionally misuses the Software, repeatedly violates the use restrictions, or becomes insolvent."
+    ]
+  },
+  "schema_version": "1.0"
+}

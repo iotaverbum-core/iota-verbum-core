@@ -2,8 +2,12 @@ from __future__ import annotations
 
 
 class LLMConstrainer:
-    def build_prompt(self, ground_truth: dict, task: str, persona: str | None = None) -> str:
-        persona_line = persona or "You are a precise assistant constrained to verified facts."
+    def build_prompt(
+        self, ground_truth: dict, task: str, persona: str | None = None
+    ) -> str:
+        persona_line = (
+            persona or "You are a precise assistant constrained to verified facts."
+        )
         facts = ground_truth.get("facts", [])
         constraints = ground_truth.get("constraints", {})
         cannot = constraints.get("CANNOT_invent", [])

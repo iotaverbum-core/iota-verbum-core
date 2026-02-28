@@ -76,11 +76,15 @@ def segment(text: str, abbreviations=None):
         for splitter in clause_splitters:
             for match in re.finditer(re.escape(splitter), sentence_text):
                 clause_starts.append(match.end())
-                boundaries.append({"boundary": s_start + match.start(), "type": "punct"})
+                boundaries.append(
+                    {"boundary": s_start + match.start(), "type": "punct"}
+                )
         for conj in clause_conj:
             for match in re.finditer(re.escape(conj), sentence_text):
                 clause_starts.append(match.start())
-        clause_starts = sorted(set([c for c in clause_starts if 0 <= c < len(sentence_text)]))
+        clause_starts = sorted(
+            set([c for c in clause_starts if 0 <= c < len(sentence_text)])
+        )
         clause_starts.append(len(sentence_text))
         for c_idx in range(len(clause_starts) - 1):
             c_start = clause_starts[c_idx]
@@ -134,7 +138,9 @@ def resolve_references(segments, entities, pronoun_map, lookback_sentences=2):
 
     coref_links = []
     unknown_state = {"M": 0, "F": 0, "N": 0, "P": 0}
-    pronoun_pattern = re.compile(r"\b(he|she|they|him|her|them|his|their|it|its)\b", re.IGNORECASE)
+    pronoun_pattern = re.compile(
+        r"\b(he|she|they|him|her|them|his|their|it|its)\b", re.IGNORECASE
+    )
     for seg in segments:
         for match in pronoun_pattern.finditer(seg["text"]):
             pronoun = match.group(1)
@@ -158,14 +164,19 @@ def resolve_references(segments, entities, pronoun_map, lookback_sentences=2):
                 unknown_id = f"unknown_{gender}_{unknown_state[gender]}"
                 coref_links.append(
                     {
-                        "from": {"token_span": [start, end], "surface_pronoun": pronoun},
+                        "from": {
+                            "token_span": [start, end],
+                            "surface_pronoun": pronoun,
+                        },
                         "to": unknown_id,
                         "rule": "lookback_limit",
                         "evidence": f"no match within lookback for {pronoun}",
                     }
                 )
                 continue
-            filtered.sort(key=lambda c: (seg["sentence_id"] - c["sentence_id"], -c["token_start"]))
+            filtered.sort(
+                key=lambda c: (seg["sentence_id"] - c["sentence_id"], -c["token_start"])
+            )
             chosen = filtered[0]
             rule = "recency"
             coref_links.append(
@@ -201,19 +212,29 @@ def extract_relationships(
             entity_matches.append((match.start(), match.end(), label))
     entity_matches.sort()
 
-    pronoun_pattern = re.compile(r"\b(he|she|they|him|her|them|his|their|it|its)\b", re.IGNORECASE)
-    pronoun_matches = [(m.start(), m.end(), m.group(1)) for m in pronoun_pattern.finditer(text)]
+    pronoun_pattern = re.compile(
+        r"\b(he|she|they|him|her|them|his|their|it|its)\b", re.IGNORECASE
+    )
+    pronoun_matches = [
+        (m.start(), m.end(), m.group(1)) for m in pronoun_pattern.finditer(text)
+    ]
 
     for verb in verbs:
-        clause = next((s for s in segments if s["clause_id"] == verb["clause_id"]), None)
+        clause = next(
+            (s for s in segments if s["clause_id"] == verb["clause_id"]), None
+        )
         if not clause:
             continue
         clause_start = clause["token_start"]
         clause_end = clause["token_end"]
         verb_start = verb["token_span"][0]
 
-        local_entities = [m for m in entity_matches if clause_start <= m[0] < clause_end]
-        local_pronouns = [m for m in pronoun_matches if clause_start <= m[0] < clause_end]
+        local_entities = [
+            m for m in entity_matches if clause_start <= m[0] < clause_end
+        ]
+        local_pronouns = [
+            m for m in pronoun_matches if clause_start <= m[0] < clause_end
+        ]
         matches = local_entities + local_pronouns
         before = [m for m in matches if m[0] < verb_start]
         after = [m for m in matches if m[0] > verb_start]
@@ -261,7 +282,9 @@ def extract_relationships(
             polarity = "neg"
 
         voice_guess = "active"
-        if re.search(r"\b(was|were|is|are|been|be)\s+\w+(ed|en)\b", clause["text"].lower()):
+        if re.search(
+            r"\b(was|were|is|are|been|be)\s+\w+(ed|en)\b", clause["text"].lower()
+        ):
             voice_guess = "passive"
 
         frames.append(

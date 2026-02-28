@@ -1,4 +1,5 @@
 import shutil
+import stat
 import sys
 from pathlib import Path
 
@@ -44,12 +45,29 @@ CASES = [
             "data/clinical/sample_patient_record.json",
         ],
     ),
+    (
+        "legal_contract",
+        [
+            "--domain",
+            "legal_contract",
+            "--input-ref",
+            "sample_contract",
+            "--input-file",
+            "data/legal_contract_sample/sample_contract.txt",
+            "--timestamp",
+            "2026-02-28T14:32:00Z",
+            "--commit-ref",
+            "e20fbd8",
+            "--repo-tag",
+            "v0.2.0-legal-domain",
+        ],
+    ),
 ]
 
 
 def _run(args, out_dir: Path):
     if out_dir.exists():
-        shutil.rmtree(out_dir)
+        _safe_rmtree(out_dir)
     out_dir.mkdir(parents=True, exist_ok=True)
     main(args + ["--out", str(out_dir)])
 
@@ -66,10 +84,22 @@ def _compare_dirs(dir_a: Path, dir_b: Path):
             raise SystemExit(f"File contents differ for {name}")
 
 
+def _on_rm_error(func, path, exc_info):
+    Path(path).chmod(stat.S_IWRITE)
+    func(path)
+
+
+def _safe_rmtree(path: Path):
+    try:
+        shutil.rmtree(path, onerror=_on_rm_error)
+    except PermissionError:
+        pass
+
+
 def main_check():
-    base = Path(".repro_check")
+    base = Path("tmp_repro_check")
     if base.exists():
-        shutil.rmtree(base)
+        _safe_rmtree(base)
     base.mkdir(parents=True, exist_ok=True)
 
     for name, args in CASES:
@@ -79,7 +109,7 @@ def main_check():
         _run(args, out_b)
         _compare_dirs(out_a, out_b)
 
-    shutil.rmtree(base)
+    _safe_rmtree(base)
 
 
 if __name__ == "__main__":

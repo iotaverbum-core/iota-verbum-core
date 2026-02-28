@@ -24,6 +24,7 @@ jobs:
       - name: Determinism Contract Gate
         run: |
           test -f docs/DETERMINISM_CONTRACT.md
+          test -f docs/NONDETERMINISM_BOUNDARY.md
       - name: Reproducibility
         run: |
           chmod +x scripts/verify_reproducibility.sh

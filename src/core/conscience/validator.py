@@ -5,7 +5,9 @@ from typing import Any
 
 
 class LLMValidator:
-    def validate(self, llm_output: str, ground_truth: dict, strict_mode: bool = True) -> dict:
+    def validate(
+        self, llm_output: str, ground_truth: dict, strict_mode: bool = True
+    ) -> dict:
         checks = {
             "invented_facts": self._check_invented_facts(llm_output, ground_truth),
             "numbers": self._check_numbers(llm_output, ground_truth),
@@ -68,7 +70,9 @@ class LLMValidator:
 
 def _extract_claims(text: str) -> dict[str, Any]:
     claims: dict[str, Any] = {}
-    pattern = re.compile(r"(?P<key>[A-Za-z_][A-Za-z0-9_.\[\]-]*)\s*(?:=|:)\s*(?P<val>[^,\n;]+)")
+    pattern = re.compile(
+        r"(?P<key>[A-Za-z_][A-Za-z0-9_.\[\]-]*)\s*(?:=|:)\s*(?P<val>[^,\n;]+)"
+    )
     for match in pattern.finditer(text):
         key = match.group("key").strip()
         raw_val = match.group("val").strip().strip('"').strip("'")

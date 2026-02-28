@@ -10,7 +10,7 @@ Determinism is enforced by:
 - No hidden randomness or time-based fields in outputs.
 - Explicit input resolution via manifests with SHA-256 verification.
 
-See `docs/DETERMINISM_CONTRACT.md` for non-negotiable invariants and forbidden sources of nondeterminism.
+See `docs/DETERMINISM_CONTRACT.md` for non-negotiable invariants and forbidden sources of nondeterminism. See `docs/NONDETERMINISM_BOUNDARY.md` for the explicit isolation boundary around any future nondeterministic wrappers.
 
 ## Verification
 

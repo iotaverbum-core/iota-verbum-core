@@ -55,7 +55,9 @@ class ConSciencePipeline:
             attempts += 1
             llm_output = llm_provider(prompt)
             last_output = llm_output
-            validation = self.validator.validate(llm_output, ground_truth, strict_mode=True)
+            validation = self.validator.validate(
+                llm_output, ground_truth, strict_mode=True
+            )
             last_validation = validation
             if validation["passes"]:
                 attestation = self.attester.attest(ground_truth, llm_output, validation)
@@ -70,11 +72,15 @@ class ConSciencePipeline:
                     "attempts": attempts,
                     "offline": False,
                 }
-            violations = {k: v for k, v in validation["checks"].items() if not v["pass"]}
+            violations = {
+                k: v for k, v in validation["checks"].items() if not v["pass"]
+            }
             prompt = self.constrainer.add_rejection_context(prompt, violations)
 
         if not fallback:
-            attestation = self.attester.attest(ground_truth, last_output, last_validation or {})
+            attestation = self.attester.attest(
+                ground_truth, last_output, last_validation or {}
+            )
             return {
                 "ground_truth": ground_truth,
                 "llm_output": last_output,
@@ -87,7 +93,11 @@ class ConSciencePipeline:
                 "offline": False,
             }
 
-        validation = last_validation or {"passes": False, "checks": violations, "severity": "high"}
+        validation = last_validation or {
+            "passes": False,
+            "checks": violations,
+            "severity": "high",
+        }
         attestation = self.attester.attest(ground_truth, last_output, validation)
         return {
             "ground_truth": ground_truth,

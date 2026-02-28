@@ -33,8 +33,12 @@ include = ["core", "core.*", "domains", "domains.*"]
 domains = ["**/*.json"]
 
 [tool.ruff]
-line-length = 100
+cache-dir = "C:/Users/chris/AppData/Local/Temp/iota_verbum_ruff_cache"
+exclude = [".pytest_tmp", ".ruff_cache", ".repro_check", "tmp_goldens", "tmp_repro_check"]
+line-length = 88
 target-version = "py311"
+
+[tool.ruff.lint]
 select = ["E", "F", "I"]
 
 [tool.pytest.ini_options]

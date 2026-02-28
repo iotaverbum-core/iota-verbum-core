@@ -18,6 +18,12 @@ python -m pip install -e .
 pytest
 python scripts/determinism_check.py
 
-python scripts/generate_manifest.py --verify
+if ! python scripts/generate_manifest.py --verify; then
+  git diff -- MANIFEST.sha256 || true
+  exit 1
+fi
 python scripts/generate_manifest.py
-python scripts/generate_manifest.py --verify
+if ! python scripts/generate_manifest.py --verify; then
+  git diff -- MANIFEST.sha256 || true
+  exit 1
+fi

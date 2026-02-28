@@ -1,5 +1,6 @@
 import argparse
 import hashlib
+import subprocess
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -25,32 +26,51 @@ INCLUDE_GLOBS = [
     ".pre-commit-config.yaml",
 ]
 
-
-def _sha256(path: Path) -> str:
-    h = hashlib.sha256()
-    with path.open("rb") as f:
-        for chunk in iter(lambda: f.read(8192), b""):
-            h.update(chunk)
-    return h.hexdigest()
+def _git_ls_files() -> list[str]:
+    output = subprocess.check_output(["git", "ls-files", "-z"], cwd=ROOT)
+    return [path for path in output.decode("utf-8").split("\0") if path]
 
 
-def _iter_files():
+def _read_index_bytes(path: str) -> bytes:
+    return subprocess.check_output(["git", "show", f":{path}"], cwd=ROOT)
+
+
+def _sha256(path: str) -> str:
+    return hashlib.sha256(_read_index_bytes(path)).hexdigest()
+
+
+def _iter_files() -> list[str]:
+    tracked = set(_git_ls_files())
     files = set()
     for pattern in INCLUDE_GLOBS:
         for path in ROOT.glob(pattern):
             if path.is_file():
-                files.add(path)
-    return sorted(files, key=lambda p: p.as_posix())
+                rel = path.relative_to(ROOT).as_posix()
+                if rel in tracked and rel != "MANIFEST.sha256":
+                    files.add(rel)
+    return sorted(files)
 
 
 def build_manifest_text() -> str:
     lines = []
     for path in _iter_files():
-        rel = path.relative_to(ROOT).as_posix()
-        if rel == "MANIFEST.sha256":
-            continue
-        lines.append(f"{_sha256(path)}  {rel}")
+        lines.append(f"{_sha256(path)}  {path}")
     return "\n".join(lines) + "\n"
+
+
+def _first_difference(existing: str, expected: str) -> tuple[int, str, str, str]:
+    existing_lines = existing.splitlines()
+    expected_lines = expected.splitlines()
+    max_len = max(len(existing_lines), len(expected_lines))
+    for idx in range(max_len):
+        actual_line = existing_lines[idx] if idx < len(existing_lines) else "<missing>"
+        expected_line = expected_lines[idx] if idx < len(expected_lines) else "<missing>"
+        if actual_line != expected_line:
+            path = expected_line.split("  ", 1)[1] if "  " in expected_line else "<missing>"
+            if path == "<missing>" and "  " in actual_line:
+                path = actual_line.split("  ", 1)[1]
+            return idx + 1, expected_line, actual_line, path
+    return 0, "", "", ""
 
 
 def main():
@@ -65,7 +85,14 @@ def main():
             raise SystemExit("MANIFEST.sha256 missing; run without --verify to generate.")
         existing = MANIFEST_PATH.read_bytes().decode("utf-8")
         if existing != manifest_text:
-            raise SystemExit("MANIFEST.sha256 does not match generated content.")
+            line_no, expected_line, actual_line, path = _first_difference(existing, manifest_text)
+            raise SystemExit(
+                "MANIFEST.sha256 does not match generated content.\n"
+                f"first differing line: {line_no}\n"
+                f"path: {path}\n"
+                f"expected: {expected_line}\n"
+                f"actual:   {actual_line}"
+            )
         return
 
     MANIFEST_PATH.write_bytes(manifest_text.encode("utf-8"))

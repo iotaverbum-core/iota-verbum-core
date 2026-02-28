@@ -7,10 +7,10 @@
   "generator_sha256": "97a9e30bbaf624f00ad6f087b14a4cbfb1d362b8648611008fc1aee4fe584658",
   "input_meta": {
     "input_file": "data/scripture/esv_sample/john_4_7_10.txt",
-    "manifest_sha256": "f3d8c22447ca1529a2d4d82f14caf9253ff72ca8e0b8fda584854cd15e19e7ff"
+    "manifest_sha256": "0e277621bd69505f99e1fccb5daa9192c471112a5ebaea02c49f9e5f16df4599"
   },
   "input_ref": "John 4:7-10",
-  "input_sha256": "680cf47855e8b4860c68f628cdfc35e51f5459e2fd6c2cad23fa67c1b83d6670",
+  "input_sha256": "c735ae524b534788870ac516cd32a032269e68fd2604f356683b1ac79379c64b",
   "output_sha256": "3302e4febc07732d07a6589d062d3593b3942e67b2732cc5575e68acdc8309c4",
   "template_path": "domains/biblical_text/templates/john.json",
   "template_sha256": "dfd4b7beea13119f3b05962291ed7ac62b2c96195336b48a662f7c7647906b2e"

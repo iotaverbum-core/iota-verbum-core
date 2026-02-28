@@ -1,5 +1,7 @@
 # Enforce LF line endings for determinism-critical files
 * text=auto eol=lf
+data/** text eol=lf
+data/scripture/** text eol=lf
 *.md  text eol=lf
 *.yml text eol=lf
 *.yaml text eol=lf
@@ -7,4 +9,5 @@
 *.ps1 text eol=lf
 *.py  text eol=lf
 *.json text eol=lf
+*.txt text eol=lf
 *.sha256 text eol=lf

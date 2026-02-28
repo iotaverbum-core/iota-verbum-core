@@ -99,7 +99,13 @@ def _resolve_base(key: str, context: dict):
     if match:
         base = match.group(1)
         index = int(match.group(2))
-        candidates = [base, f"{base}s", f"{base}_list", f"{base}s_detailed", f"{base}_detailed"]
+        candidates = [
+            base,
+            f"{base}s",
+            f"{base}_list",
+            f"{base}s_detailed",
+            f"{base}_detailed",
+        ]
         for name in candidates:
             if name in context and isinstance(context[name], list):
                 list_val = context[name]

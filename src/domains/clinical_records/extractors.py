@@ -25,13 +25,17 @@ class ClinicalRecordsExtractors:
                 "id": "risk_0",
                 "type": "age",
                 "value": history.get("age"),
-                "category": "moderate_risk" if (history.get("age") or 0) >= 50 else "low_risk",
+                "category": "moderate_risk"
+                if (history.get("age") or 0) >= 50
+                else "low_risk",
             },
             {
                 "id": "risk_1",
                 "type": "family_history",
                 "value": history.get("family_hypertension"),
-                "category": "high_risk" if history.get("family_hypertension") else "low_risk",
+                "category": "high_risk"
+                if history.get("family_hypertension")
+                else "low_risk",
             },
         ]
 
@@ -84,6 +88,7 @@ class ClinicalRecordsExtractors:
     ):
         encounter_date = normalized_input.get("encounter_date")
         next_date = _next_assessment(encounter_date, 30)
+        bp_text = _bp_text(extracted["vitals"])
         return {
             "threshold_systolic": 140,
             "threshold_diastolic": 90,
@@ -91,26 +96,25 @@ class ClinicalRecordsExtractors:
             "risk_age": extracted["risk_factors"][0]["value"],
             "risk_family_history": extracted["risk_factors"][1]["value"],
             "risk_lifestyle": "unknown",
-            "evidence_bp_1": (
-                f"BP {extracted['vitals']['systolic']}/{extracted['vitals']['diastolic']} mmHg"
-            ),
-            "evidence_bp_2": (
-                f"BP {extracted['vitals']['systolic']}/{extracted['vitals']['diastolic']} mmHg"
-            ),
+            "evidence_bp_1": bp_text,
+            "evidence_bp_2": bp_text,
             "intervention_1": "lifestyle modification counseling",
             "intervention_2": "repeat BP measurement",
             "follow_up_interval": "2 weeks",
-            "bp_reading_1": (
-                f"{extracted['vitals']['systolic']}/{extracted['vitals']['diastolic']} mmHg"
-            ),
-            "bp_reading_2": (
-                f"{extracted['vitals']['systolic']}/{extracted['vitals']['diastolic']} mmHg"
-            ),
+            "bp_reading_1": _bp_reading(extracted["vitals"]),
+            "bp_reading_2": _bp_reading(extracted["vitals"]),
             "next_assessment_date": next_date,
         }
 
     def render_output(
-        self, input_ref, input_data, normalized_input, extracted, evidence_map, rendered, context
+        self,
+        input_ref,
+        input_data,
+        normalized_input,
+        extracted,
+        evidence_map,
+        rendered,
+        context,
     ):
         return {
             "assessment": extracted["assessment"],
@@ -150,3 +154,11 @@ def _next_assessment(encounter_date: str | None, days: int):
         return (date + timedelta(days=days)).strftime("%Y-%m-%d")
     except ValueError:
         return "{missing:next_assessment_date}"
+
+
+def _bp_text(vitals: dict) -> str:
+    return f"BP {vitals['systolic']}/{vitals['diastolic']} mmHg"
+
+
+def _bp_reading(vitals: dict) -> str:
+    return f"{vitals['systolic']}/{vitals['diastolic']} mmHg"

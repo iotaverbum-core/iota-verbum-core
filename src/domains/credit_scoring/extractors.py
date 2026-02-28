@@ -103,11 +103,15 @@ class CreditScoringExtractors:
             "threshold_delinquency_months": 12,
             "threshold_delinquency_count": 0,
             "verification_method": "bank_statement",
-            "signal_income_stability": f"employment {extracted['employment_months']} months",
+            "signal_income_stability": (
+                f"employment {extracted['employment_months']} months"
+            ),
             "signal_credit_history": f"credit score {extracted['credit_score']}",
             "signal_collateral": "none",
             "risk_signal_1": "debt_to_income" if extracted["dti"] > 0.55 else "none",
-            "risk_signal_2": "recent_delinquency" if extracted["delinquencies"] > 0 else "none",
+            "risk_signal_2": "recent_delinquency"
+            if extracted["delinquencies"] > 0
+            else "none",
             "improvement_action": "reduce debt-to-income ratio",
             "evidence_1": f"debt-to-income ratio {extracted['dti']}",
             "evidence_2": f"employment {extracted['employment_months']} months",
@@ -115,7 +119,14 @@ class CreditScoringExtractors:
         }
 
     def render_output(
-        self, input_ref, input_data, normalized_input, extracted, evidence_map, rendered, context
+        self,
+        input_ref,
+        input_data,
+        normalized_input,
+        extracted,
+        evidence_map,
+        rendered,
+        context,
     ):
         output = {
             "decision": extracted["decision"],

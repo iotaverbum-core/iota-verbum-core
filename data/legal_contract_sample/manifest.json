@@ -1,0 +1,12 @@
+{
+  "dataset": "legal_contract_sample",
+  "schema_version": "1.0",
+  "records": {
+    "sample_contract": {
+      "file": "sample_contract.txt",
+      "sha256": "b5fbac817d0448fdd6aa1f8e01115e96347705d311c5eb95a8905802b2599044",
+      "record_type": "software_services_agreement",
+      "validated": true
+    }
+  }
+}

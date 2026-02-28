@@ -13,6 +13,7 @@ INCLUDE_GLOBS = [
     "schemas/**/*",
     "data/credit/**/*",
     "data/clinical/**/*",
+    "data/legal_contract_sample/**/*",
     "data/scripture/esv_sample/**/*",
     "tests/**/*.py",
     "tests/golden/**/*",
@@ -25,6 +26,7 @@ INCLUDE_GLOBS = [
     "docs/**/*.md",
     ".pre-commit-config.yaml",
 ]
+
 
 def _git_ls_files() -> list[str]:
     output = subprocess.check_output(["git", "ls-files", "-z"], cwd=ROOT)
@@ -64,9 +66,15 @@ def _first_difference(existing: str, expected: str) -> tuple[int, str, str, str]
     max_len = max(len(existing_lines), len(expected_lines))
     for idx in range(max_len):
         actual_line = existing_lines[idx] if idx < len(existing_lines) else "<missing>"
-        expected_line = expected_lines[idx] if idx < len(expected_lines) else "<missing>"
+        expected_line = (
+            expected_lines[idx] if idx < len(expected_lines) else "<missing>"
+        )
         if actual_line != expected_line:
-            path = expected_line.split("  ", 1)[1] if "  " in expected_line else "<missing>"
+            path = (
+                expected_line.split("  ", 1)[1]
+                if "  " in expected_line
+                else "<missing>"
+            )
             if path == "<missing>" and "  " in actual_line:
                 path = actual_line.split("  ", 1)[1]
             return idx + 1, expected_line, actual_line, path
@@ -75,17 +83,23 @@ def _first_difference(existing: str, expected: str) -> tuple[int, str, str, str]
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument("--verify", action="store_true", help="verify MANIFEST.sha256 matches")
+    parser.add_argument(
+        "--verify", action="store_true", help="verify MANIFEST.sha256 matches"
+    )
     args = parser.parse_args()
 
     manifest_text = build_manifest_text()
 
     if args.verify:
         if not MANIFEST_PATH.exists():
-            raise SystemExit("MANIFEST.sha256 missing; run without --verify to generate.")
+            raise SystemExit(
+                "MANIFEST.sha256 missing; run without --verify to generate."
+            )
         existing = MANIFEST_PATH.read_bytes().decode("utf-8")
         if existing != manifest_text:
-            line_no, expected_line, actual_line, path = _first_difference(existing, manifest_text)
+            line_no, expected_line, actual_line, path = _first_difference(
+                existing, manifest_text
+            )
             raise SystemExit(
                 "MANIFEST.sha256 does not match generated content.\n"
                 f"first differing line: {line_no}\n"

@@ -1,0 +1,97 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "IOTA VERBUM CORE legal_contract output",
+  "type": "object",
+  "required": [
+    "domain",
+    "schema_version",
+    "extraction"
+  ],
+  "properties": {
+    "domain": {
+      "const": "legal_contract"
+    },
+    "schema_version": {
+      "const": "1.0"
+    },
+    "extraction": {
+      "type": "object",
+      "required": [
+        "parties",
+        "effective_date",
+        "term",
+        "obligations",
+        "defined_terms",
+        "governing_law",
+        "termination_conditions",
+        "extraction_warnings"
+      ],
+      "properties": {
+        "parties": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["name", "role"],
+            "properties": {
+              "name": {"type": "string"},
+              "role": {"type": "string"}
+            },
+            "additionalProperties": false
+          }
+        },
+        "effective_date": {
+          "type": ["string", "null"],
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+        },
+        "term": {
+          "type": "object",
+          "required": ["start", "end", "duration_string"],
+          "properties": {
+            "start": {"type": ["string", "null"]},
+            "end": {"type": ["string", "null"]},
+            "duration_string": {"type": ["string", "null"]}
+          },
+          "additionalProperties": false
+        },
+        "obligations": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["party", "text", "offset"],
+            "properties": {
+              "party": {"type": "string"},
+              "text": {"type": "string"},
+              "offset": {"type": "integer", "minimum": 0}
+            },
+            "additionalProperties": false
+          }
+        },
+        "defined_terms": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
+        },
+        "governing_law": {
+          "type": "object",
+          "required": ["jurisdiction", "full_clause"],
+          "properties": {
+            "jurisdiction": {"type": ["string", "null"]},
+            "full_clause": {"type": ["string", "null"]}
+          },
+          "additionalProperties": false
+        },
+        "termination_conditions": {
+          "type": "array",
+          "items": {"type": "string"}
+        },
+        "extraction_warnings": {
+          "type": "array",
+          "items": {"type": "string"}
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

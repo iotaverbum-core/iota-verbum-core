@@ -1,4 +1,9 @@
-from core.attestation import canonicalize_json, compute_sha256, sha256_bytes, sha256_text
+from core.attestation import (
+    canonicalize_json,
+    compute_sha256,
+    sha256_bytes,
+    sha256_text,
+)
 from core.extraction import (
     extract_entities,
     extract_relationships,

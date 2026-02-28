@@ -1,0 +1,19 @@
+{
+  "context": {},
+  "domain": "legal_contract",
+  "extraction_sha256": "6243f81767eddc13318cb30f344c55d81f021792ecb81b91cd342d687362b06f",
+  "generator_sha256": "f17d3be259bb86f3ad0b4626516dd7e1ad12a9a2306cfdb79e0840cf6108563e",
+  "input_meta": {
+    "input_file": "data/legal_contract_sample/sample_contract.txt"
+  },
+  "input_ref": "sample_contract",
+  "input_sha256": "b5fbac817d0448fdd6aa1f8e01115e96347705d311c5eb95a8905802b2599044",
+  "output_sha256": "dec8e97a56c6980891950a9ff3dfa6dddb63c31acbed05abf14ec00c07ebb874",
+  "provenance_meta": {
+    "commit_ref": "e20fbd8",
+    "repo_tag": "v0.2.0-legal-domain",
+    "timestamp": "2026-02-28T14:32:00Z"
+  },
+  "template_path": "domains/legal_contract/templates/generic.json",
+  "template_sha256": "e2c7ba5174ba60822113b6eb2b6651761cd1663c753879ff374097e910778774"
+}

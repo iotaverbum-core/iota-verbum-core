@@ -49,6 +49,23 @@ def test_determinism_cross_domain(tmp_path: Path):
                 "data/clinical/sample_patient_record.json",
             ],
         ),
+        (
+            "legal_contract",
+            [
+                "--domain",
+                "legal_contract",
+                "--input-ref",
+                "sample_contract",
+                "--input-file",
+                "data/legal_contract_sample/sample_contract.txt",
+                "--timestamp",
+                "2026-02-28T14:32:00Z",
+                "--commit-ref",
+                "e20fbd8",
+                "--repo-tag",
+                "v0.2.0-legal-domain",
+            ],
+        ),
     ]
 
     for name, base_args in cases:
@@ -118,6 +135,24 @@ GOLDENS = [
         ],
         "tests/golden/clinical_records/patient_67890",
     ),
+    (
+        "legal_contract",
+        [
+            "--domain",
+            "legal_contract",
+            "--input-ref",
+            "sample_contract",
+            "--input-file",
+            "data/legal_contract_sample/sample_contract.txt",
+            "--timestamp",
+            "2026-02-28T14:32:00Z",
+            "--commit-ref",
+            "e20fbd8",
+            "--repo-tag",
+            "v0.2.0-legal-domain",
+        ],
+        "tests/golden/legal_contract/sample_contract",
+    ),
 ]
 
 
@@ -135,5 +170,7 @@ def test_golden_snapshots(tmp_path: Path):
         expected_prov = json.loads(
             (Path(golden_dir) / "expected_provenance.json").read_text(encoding="utf-8")
         )
-        actual_prov = json.loads((out_dir / "provenance.json").read_text(encoding="utf-8"))
+        actual_prov = json.loads(
+            (out_dir / "provenance.json").read_text(encoding="utf-8")
+        )
         assert actual_prov == expected_prov

@@ -63,12 +63,12 @@ def main():
     if args.verify:
         if not MANIFEST_PATH.exists():
             raise SystemExit("MANIFEST.sha256 missing; run without --verify to generate.")
-        existing = MANIFEST_PATH.read_text(encoding="utf-8")
+        existing = MANIFEST_PATH.read_bytes().decode("utf-8")
         if existing != manifest_text:
             raise SystemExit("MANIFEST.sha256 does not match generated content.")
         return
 
-    MANIFEST_PATH.write_text(manifest_text, encoding="utf-8")
+    MANIFEST_PATH.write_bytes(manifest_text.encode("utf-8"))
 
 
 if __name__ == "__main__":

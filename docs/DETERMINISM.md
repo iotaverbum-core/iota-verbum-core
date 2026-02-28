@@ -28,3 +28,7 @@ This script:
 5. Regenerates `MANIFEST.sha256` and verifies no drift.
 
 The same flow is executed in CI on every push.
+
+## Canonical MANIFEST
+
+Manifest generation is platform-invariant: hashes are computed from canonical tracked repository content rather than OS-specific working tree bytes. `MANIFEST.sha256` is written as UTF-8 with LF newlines, and manifest entries are emitted in stable lexicographic path order.

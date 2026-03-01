@@ -2,12 +2,29 @@
   "context": {},
   "domain": "legal_contract",
   "extraction_sha256": "6243f81767eddc13318cb30f344c55d81f021792ecb81b91cd342d687362b06f",
-  "generator_sha256": "f17d3be259bb86f3ad0b4626516dd7e1ad12a9a2306cfdb79e0840cf6108563e",
+  "generator_sha256": "13feab6f09d56290b017f2aead793ed00637958ae545c0a395fd9ab49c16b03e",
+  "governance_metadata": {
+    "audit_ready": true,
+    "eu_ai_act_article": "Article 13 \u2014 Transparency obligations",
+    "nist_rmf_function": "GOVERN",
+    "risk_tier": "high"
+  },
   "input_meta": {
     "input_file": "data/legal_contract_sample/sample_contract.txt"
   },
   "input_ref": "sample_contract",
   "input_sha256": "b5fbac817d0448fdd6aa1f8e01115e96347705d311c5eb95a8905802b2599044",
+  "neurosymbolic_boundary": {
+    "boundary_version": "1.0",
+    "neural_components_used": [],
+    "neural_override_count": 0,
+    "symbolic_components_used": [
+      "legal_contract_extractor_v1",
+      "schema_validator_v1",
+      "governance_mapper_v1"
+    ],
+    "symbolic_confidence": "high"
+  },
   "output_sha256": "dec8e97a56c6980891950a9ff3dfa6dddb63c31acbed05abf14ec00c07ebb874",
   "provenance_meta": {
     "commit_ref": "e20fbd8",

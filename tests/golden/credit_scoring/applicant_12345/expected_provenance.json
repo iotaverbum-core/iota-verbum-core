@@ -2,7 +2,7 @@
   "context": {},
   "domain": "credit_scoring",
   "extraction_sha256": "5262ad45d58b1ebdab2f84f671560ea65a04a6820881d44bdc34e0062d03e33a",
-  "generator_sha256": "f17d3be259bb86f3ad0b4626516dd7e1ad12a9a2306cfdb79e0840cf6108563e",
+  "generator_sha256": "13feab6f09d56290b017f2aead793ed00637958ae545c0a395fd9ab49c16b03e",
   "input_meta": {
     "input_file": "data/credit/sample_applicant.json"
   },

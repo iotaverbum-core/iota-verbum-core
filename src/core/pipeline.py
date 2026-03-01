@@ -2,6 +2,7 @@ import hashlib
 from pathlib import Path
 
 from core import attestation, templates
+from core.governance import GOVERNANCE_METADATA, build_neurosymbolic_boundary
 
 
 class DeterministicPipeline:
@@ -61,6 +62,11 @@ class DeterministicPipeline:
             "context": context,
             "input_meta": input_meta or {},
         }
+        if self.domain in GOVERNANCE_METADATA:
+            extra["governance_metadata"] = GOVERNANCE_METADATA[self.domain]
+            extra["neurosymbolic_boundary"] = build_neurosymbolic_boundary(
+                self.domain
+            )
         if provenance_meta:
             extra["provenance_meta"] = provenance_meta
 

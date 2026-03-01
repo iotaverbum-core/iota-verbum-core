@@ -26,6 +26,7 @@ def test_legal_contract_extraction(tmp_path: Path):
     )
 
     output = json.loads((out_dir / "output.json").read_text(encoding="utf-8"))
+    provenance = json.loads((out_dir / "provenance.json").read_text(encoding="utf-8"))
     extraction = output["extraction"]
     assert output["domain"] == "legal_contract"
     assert extraction["effective_date"] == "2024-01-15"
@@ -38,6 +39,8 @@ def test_legal_contract_extraction(tmp_path: Path):
     assert extraction["governing_law"]["jurisdiction"] == "the State of Delaware"
     assert extraction["termination_conditions"]
     assert extraction["extraction_warnings"] == []
+    assert provenance["governance_metadata"]["nist_rmf_function"] == "GOVERN"
+    assert provenance["neurosymbolic_boundary"]["neural_components_used"] == []
 
 
 def test_sample_contract_manifest_matches_input():

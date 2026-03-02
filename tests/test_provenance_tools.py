@@ -1,9 +1,10 @@
 import json
 from pathlib import Path
 
-from deterministic_ai import main as run_pipeline
 from scripts.generate_provenance_report import main as generate_report
 from scripts.view_provenance import format_cli_report
+
+from deterministic_ai import main as run_pipeline
 
 def _build_sample_outputs(base: Path) -> tuple[Path, Path, Path]:
     out_dir = base / "sample"

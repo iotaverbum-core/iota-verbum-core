@@ -1,17 +1,18 @@
-from datetime import timedelta
 import importlib
+from datetime import timedelta
 from pathlib import Path
 
 from fastapi.testclient import TestClient
 from sqlalchemy import select
 
-app_module = importlib.import_module("iota_verbum_api.app")
 from iota_verbum_api.app import app
 from iota_verbum_api.db.models import AuditLog, DocumentInput
 from iota_verbum_api.db.session import new_session
 from iota_verbum_api.services.pdf import ExtractionFailure
 from iota_verbum_api.services.retention import enforce_retention_policy
 from iota_verbum_api.utils import now_utc
+
+app_module = importlib.import_module("iota_verbum_api.app")
 
 
 def _headers(api_key: str = "demo-key") -> dict[str, str]:
@@ -50,7 +51,10 @@ def test_full_json_flow_and_verify():
         verify_body = verify.json()
         assert verify_body["hash_match"] is True
         assert verify_body["verified_count"] == 1
-        assert any(item["event"] == "verify" for item in verify_body["record"]["audit_log"])
+        assert any(
+            item["event"] == "verify"
+            for item in verify_body["record"]["audit_log"]
+        )
 
 
 def test_hash_mismatch_case():
@@ -110,7 +114,10 @@ def test_tenant_isolation_for_audit_and_verify():
         other_audit = client.get("/v1/audit", headers=_headers("other-key"))
         assert own_audit.status_code == 200
         assert other_audit.status_code == 200
-        assert all(item["record_id"] != record_id for item in other_audit.json()["items"])
+        assert all(
+            item["record_id"] != record_id
+            for item in other_audit.json()["items"]
+        )
 
 
 def test_pdf_upload_uses_pdfplumber_path(monkeypatch):
@@ -125,7 +132,12 @@ def test_pdf_upload_uses_pdfplumber_path(monkeypatch):
             "The recipient must return or destroy all materials. "
             "This agreement is governed by the laws of Delaware. "
             "The parties submit to exclusive jurisdiction in Wilmington.",
-            {"page_count": 1, "producer": "stub", "creation_date": "2026-01-15", "extraction_method": "pdfplumber"},
+                {
+                    "page_count": 1,
+                    "producer": "stub",
+                    "creation_date": "2026-01-15",
+                    "extraction_method": "pdfplumber",
+                },
         ),
     )
 
@@ -157,7 +169,13 @@ def test_pdf_upload_uses_ocr_fallback(monkeypatch):
             "The recipient shall destroy all copies after use. "
             "This agreement is governed by California law. "
             "Jurisdiction lies in San Francisco.",
-            {"dpi": 300, "language": "eng", "page_count": 1, "confidence_scores": {98: 7}, "extraction_method": "ocr"},
+                {
+                    "dpi": 300,
+                    "language": "eng",
+                    "page_count": 1,
+                    "confidence_scores": {98: 7},
+                    "extraction_method": "ocr",
+                },
         ),
     )
 

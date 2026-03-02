@@ -16,7 +16,9 @@ from iota_verbum_api.utils import now_utc
 async def enforce_retention_policy() -> int:
     deleted = 0
     cutoff = now_utc() - timedelta(days=settings.retention_days_document_input)
-    archive_cutoff = now_utc() - timedelta(days=settings.retention_days_provenance_record)
+    archive_cutoff = now_utc() - timedelta(
+        days=settings.retention_days_provenance_record
+    )
     with new_session() as db:
         stale = db.scalars(
             select(DocumentInput).where(DocumentInput.created_at < cutoff)

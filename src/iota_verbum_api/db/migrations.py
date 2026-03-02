@@ -2,9 +2,9 @@ from __future__ import annotations
 
 from pathlib import Path
 
-from alembic import command
 from alembic.config import Config
 
+from alembic import command
 from iota_verbum_api.config import settings
 from iota_verbum_api.db.base import Base
 from iota_verbum_api.db.session import engine

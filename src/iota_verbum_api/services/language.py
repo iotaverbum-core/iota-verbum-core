@@ -2,14 +2,19 @@ from __future__ import annotations
 
 import re
 
+try:
+    import langid
+    from langdetect import DetectorFactory, detect_langs
+except ImportError:  # pragma: no cover - optional runtime dependency fallback
+    langid = None
+    DetectorFactory = None
+    detect_langs = None
+
 from iota_verbum_api.constants import LANGUAGES_SUPPORTED
 
 
 def detect_language(text: str) -> tuple[str, float, dict]:
-    try:
-        from langdetect import DetectorFactory, detect_langs
-        import langid
-    except ImportError:
+    if DetectorFactory is None or detect_langs is None or langid is None:
         return _detect_language_fallback(text)
 
     DetectorFactory.seed = 0
@@ -49,10 +54,21 @@ def detect_language(text: str) -> tuple[str, float, dict]:
 def _detect_language_fallback(text: str) -> tuple[str, float, dict]:
     lowered = text.lower()
     scores = {
-        "fr": len(re.findall(r"\b(accord|confidentielle|juridiction|loi|partie)\b", lowered)),
-        "de": len(re.findall(r"\b(vereinbarung|vertraulich|gerichtsstand|recht|partei)\b", lowered)),
-        "es": len(re.findall(r"\b(acuerdo|confidencial|jurisdiccion|ley|parte)\b", lowered)),
-        "en": len(re.findall(r"\b(agreement|confidential|jurisdiction|law|party)\b", lowered)),
+        "fr": len(
+            re.findall(r"\b(accord|confidentielle|juridiction|loi|partie)\b", lowered)
+        ),
+        "de": len(
+            re.findall(
+                r"\b(vereinbarung|vertraulich|gerichtsstand|recht|partei)\b",
+                lowered,
+            )
+        ),
+        "es": len(
+            re.findall(r"\b(acuerdo|confidencial|jurisdiccion|ley|parte)\b", lowered)
+        ),
+        "en": len(
+            re.findall(r"\b(agreement|confidential|jurisdiction|law|party)\b", lowered)
+        ),
     }
     language = max(scores, key=scores.get)
     if scores[language] == 0:

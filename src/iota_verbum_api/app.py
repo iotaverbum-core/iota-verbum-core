@@ -5,7 +5,16 @@ import time
 import uuid
 from contextlib import asynccontextmanager
 
-from fastapi import Depends, FastAPI, File, HTTPException, Request, Response, UploadFile, status
+from fastapi import (
+    Depends,
+    FastAPI,
+    File,
+    HTTPException,
+    Request,
+    Response,
+    UploadFile,
+    status,
+)
 from fastapi.responses import HTMLResponse, JSONResponse
 from sqlalchemy import select
 from sqlalchemy.exc import IntegrityError, SQLAlchemyError
@@ -28,7 +37,10 @@ from iota_verbum_api.runtime import RuntimeState
 from iota_verbum_api.schemas import AnalyseJsonRequest
 from iota_verbum_api.security import AuthContext, authenticate_api_key
 from iota_verbum_api.services.audit import create_audit_entry
-from iota_verbum_api.services.extraction import UnsupportedDomainLanguage, extract_symbolic
+from iota_verbum_api.services.extraction import (
+    UnsupportedDomainLanguage,
+    extract_symbolic,
+)
 from iota_verbum_api.services.language import detect_language
 from iota_verbum_api.services.pdf import (
     ExtractionFailure,
@@ -44,8 +56,12 @@ from iota_verbum_api.services.storage import (
     next_record_id,
     write_provenance_record,
 )
-from iota_verbum_api.utils import hash_sensitive, isoformat_utc, now_utc, sha256_text
-
+from iota_verbum_api.utils import (
+    hash_sensitive,
+    isoformat_utc,
+    now_utc,
+    sha256_text,
+)
 
 rate_limiter = InMemoryRateLimiter(settings.rate_limit_per_minute)
 
@@ -169,7 +185,9 @@ async def audit_and_rate_limit(request: Request, call_next):
         "/v1/status": "api.health",
         "/v1/audit": "api.audit",
     }
-    if request.url.path not in {"/v1/analyse"} and not request.url.path.startswith("/v1/verify/"):
+    if request.url.path not in {"/v1/analyse"} and not request.url.path.startswith(
+        "/v1/verify/"
+    ):
         with new_session() as db:
             if tenant_id:
                 db.add(

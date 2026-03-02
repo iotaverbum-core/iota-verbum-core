@@ -1,0 +1,2 @@
+deterministic_ai domain=clinical_records
+files_written=output.json, provenance.json, attestation.sha256, log.txt

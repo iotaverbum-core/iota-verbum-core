@@ -1,0 +1,51 @@
+{
+  "assessment": "positive_screen_hypertension",
+  "evidence_map": {
+    "risk_factors": [
+      {
+        "category": "moderate_risk",
+        "id": "risk_0",
+        "type": "age",
+        "value": 52
+      },
+      {
+        "category": "high_risk",
+        "id": "risk_1",
+        "type": "family_history",
+        "value": true
+      }
+    ],
+    "symptoms": [
+      {
+        "duration_days": 3,
+        "id": "symptom_0",
+        "severity": "moderate",
+        "text": "headache"
+      },
+      {
+        "duration_days": 3,
+        "id": "symptom_1",
+        "severity": "moderate",
+        "text": "dizziness"
+      }
+    ],
+    "vitals": [
+      {
+        "id": "vital_0",
+        "status": "elevated",
+        "threshold": 140,
+        "type": "bp_systolic",
+        "value": 148
+      },
+      {
+        "id": "vital_1",
+        "status": "elevated",
+        "threshold": 90,
+        "type": "bp_diastolic",
+        "value": 94
+      }
+    ]
+  },
+  "recommendation": "Patient meets criteria for hypertension based on BP 148/94 mmHg and BP 148/94 mmHg. Recommend: lifestyle modification counseling, repeat BP measurement. Follow-up in 2 weeks.",
+  "spec_version": "clinical_v1"
+}

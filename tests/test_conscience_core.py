@@ -25,7 +25,9 @@ def test_constrainer_includes_all_facts():
     extractor = GroundTruthExtractor("credit_scoring")
     data = _load_credit_sample()
     gt = extractor.extract(data)
-    prompt = LLMConstrainer().build_prompt(gt, task="Summarize decision", persona="Tester")
+    prompt = LLMConstrainer().build_prompt(
+        gt, task="Summarize decision", persona="Tester"
+    )
     for fact in gt["facts"]:
         assert fact in prompt
 
@@ -34,7 +36,9 @@ def test_constrainer_forbids_all_cannot_invent():
     extractor = GroundTruthExtractor("credit_scoring")
     data = _load_credit_sample()
     gt = extractor.extract(data)
-    prompt = LLMConstrainer().build_prompt(gt, task="Summarize decision", persona="Tester")
+    prompt = LLMConstrainer().build_prompt(
+        gt, task="Summarize decision", persona="Tester"
+    )
     for item in gt["constraints"]["CANNOT_invent"]:
         assert item in prompt
 

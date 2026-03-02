@@ -1,0 +1,66 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "IOTA VERBUM CORE nda output",
+  "type": "object",
+  "required": [
+    "domain",
+    "schema_version",
+    "extraction"
+  ],
+  "properties": {
+    "domain": {
+      "const": "nda"
+    },
+    "schema_version": {
+      "const": "1.0"
+    },
+    "governance_metadata": {
+      "type": "object",
+      "required": ["eu_ai_act_article", "nist_rmf_function", "risk_tier", "audit_ready"],
+      "properties": {
+        "eu_ai_act_article": { "type": "string" },
+        "nist_rmf_function": {
+          "type": "string",
+          "enum": ["GOVERN", "MAP", "MEASURE", "MANAGE"]
+        },
+        "risk_tier": {
+          "type": "string",
+          "enum": ["low", "medium", "high", "critical"]
+        },
+        "audit_ready": { "type": "boolean" }
+      },
+      "additionalProperties": false
+    },
+    "neurosymbolic_boundary": {
+      "type": "object",
+      "required": [
+        "symbolic_components_used",
+        "neural_components_used",
+        "neural_override_count",
+        "symbolic_confidence",
+        "boundary_version"
+      ],
+      "properties": {
+        "symbolic_components_used": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "neural_components_used": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "neural_override_count": { "type": "integer" },
+        "symbolic_confidence": {
+          "type": "string",
+          "enum": ["high", "medium", "low"]
+        },
+        "boundary_version": { "type": "string" }
+      },
+      "additionalProperties": false
+    },
+    "extraction": {
+      "type": "object"
+    }
+  },
+  "additionalProperties": false
+}

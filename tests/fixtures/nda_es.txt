@@ -1,0 +1,13 @@
+Acuerdo de confidencialidad
+
+El presente acuerdo de confidencialidad se celebra entre Alpha Consultoria S.L. y Beta Industrial S.A. con el fin de regular el intercambio de informacion tecnica, comercial y juridica relacionado con una posible colaboracion. Informacion confidencial significa toda informacion revelada por escrito, oralmente, mediante acceso a repositorios o a traves de cualquier soporte digital, incluyendo secretos empresariales, hojas de ruta, listas de clientes, modelos financieros, planes de producto, informes de cumplimiento, borradores contractuales y cualquier resumen o derivacion que recoja el contenido sustancial de esa informacion.
+
+La parte receptora debera mantener toda la informacion confidencial en estricta reserva y se compromete a utilizarla unicamente para evaluar la operacion propuesta. La parte receptora debera limitar el acceso a las personas que necesiten conocer la informacion, imponer obligaciones de confidencialidad equivalentes, aplicar medidas tecnicas y organizativas razonables y notificar sin demora a la parte divulgadora cualquier acceso no autorizado, perdida o incidente de seguridad relevante.
+
+La vigencia de este acuerdo comienza en la fecha de firma y permanecera en efecto durante treinta y seis meses. Las obligaciones de confidencialidad seguiran siendo exigibles durante cinco anos despues de la terminacion de las conversaciones, siempre que la informacion conserve su caracter confidencial. Esta duracion permite completar la revision legal, financiera y operativa sin sacrificar la proteccion de los datos sensibles.
+
+Las excepciones se limitan a la informacion que ya era conocida licitamente por la parte receptora, que se haga publica sin incumplimiento, que sea recibida legitimamente de un tercero sin deber de reserva, o cuya divulgacion sea exigida por la ley o por una orden valida de una autoridad competente. En ese supuesto, la parte receptora notificara previamente a la parte divulgadora, en la medida permitida, para que esta pueda solicitar una medida de proteccion apropiada.
+
+Al finalizar este acuerdo, o cuando la parte divulgadora lo solicite por escrito, la parte receptora debera devolver o destruir toda la informacion confidencial y sus copias, salvo aquellas copias de respaldo que deban mantenerse de manera segura conforme a obligaciones tecnicas o regulatorias.
+
+La ley aplicable a este acuerdo sera la ley de Espana. Toda controversia relativa a su validez, interpretacion o cumplimiento quedara sometida a la jurisdiccion exclusiva de los tribunales competentes de Madrid.

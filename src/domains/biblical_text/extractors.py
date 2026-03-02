@@ -49,7 +49,18 @@ VERB_LEXICON = {
     "looked",
 }
 
-PAST_TENSE = {"was", "were", "had", "said", "came", "went", "made", "dwelt", "saw", "gave"}
+PAST_TENSE = {
+    "was",
+    "were",
+    "had",
+    "said",
+    "came",
+    "went",
+    "made",
+    "dwelt",
+    "saw",
+    "gave",
+}
 
 PRONOUNS = {
     "he": ("M", "S"),
@@ -104,7 +115,12 @@ def _entity_patterns():
 
 def _entity_meta():
     return {
-        "Jesus": {"char_id": "char_jesus", "label": "Jesus", "gender": "M", "number": "S"},
+        "Jesus": {
+            "char_id": "char_jesus",
+            "label": "Jesus",
+            "gender": "M",
+            "number": "S",
+        },
         "John": {"char_id": "char_john", "label": "John", "gender": "M", "number": "S"},
         "disciples": {
             "char_id": "char_disciples",
@@ -205,7 +221,8 @@ class BiblicalTextExtractors:
     ):
         frames = extracted["frames"]
         frame_strings = [
-            _frame_string(f["actor"], f["verb"], f["object"], f["indirect_object"]) for f in frames
+            _frame_string(f["actor"], f["verb"], f["object"], f["indirect_object"])
+            for f in frames
         ]
         actors = [f["actor"] for f in frames]
         actions = [f["verb"] for f in frames]
@@ -217,7 +234,9 @@ class BiblicalTextExtractors:
         movement = None
         for f in frames:
             if f["verb"].lower() not in ATTRIBUTION_VERBS:
-                movement = _frame_string(f["actor"], f["verb"], f["object"], f["indirect_object"])
+                movement = _frame_string(
+                    f["actor"], f["verb"], f["object"], f["indirect_object"]
+                )
                 break
 
         return {
@@ -235,7 +254,14 @@ class BiblicalTextExtractors:
         }
 
     def render_output(
-        self, input_ref, input_data, normalized_text, extracted, evidence_map, rendered, context
+        self,
+        input_ref,
+        input_data,
+        normalized_text,
+        extracted,
+        evidence_map,
+        rendered,
+        context,
     ):
         template_id = rendered.get("template_id") or rendered.get("id")
         return {
@@ -269,13 +295,17 @@ def _extract_verbs(text: str, segments):
             lower = token.lower()
             if lower in VERB_LEXICON or lower.endswith("ed") or lower.endswith("ing"):
                 lemma = lower
-                tense = "past" if lower in PAST_TENSE or lower.endswith("ed") else "present"
+                tense = (
+                    "past" if lower in PAST_TENSE or lower.endswith("ed") else "present"
+                )
                 verbs.append(
                     {
                         "verb_text": token,
                         "lemma_guess": lemma,
                         "tense_guess": tense,
-                        "role": "speech_introducer" if lower in ATTRIBUTION_VERBS else "verb",
+                        "role": "speech_introducer"
+                        if lower in ATTRIBUTION_VERBS
+                        else "verb",
                         "token_span": [
                             seg["token_start"] + match.start(),
                             seg["token_start"] + match.end(),
@@ -337,7 +367,9 @@ def _guess_speaker(prefix_text: str):
     for name in ["Jesus", "John", "Samaritan woman", "woman", "disciples"]:
         if re.search(rf"\b{name}\b", window):
             return (
-                "woman_of_Samaria" if "woman" in name.lower() and "samar" in name.lower() else name
+                "woman_of_Samaria"
+                if "woman" in name.lower() and "samar" in name.lower()
+                else name
             )
     return "unknown"
 
@@ -395,7 +427,9 @@ def _build_coref_links(text: str, segments, characters):
 
     coref_links = []
     unknown_state = {"M": 0, "F": 0, "N": 0, "P": 0}
-    pronoun_pattern = re.compile(r"\b(he|she|they|him|her|them|his|their|it|its)\b", re.IGNORECASE)
+    pronoun_pattern = re.compile(
+        r"\b(he|she|they|him|her|them|his|their|it|its)\b", re.IGNORECASE
+    )
     for seg in segments:
         for match in pronoun_pattern.finditer(seg["text"]):
             pronoun = match.group(1)
@@ -403,7 +437,9 @@ def _build_coref_links(text: str, segments, characters):
             end = seg["token_start"] + match.end()
             gender, number = PRONOUNS.get(pronoun.lower(), ("N", "S"))
             lookback = [
-                c for c in candidate_mentions if 0 <= seg["sentence_id"] - c["sentence_id"] <= 2
+                c
+                for c in candidate_mentions
+                if 0 <= seg["sentence_id"] - c["sentence_id"] <= 2
             ]
             filtered = []
             for c in lookback:
@@ -428,7 +464,9 @@ def _build_coref_links(text: str, segments, characters):
                     }
                 )
                 continue
-            filtered.sort(key=lambda c: (seg["sentence_id"] - c["sentence_id"], -c["token_start"]))
+            filtered.sort(
+                key=lambda c: (seg["sentence_id"] - c["sentence_id"], -c["token_start"])
+            )
             chosen = filtered[0]
             coref_links.append(
                 {

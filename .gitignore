@@ -12,8 +12,12 @@ __pycache__/
 
 # Test artifacts
 .pytest_cache/
+.pytest_tmp/
 .coverage
 htmlcov/
+tmp_goldens/
+tmp_repro_check/
+.repro_check/
 
 # Outputs
 outputs/

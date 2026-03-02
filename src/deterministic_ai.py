@@ -8,6 +8,7 @@ from core.pipeline import DeterministicPipeline
 from domains.biblical_text.extractors import BiblicalTextExtractors
 from domains.clinical_records.extractors import ClinicalRecordsExtractors
 from domains.credit_scoring.extractors import CreditScoringExtractors
+from domains.legal_contract.extractor import LegalContractExtractors
 
 
 def _find_repo_root(start: Path) -> Path:
@@ -43,6 +44,13 @@ DOMAIN_REGISTRY = {
         "extractor": ClinicalRecordsExtractors(),
         "templates": CODE_ROOT / "domains/clinical_records/templates",
         "manifest": DATA_ROOT / "clinical/manifest.json",
+        "input_kind": "json",
+    },
+    "legal_contract": {
+        "extractor": LegalContractExtractors(),
+        "templates": CODE_ROOT / "domains/legal_contract/templates",
+        "manifest": DATA_ROOT / "legal_contract_sample/manifest.json",
+        "input_kind": "text",
     },
 }
 
@@ -57,6 +65,13 @@ def _parse_context(entries):
     return context
 
 
+def _decode_input(domain: str, data_bytes: bytes):
+    input_kind = DOMAIN_REGISTRY[domain].get("input_kind", "json")
+    if input_kind == "text":
+        return data_bytes.decode("utf-8")
+    return json.loads(data_bytes.decode("utf-8-sig"))
+
+
 def _load_input(domain, input_ref, input_file, dataset, manifest):
     if input_file:
         path = Path(input_file)
@@ -64,7 +79,7 @@ def _load_input(domain, input_ref, input_file, dataset, manifest):
         if domain == "biblical_text":
             data = data_bytes.decode("utf-8")
         else:
-            data = json.loads(data_bytes.decode("utf-8-sig"))
+            data = _decode_input(domain, data_bytes)
         return {
             "ref": input_ref,
             "data": data,
@@ -75,13 +90,15 @@ def _load_input(domain, input_ref, input_file, dataset, manifest):
     if dataset and domain == "biblical_text":
         manifest_path = DATA_ROOT / "scripture" / dataset / "manifest.json"
     else:
-        manifest_path = Path(manifest) if manifest else DOMAIN_REGISTRY[domain]["manifest"]
+        manifest_path = (
+            Path(manifest) if manifest else DOMAIN_REGISTRY[domain]["manifest"]
+        )
     resolved = resolve_input(input_ref, manifest_path)
     data_bytes = resolved["data_bytes"]
     if domain == "biblical_text":
         data = data_bytes.decode("utf-8")
     else:
-        data = json.loads(data_bytes.decode("utf-8-sig"))
+        data = _decode_input(domain, data_bytes)
 
     return {
         "ref": resolved["ref"],
@@ -92,6 +109,21 @@ def _load_input(domain, input_ref, input_file, dataset, manifest):
             "manifest_sha256": resolved["manifest_sha256"],
         },
     }
+
+
+def _build_provenance_meta(args, resolved: dict) -> dict:
+    provenance_meta = {}
+    if args.timestamp:
+        provenance_meta["timestamp"] = args.timestamp
+    if args.commit_ref:
+        provenance_meta["commit_ref"] = args.commit_ref
+    if args.repo_tag:
+        provenance_meta["repo_tag"] = args.repo_tag
+    if resolved.get("input_meta", {}).get("manifest_sha256"):
+        provenance_meta["input_manifest_sha256"] = resolved["input_meta"][
+            "manifest_sha256"
+        ]
+    return provenance_meta
 
 
 def run_pipeline(args):
@@ -119,6 +151,7 @@ def run_pipeline(args):
         context,
         output_dir,
         input_meta=resolved["input_meta"],
+        provenance_meta=_build_provenance_meta(args, resolved),
     )
 
 
@@ -141,7 +174,9 @@ def validate_provenance(paths):
         input_meta = data.get("input_meta") or {}
         input_file = input_meta.get("input_file")
         if input_file and Path(input_file).exists():
-            input_match = sha256_bytes(Path(input_file).read_bytes()) == data.get("input_sha256")
+            input_match = sha256_bytes(Path(input_file).read_bytes()) == data.get(
+                "input_sha256"
+            )
         results.append(
             {
                 "path": str(path),
@@ -164,6 +199,9 @@ def main(argv=None):
     run_parser.add_argument("--dataset")
     run_parser.add_argument("--manifest")
     run_parser.add_argument("--context", action="append")
+    run_parser.add_argument("--timestamp")
+    run_parser.add_argument("--commit-ref")
+    run_parser.add_argument("--repo-tag")
     run_parser.add_argument("--out", required=True)
 
     validate_parser = subparsers.add_parser("validate-provenance")

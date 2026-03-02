@@ -100,7 +100,9 @@ class GroundTruthExtractor:
             "deterministic_output": deterministic_output,
             "template": template_meta,
         }
-        ground_truth_sha = attestation.compute_sha256(attestation.canonicalize_json(ground_truth))
+        ground_truth_sha = attestation.compute_sha256(
+            attestation.canonicalize_json(ground_truth)
+        )
         ground_truth["attestation_sha256"] = ground_truth_sha
         return ground_truth
 
@@ -115,13 +117,21 @@ class GroundTruthExtractor:
     ) -> tuple[dict, dict]:
         try:
             fallback = self.extractor.template_fallback(input_ref, context, normalized)
-            template = templates.load_template(input_ref, self.template_dir, chain=fallback)
+            template = templates.load_template(
+                input_ref, self.template_dir, chain=fallback
+            )
             render_context = self.extractor.build_context(
                 input_ref, input_data, normalized, extracted, evidence_map, context
             )
             rendered = templates.resolve_placeholders(template, render_context)
             output = self.extractor.render_output(
-                input_ref, input_data, normalized, extracted, evidence_map, rendered, context
+                input_ref,
+                input_data,
+                normalized,
+                extracted,
+                evidence_map,
+                rendered,
+                context,
             )
             meta = {
                 "template_path": template.get("_template_path"),

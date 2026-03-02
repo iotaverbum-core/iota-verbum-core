@@ -1,0 +1,14 @@
+Accord de non-divulgation
+
+Le present accord de non-divulgation est conclu entre Alpha Conseil SAS et Beta Industrie SARL afin d'encadrer les echanges d'informations commerciales, techniques et juridiques utiles a l'etude d'un partenariat potentiel. Aux fins du present accord, l'expression information confidentielle designe toute information communiquee par ecrit, oralement, par acces a une salle de donnees, ou par remise de documents, y compris les secrets d'affaires, strategies commerciales, listes de clients, architectures de systemes, modeles financiers, cahiers de tests, rapports de conformite et toute copie ou synthese qui en reprend la substance.
+
+La partie destinataire doit garder strictement confidentielle toute information confidentielle recue par elle et s'engage a ne l'utiliser qu'aux seules fins de l'evaluation du projet commun. La partie destinataire doit limiter l'acces aux seules personnes ayant un besoin legitime d'en connaitre le contenu, imposer a ces personnes des obligations de confidentialite equivalentes, proteger les documents avec des mesures techniques et organisationnelles appropriees, et informer sans delai la partie divulgatrice de tout acces non autorise ou de tout incident de securite pertinent.
+
+La duree du present accord commence a la date de signature et reste en vigueur pendant trente-six mois. Les obligations de confidentialite survivront pendant cinq ans apres la fin des discussions si les informations conservent leur caractere confidentiel. Cette duree a ete choisie pour permettre aux parties de mener une due diligence complete, d'analyser les risques contractuels, et de finaliser les validations internes sans compromettre la protection des informations sensibles.
+
+Les exceptions a la confidentialite couvrent uniquement les informations qui etaient deja legalement connues du destinataire, qui sont devenues publiques sans faute de sa part, qui ont ete recues legitimement d'un tiers non tenu au secret, ou dont la divulgation est imposee par la loi ou par une decision d'une autorite competente. Dans ce dernier cas, la partie destinataire doit, dans la mesure permise, notifier prealablement la partie divulgatrice afin qu'elle puisse solliciter une mesure de protection appropriee.
+
+A l'expiration du present accord, ou sur demande ecrite de la partie divulgatrice, la partie destinataire doit restituer ou detruire sans delai raisonnable tous les documents et supports contenant des informations confidentielles, sous reserve des copies de sauvegarde techniques conservees de maniere securisee conformement aux politiques de retention applicables.
+
+Le present accord est regi par la loi applicable de France. Tout litige relatif a sa validite, son interpretation, son execution ou sa cessation releve de la juridiction exclusive des tribunaux competents de Paris, auxquels les parties attribuent expressement competence.
+

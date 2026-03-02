@@ -4,9 +4,10 @@ import argparse
 import json
 from pathlib import Path
 
+from scripts.generate_manifest import build_manifest_text
+
 from core.attestation import sha256_bytes
 from deterministic_ai import REPO_ROOT
-from scripts.generate_manifest import build_manifest_text
 
 BANNER = "=" * 51
 

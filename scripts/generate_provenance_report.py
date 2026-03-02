@@ -3,12 +3,13 @@ from __future__ import annotations
 import argparse
 from pathlib import Path
 
-from core.attestation import write_text
 from scripts.view_provenance import (
     _load_record,
     _record_input_path,
     generate_html_report,
 )
+
+from core.attestation import write_text
 
 
 def main(argv: list[str] | None = None):

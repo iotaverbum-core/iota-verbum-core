@@ -1,2 +1,0 @@
-deterministic_ai domain=credit_scoring
-files_written=output.json, provenance.json, attestation.sha256, log.txt

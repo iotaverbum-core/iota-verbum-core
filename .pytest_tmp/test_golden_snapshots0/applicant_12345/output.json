@@ -1,0 +1,55 @@
+{
+  "decision": "approved_conditional",
+  "evidence_map": {
+    "frames": [
+      {
+        "action": "earn",
+        "actor": "applicant_12345",
+        "amount": 4200.0,
+        "frequency": "monthly",
+        "id": "frame_0"
+      },
+      {
+        "action": "owe",
+        "actor": "applicant_12345",
+        "amount": 2100.0,
+        "frequency": "monthly",
+        "id": "frame_1"
+      }
+    ],
+    "signals": [
+      {
+        "id": "signal_0",
+        "status": "pass",
+        "threshold": 0.55,
+        "type": "debt_to_income",
+        "value": 0.5
+      },
+      {
+        "count": 1,
+        "id": "signal_1",
+        "status": "caution",
+        "threshold": 0,
+        "type": "recent_delinquency"
+      },
+      {
+        "id": "signal_2",
+        "status": "caution",
+        "threshold": 640,
+        "type": "credit_score",
+        "value": 620
+      },
+      {
+        "id": "signal_3",
+        "status": "pass",
+        "threshold": 24,
+        "type": "employment_months",
+        "value": 36
+      }
+    ]
+  },
+  "explanation": "Application approved_conditional based on debt-to-income ratio 0.5, employment 36 months, and delinquencies 1 in 12 months. Risk tier: subprime_tier3. Interest rate: 0.089. Collateral: {missing:collateral_type}.",
+  "interest_rate": "0.089",
+  "risk_tier": "subprime_tier3",
+  "spec_version": "credit_v1"
+}

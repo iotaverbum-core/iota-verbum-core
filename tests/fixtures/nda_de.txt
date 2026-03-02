@@ -1,0 +1,14 @@
+Vertraulichkeitsvereinbarung
+
+Diese Vertraulichkeitsvereinbarung wird zwischen Alpha Beratung GmbH und Beta Systeme AG geschlossen, um den Austausch technischer, wirtschaftlicher und rechtlicher Informationen im Rahmen einer moeglichen Zusammenarbeit zu regeln. Vertrauliche Informationen bedeutet im Sinne dieser Vereinbarung alle schriftlichen, muendlichen oder elektronisch bereitgestellten Angaben, darunter Geschaeftsgeheimnisse, Kundenlisten, Quellcodefragmente, Sicherheitskonzepte, Preislisten, Vertragsentwuerfe, Testprotokolle, Finanzmodelle und jede Zusammenfassung oder Ableitung, die den wesentlichen Inhalt dieser Informationen wiedergibt.
+
+Die empfangende Partei ist verpflichtet, alle vertraulichen Informationen streng vertraulich zu behandeln und sie ausschliesslich fuer die Bewertung des gemeinsamen Vorhabens zu verwenden. Sie muss den Zugriff auf Mitarbeiter und Berater beschraenken, die diese Informationen zwingend benoetigen, gleichwertige Vertraulichkeitspflichten sicherstellen, angemessene technische und organisatorische Massnahmen aufrechterhalten und die offenlegende Partei unverzueglich ueber jeden unbefugten Zugriff, jeden Verlust oder jede relevante Sicherheitsverletzung informieren.
+
+Die Laufzeit dieser Vereinbarung beginnt mit Unterzeichnung und dauert sechsunddreissig Monate. Die Vertraulichkeitspflichten gelten fuer einen Zeitraum von fuenf Jahren nach Beendigung der Gesprache fort, soweit die betreffenden Informationen weiterhin vertraulich sind. Diese Dauer ist erforderlich, damit beide Parteien eine sorgfaeltige Due Diligence, interne Freigaben und regulatorische Bewertungen abschliessen koennen, ohne dass Schutzluecken entstehen.
+
+Ausnahmen gelten nur fuer Informationen, die der empfangenden Partei bereits rechtmaessig bekannt waren, die ohne Vertragsverletzung allgemein bekannt werden, die von einem berechtigten Dritten ohne Geheimhaltungspflicht zulaessig offengelegt wurden oder deren Offenlegung gesetzlich oder durch behoerdliche Anordnung zwingend vorgeschrieben ist. In einem solchen Fall muss die empfangende Partei die offenlegende Partei, soweit rechtlich zulaessig, vorab informieren, damit Schutzmassnahmen beantragt werden koennen.
+
+Nach Ablauf der Vereinbarung oder auf schriftliches Verlangen der offenlegenden Partei hat die empfangende Partei alle vertraulichen Informationen sowie saemtliche Kopien unverzueglich zurueckzugeben oder sicher zu vernichten, soweit nicht zwingende Sicherungskopien nach internen Aufbewahrungsregeln erhalten bleiben muessen.
+
+Fuer diese Vereinbarung gilt das anwendbare Recht der Bundesrepublik Deutschland. Ausschliesslicher Gerichtsstand fuer alle Streitigkeiten aus oder im Zusammenhang mit dieser Vereinbarung sind die zustaendigen Gerichte in Berlin.
+

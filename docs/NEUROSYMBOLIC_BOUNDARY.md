@@ -1,36 +1,36 @@
 # NEUROSYMBOLIC_BOUNDARY.md
-# IOTA VERBUM CORE — Neurosymbolic Architecture Boundary
-Version: 1.0 · Date: February 2026
-Status: Canonical — governed by MANIFEST.sha256
+# IOTA VERBUM CORE - Neurosymbolic Architecture Boundary
+Version: 1.1 - Date: March 2, 2026
+Status: Canonical - governed by MANIFEST.sha256
 
 ## Overview
 
-IOTA VERBUM CORE is a neurosymbolic hybrid system with an explicit boundary
-between its deterministic symbolic layer and its probabilistic neural layer.
+IOTA VERBUM CORE is a neurosymbolic hybrid system with an explicit boundary between its deterministic symbolic layer and any probabilistic neural layer.
 
-## Symbolic Layer (fully deterministic, currently active)
+## Active Boundary for v0.3.0-production
 
-Components: legal_contract extractor, nda extractor, provenance record
-generator, manifest generator, schema validators, governance metadata mapper.
+The active runtime boundary is `symbolic_only`.
+This applies to text ingestion, PDF extraction routing, language detection, and clause extraction.
+Language detection uses fixed-library scoring with deterministic tie-breaking rules.
+Clause extraction remains rule-based and independently verifiable.
 
-Guarantees: byte-identical outputs, independently verifiable provenance,
-traceable reasoning, formal constraint satisfaction.
+## Symbolic Layer
 
-## Neural Layer (architecturally supported, inactive until v0.3.x)
+Components: legal contract extractor, multilingual NDA extractors, PDF text cleaning, provenance storage, verification, audit logging, governance metadata mapping, and schema validation.
 
-Planned: LLM clause classifier, context-aware entity resolver,
-multi-language semantic normaliser.
+Guarantees: byte-identical extraction results for the same clean text, independently verifiable provenance, traceable rule identifiers, deterministic health reporting, and explicit failure modes.
 
-Not permitted: write to canonical output paths, override symbolic results
-without validation, generate provenance records, modify governance metadata.
+## Neural Layer
 
-## Integration Layer — The Provenance Record
+The codebase may later host isolated experimental neural components, but they are inactive in the extraction path for `v0.3.0-production`.
+Neural components may not write canonical outputs, provenance records, or governance metadata.
+Neural components may not override symbolic extraction results.
 
-Every output includes a neurosymbolic_boundary block recording which
-components ran on each side of the boundary. This makes the boundary
-auditable at the record level.
+## Record-Level Boundary
+
+Every provenance record stores `neurosymbolic_boundary: symbolic_only`.
+`/health` is the source of truth for the currently active boundary and must remain aligned with runtime behavior.
 
 ## Verification
 
-python scripts/determinism_check.py         # symbolic layer determinism
-python scripts/generate_manifest.py --verify  # boundary document is sealed
+`GET /v1/verify/{record_id}` recomputes the SHA-256 hash from stored clean text and compares it with the stored provenance hash.

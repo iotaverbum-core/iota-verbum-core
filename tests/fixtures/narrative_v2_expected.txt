@@ -1,0 +1,20 @@
+Verification
+Status: VERIFIED_OK
+Reasons: none
+Required Info: none
+
+What we know
+- C: Gamma supports Delta [evidence=1]
+- A: Alpha supports Beta [evidence=1]
+- B: Beta supports Gamma [evidence=1]
+
+What we don't know yet
+None.
+
+Conflicts
+None.
+
+Receipts
+Counts: evidence_refs=3, proofs=1, findings=0
+Top evidence refs: source-a|chunk-a, source-b|chunk-b, source-c|chunk-c
+Run with --show-receipts true for full receipts

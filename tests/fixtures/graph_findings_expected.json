@@ -1,0 +1,22 @@
+{
+  "findings_version": "1.0",
+  "duplicates": [
+    {
+      "claim_a": "c1",
+      "claim_b": "c2",
+      "reason": "matching normalized proposition fingerprint"
+    }
+  ],
+  "contradictions": [
+    {
+      "claim_a": "c1",
+      "claim_b": "c3",
+      "reason": "opposite polarity for same normalized proposition"
+    },
+    {
+      "claim_a": "c2",
+      "claim_b": "c3",
+      "reason": "opposite polarity for same normalized proposition"
+    }
+  ]
+}

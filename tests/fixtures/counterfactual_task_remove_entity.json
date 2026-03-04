@@ -1,0 +1,19 @@
+{
+  "version": "1.0",
+  "task_id": "cf:c89eb5e77beab4b63757dd492dca979e081e54e9be442d37f4f120849f339496",
+  "created_utc": "2026-03-05T00:00:00Z",
+  "base": {
+    "source": {
+      "kind": "output_json",
+      "path": "FIXTURE_BASE_OUTPUT_PATH"
+    }
+  },
+  "operation": {
+    "type": "REMOVE_ENTITY",
+    "target_id": "entity:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+  },
+  "options": {
+    "mode": "brief",
+    "max_lines": 80
+  }
+}

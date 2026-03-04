@@ -1,0 +1,36 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/schemas/world_diff_narrative.schema.json",
+  "title": "WorldDiffNarrative",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "world_diff_narrative_version",
+    "mode",
+    "text",
+    "sections"
+  ],
+  "properties": {
+    "world_diff_narrative_version": {
+      "type": "string",
+      "const": "1.0"
+    },
+    "mode": {
+      "type": "string",
+      "enum": ["brief", "full"]
+    },
+    "text": {"type": "string"},
+    "sections": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["title", "lines"],
+        "properties": {
+          "title": {"type": "string"},
+          "lines": {"type": "array", "items": {"type": "string"}}
+        }
+      }
+    }
+  }
+}

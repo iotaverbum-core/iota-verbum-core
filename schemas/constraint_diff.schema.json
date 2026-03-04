@@ -1,0 +1,226 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/schemas/constraint_diff.schema.json",
+  "title": "ConstraintDiff",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "version",
+    "old",
+    "new",
+    "verification_change",
+    "violations",
+    "counts"
+  ],
+  "$defs": {
+    "hashes": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "output_sha256",
+        "world_sha256",
+        "attestation_sha256"
+      ],
+      "properties": {
+        "output_sha256": {
+          "type": "string",
+          "minLength": 1
+        },
+        "world_sha256": {
+          "type": "string",
+          "minLength": 1
+        },
+        "attestation_sha256": {
+          "type": "string"
+        }
+      }
+    },
+    "evidence_ref": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "source_id",
+        "chunk_id",
+        "offset_start",
+        "offset_end",
+        "text_sha256"
+      ],
+      "properties": {
+        "source_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "chunk_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "offset_start": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "offset_end": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "text_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        }
+      }
+    },
+    "constraint_violation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "type",
+        "events",
+        "entities",
+        "reason",
+        "evidence"
+      ],
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "POLICY_CONFLICT",
+            "TEMPORAL_CONFLICT",
+            "CAUSAL_CONFLICT",
+            "STATE_CONFLICT"
+          ]
+        },
+        "events": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^event:[0-9a-f]{64}$"
+          }
+        },
+        "entities": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^entity:[0-9a-f]{64}$"
+          }
+        },
+        "reason": {
+          "type": "string",
+          "minLength": 1
+        },
+        "evidence": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/evidence_ref"
+          }
+        }
+      }
+    },
+    "changed_violation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "old",
+        "new"
+      ],
+      "properties": {
+        "old": {
+          "$ref": "#/$defs/constraint_violation"
+        },
+        "new": {
+          "$ref": "#/$defs/constraint_violation"
+        }
+      }
+    }
+  },
+  "properties": {
+    "version": {
+      "type": "string",
+      "const": "1.0"
+    },
+    "old": {
+      "$ref": "#/$defs/hashes"
+    },
+    "new": {
+      "$ref": "#/$defs/hashes"
+    },
+    "verification_change": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "old",
+        "new"
+      ],
+      "properties": {
+        "old": {
+          "type": "string",
+          "minLength": 1
+        },
+        "new": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "violations": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "added",
+        "removed",
+        "changed"
+      ],
+      "properties": {
+        "added": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/constraint_violation"
+          }
+        },
+        "removed": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/constraint_violation"
+          }
+        },
+        "changed": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/changed_violation"
+          }
+        }
+      }
+    },
+    "counts": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "old_total",
+        "new_total",
+        "added",
+        "removed",
+        "changed"
+      ],
+      "properties": {
+        "old_total": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "new_total": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "added": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "removed": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "changed": {
+          "type": "integer",
+          "minimum": 0
+        }
+      }
+    }
+  }
+}

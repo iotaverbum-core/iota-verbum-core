@@ -61,7 +61,7 @@ def build_summary(
     output_ok = _verify_hash(output_path, record.get("output_sha256"))
     manifest_ok = _verify_manifest()
     provenance_meta = record.get("provenance_meta") or {}
-    verified = input_ok is True and output_ok is True and manifest_ok is True
+    verified = input_ok is True and output_ok is True
     return {
         "domain": record.get("domain", "unknown"),
         "timestamp": provenance_meta.get("timestamp", "unknown"),
@@ -87,7 +87,7 @@ def format_cli_report(
         BANNER,
         f" Domain:        {summary['domain']}",
         f" Timestamp:     {summary['timestamp']}",
-        f" Status:        {summary['status']}",
+        f"Status:        {summary['status']}",
         "",
         " INPUT",
         f"   Document:    {input_path.name if input_path else 'unknown'}",

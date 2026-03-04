@@ -1,0 +1,36 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/schemas/evidence_ref.schema.json",
+  "title": "EvidenceRef",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "source_id",
+    "chunk_id",
+    "offset_start",
+    "offset_end",
+    "text_sha256"
+  ],
+  "properties": {
+    "source_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "chunk_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "offset_start": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "offset_end": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "text_sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    }
+  }
+}

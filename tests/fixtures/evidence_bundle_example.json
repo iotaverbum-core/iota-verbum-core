@@ -1,0 +1,45 @@
+{
+  "bundle_version": "1.0",
+  "created_utc": "2026-03-01T12:00:00Z",
+  "inputs": {
+    "prompt": "Summarize Cafe\u0301 evidence.",
+    "params": {
+      "limit": 2,
+      "include_quotes": true,
+      "filters": [
+        "source:a",
+        "source:b"
+      ]
+    }
+  },
+  "artifacts": [
+    {
+      "source_id": "source-a",
+      "chunk_id": "chunk-0001",
+      "offset_start": 0,
+      "offset_end": 17,
+      "text": "Cafe\u0301 line 1\r\nline 2"
+    },
+    {
+      "source_id": "source-b",
+      "chunk_id": "chunk-0002",
+      "offset_start": 18,
+      "offset_end": 31,
+      "text": "Quoted line",
+      "text_sha256": "29d3d204d9e3016293b45f0fdcec99bc58cefaf13efb7d60943456c946f29505"
+    }
+  ],
+  "toolchain": {
+    "core_version": "0.3.0",
+    "parser_versions": {
+      "segmenter": "2026.03"
+    },
+    "schema_versions": {
+      "evidence_bundle": "1.0",
+      "attestation_record": "1.0"
+    }
+  },
+  "policy": {
+    "ruleset_id": "ruleset.core.v1"
+  }
+}

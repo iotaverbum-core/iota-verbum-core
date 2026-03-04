@@ -1,0 +1,581 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/schemas/counterfactual_result.schema.json",
+  "title": "CounterfactualResult",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "version",
+    "task_id",
+    "base_hashes",
+    "counterfactual_hashes",
+    "operation",
+    "effects",
+    "diff",
+    "receipts"
+  ],
+  "$defs": {
+    "json_value": {
+      "oneOf": [
+        {
+          "type": "null"
+        },
+        {
+          "type": "boolean"
+        },
+        {
+          "type": "number"
+        },
+        {
+          "type": "string"
+        },
+        {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/json_value"
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "patternProperties": {
+            "^.*$": {
+              "$ref": "#/$defs/json_value"
+            }
+          }
+        }
+      ]
+    },
+    "hashes": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "world_sha256",
+        "output_sha256",
+        "attestation_sha256"
+      ],
+      "properties": {
+        "world_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "output_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "attestation_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        }
+      }
+    },
+    "world_diff_reason": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "code",
+        "message",
+        "ref"
+      ],
+      "properties": {
+        "code": {
+          "type": "string"
+        },
+        "message": {
+          "type": "string"
+        },
+        "ref": {
+          "type": "object",
+          "additionalProperties": false,
+          "patternProperties": {
+            "^.*$": {
+              "$ref": "#/$defs/json_value"
+            }
+          }
+        }
+      }
+    },
+    "world_diff_unknown": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "ref"
+      ],
+      "properties": {
+        "kind": {
+          "type": "string"
+        },
+        "ref": {
+          "type": "object",
+          "additionalProperties": false,
+          "patternProperties": {
+            "^.*$": {
+              "$ref": "#/$defs/json_value"
+            }
+          }
+        }
+      }
+    },
+    "world_diff_conflict": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "ref",
+        "reason"
+      ],
+      "properties": {
+        "kind": {
+          "type": "string"
+        },
+        "ref": {
+          "type": "object",
+          "additionalProperties": false,
+          "patternProperties": {
+            "^.*$": {
+              "$ref": "#/$defs/json_value"
+            }
+          }
+        },
+        "reason": {
+          "type": "string"
+        }
+      }
+    },
+    "world_diff": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "world_diff_version",
+        "old",
+        "new",
+        "entities",
+        "events",
+        "unknowns",
+        "conflicts",
+        "verification"
+      ],
+      "properties": {
+        "world_diff_version": {
+          "type": "string",
+          "const": "1.0"
+        },
+        "old": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "world_sha256",
+            "output_sha256",
+            "attestation_sha256"
+          ],
+          "properties": {
+            "world_sha256": {
+              "type": "string"
+            },
+            "output_sha256": {
+              "type": "string"
+            },
+            "attestation_sha256": {
+              "type": "string"
+            }
+          }
+        },
+        "new": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "world_sha256",
+            "output_sha256",
+            "attestation_sha256"
+          ],
+          "properties": {
+            "world_sha256": {
+              "type": "string"
+            },
+            "output_sha256": {
+              "type": "string"
+            },
+            "attestation_sha256": {
+              "type": "string"
+            }
+          }
+        },
+        "entities": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "added",
+            "removed",
+            "unchanged"
+          ],
+          "properties": {
+            "added": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "removed": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "unchanged": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "events": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "added",
+            "removed",
+            "changed",
+            "unchanged"
+          ],
+          "properties": {
+            "added": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "removed": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "changed": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "event_id",
+                  "changes"
+                ],
+                "properties": {
+                  "event_id": {
+                    "type": "string"
+                  },
+                  "changes": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "additionalProperties": false,
+                      "required": [
+                        "field",
+                        "old",
+                        "new"
+                      ],
+                      "properties": {
+                        "field": {
+                          "type": "string"
+                        },
+                        "old": {
+                          "$ref": "#/$defs/json_value"
+                        },
+                        "new": {
+                          "$ref": "#/$defs/json_value"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "unchanged": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "unknowns": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "added",
+            "removed"
+          ],
+          "properties": {
+            "added": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/world_diff_unknown"
+              }
+            },
+            "removed": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/world_diff_unknown"
+              }
+            }
+          }
+        },
+        "conflicts": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "added",
+            "removed"
+          ],
+          "properties": {
+            "added": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/world_diff_conflict"
+              }
+            },
+            "removed": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/world_diff_conflict"
+              }
+            }
+          }
+        },
+        "verification": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "old_status",
+            "new_status",
+            "reasons_added",
+            "reasons_removed",
+            "required_info_added",
+            "required_info_removed"
+          ],
+          "properties": {
+            "old_status": {
+              "type": "string",
+              "enum": [
+                "VERIFIED_OK",
+                "VERIFIED_FAIL",
+                "VERIFIED_NEEDS_INFO"
+              ]
+            },
+            "new_status": {
+              "type": "string",
+              "enum": [
+                "VERIFIED_OK",
+                "VERIFIED_FAIL",
+                "VERIFIED_NEEDS_INFO"
+              ]
+            },
+            "reasons_added": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/world_diff_reason"
+              }
+            },
+            "reasons_removed": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/world_diff_reason"
+              }
+            },
+            "required_info_added": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/world_diff_unknown"
+              }
+            },
+            "required_info_removed": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/world_diff_unknown"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "properties": {
+    "version": {
+      "type": "string",
+      "const": "1.0"
+    },
+    "task_id": {
+      "type": "string",
+      "pattern": "^cf:[0-9a-f]{64}$"
+    },
+    "base_hashes": {
+      "$ref": "#/$defs/hashes"
+    },
+    "counterfactual_hashes": {
+      "$ref": "#/$defs/hashes"
+    },
+    "operation": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "type",
+            "target_id"
+          ],
+          "properties": {
+            "type": {
+              "const": "REMOVE_EVENT"
+            },
+            "target_id": {
+              "type": "string",
+              "pattern": "^event:[0-9a-f]{64}$"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "type",
+            "target_id"
+          ],
+          "properties": {
+            "type": {
+              "const": "REMOVE_ENTITY"
+            },
+            "target_id": {
+              "type": "string",
+              "pattern": "^entity:[0-9a-f]{64}$"
+            }
+          }
+        }
+      ]
+    },
+    "effects": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "removed",
+        "changed_events",
+        "changed_unknowns_count",
+        "verification_change"
+      ],
+      "properties": {
+        "removed": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "events",
+            "entities"
+          ],
+          "properties": {
+            "events": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "pattern": "^event:[0-9a-f]{64}$"
+              }
+            },
+            "entities": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "pattern": "^entity:[0-9a-f]{64}$"
+              }
+            }
+          }
+        },
+        "changed_events": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "event_id",
+              "fields_changed"
+            ],
+            "properties": {
+              "event_id": {
+                "type": "string",
+                "pattern": "^event:[0-9a-f]{64}$"
+              },
+              "fields_changed": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "changed_unknowns_count": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "old",
+            "new"
+          ],
+          "properties": {
+            "old": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "new": {
+              "type": "integer",
+              "minimum": 0
+            }
+          }
+        },
+        "verification_change": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "old",
+            "new"
+          ],
+          "properties": {
+            "old": {
+              "type": "string",
+              "enum": [
+                "VERIFIED_OK",
+                "VERIFIED_FAIL",
+                "VERIFIED_NEEDS_INFO"
+              ]
+            },
+            "new": {
+              "type": "string",
+              "enum": [
+                "VERIFIED_OK",
+                "VERIFIED_FAIL",
+                "VERIFIED_NEEDS_INFO"
+              ]
+            }
+          }
+        }
+      }
+    },
+    "diff": {
+      "$ref": "#/$defs/world_diff"
+    },
+    "receipts": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "base_path",
+        "counterfactual_path"
+      ],
+      "properties": {
+        "base_path": {
+          "type": "string",
+          "minLength": 1
+        },
+        "counterfactual_path": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,16 @@
+Summary
+Delta: Entities +1/-0, Events +1/-0, Changed 1, Unknowns +1/-1, Conflicts +0/-0, Verification VERIFIED_OK->VERIFIED_FAIL
+
+What's new
+- entity added: entity:new
+- event added: event:new
+
+What changed
+- event:changed: action,time
+
+What got resolved
+- unknown removed: {"kind":"missing_time","ref":{"event_id":"event:changed"}}
+
+What needs attention
+- unknown added: {"kind":"missing_actor","ref":{"event_id":"event:new"}}
+- required info added: {"kind":"missing_actor","ref":{"event_id":"event:new"}}

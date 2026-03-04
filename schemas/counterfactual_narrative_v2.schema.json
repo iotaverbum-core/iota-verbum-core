@@ -1,0 +1,102 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/schemas/counterfactual_narrative_v2.schema.json",
+  "title": "CounterfactualNarrativeV2",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "narrative_version",
+    "mode",
+    "text",
+    "sections",
+    "summary"
+  ],
+  "properties": {
+    "narrative_version": {
+      "type": "string",
+      "const": "2.0"
+    },
+    "mode": {
+      "type": "string",
+      "enum": [
+        "brief",
+        "full"
+      ]
+    },
+    "text": {
+      "type": "string"
+    },
+    "sections": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "title",
+          "lines"
+        ],
+        "properties": {
+          "title": {
+            "type": "string",
+            "minLength": 1
+          },
+          "lines": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "summary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "task_id",
+        "verification_old",
+        "verification_new",
+        "causal_edges_old",
+        "causal_edges_new",
+        "has_cycle_old",
+        "has_cycle_new"
+      ],
+      "properties": {
+        "task_id": {
+          "type": "string",
+          "pattern": "^cf:[0-9a-f]{64}$"
+        },
+        "verification_old": {
+          "type": "string",
+          "enum": [
+            "VERIFIED_OK",
+            "VERIFIED_FAIL",
+            "VERIFIED_NEEDS_INFO"
+          ]
+        },
+        "verification_new": {
+          "type": "string",
+          "enum": [
+            "VERIFIED_OK",
+            "VERIFIED_FAIL",
+            "VERIFIED_NEEDS_INFO"
+          ]
+        },
+        "causal_edges_old": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "causal_edges_new": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "has_cycle_old": {
+          "type": "boolean"
+        },
+        "has_cycle_new": {
+          "type": "boolean"
+        }
+      }
+    }
+  }
+}

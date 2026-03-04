@@ -1,0 +1,96 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/schemas/constraint_diff_narrative_v2.schema.json",
+  "title": "ConstraintDiffNarrativeV2",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "narrative_version",
+    "mode",
+    "text",
+    "sections",
+    "summary"
+  ],
+  "properties": {
+    "narrative_version": {
+      "type": "string",
+      "const": "2.0"
+    },
+    "mode": {
+      "type": "string",
+      "enum": [
+        "brief",
+        "full"
+      ]
+    },
+    "text": {
+      "type": "string"
+    },
+    "sections": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "title",
+          "lines"
+        ],
+        "properties": {
+          "title": {
+            "type": "string",
+            "minLength": 1
+          },
+          "lines": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "summary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "old_total",
+        "new_total",
+        "added",
+        "removed",
+        "changed",
+        "verification_old",
+        "verification_new"
+      ],
+      "properties": {
+        "old_total": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "new_total": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "added": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "removed": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "changed": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "verification_old": {
+          "type": "string",
+          "minLength": 1
+        },
+        "verification_new": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    }
+  }
+}

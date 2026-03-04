@@ -1,0 +1,71 @@
+{
+  "graph_version": "1.0",
+  "claims": [
+    {
+      "claim_id": "c1",
+      "subject": "Sky",
+      "predicate": "is",
+      "object": "Blue",
+      "polarity": "affirm",
+      "modality": "assert",
+      "qualifiers": {},
+      "evidence": [
+        {
+          "source_id": "source-a",
+          "chunk_id": "chunk-0001",
+          "offset_start": 0,
+          "offset_end": 10,
+          "text_sha256": "29d3d204d9e3016293b45f0fdcec99bc58cefaf13efb7d60943456c946f29505"
+        }
+      ]
+    },
+    {
+      "claim_id": "c2",
+      "subject": "  sky ",
+      "predicate": "is",
+      "object": " blue",
+      "polarity": "affirm",
+      "modality": "assert",
+      "qualifiers": {},
+      "evidence": [
+        {
+          "source_id": "source-b",
+          "chunk_id": "chunk-0002",
+          "offset_start": 11,
+          "offset_end": 21,
+          "text_sha256": "29d3d204d9e3016293b45f0fdcec99bc58cefaf13efb7d60943456c946f29505"
+        }
+      ]
+    },
+    {
+      "claim_id": "c3",
+      "subject": "sky",
+      "predicate": "is",
+      "object": "blue",
+      "polarity": "deny",
+      "modality": "assert",
+      "qualifiers": {},
+      "evidence": [
+        {
+          "source_id": "source-c",
+          "chunk_id": "chunk-0003",
+          "offset_start": 22,
+          "offset_end": 32,
+          "text_sha256": "29d3d204d9e3016293b45f0fdcec99bc58cefaf13efb7d60943456c946f29505"
+        }
+      ]
+    }
+  ],
+  "edges": [
+    {
+      "from_id": "c1",
+      "to_id": "c2",
+      "type": "supports"
+    },
+    {
+      "from_id": "c1",
+      "to_id": "c3",
+      "type": "contradicts"
+    }
+  ]
+}

@@ -1,0 +1,105 @@
+{
+  "version": "1.0",
+  "violations": [
+    {
+      "type": "CAUSAL_CONFLICT",
+      "events": [
+        "event:5555555555555555555555555555555555555555555555555555555555555555",
+        "event:6666666666666666666666666666666666666666666666666666666666666666"
+      ],
+      "entities": [
+        "entity:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+      ],
+      "reason": "causal edge points to an event that occurs earlier in time",
+      "evidence": [
+        {
+          "source_id": "doc:1",
+          "chunk_id": "chunk:6",
+          "offset_start": 51,
+          "offset_end": 60,
+          "text_sha256": "6666666666666666666666666666666666666666666666666666666666666666"
+        }
+      ]
+    },
+    {
+      "type": "POLICY_CONFLICT",
+      "events": [
+        "event:1111111111111111111111111111111111111111111111111111111111111111",
+        "event:2222222222222222222222222222222222222222222222222222222222222222"
+      ],
+      "entities": [
+        "entity:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+      ],
+      "reason": "policy forbids source exposure for the same object referenced in a source-context event",
+      "evidence": [
+        {
+          "source_id": "doc:1",
+          "chunk_id": "chunk:1",
+          "offset_start": 0,
+          "offset_end": 10,
+          "text_sha256": "1111111111111111111111111111111111111111111111111111111111111111"
+        },
+        {
+          "source_id": "doc:1",
+          "chunk_id": "chunk:2",
+          "offset_start": 11,
+          "offset_end": 20,
+          "text_sha256": "2222222222222222222222222222222222222222222222222222222222222222"
+        }
+      ]
+    },
+    {
+      "type": "STATE_CONFLICT",
+      "events": [
+        "event:7777777777777777777777777777777777777777777777777777777777777777",
+        "event:8888888888888888888888888888888888888888888888888888888888888888"
+      ],
+      "entities": [
+        "entity:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+      ],
+      "reason": "entity has contradictory state values for status at 2026-03-07: active, destroyed",
+      "evidence": [
+        {
+          "source_id": "doc:2",
+          "chunk_id": "chunk:1",
+          "offset_start": 0,
+          "offset_end": 10,
+          "text_sha256": "7777777777777777777777777777777777777777777777777777777777777777"
+        },
+        {
+          "source_id": "doc:2",
+          "chunk_id": "chunk:2",
+          "offset_start": 11,
+          "offset_end": 20,
+          "text_sha256": "8888888888888888888888888888888888888888888888888888888888888888"
+        }
+      ]
+    },
+    {
+      "type": "TEMPORAL_CONFLICT",
+      "events": [
+        "event:3333333333333333333333333333333333333333333333333333333333333333",
+        "event:4444444444444444444444444444444444444444444444444444444444444444"
+      ],
+      "entities": [
+        "entity:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+      ],
+      "reason": "causal before edge conflicts with explicit timeline ordering",
+      "evidence": [
+        {
+          "source_id": "doc:1",
+          "chunk_id": "chunk:4",
+          "offset_start": 31,
+          "offset_end": 40,
+          "text_sha256": "4444444444444444444444444444444444444444444444444444444444444444"
+        }
+      ]
+    }
+  ],
+  "counts": {
+    "policy": 1,
+    "temporal": 1,
+    "causal": 1,
+    "state": 1
+  }
+}

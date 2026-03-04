@@ -1,0 +1,79 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/schemas/critical_path_narrative_v2.schema.json",
+  "title": "CriticalPathNarrativeV2",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "narrative_version",
+    "mode",
+    "text",
+    "sections",
+    "summary"
+  ],
+  "properties": {
+    "narrative_version": {
+      "type": "string",
+      "const": "2.0"
+    },
+    "mode": {
+      "type": "string",
+      "enum": [
+        "brief",
+        "full"
+      ]
+    },
+    "text": {
+      "type": "string"
+    },
+    "sections": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "title",
+          "lines"
+        ],
+        "properties": {
+          "title": {
+            "type": "string",
+            "minLength": 1
+          },
+          "lines": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "summary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "top_event_id",
+        "top_score",
+        "chain_length",
+        "cycle_detected"
+      ],
+      "properties": {
+        "top_event_id": {
+          "type": "string"
+        },
+        "top_score": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "chain_length": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "cycle_detected": {
+          "type": "boolean"
+        }
+      }
+    }
+  }
+}

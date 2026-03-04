@@ -1,0 +1,120 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/schemas/causal_findings.schema.json",
+  "title": "CausalFindings",
+  "type": "array",
+  "items": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "code",
+      "message",
+      "event_ids"
+    ],
+    "properties": {
+      "code": {
+        "type": "string",
+        "enum": [
+          "CYCLE_TEMPORAL_CONSTRAINT",
+          "UNKNOWN_BLOCKS_CAUSAL"
+        ]
+      },
+      "message": {
+        "type": "string",
+        "minLength": 1
+      },
+      "event_ids": {
+        "type": "array",
+        "items": {
+          "type": "string",
+          "pattern": "^event:[0-9a-f]{64}$"
+        }
+      },
+      "details": {
+        "type": "object",
+        "additionalProperties": false,
+        "patternProperties": {
+          "^.*$": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "number"
+              },
+              {
+                "type": "string"
+              },
+              {
+                "type": "array",
+                "items": {
+                  "oneOf": [
+                    {
+                      "type": "null"
+                    },
+                    {
+                      "type": "boolean"
+                    },
+                    {
+                      "type": "number"
+                    },
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "object",
+                      "additionalProperties": false,
+                      "patternProperties": {
+                        "^.*$": {
+                          "oneOf": [
+                            {
+                              "type": "null"
+                            },
+                            {
+                              "type": "boolean"
+                            },
+                            {
+                              "type": "number"
+                            },
+                            {
+                              "type": "string"
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "type": "object",
+                "additionalProperties": false,
+                "patternProperties": {
+                  "^.*$": {
+                    "oneOf": [
+                      {
+                        "type": "null"
+                      },
+                      {
+                        "type": "boolean"
+                      },
+                      {
+                        "type": "number"
+                      },
+                      {
+                        "type": "string"
+                      }
+                    ]
+                  }
+                }
+              }
+            ]
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,178 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/schemas/repair_hints.schema.json",
+  "title": "RepairHints",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "version",
+    "hints"
+  ],
+  "$defs": {
+    "repair_hint": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "hint_id",
+        "violation_type",
+        "target",
+        "action",
+        "rationale",
+        "risk",
+        "receipts"
+      ],
+      "properties": {
+        "hint_id": {
+          "type": "string",
+          "pattern": "^hint:[0-9a-f]{64}$"
+        },
+        "violation_type": {
+          "type": "string",
+          "enum": [
+            "POLICY_CONFLICT",
+            "TEMPORAL_CONFLICT",
+            "CAUSAL_CONFLICT",
+            "STATE_CONFLICT"
+          ]
+        },
+        "target": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "event_ids",
+            "entity_ids"
+          ],
+          "properties": {
+            "event_ids": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "pattern": "^event:[0-9a-f]{64}$"
+              }
+            },
+            "entity_ids": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "pattern": "^entity:[0-9a-f]{64}$"
+              }
+            }
+          }
+        },
+        "action": {
+          "type": "string",
+          "enum": [
+            "DROP_EVENT",
+            "DROP_EDGE",
+            "MARK_TIME_UNKNOWN",
+            "MARK_ACTOR_UNKNOWN",
+            "SPLIT_ENTITY",
+            "NARROW_SCOPE"
+          ]
+        },
+        "rationale": {
+          "type": "string",
+          "minLength": 1
+        },
+        "risk": {
+          "type": "string",
+          "enum": [
+            "low",
+            "medium",
+            "high"
+          ]
+        },
+        "receipts": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "violation_receipts",
+            "related_edges"
+          ],
+          "properties": {
+            "violation_receipts": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "source_id",
+                  "chunk_id",
+                  "offset_start",
+                  "offset_end",
+                  "text_sha256"
+                ],
+                "properties": {
+                  "source_id": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "chunk_id": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "offset_start": {
+                    "type": "integer",
+                    "minimum": 0
+                  },
+                  "offset_end": {
+                    "type": "integer",
+                    "minimum": 0
+                  },
+                  "text_sha256": {
+                    "type": "string",
+                    "pattern": "^[0-9a-f]{64}$"
+                  }
+                }
+              }
+            },
+            "related_edges": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "from_event_id",
+                  "to_event_id",
+                  "type"
+                ],
+                "properties": {
+                  "from_event_id": {
+                    "type": "string",
+                    "pattern": "^event:[0-9a-f]{64}$"
+                  },
+                  "to_event_id": {
+                    "type": "string",
+                    "pattern": "^event:[0-9a-f]{64}$"
+                  },
+                  "type": {
+                    "type": "string",
+                    "enum": [
+                      "before",
+                      "causes",
+                      "enables",
+                      "mitigates",
+                      "contradicts"
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "properties": {
+    "version": {
+      "type": "string",
+      "const": "1.0"
+    },
+    "hints": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/repair_hint"
+      }
+    }
+  }
+}

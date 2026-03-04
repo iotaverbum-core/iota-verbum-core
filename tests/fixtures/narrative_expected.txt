@@ -1,0 +1,11 @@
+Claim
+C: Gamma supports Delta [polarity=affirm, modality=assert]
+
+Support
+A -> B (supports) [primitive] A -> C (supports) [derived] B -> C (supports) [primitive]
+
+Conflicts
+None.
+
+Receipts
+#claims=3, #edges=3, #evidence_refs=3, #proofs=1, #conflicts=0

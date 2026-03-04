@@ -1,0 +1,86 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/schemas/constraint_narrative_v2.schema.json",
+  "title": "ConstraintNarrativeV2",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "narrative_version",
+    "mode",
+    "text",
+    "sections",
+    "summary"
+  ],
+  "properties": {
+    "narrative_version": {
+      "type": "string",
+      "const": "2.0"
+    },
+    "mode": {
+      "type": "string",
+      "enum": [
+        "brief",
+        "full"
+      ]
+    },
+    "text": {
+      "type": "string"
+    },
+    "sections": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "title",
+          "lines"
+        ],
+        "properties": {
+          "title": {
+            "type": "string",
+            "minLength": 1
+          },
+          "lines": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "summary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "violation_count",
+        "policy_count",
+        "temporal_count",
+        "causal_count",
+        "state_count"
+      ],
+      "properties": {
+        "violation_count": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "policy_count": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "temporal_count": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "causal_count": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "state_count": {
+          "type": "integer",
+          "minimum": 0
+        }
+      }
+    }
+  }
+}

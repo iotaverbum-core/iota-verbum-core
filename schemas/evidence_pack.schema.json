@@ -1,0 +1,103 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/schemas/evidence_pack.schema.json",
+  "title": "EvidencePack",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "pack_version",
+    "root_hint",
+    "documents",
+    "chunks",
+    "pack_sha256"
+  ],
+  "properties": {
+    "pack_version": {
+      "type": "string",
+      "const": "1.0"
+    },
+    "root_hint": {
+      "type": "string"
+    },
+    "documents": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "doc_id",
+          "relpath",
+          "sha256",
+          "bytes"
+        ],
+        "properties": {
+          "doc_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "relpath": {
+            "type": "string",
+            "minLength": 1
+          },
+          "sha256": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{64}$"
+          },
+          "bytes": {
+            "type": "integer",
+            "minimum": 0
+          }
+        }
+      }
+    },
+    "chunks": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "doc_id",
+          "chunk_id",
+          "index",
+          "offset_start",
+          "offset_end",
+          "text",
+          "text_sha256"
+        ],
+        "properties": {
+          "doc_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "chunk_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "index": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "offset_start": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "offset_end": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "text": {
+            "type": "string"
+          },
+          "text_sha256": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{64}$"
+          }
+        }
+      }
+    },
+    "pack_sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    }
+  }
+}

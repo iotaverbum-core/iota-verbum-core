@@ -1,0 +1,121 @@
+{
+  "base_hashes": {
+    "attestation_sha256": "FIXTURE_BASE_ATTESTATION_SHA256",
+    "output_sha256": "e26d56d342ac4f79e218732041bac75917fe7ce71436361835c3d086fd7a1cba",
+    "world_sha256": "dca859a4c8c4adec5e8b1c9b9f32f311958a3b50d2f0a977c1e3e361bbce7a1f"
+  },
+  "counterfactual_hashes": {
+    "attestation_sha256": "FIXTURE_COUNTERFACTUAL_ATTESTATION_SHA256",
+    "output_sha256": "6e5231298ba521db8aa8cb09d89f9b1d0b74b2bb3d730e042da06e2cfda64dde",
+    "world_sha256": "c454e9c6c10dfbeeddf99772f8cb23d882d1efb81cbf4657c47af33091e3916f"
+  },
+  "diff": {
+    "conflicts": {
+      "added": [],
+      "removed": []
+    },
+    "entities": {
+      "added": [],
+      "removed": [],
+      "unchanged": [
+        "entity:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "entity:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+      ]
+    },
+    "events": {
+      "added": [],
+      "changed": [],
+      "removed": [
+        "event:3333333333333333333333333333333333333333333333333333333333333333"
+      ],
+      "unchanged": [
+        "event:1111111111111111111111111111111111111111111111111111111111111111",
+        "event:2222222222222222222222222222222222222222222222222222222222222222"
+      ]
+    },
+    "new": {
+      "attestation_sha256": "FIXTURE_COUNTERFACTUAL_ATTESTATION_SHA256",
+      "output_sha256": "6e5231298ba521db8aa8cb09d89f9b1d0b74b2bb3d730e042da06e2cfda64dde",
+      "world_sha256": "c454e9c6c10dfbeeddf99772f8cb23d882d1efb81cbf4657c47af33091e3916f"
+    },
+    "old": {
+      "attestation_sha256": "FIXTURE_BASE_ATTESTATION_SHA256",
+      "output_sha256": "e26d56d342ac4f79e218732041bac75917fe7ce71436361835c3d086fd7a1cba",
+      "world_sha256": "dca859a4c8c4adec5e8b1c9b9f32f311958a3b50d2f0a977c1e3e361bbce7a1f"
+    },
+    "unknowns": {
+      "added": [],
+      "removed": [
+        {
+          "kind": "missing_actor",
+          "ref": {
+            "event_id": "event:3333333333333333333333333333333333333333333333333333333333333333"
+          }
+        },
+        {
+          "kind": "missing_time",
+          "ref": {
+            "event_id": "event:3333333333333333333333333333333333333333333333333333333333333333"
+          }
+        }
+      ]
+    },
+    "verification": {
+      "new_status": "VERIFIED_OK",
+      "old_status": "VERIFIED_NEEDS_INFO",
+      "reasons_added": [],
+      "reasons_removed": [
+        {
+          "code": "RULE_WORLD_UNKNOWNS_SECURITY",
+          "message": "security-relevant world event is missing required context",
+          "ref": {
+            "event_id": "event:3333333333333333333333333333333333333333333333333333333333333333"
+          }
+        }
+      ],
+      "required_info_added": [],
+      "required_info_removed": [
+        {
+          "kind": "missing_actor",
+          "ref": {
+            "event_id": "event:3333333333333333333333333333333333333333333333333333333333333333"
+          }
+        },
+        {
+          "kind": "missing_time",
+          "ref": {
+            "event_id": "event:3333333333333333333333333333333333333333333333333333333333333333"
+          }
+        }
+      ]
+    },
+    "world_diff_version": "1.0"
+  },
+  "effects": {
+    "changed_events": [],
+    "changed_unknowns_count": {
+      "new": 0,
+      "old": 2
+    },
+    "removed": {
+      "entities": [],
+      "events": [
+        "event:3333333333333333333333333333333333333333333333333333333333333333"
+      ]
+    },
+    "verification_change": {
+      "new": "VERIFIED_OK",
+      "old": "VERIFIED_NEEDS_INFO"
+    }
+  },
+  "operation": {
+    "target_id": "event:3333333333333333333333333333333333333333333333333333333333333333",
+    "type": "REMOVE_EVENT"
+  },
+  "receipts": {
+    "base_path": "FIXTURE_BASE_OUTPUT_PATH",
+    "counterfactual_path": "FIXTURE_COUNTERFACTUAL_PATH"
+  },
+  "task_id": "FIXTURE_TASK_ID",
+  "version": "1.0"
+}

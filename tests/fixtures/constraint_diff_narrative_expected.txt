@@ -1,0 +1,17 @@
+Summary
+Delta: Violations 3->3, Added 1, Removed 1, Changed 1, Verification VERIFIED_OK->VERIFIED_FAIL
+
+Added violations
+- CAUSAL_CONFLICT: new causal violation
+
+Removed violations
+- STATE_CONFLICT: entity has contradictory state values
+
+Changed violations
+- TEMPORAL_CONFLICT: old temporal reason -> new temporal reason
+
+Receipts
+Old output_sha256: old-output
+New output_sha256: new-output
+Old world_sha256: old-world
+New world_sha256: new-world

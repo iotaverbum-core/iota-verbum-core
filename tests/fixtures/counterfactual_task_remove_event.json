@@ -1,0 +1,19 @@
+{
+  "version": "1.0",
+  "task_id": "cf:83ae2f09219da5a8cece792e381f4d56b6b208b7ffa1545e4ef89d63a7e174f5",
+  "created_utc": "2026-03-05T00:00:00Z",
+  "base": {
+    "source": {
+      "kind": "output_json",
+      "path": "FIXTURE_BASE_OUTPUT_PATH"
+    }
+  },
+  "operation": {
+    "type": "REMOVE_EVENT",
+    "target_id": "event:3333333333333333333333333333333333333333333333333333333333333333"
+  },
+  "options": {
+    "mode": "brief",
+    "max_lines": 80
+  }
+}

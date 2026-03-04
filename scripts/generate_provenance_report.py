@@ -11,6 +11,7 @@ from scripts.view_provenance import (
 
 from core.attestation import write_text
 
+
 def main(argv: list[str] | None = None):
     parser = argparse.ArgumentParser(
         description="Generate a deterministic HTML provenance report."

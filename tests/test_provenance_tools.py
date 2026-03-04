@@ -6,6 +6,7 @@ from scripts.view_provenance import format_cli_report
 
 from deterministic_ai import main as run_pipeline
 
+
 def _build_sample_outputs(base: Path) -> tuple[Path, Path, Path]:
     out_dir = base / "sample"
     run_pipeline(

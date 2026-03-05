@@ -1,0 +1,395 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/schemas/world_model.schema.json",
+  "title": "WorldModel",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "world_version",
+    "world_sha256",
+    "entities",
+    "events",
+    "relations",
+    "unknowns",
+    "conflicts"
+  ],
+  "$defs": {
+    "entity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "entity_id",
+        "type",
+        "name",
+        "aliases"
+      ],
+      "properties": {
+        "entity_id": {
+          "type": "string",
+          "pattern": "^entity:[0-9a-f]{64}$"
+        },
+        "type": {
+          "type": "string",
+          "enum": [
+            "Person",
+            "Org",
+            "System",
+            "Secret",
+            "Policy",
+            "Service",
+            "Concept"
+          ]
+        },
+        "name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "aliases": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      }
+    },
+    "event": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "event_id",
+        "type",
+        "time",
+        "actors",
+        "objects",
+        "action",
+        "state",
+        "evidence"
+      ],
+      "properties": {
+        "event_id": {
+          "type": "string",
+          "pattern": "^event:[0-9a-f]{64}$"
+        },
+        "type": {
+          "type": "string",
+          "enum": [
+            "Config",
+            "Access",
+            "Leak",
+            "Rotation",
+            "Deployment",
+            "PolicyChange",
+            "Other"
+          ]
+        },
+        "time": {
+          "oneOf": [
+            {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "kind",
+                "value"
+              ],
+              "properties": {
+                "kind": {
+                  "const": "instant"
+                },
+                "value": {
+                  "type": "string",
+                  "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}Z$"
+                }
+              }
+            },
+            {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "kind",
+                "value"
+              ],
+              "properties": {
+                "kind": {
+                  "const": "date"
+                },
+                "value": {
+                  "type": "string",
+                  "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+                }
+              }
+            },
+            {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "kind"
+              ],
+              "properties": {
+                "kind": {
+                  "const": "unknown"
+                }
+              }
+            }
+          ]
+        },
+        "actors": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "objects": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "action": {
+          "type": "string",
+          "minLength": 1
+        },
+        "state": {
+          "oneOf": [
+            {
+              "type": "null"
+            },
+            {
+              "type": "object",
+              "additionalProperties": false,
+              "patternProperties": {
+                "^.*$": {
+                  "$ref": "#/$defs/json_value"
+                }
+              }
+            }
+          ]
+        },
+        "evidence": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "source_id",
+              "chunk_id",
+              "offset_start",
+              "offset_end",
+              "text_sha256"
+            ],
+            "properties": {
+              "source_id": {
+                "type": "string",
+                "minLength": 1
+              },
+              "chunk_id": {
+                "type": "string",
+                "minLength": 1
+              },
+              "offset_start": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "offset_end": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "text_sha256": {
+                "type": "string",
+                "pattern": "^[0-9a-f]{64}$"
+              }
+            }
+          }
+        }
+      }
+    },
+    "json_value": {
+      "oneOf": [
+        {
+          "type": "null"
+        },
+        {
+          "type": "boolean"
+        },
+        {
+          "type": "number"
+        },
+        {
+          "type": "string"
+        },
+        {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/json_value"
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "patternProperties": {
+            "^.*$": {
+              "$ref": "#/$defs/json_value"
+            }
+          }
+        }
+      ]
+    }
+  },
+  "properties": {
+    "world_version": {
+      "type": "string",
+      "const": "1.0"
+    },
+    "world_sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "entities": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/entity"
+      }
+    },
+    "events": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/event"
+      }
+    },
+    "relations": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "from_id",
+          "to_id",
+          "type",
+          "derived",
+          "proof"
+        ],
+        "properties": {
+          "from_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "to_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "before",
+              "after",
+              "same_time"
+            ]
+          },
+          "derived": {
+            "type": "boolean"
+          },
+          "proof": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": [
+                    "rule",
+                    "a",
+                    "b"
+                  ],
+                  "properties": {
+                    "rule": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "a": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "b": {
+                      "type": "string",
+                      "minLength": 1
+                    }
+                  }
+                }
+              }
+            ]
+          }
+        }
+      }
+    },
+    "unknowns": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "kind",
+          "ref"
+        ],
+        "properties": {
+          "kind": {
+            "type": "string",
+            "enum": [
+              "missing_time",
+              "missing_actor",
+              "missing_object",
+              "ambiguous_entity"
+            ]
+          },
+          "ref": {
+            "type": "object",
+            "additionalProperties": false,
+            "patternProperties": {
+              "^.*$": {
+                "$ref": "#/$defs/json_value"
+              }
+            }
+          }
+        }
+      }
+    },
+    "conflicts": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "kind",
+          "ref",
+          "reason"
+        ],
+        "properties": {
+          "kind": {
+            "type": "string",
+            "enum": [
+              "state_conflict",
+              "ordering_conflict"
+            ]
+          },
+          "ref": {
+            "type": "object",
+            "additionalProperties": false,
+            "patternProperties": {
+              "^.*$": {
+                "$ref": "#/$defs/json_value"
+              }
+            }
+          },
+          "reason": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      }
+    }
+  }
+}

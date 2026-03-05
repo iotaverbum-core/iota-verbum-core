@@ -1,0 +1,25 @@
+Repair Hint Summary
+Hints: 8
+Low risk: 4
+Medium risk: 4
+High risk: 0
+
+Hints
+- DROP_EDGE on event:5555555555555555555555555555555555555555555555555555555555555555, event:6666666666666666666666666666666666666666666666666666666666666666, entity:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+- MARK_TIME_UNKNOWN on event:5555555555555555555555555555555555555555555555555555555555555555, entity:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+- DROP_EVENT on event:2222222222222222222222222222222222222222222222222222222222222222, entity:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+- NARROW_SCOPE on event:1111111111111111111111111111111111111111111111111111111111111111, event:2222222222222222222222222222222222222222222222222222222222222222, entity:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+- MARK_TIME_UNKNOWN on event:7777777777777777777777777777777777777777777777777777777777777777, event:8888888888888888888888888888888888888888888888888888888888888888, entity:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+- SPLIT_ENTITY on event:7777777777777777777777777777777777777777777777777777777777777777, event:8888888888888888888888888888888888888888888888888888888888888888, entity:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+
+Rationales
+- hint:cb2f3480e97af2362bfc7718f8ac2eb36ec005c05d42ab16dd675e80d9080b09: drop the causal edge if the explicit timeline shows the effect preceding the proposed cause
+- hint:5f7b18f8ff94139156731b9cbde391f3515f616a6ba18aca2a3f269bc5fb80e6: mark one explicit event time as unknown if the causal link is trusted more than the current timestamp
+- hint:d015dde6bb89af4390682832611ee395c1d1bd01f00268f97273cbd2e36c044a: drop the source-context event that violates the policy while preserving the policy statement
+- hint:54d1bcc8933d60e6e65bc6dcc6ae8bea0a15c1d92ed996ea3d6e78fd7421c672: narrow bundle scope or query focus so the conflicting source-context evidence is excluded from this world
+- hint:4792fa4330ecfc3452b08c88a23af31825c283d3c6f589f77f4345ab5dc90445: mark the state event times as unknown if the contradiction is caused by over-precise timestamp alignment
+- hint:932b65f821df584d8708bc473230ce891b8ed9f32b1823e524247833a5d08426: split the entity if the conflicting states refer to distinct real-world things that were merged
+
+Receipts
+Total violation receipts: 12
+Total related edges: 4

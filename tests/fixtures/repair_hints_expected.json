@@ -1,0 +1,278 @@
+{
+  "version": "1.0",
+  "hints": [
+    {
+      "hint_id": "hint:cb2f3480e97af2362bfc7718f8ac2eb36ec005c05d42ab16dd675e80d9080b09",
+      "violation_type": "CAUSAL_CONFLICT",
+      "target": {
+        "event_ids": [
+          "event:5555555555555555555555555555555555555555555555555555555555555555",
+          "event:6666666666666666666666666666666666666666666666666666666666666666"
+        ],
+        "entity_ids": [
+          "entity:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+        ]
+      },
+      "action": "DROP_EDGE",
+      "rationale": "drop the causal edge if the explicit timeline shows the effect preceding the proposed cause",
+      "risk": "medium",
+      "receipts": {
+        "violation_receipts": [
+          {
+            "source_id": "doc:1",
+            "chunk_id": "chunk:6",
+            "offset_start": 51,
+            "offset_end": 60,
+            "text_sha256": "6666666666666666666666666666666666666666666666666666666666666666"
+          }
+        ],
+        "related_edges": [
+          {
+            "from_event_id": "event:6666666666666666666666666666666666666666666666666666666666666666",
+            "to_event_id": "event:5555555555555555555555555555555555555555555555555555555555555555",
+            "type": "causes"
+          }
+        ]
+      }
+    },
+    {
+      "hint_id": "hint:5f7b18f8ff94139156731b9cbde391f3515f616a6ba18aca2a3f269bc5fb80e6",
+      "violation_type": "CAUSAL_CONFLICT",
+      "target": {
+        "event_ids": [
+          "event:5555555555555555555555555555555555555555555555555555555555555555"
+        ],
+        "entity_ids": [
+          "entity:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+        ]
+      },
+      "action": "MARK_TIME_UNKNOWN",
+      "rationale": "mark one explicit event time as unknown if the causal link is trusted more than the current timestamp",
+      "risk": "low",
+      "receipts": {
+        "violation_receipts": [
+          {
+            "source_id": "doc:1",
+            "chunk_id": "chunk:6",
+            "offset_start": 51,
+            "offset_end": 60,
+            "text_sha256": "6666666666666666666666666666666666666666666666666666666666666666"
+          }
+        ],
+        "related_edges": [
+          {
+            "from_event_id": "event:6666666666666666666666666666666666666666666666666666666666666666",
+            "to_event_id": "event:5555555555555555555555555555555555555555555555555555555555555555",
+            "type": "causes"
+          }
+        ]
+      }
+    },
+    {
+      "hint_id": "hint:d015dde6bb89af4390682832611ee395c1d1bd01f00268f97273cbd2e36c044a",
+      "violation_type": "POLICY_CONFLICT",
+      "target": {
+        "event_ids": [
+          "event:2222222222222222222222222222222222222222222222222222222222222222"
+        ],
+        "entity_ids": [
+          "entity:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+        ]
+      },
+      "action": "DROP_EVENT",
+      "rationale": "drop the source-context event that violates the policy while preserving the policy statement",
+      "risk": "medium",
+      "receipts": {
+        "violation_receipts": [
+          {
+            "source_id": "doc:1",
+            "chunk_id": "chunk:1",
+            "offset_start": 0,
+            "offset_end": 10,
+            "text_sha256": "1111111111111111111111111111111111111111111111111111111111111111"
+          },
+          {
+            "source_id": "doc:1",
+            "chunk_id": "chunk:2",
+            "offset_start": 11,
+            "offset_end": 20,
+            "text_sha256": "2222222222222222222222222222222222222222222222222222222222222222"
+          }
+        ],
+        "related_edges": []
+      }
+    },
+    {
+      "hint_id": "hint:54d1bcc8933d60e6e65bc6dcc6ae8bea0a15c1d92ed996ea3d6e78fd7421c672",
+      "violation_type": "POLICY_CONFLICT",
+      "target": {
+        "event_ids": [
+          "event:1111111111111111111111111111111111111111111111111111111111111111",
+          "event:2222222222222222222222222222222222222222222222222222222222222222"
+        ],
+        "entity_ids": [
+          "entity:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+        ]
+      },
+      "action": "NARROW_SCOPE",
+      "rationale": "narrow bundle scope or query focus so the conflicting source-context evidence is excluded from this world",
+      "risk": "low",
+      "receipts": {
+        "violation_receipts": [
+          {
+            "source_id": "doc:1",
+            "chunk_id": "chunk:1",
+            "offset_start": 0,
+            "offset_end": 10,
+            "text_sha256": "1111111111111111111111111111111111111111111111111111111111111111"
+          },
+          {
+            "source_id": "doc:1",
+            "chunk_id": "chunk:2",
+            "offset_start": 11,
+            "offset_end": 20,
+            "text_sha256": "2222222222222222222222222222222222222222222222222222222222222222"
+          }
+        ],
+        "related_edges": []
+      }
+    },
+    {
+      "hint_id": "hint:4792fa4330ecfc3452b08c88a23af31825c283d3c6f589f77f4345ab5dc90445",
+      "violation_type": "STATE_CONFLICT",
+      "target": {
+        "event_ids": [
+          "event:7777777777777777777777777777777777777777777777777777777777777777",
+          "event:8888888888888888888888888888888888888888888888888888888888888888"
+        ],
+        "entity_ids": [
+          "entity:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+        ]
+      },
+      "action": "MARK_TIME_UNKNOWN",
+      "rationale": "mark the state event times as unknown if the contradiction is caused by over-precise timestamp alignment",
+      "risk": "low",
+      "receipts": {
+        "violation_receipts": [
+          {
+            "source_id": "doc:2",
+            "chunk_id": "chunk:1",
+            "offset_start": 0,
+            "offset_end": 10,
+            "text_sha256": "7777777777777777777777777777777777777777777777777777777777777777"
+          },
+          {
+            "source_id": "doc:2",
+            "chunk_id": "chunk:2",
+            "offset_start": 11,
+            "offset_end": 20,
+            "text_sha256": "8888888888888888888888888888888888888888888888888888888888888888"
+          }
+        ],
+        "related_edges": []
+      }
+    },
+    {
+      "hint_id": "hint:932b65f821df584d8708bc473230ce891b8ed9f32b1823e524247833a5d08426",
+      "violation_type": "STATE_CONFLICT",
+      "target": {
+        "event_ids": [
+          "event:7777777777777777777777777777777777777777777777777777777777777777",
+          "event:8888888888888888888888888888888888888888888888888888888888888888"
+        ],
+        "entity_ids": [
+          "entity:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+        ]
+      },
+      "action": "SPLIT_ENTITY",
+      "rationale": "split the entity if the conflicting states refer to distinct real-world things that were merged",
+      "risk": "medium",
+      "receipts": {
+        "violation_receipts": [
+          {
+            "source_id": "doc:2",
+            "chunk_id": "chunk:1",
+            "offset_start": 0,
+            "offset_end": 10,
+            "text_sha256": "7777777777777777777777777777777777777777777777777777777777777777"
+          },
+          {
+            "source_id": "doc:2",
+            "chunk_id": "chunk:2",
+            "offset_start": 11,
+            "offset_end": 20,
+            "text_sha256": "8888888888888888888888888888888888888888888888888888888888888888"
+          }
+        ],
+        "related_edges": []
+      }
+    },
+    {
+      "hint_id": "hint:8ca0d2b1f45bca877d149d1d781612612969e5b570b0647f79a639ba6124a60b",
+      "violation_type": "TEMPORAL_CONFLICT",
+      "target": {
+        "event_ids": [
+          "event:3333333333333333333333333333333333333333333333333333333333333333",
+          "event:4444444444444444444444444444444444444444444444444444444444444444"
+        ],
+        "entity_ids": [
+          "entity:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+        ]
+      },
+      "action": "DROP_EDGE",
+      "rationale": "drop the temporal edge if its ordering rule is weaker than the explicit event timeline",
+      "risk": "medium",
+      "receipts": {
+        "violation_receipts": [
+          {
+            "source_id": "doc:1",
+            "chunk_id": "chunk:4",
+            "offset_start": 31,
+            "offset_end": 40,
+            "text_sha256": "4444444444444444444444444444444444444444444444444444444444444444"
+          }
+        ],
+        "related_edges": [
+          {
+            "from_event_id": "event:4444444444444444444444444444444444444444444444444444444444444444",
+            "to_event_id": "event:3333333333333333333333333333333333333333333333333333333333333333",
+            "type": "before"
+          }
+        ]
+      }
+    },
+    {
+      "hint_id": "hint:34ab3c8b211b52e51ed6a223dd5d4ec4b69a32259e0856de997692e8359ac2c6",
+      "violation_type": "TEMPORAL_CONFLICT",
+      "target": {
+        "event_ids": [
+          "event:3333333333333333333333333333333333333333333333333333333333333333"
+        ],
+        "entity_ids": [
+          "entity:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+        ]
+      },
+      "action": "MARK_TIME_UNKNOWN",
+      "rationale": "mark one explicit event time as unknown to remove the impossible ordering constraint without deleting the event",
+      "risk": "low",
+      "receipts": {
+        "violation_receipts": [
+          {
+            "source_id": "doc:1",
+            "chunk_id": "chunk:4",
+            "offset_start": 31,
+            "offset_end": 40,
+            "text_sha256": "4444444444444444444444444444444444444444444444444444444444444444"
+          }
+        ],
+        "related_edges": [
+          {
+            "from_event_id": "event:4444444444444444444444444444444444444444444444444444444444444444",
+            "to_event_id": "event:3333333333333333333333333333333333333333333333333333333333333333",
+            "type": "before"
+          }
+        ]
+      }
+    }
+  ]
+}

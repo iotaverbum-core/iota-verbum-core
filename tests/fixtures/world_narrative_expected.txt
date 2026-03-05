@@ -1,0 +1,12 @@
+Summary
+Entities=1; Events=2; Unknowns=1; Conflicts=1.
+
+Timeline
+- [2026-03-01] Config: API keys configured for env-only use (event_id=event:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa)
+- [unknown] Rotation: Rotation scheduled without a date (event_id=event:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb)
+
+Unknowns
+- missing_time: {"event_id":"event:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"}
+
+Conflicts
+- state_conflict: API_KEYS has conflicting states: env-only, never-in-repo (ref={"entity_id":"entity:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa","event_ids":["event:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa","event:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"],"key":"API_KEYS","values":["env-only","never-in-repo"]})

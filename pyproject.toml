@@ -42,7 +42,7 @@ py-modules = ["deterministic_ai"]
 
 [tool.setuptools.packages.find]
 where = ["src"]
-include = ["core", "core.*", "domains", "domains.*", "iota_verbum_api", "iota_verbum_api.*"]
+include = ["core", "core.*", "domains", "domains.*", "iota_verbum_api", "iota_verbum_api.*", "proposal", "proposal.*"]
 
 [tool.setuptools.package-data]
 domains = ["**/*.json"]

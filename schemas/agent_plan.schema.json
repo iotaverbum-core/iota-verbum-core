@@ -1,0 +1,128 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/schemas/agent_plan.schema.json",
+  "title": "AgentPlan",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "plan_version",
+    "task_id",
+    "steps",
+    "plan_sha256"
+  ],
+  "$defs": {
+    "json_value": {
+      "oneOf": [
+        {
+          "type": "null"
+        },
+        {
+          "type": "boolean"
+        },
+        {
+          "type": "number"
+        },
+        {
+          "type": "string"
+        },
+        {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/json_value"
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "patternProperties": {
+            "^.*$": {
+              "$ref": "#/$defs/json_value"
+            }
+          }
+        }
+      ]
+    },
+    "params_object": {
+      "type": "object",
+      "additionalProperties": false,
+      "patternProperties": {
+        "^.*$": {
+          "$ref": "#/$defs/json_value"
+        }
+      }
+    }
+  },
+  "properties": {
+    "plan_version": {
+      "type": "string",
+      "const": "1.0"
+    },
+    "task_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "steps": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "step_id",
+          "action",
+          "params",
+          "status",
+          "outputs"
+        ],
+        "properties": {
+          "step_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "action": {
+            "type": "string",
+            "minLength": 1
+          },
+          "params": {
+            "$ref": "#/$defs/params_object"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "PLANNED",
+              "SKIPPED",
+              "EXECUTED",
+              "FAILED"
+            ]
+          },
+          "outputs": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "run_dir",
+              "ledger_dir",
+              "artifacts"
+            ],
+            "properties": {
+              "run_dir": {
+                "type": "string"
+              },
+              "ledger_dir": {
+                "type": "string"
+              },
+              "artifacts": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "plan_sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    }
+  }
+}

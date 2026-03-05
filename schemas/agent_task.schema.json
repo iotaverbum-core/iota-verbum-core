@@ -1,0 +1,136 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/schemas/agent_task.schema.json",
+  "title": "AgentTask",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "task_version",
+    "task_id",
+    "created_utc",
+    "ruleset_id",
+    "core_version",
+    "inputs",
+    "steps"
+  ],
+  "$defs": {
+    "json_value": {
+      "oneOf": [
+        {
+          "type": "null"
+        },
+        {
+          "type": "boolean"
+        },
+        {
+          "type": "number"
+        },
+        {
+          "type": "string"
+        },
+        {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/json_value"
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "patternProperties": {
+            "^.*$": {
+              "$ref": "#/$defs/json_value"
+            }
+          }
+        }
+      ]
+    },
+    "params_object": {
+      "type": "object",
+      "additionalProperties": false,
+      "patternProperties": {
+        "^.*$": {
+          "$ref": "#/$defs/json_value"
+        }
+      }
+    }
+  },
+  "properties": {
+    "task_version": {
+      "type": "string",
+      "const": "1.0"
+    },
+    "task_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "created_utc": {
+      "type": "string",
+      "minLength": 1
+    },
+    "ruleset_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "core_version": {
+      "type": "string",
+      "minLength": 1
+    },
+    "inputs": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "folder",
+        "query",
+        "prompt",
+        "max_chunks"
+      ],
+      "properties": {
+        "folder": {
+          "type": "string",
+          "minLength": 1
+        },
+        "query": {
+          "type": "string"
+        },
+        "prompt": {
+          "type": "string"
+        },
+        "max_chunks": {
+          "type": "integer",
+          "minimum": 1
+        }
+      }
+    },
+    "steps": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "step_id",
+          "action",
+          "params"
+        ],
+        "properties": {
+          "step_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "action": {
+            "type": "string",
+            "enum": [
+              "RUN_DEMO_WORLD",
+              "RUN_DEMO_GRAPH",
+              "RUN_WORLD_DIFF",
+              "REPLAY_VERIFY"
+            ]
+          },
+          "params": {
+            "$ref": "#/$defs/params_object"
+          }
+        }
+      }
+    }
+  }
+}

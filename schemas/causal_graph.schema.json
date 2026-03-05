@@ -1,0 +1,209 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/schemas/causal_graph.schema.json",
+  "title": "CausalGraph",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "version",
+    "nodes",
+    "edges",
+    "causal_order",
+    "findings"
+  ],
+  "$defs": {
+    "evidence_ref": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "source_id",
+        "chunk_id",
+        "offset_start",
+        "offset_end",
+        "text_sha256"
+      ],
+      "properties": {
+        "source_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "chunk_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "offset_start": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "offset_end": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "text_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        }
+      }
+    },
+    "causal_edge": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "from_event_id",
+        "to_event_id",
+        "type",
+        "reason_code",
+        "confidence",
+        "evidence"
+      ],
+      "properties": {
+        "from_event_id": {
+          "type": "string",
+          "pattern": "^event:[0-9a-f]{64}$"
+        },
+        "to_event_id": {
+          "type": "string",
+          "pattern": "^event:[0-9a-f]{64}$"
+        },
+        "type": {
+          "type": "string",
+          "enum": [
+            "before",
+            "after",
+            "causes",
+            "enables",
+            "mitigates",
+            "contradicts"
+          ]
+        },
+        "reason_code": {
+          "type": "string",
+          "enum": [
+            "RULE_TIME_EXPLICIT_DATE",
+            "RULE_TIME_PHRASE_BEFORE",
+            "RULE_POLICY_PRECEDES_CONFIG",
+            "RULE_SECRET_HANDLING_CAUSAL",
+            "RULE_CONFLICT_IMPLIED",
+            "RULE_UNKNOWN_BLOCKS_CAUSAL"
+          ]
+        },
+        "confidence": {
+          "type": "string",
+          "enum": [
+            "high",
+            "medium",
+            "low"
+          ]
+        },
+        "evidence": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/evidence_ref"
+          }
+        }
+      }
+    },
+    "finding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "code",
+        "message",
+        "event_ids"
+      ],
+      "properties": {
+        "code": {
+          "type": "string",
+          "enum": [
+            "CYCLE_TEMPORAL_CONSTRAINT",
+            "UNKNOWN_BLOCKS_CAUSAL"
+          ]
+        },
+        "message": {
+          "type": "string",
+          "minLength": 1
+        },
+        "event_ids": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^event:[0-9a-f]{64}$"
+          }
+        },
+        "details": {
+          "type": "object",
+          "additionalProperties": false,
+          "patternProperties": {
+            "^.*$": {
+              "oneOf": [
+                {
+                  "type": "null"
+                },
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "array",
+                  "items": {
+                    "oneOf": [
+                      {
+                        "type": "null"
+                      },
+                      {
+                        "type": "boolean"
+                      },
+                      {
+                        "type": "number"
+                      },
+                      {
+                        "type": "string"
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          }
+        }
+      }
+    }
+  },
+  "properties": {
+    "version": {
+      "type": "string",
+      "const": "1.0"
+    },
+    "nodes": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "pattern": "^event:[0-9a-f]{64}$"
+      }
+    },
+    "edges": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/causal_edge"
+      }
+    },
+    "causal_order": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "pattern": "^event:[0-9a-f]{64}$"
+      }
+    },
+    "findings": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/finding"
+      }
+    }
+  }
+}

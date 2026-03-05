@@ -1,0 +1,88 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/schemas/causal_narrative_v2.schema.json",
+  "title": "CausalNarrativeV2",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "narrative_version",
+    "mode",
+    "text",
+    "sections",
+    "graph_summary"
+  ],
+  "properties": {
+    "narrative_version": {
+      "type": "string",
+      "const": "2.0"
+    },
+    "mode": {
+      "type": "string",
+      "enum": [
+        "brief",
+        "full"
+      ]
+    },
+    "text": {
+      "type": "string"
+    },
+    "sections": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "title",
+          "lines"
+        ],
+        "properties": {
+          "title": {
+            "type": "string",
+            "minLength": 1
+          },
+          "lines": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "graph_summary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "node_count",
+        "edge_count",
+        "finding_count",
+        "has_temporal_cycle",
+        "first_causal_order"
+      ],
+      "properties": {
+        "node_count": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "edge_count": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "finding_count": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "has_temporal_cycle": {
+          "type": "boolean"
+        },
+        "first_causal_order": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^event:[0-9a-f]{64}$"
+          }
+        }
+      }
+    }
+  }
+}

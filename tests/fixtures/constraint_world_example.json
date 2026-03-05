@@ -1,0 +1,273 @@
+{
+  "world_model": {
+    "world_version": "1.0",
+    "world_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "entities": [
+      {
+        "entity_id": "entity:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "type": "Secret",
+        "name": "API_KEYS",
+        "aliases": []
+      },
+      {
+        "entity_id": "entity:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "type": "Service",
+        "name": "Database",
+        "aliases": []
+      }
+    ],
+    "events": [
+      {
+        "event_id": "event:1111111111111111111111111111111111111111111111111111111111111111",
+        "type": "PolicyChange",
+        "time": {
+          "kind": "date",
+          "value": "2026-03-01"
+        },
+        "actors": [],
+        "objects": [
+          "entity:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+        ],
+        "action": "`API_KEYS` must never appear in source.",
+        "state": {
+          "API_KEYS": "never-in-repo"
+        },
+        "evidence": [
+          {
+            "source_id": "doc:1",
+            "chunk_id": "chunk:1",
+            "offset_start": 0,
+            "offset_end": 10,
+            "text_sha256": "1111111111111111111111111111111111111111111111111111111111111111"
+          }
+        ]
+      },
+      {
+        "event_id": "event:2222222222222222222222222222222222222222222222222222222222222222",
+        "type": "Leak",
+        "time": {
+          "kind": "date",
+          "value": "2026-03-02"
+        },
+        "actors": [],
+        "objects": [
+          "entity:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+        ],
+        "action": "API_KEYS were committed to source repo.",
+        "state": null,
+        "evidence": [
+          {
+            "source_id": "doc:1",
+            "chunk_id": "chunk:2",
+            "offset_start": 11,
+            "offset_end": 20,
+            "text_sha256": "2222222222222222222222222222222222222222222222222222222222222222"
+          }
+        ]
+      },
+      {
+        "event_id": "event:3333333333333333333333333333333333333333333333333333333333333333",
+        "type": "Deployment",
+        "time": {
+          "kind": "date",
+          "value": "2026-03-03"
+        },
+        "actors": [],
+        "objects": [
+          "entity:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+        ],
+        "action": "API_KEYS deployment completed.",
+        "state": null,
+        "evidence": [
+          {
+            "source_id": "doc:1",
+            "chunk_id": "chunk:3",
+            "offset_start": 21,
+            "offset_end": 30,
+            "text_sha256": "3333333333333333333333333333333333333333333333333333333333333333"
+          }
+        ]
+      },
+      {
+        "event_id": "event:4444444444444444444444444444444444444444444444444444444444444444",
+        "type": "Rotation",
+        "time": {
+          "kind": "date",
+          "value": "2026-03-04"
+        },
+        "actors": [],
+        "objects": [
+          "entity:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+        ],
+        "action": "API_KEYS rotated after deployment.",
+        "state": null,
+        "evidence": [
+          {
+            "source_id": "doc:1",
+            "chunk_id": "chunk:4",
+            "offset_start": 31,
+            "offset_end": 40,
+            "text_sha256": "4444444444444444444444444444444444444444444444444444444444444444"
+          }
+        ]
+      },
+      {
+        "event_id": "event:5555555555555555555555555555555555555555555555555555555555555555",
+        "type": "Other",
+        "time": {
+          "kind": "date",
+          "value": "2026-03-05"
+        },
+        "actors": [],
+        "objects": [
+          "entity:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+        ],
+        "action": "Leak discovered.",
+        "state": null,
+        "evidence": [
+          {
+            "source_id": "doc:1",
+            "chunk_id": "chunk:5",
+            "offset_start": 41,
+            "offset_end": 50,
+            "text_sha256": "5555555555555555555555555555555555555555555555555555555555555555"
+          }
+        ]
+      },
+      {
+        "event_id": "event:6666666666666666666666666666666666666666666666666666666666666666",
+        "type": "Other",
+        "time": {
+          "kind": "date",
+          "value": "2026-03-06"
+        },
+        "actors": [],
+        "objects": [
+          "entity:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+        ],
+        "action": "Deployment caused the leak.",
+        "state": null,
+        "evidence": [
+          {
+            "source_id": "doc:1",
+            "chunk_id": "chunk:6",
+            "offset_start": 51,
+            "offset_end": 60,
+            "text_sha256": "6666666666666666666666666666666666666666666666666666666666666666"
+          }
+        ]
+      },
+      {
+        "event_id": "event:7777777777777777777777777777777777777777777777777777777777777777",
+        "type": "Other",
+        "time": {
+          "kind": "date",
+          "value": "2026-03-07"
+        },
+        "actors": [],
+        "objects": [
+          "entity:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+        ],
+        "action": "Database marked active.",
+        "state": {
+          "status": "active"
+        },
+        "evidence": [
+          {
+            "source_id": "doc:2",
+            "chunk_id": "chunk:1",
+            "offset_start": 0,
+            "offset_end": 10,
+            "text_sha256": "7777777777777777777777777777777777777777777777777777777777777777"
+          }
+        ]
+      },
+      {
+        "event_id": "event:8888888888888888888888888888888888888888888888888888888888888888",
+        "type": "Other",
+        "time": {
+          "kind": "date",
+          "value": "2026-03-07"
+        },
+        "actors": [],
+        "objects": [
+          "entity:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+        ],
+        "action": "Database marked destroyed.",
+        "state": {
+          "status": "destroyed"
+        },
+        "evidence": [
+          {
+            "source_id": "doc:2",
+            "chunk_id": "chunk:2",
+            "offset_start": 11,
+            "offset_end": 20,
+            "text_sha256": "8888888888888888888888888888888888888888888888888888888888888888"
+          }
+        ]
+      }
+    ],
+    "relations": [],
+    "unknowns": [],
+    "conflicts": []
+  },
+  "causal_graph": {
+    "version": "1.0",
+    "nodes": [
+      "event:1111111111111111111111111111111111111111111111111111111111111111",
+      "event:2222222222222222222222222222222222222222222222222222222222222222",
+      "event:3333333333333333333333333333333333333333333333333333333333333333",
+      "event:4444444444444444444444444444444444444444444444444444444444444444",
+      "event:5555555555555555555555555555555555555555555555555555555555555555",
+      "event:6666666666666666666666666666666666666666666666666666666666666666",
+      "event:7777777777777777777777777777777777777777777777777777777777777777",
+      "event:8888888888888888888888888888888888888888888888888888888888888888"
+    ],
+    "edges": [
+      {
+        "from_event_id": "event:4444444444444444444444444444444444444444444444444444444444444444",
+        "to_event_id": "event:3333333333333333333333333333333333333333333333333333333333333333",
+        "type": "before",
+        "reason_code": "RULE_TIME_PHRASE_BEFORE",
+        "confidence": "medium",
+        "evidence": [
+          {
+            "source_id": "doc:1",
+            "chunk_id": "chunk:4",
+            "offset_start": 31,
+            "offset_end": 40,
+            "text_sha256": "4444444444444444444444444444444444444444444444444444444444444444"
+          }
+        ]
+      },
+      {
+        "from_event_id": "event:6666666666666666666666666666666666666666666666666666666666666666",
+        "to_event_id": "event:5555555555555555555555555555555555555555555555555555555555555555",
+        "type": "causes",
+        "reason_code": "RULE_SECRET_HANDLING_CAUSAL",
+        "confidence": "high",
+        "evidence": [
+          {
+            "source_id": "doc:1",
+            "chunk_id": "chunk:6",
+            "offset_start": 51,
+            "offset_end": 60,
+            "text_sha256": "6666666666666666666666666666666666666666666666666666666666666666"
+          }
+        ]
+      }
+    ],
+    "causal_order": [
+      "event:1111111111111111111111111111111111111111111111111111111111111111",
+      "event:2222222222222222222222222222222222222222222222222222222222222222",
+      "event:4444444444444444444444444444444444444444444444444444444444444444",
+      "event:3333333333333333333333333333333333333333333333333333333333333333",
+      "event:5555555555555555555555555555555555555555555555555555555555555555",
+      "event:6666666666666666666666666666666666666666666666666666666666666666",
+      "event:7777777777777777777777777777777777777777777777777777777777777777",
+      "event:8888888888888888888888888888888888888888888888888888888888888888"
+    ],
+    "findings": []
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "version": "1.0",
+  "events": [
+    {
+      "event_id": "event:1111111111111111111111111111111111111111111111111111111111111111",
+      "actors": [
+        "ops",
+        "secops"
+      ],
+      "objects": [
+        "API_KEYS",
+        "entity:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+      ],
+      "time": {
+        "kind": "date",
+        "value": "2026-03-01"
+      }
+    },
+    {
+      "event_id": "event:ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+      "actors": [
+        "ignored"
+      ]
+    }
+  ]
+}

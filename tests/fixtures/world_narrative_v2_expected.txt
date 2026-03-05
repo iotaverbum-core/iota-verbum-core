@@ -1,0 +1,19 @@
+Verification
+Status: VERIFIED_NEEDS_INFO
+- RULE_WORLD_UNKNOWNS_SECURITY
+- missing_time (event_id=event:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb)
+
+What we know
+- [2026-03-01] Config: API keys configured for env-only use [evidence=1]
+- [unknown] Rotation: Rotation scheduled without a date [evidence=1]
+
+What we don't know yet
+- missing_time (event_id=event:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb)
+
+Conflicts
+- state_conflict: API_KEYS has conflicting states: env-only, never-in-repo
+
+Receipts
+Counts: evidence_refs=2, proofs=0, findings=0
+Top evidence refs: doc:1|chunk:1, doc:2|chunk:2
+Run with --show-receipts true for full receipts

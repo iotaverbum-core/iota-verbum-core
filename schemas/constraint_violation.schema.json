@@ -1,0 +1,84 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/schemas/constraint_violation.schema.json",
+  "title": "ConstraintViolation",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "type",
+    "events",
+    "entities",
+    "reason",
+    "evidence"
+  ],
+  "$defs": {
+    "evidence_ref": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "source_id",
+        "chunk_id",
+        "offset_start",
+        "offset_end",
+        "text_sha256"
+      ],
+      "properties": {
+        "source_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "chunk_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "offset_start": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "offset_end": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "text_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        }
+      }
+    }
+  },
+  "properties": {
+    "type": {
+      "type": "string",
+      "enum": [
+        "POLICY_CONFLICT",
+        "TEMPORAL_CONFLICT",
+        "CAUSAL_CONFLICT",
+        "STATE_CONFLICT"
+      ]
+    },
+    "events": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "pattern": "^event:[0-9a-f]{64}$"
+      }
+    },
+    "entities": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "pattern": "^entity:[0-9a-f]{64}$"
+      }
+    },
+    "reason": {
+      "type": "string",
+      "minLength": 1
+    },
+    "evidence": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/evidence_ref"
+      }
+    }
+  }
+}

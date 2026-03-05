@@ -1,0 +1,109 @@
+{
+  "graph_version": "1.0",
+  "claims": [
+    {
+      "claim_id": "A",
+      "subject": "Alpha",
+      "predicate": "supports",
+      "object": "Beta",
+      "polarity": "affirm",
+      "modality": "assert",
+      "qualifiers": {},
+      "evidence": [
+        {
+          "source_id": "source-a",
+          "chunk_id": "chunk-a",
+          "offset_start": 0,
+          "offset_end": 10,
+          "text_sha256": "29d3d204d9e3016293b45f0fdcec99bc58cefaf13efb7d60943456c946f29505"
+        }
+      ]
+    },
+    {
+      "claim_id": "B",
+      "subject": "Beta",
+      "predicate": "supports",
+      "object": "Gamma",
+      "polarity": "affirm",
+      "modality": "assert",
+      "qualifiers": {},
+      "evidence": [
+        {
+          "source_id": "source-b",
+          "chunk_id": "chunk-b",
+          "offset_start": 11,
+          "offset_end": 21,
+          "text_sha256": "29d3d204d9e3016293b45f0fdcec99bc58cefaf13efb7d60943456c946f29505"
+        }
+      ]
+    },
+    {
+      "claim_id": "C",
+      "subject": "Gamma",
+      "predicate": "supports",
+      "object": "Delta",
+      "polarity": "affirm",
+      "modality": "assert",
+      "qualifiers": {},
+      "evidence": [
+        {
+          "source_id": "source-c",
+          "chunk_id": "chunk-c",
+          "offset_start": 22,
+          "offset_end": 32,
+          "text_sha256": "29d3d204d9e3016293b45f0fdcec99bc58cefaf13efb7d60943456c946f29505"
+        }
+      ]
+    },
+    {
+      "claim_id": "D",
+      "subject": "Delta",
+      "predicate": "implies",
+      "object": "Epsilon",
+      "polarity": "affirm",
+      "modality": "assert",
+      "qualifiers": {},
+      "evidence": [
+        {
+          "source_id": "source-d",
+          "chunk_id": "chunk-d",
+          "offset_start": 33,
+          "offset_end": 43,
+          "text_sha256": "29d3d204d9e3016293b45f0fdcec99bc58cefaf13efb7d60943456c946f29505"
+        }
+      ]
+    }
+  ],
+  "edges": [
+    {
+      "from_id": "A",
+      "to_id": "B",
+      "type": "supports"
+    },
+    {
+      "from_id": "B",
+      "to_id": "C",
+      "type": "supports"
+    },
+    {
+      "from_id": "I1",
+      "to_id": "I2",
+      "type": "implies"
+    },
+    {
+      "from_id": "I2",
+      "to_id": "I3",
+      "type": "implies"
+    },
+    {
+      "from_id": "D1",
+      "to_id": "D2",
+      "type": "depends_on"
+    },
+    {
+      "from_id": "D2",
+      "to_id": "D3",
+      "type": "depends_on"
+    }
+  ]
+}

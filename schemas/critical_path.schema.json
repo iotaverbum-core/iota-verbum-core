@@ -1,0 +1,104 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/schemas/critical_path.schema.json",
+  "title": "CriticalPath",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "version",
+    "top_k",
+    "top_events",
+    "critical_chain",
+    "receipts"
+  ],
+  "properties": {
+    "version": {
+      "type": "string",
+      "const": "1.0"
+    },
+    "top_k": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "top_events": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "event_id",
+          "score",
+          "fan_out",
+          "downstream_reach"
+        ],
+        "properties": {
+          "event_id": {
+            "type": "string",
+            "pattern": "^event:[0-9a-f]{64}$"
+          },
+          "score": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "fan_out": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "downstream_reach": {
+            "type": "integer",
+            "minimum": 0
+          }
+        }
+      }
+    },
+    "critical_chain": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "pattern": "^event:[0-9a-f]{64}$"
+      }
+    },
+    "receipts": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "edge_types_used",
+        "counts"
+      ],
+      "properties": {
+        "edge_types_used": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "before",
+              "causes",
+              "enables"
+            ]
+          }
+        },
+        "counts": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "nodes",
+            "edges"
+          ],
+          "properties": {
+            "nodes": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "edges": {
+              "type": "integer",
+              "minimum": 0
+            }
+          }
+        },
+        "cycle_detected": {
+          "type": "boolean"
+        }
+      }
+    }
+  }
+}

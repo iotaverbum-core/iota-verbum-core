@@ -1,0 +1,19 @@
+Summary
+Patch: FIXTURE_PATCH_ID
+Verification: VERIFIED_NEEDS_INFO -> VERIFIED_OK
+Base world_sha256: dca859a4c8c4adec5e8b1c9b9f32f311958a3b50d2f0a977c1e3e361bbce7a1f
+New world_sha256: FIXTURE_NEW_WORLD_SHA256
+
+Operation counts
+- UPDATE_EVENT: 1
+
+Top affected ids
+- event:3333333333333333333333333333333333333333333333333333333333333333
+
+Diff summary
+None.
+
+Receipts
+patch_sha256: FIXTURE_PATCH_SHA256
+op_count: 1
+ledger_dir: FIXTURE_LEDGER_DIR

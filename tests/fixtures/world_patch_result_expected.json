@@ -1,0 +1,23 @@
+{
+  "version": "1.0",
+  "patch_id": "FIXTURE_PATCH_ID",
+  "base": {
+    "world_sha256": "dca859a4c8c4adec5e8b1c9b9f32f311958a3b50d2f0a977c1e3e361bbce7a1f",
+    "output_sha256": "FIXTURE_BASE_OUTPUT_SHA256",
+    "attestation_sha256": "FIXTURE_BASE_ATTESTATION_SHA256"
+  },
+  "new": {
+    "world_sha256": "FIXTURE_NEW_WORLD_SHA256",
+    "output_sha256": "FIXTURE_NEW_OUTPUT_SHA256",
+    "attestation_sha256": "FIXTURE_NEW_ATTESTATION_SHA256"
+  },
+  "verification_change": {
+    "old": "VERIFIED_NEEDS_INFO",
+    "new": "VERIFIED_OK"
+  },
+  "ledger_dir": "FIXTURE_LEDGER_DIR",
+  "receipts": {
+    "patch_sha256": "FIXTURE_PATCH_SHA256",
+    "op_count": 1
+  }
+}

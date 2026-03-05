@@ -41,6 +41,13 @@ from core.reasoning.support_tree import build_support_tree
 from core.reasoning.verifier import load_ruleset, verify_claim
 from core.reasoning.world_narrative import render_world_narrative
 from core.reasoning.world_narrative_v2 import render_world_narrative_v2
+from core.reasoning.world_patch import (
+    apply_world_patch,
+    build_patched_output,
+    load_world_patch,
+    run_world_patch,
+)
+from core.reasoning.world_patch_narrative_v2 import render_world_patch_narrative_v2
 
 __all__ = [
     "build_claim_graph",
@@ -73,6 +80,11 @@ __all__ = [
     "run_counterfactual_task",
     "render_world_narrative",
     "render_world_narrative_v2",
+    "load_world_patch",
+    "apply_world_patch",
+    "build_patched_output",
+    "run_world_patch",
+    "render_world_patch_narrative_v2",
     "run_graph_reasoning",
     "load_ruleset",
     "verify_claim",

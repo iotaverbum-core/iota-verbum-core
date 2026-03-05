@@ -1,0 +1,21 @@
+Summary
+Plan: plan:48a1c56a6d5d90d340f53caed309cf95a66d0432fc698443eeeac7ccf17cb0a6
+Base verification: VERIFIED_NEEDS_INFO
+Action count: 1
+
+Proposed actions
+- p10 low ADD_WORLD_ENRICHMENT :: Fill missing world context required for verification.
+
+Selected action
+None.
+
+Result
+None.
+
+Replay
+None.
+
+Receipts
+planned_actions: 1
+planned_trigger_reasons: 1
+planned_event_refs: 1

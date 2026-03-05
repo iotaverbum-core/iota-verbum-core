@@ -1,0 +1,10 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/schemas/repair_action.schema.json",
+  "title": "RepairAction",
+  "allOf": [
+    {
+      "$ref": "repair_plan.schema.json#/$defs/action"
+    }
+  ]
+}

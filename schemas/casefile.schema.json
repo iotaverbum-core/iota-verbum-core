@@ -1,0 +1,197 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/schemas/casefile.schema.json",
+  "title": "Casefile",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "casefile_version",
+    "casefile_id",
+    "created_utc",
+    "core_version",
+    "ruleset_id",
+    "query",
+    "prompt",
+    "hashes",
+    "ledger_dir",
+    "summary",
+    "artifacts",
+    "receipts_summary"
+  ],
+  "$defs": {
+    "sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "artifact": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "name",
+        "role",
+        "sha256"
+      ],
+      "properties": {
+        "name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "role": {
+          "type": "string",
+          "enum": [
+            "sealed",
+            "derived",
+            "narrative"
+          ]
+        },
+        "sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "schema": {
+          "type": "string",
+          "minLength": 1
+        },
+        "notes": {
+          "type": "string"
+        }
+      }
+    }
+  },
+  "properties": {
+    "casefile_version": {
+      "type": "string",
+      "const": "1.0"
+    },
+    "casefile_id": {
+      "type": "string",
+      "pattern": "^case:[0-9a-f]{64}$"
+    },
+    "created_utc": {
+      "type": "string",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}Z$"
+    },
+    "core_version": {
+      "type": "string",
+      "minLength": 1
+    },
+    "ruleset_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "query": {
+      "type": "string"
+    },
+    "prompt": {
+      "type": "string"
+    },
+    "hashes": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "manifest_sha256",
+        "bundle_sha256",
+        "world_sha256",
+        "output_sha256",
+        "attestation_sha256"
+      ],
+      "properties": {
+        "manifest_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "bundle_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "world_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "output_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "attestation_sha256": {
+          "$ref": "#/$defs/sha256"
+        }
+      }
+    },
+    "ledger_dir": {
+      "type": "string",
+      "pattern": "^outputs/.+$"
+    },
+    "summary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "entities",
+        "events",
+        "unknowns",
+        "conflicts",
+        "verification_status",
+        "constraint_violations",
+        "causal_edges"
+      ],
+      "properties": {
+        "entities": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "events": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "unknowns": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "conflicts": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "verification_status": {
+          "type": "string",
+          "enum": [
+            "VERIFIED_OK",
+            "VERIFIED_FAIL",
+            "VERIFIED_NEEDS_INFO"
+          ]
+        },
+        "constraint_violations": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "causal_edges": {
+          "type": "integer",
+          "minimum": 0
+        }
+      }
+    },
+    "artifacts": {
+      "type": "array",
+      "minItems": 4,
+      "items": {
+        "$ref": "#/$defs/artifact"
+      }
+    },
+    "receipts_summary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "evidence_ref_count",
+        "proof_count",
+        "finding_count"
+      ],
+      "properties": {
+        "evidence_ref_count": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "proof_count": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "finding_count": {
+          "type": "integer",
+          "minimum": 0
+        }
+      }
+    }
+  }
+}

@@ -1,3 +1,4 @@
+from core.reasoning.casefile import build_casefile, casefile_artifact_sha256
 from core.reasoning.causal import compute_causal_graph
 from core.reasoning.causal_narrative_v2 import render_causal_narrative_v2
 from core.reasoning.claim_graph import (
@@ -51,6 +52,7 @@ from core.reasoning.world_patch_narrative_v2 import render_world_patch_narrative
 
 __all__ = [
     "build_claim_graph",
+    "build_casefile",
     "compute_causal_graph",
     "compute_critical_path",
     "compute_constraint_diff",
@@ -80,6 +82,7 @@ __all__ = [
     "run_counterfactual_task",
     "render_world_narrative",
     "render_world_narrative_v2",
+    "casefile_artifact_sha256",
     "load_world_patch",
     "apply_world_patch",
     "build_patched_output",

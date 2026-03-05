@@ -1,0 +1,288 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/schemas/repair_run_record.schema.json",
+  "title": "RepairRunRecord",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "version",
+    "plan_id",
+    "selected_action_id",
+    "base",
+    "new",
+    "verification",
+    "diffs",
+    "replay",
+    "receipts",
+    "applied_changes"
+  ],
+  "$defs": {
+    "hash_hex": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "hash_or_empty": {
+      "type": "string",
+      "pattern": "^$|^[0-9a-f]{64}$"
+    },
+    "evidence_ref": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "source_id",
+        "chunk_id",
+        "offset_start",
+        "offset_end",
+        "text_sha256"
+      ],
+      "properties": {
+        "source_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "chunk_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "offset_start": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "offset_end": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "text_sha256": {
+          "$ref": "#/$defs/hash_hex"
+        }
+      }
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "VERIFIED_OK",
+        "VERIFIED_FAIL",
+        "VERIFIED_NEEDS_INFO"
+      ]
+    },
+    "action_receipts": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "trigger_reasons",
+        "event_ids",
+        "entity_ids",
+        "evidence_refs"
+      ],
+      "properties": {
+        "trigger_reasons": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "event_ids": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^event:[0-9a-f]{64}$"
+          }
+        },
+        "entity_ids": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^entity:[0-9a-f]{64}$"
+          }
+        },
+        "evidence_refs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/evidence_ref"
+          }
+        }
+      }
+    }
+  },
+  "properties": {
+    "version": {
+      "type": "string",
+      "const": "1.0"
+    },
+    "plan_id": {
+      "type": "string",
+      "pattern": "^plan:[0-9a-f]{64}$"
+    },
+    "selected_action_id": {
+      "type": "string",
+      "pattern": "^act:[0-9a-f]{64}$"
+    },
+    "base": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "world_sha256",
+        "output_sha256",
+        "attestation_sha256",
+        "source_ref"
+      ],
+      "properties": {
+        "world_sha256": {
+          "$ref": "#/$defs/hash_hex"
+        },
+        "output_sha256": {
+          "$ref": "#/$defs/hash_hex"
+        },
+        "attestation_sha256": {
+          "$ref": "#/$defs/hash_or_empty"
+        },
+        "ledger_dir": {
+          "type": "string",
+          "minLength": 1
+        },
+        "source_ref": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "kind",
+            "path"
+          ],
+          "properties": {
+            "kind": {
+              "type": "string",
+              "enum": [
+                "ledger_dir",
+                "output_json"
+              ]
+            },
+            "path": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        }
+      }
+    },
+    "new": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "world_sha256",
+        "output_sha256",
+        "attestation_sha256",
+        "ledger_dir"
+      ],
+      "properties": {
+        "world_sha256": {
+          "$ref": "#/$defs/hash_hex"
+        },
+        "output_sha256": {
+          "$ref": "#/$defs/hash_hex"
+        },
+        "attestation_sha256": {
+          "$ref": "#/$defs/hash_hex"
+        },
+        "ledger_dir": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "verification": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "old",
+        "new"
+      ],
+      "properties": {
+        "old": {
+          "$ref": "#/$defs/status"
+        },
+        "new": {
+          "$ref": "#/$defs/status"
+        }
+      }
+    },
+    "diffs": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "world_diff_present",
+        "constraint_diff_present"
+      ],
+      "properties": {
+        "world_diff_present": {
+          "type": "boolean"
+        },
+        "constraint_diff_present": {
+          "type": "boolean"
+        }
+      }
+    },
+    "replay": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "strict_manifest",
+        "ok"
+      ],
+      "properties": {
+        "strict_manifest": {
+          "type": "boolean"
+        },
+        "ok": {
+          "type": "boolean"
+        }
+      }
+    },
+    "receipts": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "action_receipts"
+      ],
+      "properties": {
+        "action_receipts": {
+          "$ref": "#/$defs/action_receipts"
+        }
+      }
+    },
+    "applied_changes": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind"
+      ],
+      "properties": {
+        "kind": {
+          "type": "string",
+          "enum": [
+            "ADD_WORLD_ENRICHMENT",
+            "APPLY_WORLD_PATCH",
+            "TUNE_FOCUS"
+          ]
+        },
+        "enrichment_path": {
+          "type": "string",
+          "minLength": 1
+        },
+        "patch_path": {
+          "type": "string",
+          "minLength": 1
+        },
+        "query": {
+          "type": "string"
+        },
+        "max_chunks": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "max_events": {
+          "type": "integer",
+          "minimum": 1
+        }
+      }
+    }
+  }
+}

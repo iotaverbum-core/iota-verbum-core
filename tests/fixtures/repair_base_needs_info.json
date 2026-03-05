@@ -1,0 +1,324 @@
+{
+  "world_model": {
+    "world_version": "1.0",
+    "world_sha256": "dca859a4c8c4adec5e8b1c9b9f32f311958a3b50d2f0a977c1e3e361bbce7a1f",
+    "entities": [
+      {
+        "entity_id": "entity:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "type": "Secret",
+        "name": "API_KEYS",
+        "aliases": []
+      },
+      {
+        "entity_id": "entity:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "type": "Secret",
+        "name": "DB_PASSWORD",
+        "aliases": []
+      }
+    ],
+    "events": [
+      {
+        "event_id": "event:1111111111111111111111111111111111111111111111111111111111111111",
+        "type": "PolicyChange",
+        "time": {
+          "kind": "date",
+          "value": "2026-03-01"
+        },
+        "actors": [
+          "secops"
+        ],
+        "objects": [
+          "entity:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+        ],
+        "action": "`API_KEYS` must be never in source.",
+        "state": {
+          "API_KEYS": "never-in-repo"
+        },
+        "evidence": [
+          {
+            "source_id": "doc:1",
+            "chunk_id": "chunk:1",
+            "offset_start": 0,
+            "offset_end": 39,
+            "text_sha256": "c8b129c037c222f8e55a6d791b6d36cec99161945ac3be7b7de2745be2174f03"
+          }
+        ]
+      },
+      {
+        "event_id": "event:2222222222222222222222222222222222222222222222222222222222222222",
+        "type": "Config",
+        "time": {
+          "kind": "date",
+          "value": "2026-03-02"
+        },
+        "actors": [
+          "platform"
+        ],
+        "objects": [
+          "entity:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+        ],
+        "action": "`API_KEYS` are environment only.",
+        "state": {
+          "API_KEYS": "env-only"
+        },
+        "evidence": [
+          {
+            "source_id": "doc:1",
+            "chunk_id": "chunk:2",
+            "offset_start": 40,
+            "offset_end": 79,
+            "text_sha256": "e9db98377dd9ebaa2acd26b224f0f47052dc4bc5a19c8ae34d9f768055bd1284"
+          }
+        ]
+      },
+      {
+        "event_id": "event:3333333333333333333333333333333333333333333333333333333333333333",
+        "type": "Access",
+        "time": {
+          "kind": "unknown"
+        },
+        "actors": [],
+        "objects": [
+          "entity:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+        ],
+        "action": "API_KEYS access was reviewed.",
+        "state": null,
+        "evidence": [
+          {
+            "source_id": "doc:1",
+            "chunk_id": "chunk:3",
+            "offset_start": 80,
+            "offset_end": 119,
+            "text_sha256": "350e951b0fba25ee9097f5eeeac0184ae84326a0df509f8fd8ccf037ad4f68b3"
+          }
+        ]
+      }
+    ],
+    "relations": [],
+    "unknowns": [
+      {
+        "kind": "missing_actor",
+        "ref": {
+          "event_id": "event:3333333333333333333333333333333333333333333333333333333333333333"
+        }
+      },
+      {
+        "kind": "missing_time",
+        "ref": {
+          "event_id": "event:3333333333333333333333333333333333333333333333333333333333333333"
+        }
+      }
+    ],
+    "conflicts": [
+      {
+        "kind": "state_conflict",
+        "ref": {
+          "entity_id": "entity:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "event_ids": [
+            "event:1111111111111111111111111111111111111111111111111111111111111111",
+            "event:2222222222222222222222222222222222222222222222222222222222222222"
+          ],
+          "key": "API_KEYS",
+          "values": [
+            "env-only",
+            "never-in-repo"
+          ]
+        },
+        "reason": "API_KEYS has conflicting states: env-only, never-in-repo"
+      }
+    ]
+  },
+  "causal_graph": {
+    "version": "1.0",
+    "nodes": [
+      "event:1111111111111111111111111111111111111111111111111111111111111111",
+      "event:2222222222222222222222222222222222222222222222222222222222222222",
+      "event:3333333333333333333333333333333333333333333333333333333333333333"
+    ],
+    "edges": [
+      {
+        "from_event_id": "event:1111111111111111111111111111111111111111111111111111111111111111",
+        "to_event_id": "event:2222222222222222222222222222222222222222222222222222222222222222",
+        "type": "before",
+        "reason_code": "RULE_POLICY_PRECEDES_CONFIG",
+        "confidence": "high",
+        "evidence": [
+          {
+            "source_id": "doc:1",
+            "chunk_id": "chunk:1",
+            "offset_start": 0,
+            "offset_end": 39,
+            "text_sha256": "c8b129c037c222f8e55a6d791b6d36cec99161945ac3be7b7de2745be2174f03"
+          },
+          {
+            "source_id": "doc:1",
+            "chunk_id": "chunk:2",
+            "offset_start": 40,
+            "offset_end": 79,
+            "text_sha256": "e9db98377dd9ebaa2acd26b224f0f47052dc4bc5a19c8ae34d9f768055bd1284"
+          }
+        ]
+      },
+      {
+        "from_event_id": "event:1111111111111111111111111111111111111111111111111111111111111111",
+        "to_event_id": "event:2222222222222222222222222222222222222222222222222222222222222222",
+        "type": "contradicts",
+        "reason_code": "RULE_CONFLICT_IMPLIED",
+        "confidence": "high",
+        "evidence": [
+          {
+            "source_id": "doc:1",
+            "chunk_id": "chunk:1",
+            "offset_start": 0,
+            "offset_end": 39,
+            "text_sha256": "c8b129c037c222f8e55a6d791b6d36cec99161945ac3be7b7de2745be2174f03"
+          },
+          {
+            "source_id": "doc:1",
+            "chunk_id": "chunk:2",
+            "offset_start": 40,
+            "offset_end": 79,
+            "text_sha256": "e9db98377dd9ebaa2acd26b224f0f47052dc4bc5a19c8ae34d9f768055bd1284"
+          }
+        ]
+      },
+      {
+        "from_event_id": "event:1111111111111111111111111111111111111111111111111111111111111111",
+        "to_event_id": "event:2222222222222222222222222222222222222222222222222222222222222222",
+        "type": "enables",
+        "reason_code": "RULE_SECRET_HANDLING_CAUSAL",
+        "confidence": "high",
+        "evidence": [
+          {
+            "source_id": "doc:1",
+            "chunk_id": "chunk:1",
+            "offset_start": 0,
+            "offset_end": 39,
+            "text_sha256": "c8b129c037c222f8e55a6d791b6d36cec99161945ac3be7b7de2745be2174f03"
+          },
+          {
+            "source_id": "doc:1",
+            "chunk_id": "chunk:2",
+            "offset_start": 40,
+            "offset_end": 79,
+            "text_sha256": "e9db98377dd9ebaa2acd26b224f0f47052dc4bc5a19c8ae34d9f768055bd1284"
+          }
+        ]
+      }
+    ],
+    "causal_order": [
+      "event:1111111111111111111111111111111111111111111111111111111111111111",
+      "event:2222222222222222222222222222222222222222222222222222222222222222",
+      "event:3333333333333333333333333333333333333333333333333333333333333333"
+    ],
+    "findings": []
+  },
+  "causal_findings": [],
+  "causal_narrative_v2": {
+    "narrative_version": "2.0",
+    "mode": "brief",
+    "text": "Summary\nNodes: 3\nEdges: 3\nTemporal cycle: no\nVerification: VERIFIED_NEEDS_INFO\n\nCausal Order\n- event:1111111111111111111111111111111111111111111111111111111111111111\n- event:2222222222222222222222222222222222222222222222222222222222222222\n- event:3333333333333333333333333333333333333333333333333333333333333333\n\nEdges\n- event:1111111111111111111111111111111111111111111111111111111111111111 -> event:2222222222222222222222222222222222222222222222222222222222222222 [before, RULE_POLICY_PRECEDES_CONFIG, high]\n- event:1111111111111111111111111111111111111111111111111111111111111111 -> event:2222222222222222222222222222222222222222222222222222222222222222 [contradicts, RULE_CONFLICT_IMPLIED, high]\n- event:1111111111111111111111111111111111111111111111111111111111111111 -> event:2222222222222222222222222222222222222222222222222222222222222222 [enables, RULE_SECRET_HANDLING_CAUSAL, high]\n\nFindings\nNone.\n",
+    "sections": [
+      {
+        "title": "Summary",
+        "lines": [
+          "Nodes: 3",
+          "Edges: 3",
+          "Temporal cycle: no",
+          "Verification: VERIFIED_NEEDS_INFO"
+        ]
+      },
+      {
+        "title": "Causal Order",
+        "lines": [
+          "- event:1111111111111111111111111111111111111111111111111111111111111111",
+          "- event:2222222222222222222222222222222222222222222222222222222222222222",
+          "- event:3333333333333333333333333333333333333333333333333333333333333333"
+        ]
+      },
+      {
+        "title": "Edges",
+        "lines": [
+          "- event:1111111111111111111111111111111111111111111111111111111111111111 -> event:2222222222222222222222222222222222222222222222222222222222222222 [before, RULE_POLICY_PRECEDES_CONFIG, high]",
+          "- event:1111111111111111111111111111111111111111111111111111111111111111 -> event:2222222222222222222222222222222222222222222222222222222222222222 [contradicts, RULE_CONFLICT_IMPLIED, high]",
+          "- event:1111111111111111111111111111111111111111111111111111111111111111 -> event:2222222222222222222222222222222222222222222222222222222222222222 [enables, RULE_SECRET_HANDLING_CAUSAL, high]"
+        ]
+      },
+      {
+        "title": "Findings",
+        "lines": []
+      }
+    ],
+    "graph_summary": {
+      "node_count": 3,
+      "edge_count": 3,
+      "finding_count": 0,
+      "has_temporal_cycle": false,
+      "first_causal_order": [
+        "event:1111111111111111111111111111111111111111111111111111111111111111",
+        "event:2222222222222222222222222222222222222222222222222222222222222222",
+        "event:3333333333333333333333333333333333333333333333333333333333333333"
+      ]
+    }
+  },
+  "verification_result": {
+    "verification_version": "1.0",
+    "ruleset_id": "ruleset.core.v1",
+    "target_claim_id": "world:test",
+    "status": "VERIFIED_NEEDS_INFO",
+    "reasons": [
+      {
+        "code": "RULE_WORLD_UNKNOWNS_SECURITY",
+        "message": "security-relevant world event is missing required context",
+        "ref": {
+          "event_id": "event:3333333333333333333333333333333333333333333333333333333333333333"
+        }
+      }
+    ],
+    "required_info": [
+      {
+        "kind": "missing_actor",
+        "ref": {
+          "event_id": "event:3333333333333333333333333333333333333333333333333333333333333333"
+        }
+      },
+      {
+        "kind": "missing_time",
+        "ref": {
+          "event_id": "event:3333333333333333333333333333333333333333333333333333333333333333"
+        }
+      }
+    ],
+    "receipts": {
+      "bundle_sha256": "de8d170df3473b8e43f1f1408001528080b4d2c9d855c4b6d230b201c8a272e5",
+      "output_sha256": "f1cfa0ed6957ef424c21ee637d432eb5d3291ce44b406f43a7898d73e0bd42a2",
+      "attestation_sha256": "",
+      "ruleset_sha256": "cb06a9a556b516f9605dcd82b0fee83b113a6887bf671a7ddd99370eee461340",
+      "evidence_refs": [
+        {
+          "source_id": "doc:1",
+          "chunk_id": "chunk:1",
+          "offset_start": 0,
+          "offset_end": 39,
+          "text_sha256": "c8b129c037c222f8e55a6d791b6d36cec99161945ac3be7b7de2745be2174f03"
+        },
+        {
+          "source_id": "doc:1",
+          "chunk_id": "chunk:2",
+          "offset_start": 40,
+          "offset_end": 79,
+          "text_sha256": "e9db98377dd9ebaa2acd26b224f0f47052dc4bc5a19c8ae34d9f768055bd1284"
+        },
+        {
+          "source_id": "doc:1",
+          "chunk_id": "chunk:3",
+          "offset_start": 80,
+          "offset_end": 119,
+          "text_sha256": "350e951b0fba25ee9097f5eeeac0184ae84326a0df509f8fd8ccf037ad4f68b3"
+        }
+      ],
+      "proofs": [],
+      "findings": []
+    }
+  }
+}

@@ -1,0 +1,307 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/schemas/repair_plan.schema.json",
+  "title": "RepairPlan",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "version",
+    "plan_id",
+    "base",
+    "status",
+    "actions",
+    "notes",
+    "ruleset_id"
+  ],
+  "$defs": {
+    "hash_hex": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "hash_or_empty": {
+      "type": "string",
+      "pattern": "^$|^[0-9a-f]{64}$"
+    },
+    "evidence_ref": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "source_id",
+        "chunk_id",
+        "offset_start",
+        "offset_end",
+        "text_sha256"
+      ],
+      "properties": {
+        "source_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "chunk_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "offset_start": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "offset_end": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "text_sha256": {
+          "$ref": "#/$defs/hash_hex"
+        }
+      }
+    },
+    "json_value": {
+      "oneOf": [
+        {
+          "type": "null"
+        },
+        {
+          "type": "boolean"
+        },
+        {
+          "type": "number"
+        },
+        {
+          "type": "string"
+        },
+        {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/json_value"
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "patternProperties": {
+            "^.*$": {
+              "$ref": "#/$defs/json_value"
+            }
+          }
+        }
+      ]
+    },
+    "action_inputs": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [],
+      "properties": {
+        "enrichment_path": {
+          "type": "string",
+          "minLength": 1
+        },
+        "missing": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "kind",
+              "event_id",
+              "value"
+            ],
+            "properties": {
+              "kind": {
+                "type": "string",
+                "enum": [
+                  "missing_time",
+                  "missing_actor",
+                  "missing_object"
+                ]
+              },
+              "event_id": {
+                "type": "string",
+                "pattern": "^event:[0-9a-f]{64}$"
+              },
+              "value": {
+                "$ref": "#/$defs/json_value"
+              }
+            }
+          }
+        },
+        "patch_path": {
+          "type": "string",
+          "minLength": 1
+        },
+        "description": {
+          "type": "string",
+          "minLength": 1
+        },
+        "recommended_max_chunks": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "recommended_max_events": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "recommended_query": {
+          "type": "string"
+        }
+      }
+    },
+    "action": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "action_id",
+        "kind",
+        "risk",
+        "priority",
+        "goal",
+        "inputs",
+        "expected_effect",
+        "receipts"
+      ],
+      "properties": {
+        "action_id": {
+          "type": "string",
+          "pattern": "^act:[0-9a-f]{64}$"
+        },
+        "kind": {
+          "type": "string",
+          "enum": [
+            "ADD_WORLD_ENRICHMENT",
+            "APPLY_WORLD_PATCH",
+            "TUNE_FOCUS"
+          ]
+        },
+        "risk": {
+          "type": "string",
+          "enum": [
+            "low",
+            "medium",
+            "high"
+          ]
+        },
+        "priority": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "goal": {
+          "type": "string",
+          "minLength": 1
+        },
+        "inputs": {
+          "$ref": "#/$defs/action_inputs"
+        },
+        "expected_effect": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "clears_reasons",
+            "may_change_hashes"
+          ],
+          "properties": {
+            "clears_reasons": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "may_change_hashes": {
+              "type": "boolean"
+            }
+          }
+        },
+        "receipts": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "trigger_reasons",
+            "event_ids",
+            "entity_ids",
+            "evidence_refs"
+          ],
+          "properties": {
+            "trigger_reasons": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "event_ids": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "pattern": "^event:[0-9a-f]{64}$"
+              }
+            },
+            "entity_ids": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "pattern": "^entity:[0-9a-f]{64}$"
+              }
+            },
+            "evidence_refs": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/evidence_ref"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "properties": {
+    "version": {
+      "type": "string",
+      "const": "1.0"
+    },
+    "plan_id": {
+      "type": "string",
+      "pattern": "^plan:[0-9a-f]{64}$"
+    },
+    "base": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "world_sha256",
+        "output_sha256",
+        "attestation_sha256"
+      ],
+      "properties": {
+        "world_sha256": {
+          "$ref": "#/$defs/hash_hex"
+        },
+        "output_sha256": {
+          "$ref": "#/$defs/hash_hex"
+        },
+        "attestation_sha256": {
+          "$ref": "#/$defs/hash_or_empty"
+        },
+        "ledger_dir": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "VERIFIED_OK",
+        "VERIFIED_FAIL",
+        "VERIFIED_NEEDS_INFO"
+      ]
+    },
+    "actions": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/action"
+      }
+    },
+    "notes": {
+      "type": "string"
+    },
+    "ruleset_id": {
+      "type": "string",
+      "minLength": 1
+    }
+  }
+}

@@ -37,6 +37,9 @@ from core.reasoning.repair_hints import compute_repair_hints
 from core.reasoning.repair_hints_narrative_v2 import (
     render_repair_hints_narrative_v2,
 )
+from core.reasoning.repair_loop import run_repair_loop
+from core.reasoning.repair_narrative_v2 import render_repair_narrative_v2
+from core.reasoning.repair_plan import compute_repair_plan
 from core.reasoning.run_graph import run_graph_reasoning
 from core.reasoning.support_tree import build_support_tree
 from core.reasoning.verifier import load_ruleset, verify_claim
@@ -58,6 +61,7 @@ __all__ = [
     "compute_constraint_diff",
     "compute_constraints",
     "compute_repair_hints",
+    "compute_repair_plan",
     "compute_task_id",
     "build_adjacency",
     "build_support_tree",
@@ -77,9 +81,11 @@ __all__ = [
     "render_constraint_narrative_v2",
     "render_counterfactual_narrative_v2",
     "render_repair_hints_narrative_v2",
+    "render_repair_narrative_v2",
     "render_narrative",
     "render_narrative_v2",
     "run_counterfactual_task",
+    "run_repair_loop",
     "render_world_narrative",
     "render_world_narrative_v2",
     "casefile_artifact_sha256",

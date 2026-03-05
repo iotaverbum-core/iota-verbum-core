@@ -388,7 +388,7 @@ def run_demo(
         )
         _write_demo_outputs(run_dir, planned_files)
         ledger_dir = write_run(ledger_root=str(run_dir / "ledger"), **sealed)
-        sealed = {**sealed, "ledger_dir": str(ledger_dir)}
+        sealed = {**sealed, "ledger_dir": Path(ledger_dir).as_posix()}
         pack_path = run_dir / "evidence_pack.json"
         bundle_path = run_dir / "evidence_bundle.json"
         world_model_path = run_dir / "world_model.json"
@@ -579,7 +579,7 @@ def run_demo(
     run_dir = _resolve_run_dir(base_run_dir, planned_files)
     _write_demo_outputs(run_dir, planned_files)
     ledger_dir = write_run(ledger_root=str(run_dir / "ledger"), **sealed)
-    sealed = {**sealed, "ledger_dir": str(ledger_dir)}
+    sealed = {**sealed, "ledger_dir": Path(ledger_dir).as_posix()}
     pack_path = run_dir / "evidence_pack.json"
     claim_graph_path = run_dir / "claim_graph.json"
     bundle_path = run_dir / "evidence_bundle.json"

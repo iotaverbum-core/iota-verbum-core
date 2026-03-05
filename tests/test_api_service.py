@@ -52,8 +52,7 @@ def test_full_json_flow_and_verify():
         assert verify_body["hash_match"] is True
         assert verify_body["verified_count"] == 1
         assert any(
-            item["event"] == "verify"
-            for item in verify_body["record"]["audit_log"]
+            item["event"] == "verify" for item in verify_body["record"]["audit_log"]
         )
 
 
@@ -115,8 +114,7 @@ def test_tenant_isolation_for_audit_and_verify():
         assert own_audit.status_code == 200
         assert other_audit.status_code == 200
         assert all(
-            item["record_id"] != record_id
-            for item in other_audit.json()["items"]
+            item["record_id"] != record_id for item in other_audit.json()["items"]
         )
 
 
@@ -132,12 +130,12 @@ def test_pdf_upload_uses_pdfplumber_path(monkeypatch):
             "The recipient must return or destroy all materials. "
             "This agreement is governed by the laws of Delaware. "
             "The parties submit to exclusive jurisdiction in Wilmington.",
-                {
-                    "page_count": 1,
-                    "producer": "stub",
-                    "creation_date": "2026-01-15",
-                    "extraction_method": "pdfplumber",
-                },
+            {
+                "page_count": 1,
+                "producer": "stub",
+                "creation_date": "2026-01-15",
+                "extraction_method": "pdfplumber",
+            },
         ),
     )
 
@@ -169,13 +167,13 @@ def test_pdf_upload_uses_ocr_fallback(monkeypatch):
             "The recipient shall destroy all copies after use. "
             "This agreement is governed by California law. "
             "Jurisdiction lies in San Francisco.",
-                {
-                    "dpi": 300,
-                    "language": "eng",
-                    "page_count": 1,
-                    "confidence_scores": {98: 7},
-                    "extraction_method": "ocr",
-                },
+            {
+                "dpi": 300,
+                "language": "eng",
+                "page_count": 1,
+                "confidence_scores": {98: 7},
+                "extraction_method": "ocr",
+            },
         ),
     )
 
@@ -219,3 +217,98 @@ def test_retention_policy_purges_document_inputs_and_logs_event(monkeypatch):
         )
         assert document is None
         assert purge_event is not None
+
+
+def test_casefile_generate_endpoint(monkeypatch):
+    monkeypatch.setattr(
+        app_module,
+        "run_demo",
+        lambda **_kwargs: {
+            "casefile": {
+                "casefile_version": "1.0",
+                "casefile_id": "case:" + ("1" * 64),
+                "created_utc": "2026-03-05T00:00:00Z",
+                "core_version": "0.4.0",
+                "ruleset_id": "ruleset.core.v1",
+                "query": "",
+                "prompt": "",
+                "hashes": {
+                    "manifest_sha256": "2" * 64,
+                    "bundle_sha256": "3" * 64,
+                    "world_sha256": "4" * 64,
+                    "output_sha256": "5" * 64,
+                    "attestation_sha256": "6" * 64,
+                },
+                "ledger_dir": "outputs/demo/x/ledger/" + ("3" * 64),
+                "summary": {
+                    "entities": 1,
+                    "events": 1,
+                    "unknowns": 0,
+                    "conflicts": 0,
+                    "verification_status": "VERIFIED_OK",
+                    "constraint_violations": 0,
+                    "causal_edges": 0,
+                },
+                "artifacts": [
+                    {"name": "attestation.json", "role": "sealed", "sha256": "6" * 64},
+                    {"name": "bundle.json", "role": "sealed", "sha256": "3" * 64},
+                    {"name": "output.json", "role": "sealed", "sha256": "5" * 64},
+                    {"name": "casefile.json", "role": "derived", "sha256": "7" * 64},
+                ],
+                "receipts_summary": {
+                    "evidence_ref_count": 0,
+                    "proof_count": 0,
+                    "finding_count": 0,
+                },
+            },
+            "ledger_dir_rel": "outputs/demo/x/ledger/" + ("3" * 64),
+        },
+    )
+    with TestClient(app) as client:
+        response = client.post(
+            "/v1/casefile/generate",
+            headers={**_headers(), "Content-Type": "application/json"},
+            json={
+                "folder": "tests/fixtures",
+                "query": "",
+                "prompt": "",
+                "max_chunks": 1,
+                "max_events": 1,
+                "created_utc": "2026-03-05T00:00:00Z",
+                "core_version": "0.4.0",
+                "ruleset_id": "ruleset.core.v1",
+                "verbosity": "brief",
+                "show_receipts": False,
+            },
+        )
+    assert response.status_code == 200
+    body = response.json()
+    assert body["casefile"]["casefile_id"].startswith("case:")
+    assert body["ledger_dir"].startswith("outputs/")
+
+
+def test_casefile_verify_endpoint(monkeypatch):
+    monkeypatch.setattr(
+        app_module,
+        "verify_run",
+        lambda _ledger_dir, strict_manifest: {
+            "ok": True,
+            "bundle_sha256": "a" * 64,
+            "output_sha256": "b" * 64,
+            "attestation_sha256": "c" * 64,
+            "warnings": [] if strict_manifest else ["manifest_sha256 mismatch"],
+        },
+    )
+    with TestClient(app) as client:
+        response = client.post(
+            "/v1/casefile/verify",
+            headers={**_headers(), "Content-Type": "application/json"},
+            json={
+                "ledger_dir": "outputs/demo/x/ledger/" + ("a" * 64),
+                "strict_manifest": True,
+            },
+        )
+    assert response.status_code == 200
+    body = response.json()
+    assert body["status"] == "VERIFIED_OK"
+    assert body["ledger_dir"].startswith("outputs/")

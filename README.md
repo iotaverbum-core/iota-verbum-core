@@ -4,6 +4,8 @@ IOTA VERBUM CORE is a deterministic extraction and provenance engine for audit-s
 
 This repository contains the deterministic core only: domain extractors, schemas, manifests, provenance tools, and reproducibility checks.
 
+Casefile v1 is now available as the beachhead world output contract: a deterministic index artifact (`casefile.json`) that summarizes verified timeline state, contradictions, unknowns, receipts, and links to sealed ledger outputs.
+
 ## Quickstart
 
 ```powershell
@@ -50,3 +52,4 @@ python scripts\generate_provenance_report.py `
 Canonical outputs are written with stable JSON serialization, input fixtures are pinned by SHA-256, and CI runs both the test suite and a double-run reproducibility check. `MANIFEST.sha256` is regenerated from tracked repository bytes and verified for drift during reproducibility checks.
 
 See `docs/DETERMINISM.md` and `docs/NONDETERMINISM_BOUNDARY.md` for the verification model. The biblical text example remains available as a fixture in `docs/examples/biblical_text.md`.
+See `docs/CASEFILE.md` for casefile contract details and replay usage.

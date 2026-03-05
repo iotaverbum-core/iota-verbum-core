@@ -11,6 +11,7 @@ from core.determinism.canonical_json import dumps_canonical
 from core.determinism.finalize import finalize
 from core.determinism.hashing import sha256_bytes, sha256_text
 from core.determinism.ledger import write_run
+from core.reasoning.casefile import build_casefile, casefile_artifact_sha256
 from core.reasoning.causal import compute_causal_graph
 from core.reasoning.causal_narrative_v2 import render_causal_narrative_v2
 from core.reasoning.constraint_narrative_v2 import render_constraint_narrative_v2
@@ -189,6 +190,10 @@ def _world_target_claim_id(query: str) -> str:
     return "world:" + sha256_text(normalize_text(query))
 
 
+def _repo_relative(path: Path) -> str:
+    return path.resolve().relative_to(Path.cwd().resolve()).as_posix()
+
+
 def run_demo(
     *,
     folder: str,
@@ -319,6 +324,29 @@ def run_demo(
         output_obj["constraint_narrative_v2"] = constraint_narrative_v2
         output_obj["repair_hints_narrative_v2"] = repair_hints_narrative_v2
         output_obj["verification_result"] = verification_result
+        run_dir = _resolve_run_dir(
+            base_run_dir,
+            {
+                "evidence_bundle.json": bundle_bytes,
+                "evidence_pack.json": pack_bytes,
+                "world_model.json": world_model_bytes,
+            },
+        )
+        ledger_dir_rel = (run_dir / "ledger" / bundle_sha256).as_posix()
+        provisional_casefile = build_casefile(
+            output_obj=output_obj,
+            query=query,
+            prompt=prompt,
+            created_utc=created_utc,
+            core_version=core_version,
+            ruleset_id=ruleset_id,
+            manifest_sha256=manifest_sha256,
+            ledger_dir_rel=ledger_dir_rel,
+            bundle_sha256=bundle_sha256,
+            output_sha256="0" * 64,
+            attestation_sha256="0" * 64,
+        )
+        output_obj["casefile"] = provisional_casefile
         sealed = finalize(
             bundle_obj,
             output_obj,
@@ -341,7 +369,23 @@ def run_demo(
             "sealed_output.json": sealed["output_bytes"],
             "world_model.json": world_model_bytes,
         }
-        run_dir = _resolve_run_dir(base_run_dir, planned_files)
+        final_casefile = build_casefile(
+            output_obj=output_obj,
+            query=query,
+            prompt=prompt,
+            created_utc=created_utc,
+            core_version=core_version,
+            ruleset_id=ruleset_id,
+            manifest_sha256=manifest_sha256,
+            ledger_dir_rel=ledger_dir_rel,
+            bundle_sha256=bundle_sha256,
+            output_sha256=sealed["output_sha256"],
+            attestation_sha256=sealed["attestation_sha256"],
+        )
+        casefile_bytes = dumps_canonical(final_casefile)
+        casefile_path = _write_with_conflict_suffix(
+            run_dir / "casefile.json", casefile_bytes
+        )
         _write_demo_outputs(run_dir, planned_files)
         ledger_dir = write_run(ledger_root=str(run_dir / "ledger"), **sealed)
         sealed = {**sealed, "ledger_dir": str(ledger_dir)}
@@ -350,6 +394,7 @@ def run_demo(
         world_model_path = run_dir / "world_model.json"
         output_path = run_dir / "sealed_output.json"
         attestation_path = run_dir / "attestation.json"
+        casefile_sha256 = casefile_artifact_sha256(final_casefile)
 
         replay_command = (
             "python -m core.determinism.replay "
@@ -375,9 +420,7 @@ def run_demo(
             + "\n"
         )
         top_event = (
-            critical_path["top_events"][0]
-            if critical_path["top_events"]
-            else None
+            critical_path["top_events"][0] if critical_path["top_events"] else None
         )
         critical_path_summary = (
             "Critical Path\n"
@@ -401,9 +444,7 @@ def run_demo(
         repair_hint_preview = [
             f"{hint['action']} "
             + (
-                ", ".join(
-                    hint["target"]["event_ids"] + hint["target"]["entity_ids"]
-                )
+                ", ".join(hint["target"]["event_ids"] + hint["target"]["entity_ids"])
                 or "none"
             )
             for hint in repair_hints["hints"][:3]
@@ -434,33 +475,38 @@ def run_demo(
                 run_dir / "world_diff_narrative.json",
                 diff_narrative_bytes,
             )
-            diff_narrative_text = (
-                "\nWorld Diff\n"
-                + _format_report(diff_narrative["text"])
+            diff_narrative_text = "\nWorld Diff\n" + _format_report(
+                diff_narrative["text"]
             )
         report = (
-            "Deterministic World Demo\n"
-            f"pack_sha256:       {pack_obj['pack_sha256']}\n"
-            f"bundle_sha256:     {bundle_sha256}\n"
-            f"world_sha256:      {world_model['world_sha256']}\n"
-            f"output_sha256:     {sealed['output_sha256']}\n"
-            f"attestation_sha256:{sealed['attestation_sha256']}\n"
-            f"ledger_dir:        {sealed['ledger_dir']}\n\n"
-            f"{warning_line}"
-            "World Narrative\n"
-            f"{_format_report(narrative_text)}\n"
-            f"{causal_summary}"
-            f"{critical_path_summary}"
-            f"{constraint_summary}"
-            f"{repair_hints_summary}"
-            "Causal Narrative\n"
-            f"{_format_report(causal_narrative_text)}\n"
-            "Ledger Dir\n"
-            f"{sealed['ledger_dir']}\n\n"
-            "Replay Command\n"
-            f"{replay_command}\n"
-            f"{diff_narrative_text}"
-        ).replace("\r\n", "\n").replace("\r", "\n")
+            (
+                "Deterministic World Demo\n"
+                f"pack_sha256:       {pack_obj['pack_sha256']}\n"
+                f"bundle_sha256:     {bundle_sha256}\n"
+                f"world_sha256:      {world_model['world_sha256']}\n"
+                f"casefile_id:       {final_casefile['casefile_id']}\n"
+                f"casefile_sha256:   {casefile_sha256}\n"
+                f"output_sha256:     {sealed['output_sha256']}\n"
+                f"attestation_sha256:{sealed['attestation_sha256']}\n"
+                f"ledger_dir:        {sealed['ledger_dir']}\n\n"
+                f"{warning_line}"
+                "World Narrative\n"
+                f"{_format_report(narrative_text)}\n"
+                f"{causal_summary}"
+                f"{critical_path_summary}"
+                f"{constraint_summary}"
+                f"{repair_hints_summary}"
+                "Causal Narrative\n"
+                f"{_format_report(causal_narrative_text)}\n"
+                "Ledger Dir\n"
+                f"{sealed['ledger_dir']}\n\n"
+                "Replay Command\n"
+                f"{replay_command}\n"
+                f"{diff_narrative_text}"
+            )
+            .replace("\r\n", "\n")
+            .replace("\r", "\n")
+        )
         result = {
             "run_dir": str(run_dir),
             "pack_path": str(pack_path),
@@ -476,6 +522,10 @@ def run_demo(
             "attestation_sha256": sealed["attestation_sha256"],
             "target_claim_id": target_claim_id,
             "ledger_dir": sealed["ledger_dir"],
+            "ledger_dir_rel": _repo_relative(Path(sealed["ledger_dir"])),
+            "casefile": final_casefile,
+            "casefile_path": str(casefile_path),
+            "casefile_sha256": casefile_sha256,
             "report": report,
         }
         if diff_path is not None and diff_narrative_path is not None:
@@ -539,34 +589,33 @@ def run_demo(
     output_obj = json.loads(sealed["output_bytes"].decode("utf-8"))
     narrative_text = output_obj["narrative_v2"]["text"]
     target_claim = next(
-        claim
-        for claim in claim_graph["claims"]
-        if claim["claim_id"] == target_claim_id
+        claim for claim in claim_graph["claims"] if claim["claim_id"] == target_claim_id
     )
     replay_command = (
         f"python -m core.determinism.replay {Path(sealed['ledger_dir']).as_posix()} "
         "--strict-manifest"
     )
-    target_summary = (
-        f"{target_claim['subject']} | "
-        f"{target_claim['object'][:120]}"
-    )
+    target_summary = f"{target_claim['subject']} | {target_claim['object'][:120]}"
     report = (
-        "Deterministic Demo\n"
-        f"pack_sha256:       {pack_obj['pack_sha256']}\n"
-        f"bundle_sha256:     {bundle_sha256}\n"
-        f"output_sha256:     {sealed['output_sha256']}\n"
-        f"attestation_sha256:{sealed['attestation_sha256']}\n"
-        f"ledger_dir:        {sealed['ledger_dir']}\n"
-        f"target_claim_id:   {target_claim_id}\n"
-        f"target_claim:      {target_summary}\n\n"
-        "Narrative\n"
-        f"{_format_report(narrative_text)}\n"
-        "Ledger Dir\n"
-        f"{sealed['ledger_dir']}\n\n"
-        "Replay Command\n"
-        f"{replay_command}\n"
-    ).replace("\r\n", "\n").replace("\r", "\n")
+        (
+            "Deterministic Demo\n"
+            f"pack_sha256:       {pack_obj['pack_sha256']}\n"
+            f"bundle_sha256:     {bundle_sha256}\n"
+            f"output_sha256:     {sealed['output_sha256']}\n"
+            f"attestation_sha256:{sealed['attestation_sha256']}\n"
+            f"ledger_dir:        {sealed['ledger_dir']}\n"
+            f"target_claim_id:   {target_claim_id}\n"
+            f"target_claim:      {target_summary}\n\n"
+            "Narrative\n"
+            f"{_format_report(narrative_text)}\n"
+            "Ledger Dir\n"
+            f"{sealed['ledger_dir']}\n\n"
+            "Replay Command\n"
+            f"{replay_command}\n"
+        )
+        .replace("\r\n", "\n")
+        .replace("\r", "\n")
+    )
     return {
         "run_dir": str(run_dir),
         "pack_path": str(pack_path),

@@ -20,6 +20,7 @@ from sqlalchemy import select
 from sqlalchemy.exc import IntegrityError, SQLAlchemyError
 from sqlalchemy.orm import Session
 
+from core.determinism.replay import verify_run
 from iota_verbum_api.config import settings
 from iota_verbum_api.constants import (
     API_VERSION,
@@ -34,7 +35,11 @@ from iota_verbum_api.db.models import AuditLog
 from iota_verbum_api.db.session import get_db, new_session
 from iota_verbum_api.rate_limit import InMemoryRateLimiter
 from iota_verbum_api.runtime import RuntimeState
-from iota_verbum_api.schemas import AnalyseJsonRequest
+from iota_verbum_api.schemas import (
+    AnalyseJsonRequest,
+    CasefileGenerateRequest,
+    CasefileVerifyRequest,
+)
 from iota_verbum_api.security import AuthContext, authenticate_api_key
 from iota_verbum_api.services.audit import create_audit_entry
 from iota_verbum_api.services.extraction import (
@@ -62,6 +67,7 @@ from iota_verbum_api.utils import (
     now_utc,
     sha256_text,
 )
+from proposal.cli_demo import run_demo
 
 rate_limiter = InMemoryRateLimiter(settings.rate_limit_per_minute)
 
@@ -541,3 +547,55 @@ def audit_log_endpoint(
             for row in rows
         ],
     }
+
+
+@app.post("/v1/casefile/generate")
+def casefile_generate(
+    payload: CasefileGenerateRequest,
+    auth: AuthContext = Depends(authenticate_api_key),
+):
+    del auth
+    result = run_demo(
+        folder=payload.folder,
+        query=payload.query,
+        prompt=payload.prompt,
+        max_chunks=payload.max_chunks,
+        created_utc=payload.created_utc,
+        core_version=payload.core_version,
+        ruleset_id=payload.ruleset_id,
+        world=True,
+        verbosity=payload.verbosity,
+        show_receipts=payload.show_receipts,
+        max_events=payload.max_events,
+        enrich=payload.enrich_path,
+    )
+    casefile = result["casefile"]
+    return {
+        "casefile": casefile,
+        "ledger_dir": result["ledger_dir_rel"],
+        "hashes": casefile["hashes"],
+    }
+
+
+@app.post("/v1/casefile/verify")
+def casefile_verify(
+    payload: CasefileVerifyRequest,
+    auth: AuthContext = Depends(authenticate_api_key),
+):
+    del auth
+    try:
+        verification = verify_run(
+            payload.ledger_dir,
+            strict_manifest=payload.strict_manifest,
+        )
+        return {
+            "status": "VERIFIED_OK",
+            "ledger_dir": payload.ledger_dir.replace("\\", "/"),
+            "verification": verification,
+        }
+    except Exception as exc:  # noqa: BLE001
+        return {
+            "status": "VERIFIED_FAIL",
+            "ledger_dir": payload.ledger_dir.replace("\\", "/"),
+            "error": str(exc),
+        }

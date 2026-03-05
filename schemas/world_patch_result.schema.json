@@ -1,0 +1,116 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/schemas/world_patch_result.schema.json",
+  "title": "WorldPatchResult",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "version",
+    "patch_id",
+    "base",
+    "new",
+    "verification_change",
+    "ledger_dir",
+    "receipts"
+  ],
+  "$defs": {
+    "hashes": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "world_sha256",
+        "output_sha256",
+        "attestation_sha256"
+      ],
+      "properties": {
+        "world_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "output_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "attestation_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        }
+      }
+    },
+    "verification_change": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "old",
+        "new"
+      ],
+      "properties": {
+        "old": {
+          "type": "string",
+          "enum": [
+            "VERIFIED_OK",
+            "VERIFIED_FAIL",
+            "VERIFIED_NEEDS_INFO"
+          ]
+        },
+        "new": {
+          "type": "string",
+          "enum": [
+            "VERIFIED_OK",
+            "VERIFIED_FAIL",
+            "VERIFIED_NEEDS_INFO"
+          ]
+        }
+      }
+    }
+  },
+  "properties": {
+    "version": {
+      "type": "string",
+      "const": "1.0"
+    },
+    "patch_id": {
+      "type": "string",
+      "pattern": "^patch:[0-9a-f]{64}$"
+    },
+    "base": {
+      "$ref": "#/$defs/hashes"
+    },
+    "new": {
+      "$ref": "#/$defs/hashes"
+    },
+    "verification_change": {
+      "$ref": "#/$defs/verification_change"
+    },
+    "world_diff": {
+      "type": "object",
+      "additionalProperties": true
+    },
+    "constraint_diff": {
+      "type": "object",
+      "additionalProperties": true
+    },
+    "ledger_dir": {
+      "type": "string",
+      "minLength": 1
+    },
+    "receipts": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "patch_sha256",
+        "op_count"
+      ],
+      "properties": {
+        "patch_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "op_count": {
+          "type": "integer",
+          "minimum": 1
+        }
+      }
+    }
+  }
+}

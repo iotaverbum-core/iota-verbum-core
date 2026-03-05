@@ -1,0 +1,96 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/schemas/world_patch_narrative_v2.schema.json",
+  "title": "WorldPatchNarrativeV2",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "narrative_version",
+    "mode",
+    "text",
+    "sections",
+    "summary"
+  ],
+  "properties": {
+    "narrative_version": {
+      "type": "string",
+      "const": "2.0"
+    },
+    "mode": {
+      "type": "string",
+      "enum": [
+        "brief",
+        "full"
+      ]
+    },
+    "text": {
+      "type": "string"
+    },
+    "sections": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "title",
+          "lines"
+        ],
+        "properties": {
+          "title": {
+            "type": "string"
+          },
+          "lines": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "summary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "patch_id",
+        "op_count",
+        "verification_old",
+        "verification_new",
+        "top_targets"
+      ],
+      "properties": {
+        "patch_id": {
+          "type": "string",
+          "pattern": "^patch:[0-9a-f]{64}$"
+        },
+        "op_count": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "verification_old": {
+          "type": "string",
+          "enum": [
+            "VERIFIED_OK",
+            "VERIFIED_FAIL",
+            "VERIFIED_NEEDS_INFO"
+          ]
+        },
+        "verification_new": {
+          "type": "string",
+          "enum": [
+            "VERIFIED_OK",
+            "VERIFIED_FAIL",
+            "VERIFIED_NEEDS_INFO"
+          ]
+        },
+        "top_targets": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      }
+    }
+  }
+}

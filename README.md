@@ -6,6 +6,20 @@ This repository contains the deterministic core only: domain extractors, schemas
 
 Casefile v1 is now available as the beachhead world output contract: a deterministic index artifact (`casefile.json`) that summarizes verified timeline state, contradictions, unknowns, receipts, and links to sealed ledger outputs.
 
+## 30-Second Trust Loop
+
+1. Generate deterministic self-casefile + strict replay:
+   - `.\scripts\clonable_integrity.ps1`
+2. Inspect casefile:
+   - `python -m core.casefile.inspect outputs/demo/<run_id>/casefile.json`
+   - `docs/proof_trace_viewer.html` (read-only)
+3. Authoritative replay command:
+   - `python -m core.determinism.replay outputs/demo/<run_id>/ledger/<bundle_sha256> --strict-manifest`
+4. Tamper check (copied artifacts only; original ledger unchanged):
+   - `.\scripts\tamper_casefile.ps1 -LedgerDir outputs/demo/<run_id>/ledger/<bundle_sha256>`
+
+See `docs/INTEGRITY_PATH.md` for the canonical 4-step path.
+
 ## Quickstart
 
 ```powershell

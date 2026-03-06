@@ -25,6 +25,7 @@ INCLUDE_GLOBS = [
     "README.md",
     "LICENSE",
     "docs/**/*.md",
+    "docs/**/*.html",
     ".pre-commit-config.yaml",
 ]
 

@@ -1,0 +1,232 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Proof Trace Viewer (Read-Only)</title>
+  <style>
+    :root {
+      --bg: #f4f5ef;
+      --ink: #1f2a2f;
+      --panel: #ffffff;
+      --line: #d7dbcd;
+      --muted: #5f6b6f;
+      --accent: #2d6a4f;
+    }
+    body {
+      margin: 0;
+      font-family: "Segoe UI", "Tahoma", sans-serif;
+      background: linear-gradient(135deg, #f4f5ef, #e8ece1);
+      color: var(--ink);
+    }
+    main {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 24px 16px 48px;
+    }
+    .panel {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 16px;
+      margin-bottom: 16px;
+    }
+    h1, h2 {
+      margin: 0 0 8px;
+    }
+    h1 {
+      font-size: 1.4rem;
+    }
+    h2 {
+      font-size: 1.05rem;
+      margin-top: 14px;
+    }
+    p {
+      margin: 6px 0;
+      line-height: 1.4;
+    }
+    .muted {
+      color: var(--muted);
+    }
+    .warn {
+      color: #8f2d2d;
+      font-weight: 600;
+    }
+    .good {
+      color: var(--accent);
+      font-weight: 600;
+    }
+    pre {
+      margin: 8px 0 0;
+      padding: 10px;
+      background: #f8f9f4;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 8px;
+    }
+    th, td {
+      border: 1px solid var(--line);
+      padding: 8px;
+      text-align: left;
+      vertical-align: top;
+      font-size: 0.92rem;
+      word-break: break-word;
+    }
+    th {
+      background: #f1f4ea;
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <section class="panel">
+      <h1>Proof Trace Viewer</h1>
+      <p class="muted">Read-only casefile inspector. Replay verification is authoritative.</p>
+      <p class="warn">This page does not verify integrity. Run replay in terminal:</p>
+      <pre>python -m core.determinism.replay &lt;ledger_dir&gt; --strict-manifest</pre>
+      <p>
+        <label for="fileInput"><strong>Load casefile.json:</strong></label>
+        <input id="fileInput" type="file" accept=".json,application/json">
+      </p>
+      <p id="status" class="muted">No casefile loaded.</p>
+    </section>
+
+    <section class="panel">
+      <h2>Header</h2>
+      <pre id="headerView">-</pre>
+      <h2>Hashes</h2>
+      <pre id="hashView">-</pre>
+      <h2>Summary</h2>
+      <pre id="summaryView">-</pre>
+      <h2>Ledger</h2>
+      <pre id="ledgerView">-</pre>
+      <h2>Receipts</h2>
+      <pre id="receiptView">-</pre>
+    </section>
+
+    <section class="panel">
+      <h2>Artifacts</h2>
+      <table id="artifactTable">
+        <thead>
+          <tr>
+            <th>name</th>
+            <th>role</th>
+            <th>sha256</th>
+            <th>schema</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td colspan="4" class="muted">No casefile loaded.</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+  </main>
+
+  <script>
+    const roleOrder = { sealed: 0, derived: 1, narrative: 2 };
+    const fileInput = document.getElementById("fileInput");
+    const status = document.getElementById("status");
+
+    function safe(obj, path, fallback = "-") {
+      try {
+        return path.split(".").reduce((acc, key) => acc[key], obj) ?? fallback;
+      } catch {
+        return fallback;
+      }
+    }
+
+    function renderText(targetId, lines) {
+      document.getElementById(targetId).textContent = lines.join("\n");
+    }
+
+    function renderArtifacts(items) {
+      const tbody = document.querySelector("#artifactTable tbody");
+      tbody.innerHTML = "";
+      const sorted = [...items].sort((a, b) => {
+        const leftRole = roleOrder[a.role] ?? 99;
+        const rightRole = roleOrder[b.role] ?? 99;
+        if (leftRole !== rightRole) return leftRole - rightRole;
+        return String(a.name).localeCompare(String(b.name));
+      });
+      for (const item of sorted) {
+        const row = document.createElement("tr");
+        row.innerHTML = [
+          `<td>${item.name ?? "-"}</td>`,
+          `<td>${item.role ?? "-"}</td>`,
+          `<td>${item.sha256 ?? "-"}</td>`,
+          `<td>${item.schema ?? "-"}</td>`
+        ].join("");
+        tbody.appendChild(row);
+      }
+      if (!sorted.length) {
+        const row = document.createElement("tr");
+        row.innerHTML = '<td colspan="4" class="muted">No artifacts found.</td>';
+        tbody.appendChild(row);
+      }
+    }
+
+    fileInput.addEventListener("change", async () => {
+      const file = fileInput.files?.[0];
+      if (!file) {
+        return;
+      }
+      try {
+        const raw = await file.text();
+        const casefile = JSON.parse(raw);
+
+        renderText("headerView", [
+          `Casefile ID: ${safe(casefile, "casefile_id")}`,
+          `Verification Status: ${safe(casefile, "summary.verification_status")}`,
+          `Created UTC: ${safe(casefile, "created_utc")}`,
+          `Core Version: ${safe(casefile, "core_version")}`,
+          `Ruleset ID: ${safe(casefile, "ruleset_id")}`
+        ]);
+
+        renderText("hashView", [
+          `manifest_sha256: ${safe(casefile, "hashes.manifest_sha256")}`,
+          `bundle_sha256: ${safe(casefile, "hashes.bundle_sha256")}`,
+          `world_sha256: ${safe(casefile, "hashes.world_sha256")}`,
+          `output_sha256: ${safe(casefile, "hashes.output_sha256")}`,
+          `attestation_sha256: ${safe(casefile, "hashes.attestation_sha256")}`
+        ]);
+
+        renderText("summaryView", [
+          `entities: ${safe(casefile, "summary.entities")}`,
+          `events: ${safe(casefile, "summary.events")}`,
+          `unknowns: ${safe(casefile, "summary.unknowns")}`,
+          `conflicts: ${safe(casefile, "summary.conflicts")}`,
+          `constraint_violations: ${safe(casefile, "summary.constraint_violations")}`,
+          `causal_edges: ${safe(casefile, "summary.causal_edges")}`
+        ]);
+
+        const ledgerDir = safe(casefile, "ledger_dir");
+        renderText("ledgerView", [
+          `ledger_dir: ${ledgerDir}`,
+          `replay command: python -m core.determinism.replay ${ledgerDir} --strict-manifest`
+        ]);
+
+        renderText("receiptView", [
+          `evidence_ref_count: ${safe(casefile, "receipts_summary.evidence_ref_count")}`,
+          `proof_count: ${safe(casefile, "receipts_summary.proof_count")}`,
+          `finding_count: ${safe(casefile, "receipts_summary.finding_count")}`
+        ]);
+
+        renderArtifacts(Array.isArray(casefile.artifacts) ? casefile.artifacts : []);
+        status.textContent = `Loaded: ${file.name}`;
+        status.className = "good";
+      } catch (error) {
+        status.textContent = `Load failed: ${error}`;
+        status.className = "warn";
+      }
+    });
+  </script>
+</body>
+</html>

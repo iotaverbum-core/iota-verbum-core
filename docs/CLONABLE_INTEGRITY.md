@@ -49,9 +49,14 @@ CLONABLE_INTEGRITY_OK
 
 Any failure exits non-zero.
 
+After `CLONABLE_INTEGRITY_OK`, inspect the generated casefile via:
+
+- `python -m core.casefile.inspect outputs/demo/<run_id>/casefile.json`
+- `docs/proof_trace_viewer.html` (read-only helper)
+
 ## What Replay Guarantees
 
-Strict replay verification guarantees reproducibility and provenance integrity of sealed artifacts for the supplied evidence corpus. It does not, by itself, guarantee correctness beyond that evidence.
+Strict replay verification guarantees reproducibility and provenance integrity of sealed artifacts for the supplied evidence corpus. It does not, by itself, guarantee correctness beyond that evidence. Replay verification is authoritative; viewer pages are read-only inspection helpers.
 
 ## Tamper Check
 

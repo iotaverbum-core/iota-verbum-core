@@ -30,6 +30,72 @@ python -m pip install -e .
 pytest tests/ -v
 ```
 
+## Codex Quickstart
+
+```powershell
+.\.venv\Scripts\Activate.ps1
+python -m pytest -q
+.\scripts\clonable_integrity.ps1
+```
+
+## Casefile Studio Demo App
+
+Run the production demo app locally:
+
+```powershell
+.\.venv\Scripts\Activate.ps1
+python -m pip install -r requirements.lock
+python -m pip install -e .[dev]
+uvicorn iota_verbum_api.app:app --host 0.0.0.0 --port 8000
+```
+
+Open:
+
+- `http://localhost:8000/` for Casefile Studio
+
+Primary API endpoints:
+
+- `GET /api/fixtures`
+- `POST /api/runs/sample`
+- `POST /api/runs/upload`
+- `GET /api/runs/{run_id}/summary`
+- `POST /api/runs/{run_id}/replay-verify`
+
+## Demo Fixtures
+
+Curated deterministic fixtures are in `data/demo_cases/`:
+
+- `timeline_breach_chain`
+- `secret_state_conflict`
+- `policy_control_mismatch`
+
+Fixture contract and behavior notes:
+
+- `docs/DEMO_FIXTURES.md`
+
+## Artifact Inspection
+
+After a sample run completes:
+
+1. Inspect casefile:
+   - `python -m core.casefile.inspect outputs/demo/<run_id>/casefile.json`
+2. Inspect run artifacts:
+   - `outputs/demo/<run_id>/`
+3. Inspect canonical ledger payload:
+   - `outputs/demo/<run_id>/ledger/<bundle_sha256>/`
+
+## Replay Verification
+
+Authoritative integrity check:
+
+```powershell
+python -m core.determinism.replay outputs/demo/<run_id>/ledger/<bundle_sha256> --strict-manifest
+```
+
+Casefile Studio also exposes replay verification at:
+
+- `POST /api/runs/{run_id}/replay-verify`
+
 Run the legal contract extractor:
 
 ```powershell

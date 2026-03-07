@@ -1,10 +1,11 @@
-# Railway Deployment - v0.3.0-production
+# Railway Deployment - Casefile Studio
 
 ## Services
 
 1. Add a PostgreSQL plugin to the Railway project.
 2. Confirm the service exposes `DATABASE_URL` to the API service.
 3. Deploy the API service from this repository with the included `Dockerfile`.
+4. Confirm `/` serves Casefile Studio and `/api/*` serves demo APIs.
 
 ## Required Environment Variables
 
@@ -28,10 +29,15 @@ RATE_LIMIT_PER_MINUTE=60
 ## Verification Checklist
 
 - `GET /health` returns `version: v0.3.0-production`
+- `GET /api/health` returns `status: ok`
+- `GET /api/fixtures` returns curated deterministic fixtures
 - `GET /health` returns `storage: postgresql`
 - `GET /health` returns `pdf_parsing: active`
 - `GET /health` returns `neurosymbolic_boundary: symbolic_only`
 - `GET /v1/status` returns component status and uptime
+- `POST /api/runs/sample` starts a case run
+- `GET /api/runs/{run_request_id}` reaches `completed`
+- `POST /api/runs/{run_id}/replay-verify` returns `VERIFIED_OK` on untampered output
 - `POST /v1/analyse` succeeds for JSON text input
 - `POST /v1/analyse` succeeds for PDF multipart input
 - `GET /v1/verify/{record_id}` returns `hash_match: true`

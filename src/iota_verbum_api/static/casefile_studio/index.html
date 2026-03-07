@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Casefile Studio | IOTA VERBUM CORE</title>
+  <link rel="stylesheet" href="/studio/assets/styles.css">
+</head>
+<body>
+  <header class="hero">
+    <div class="hero-inner">
+      <p class="eyebrow">IOTA VERBUM CORE</p>
+      <h1>Deterministic casefiles from evidence.</h1>
+      <p class="subhead">Verified timeline, contradictions, unknowns, receipts, and replayable proof chain.</p>
+      <div class="hero-cta">
+        <button id="openSampleBtn" class="btn btn-primary">Open Sample Case</button>
+        <button id="runOwnBtn" class="btn btn-ghost">Run Your Own Case</button>
+      </div>
+      <div class="pipeline">
+        <span>EvidencePack</span>
+        <span>Claim Graph</span>
+        <span>World Model</span>
+        <span>Narratives</span>
+        <span>Ledger + Replay</span>
+      </div>
+    </div>
+  </header>
+
+  <main class="layout">
+    <section class="card" id="gallerySection">
+      <div class="card-head">
+        <h2>Sample Case Gallery</h2>
+        <p>Curated deterministic fixtures. Same inputs, same casefile bytes.</p>
+      </div>
+      <div id="fixtures" class="fixture-grid"></div>
+    </section>
+
+    <section class="card" id="uploadSection">
+      <div class="card-head">
+        <h2>Run Your Own Case</h2>
+        <p>Upload markdown or text evidence. Authoritative generation runs on backend core pipeline.</p>
+      </div>
+      <form id="uploadForm" class="form">
+        <label>Evidence files (.md, .txt)
+          <input id="fileInput" type="file" name="files" accept=".md,.txt" multiple required>
+        </label>
+        <label>Query
+          <input id="queryInput" type="text" name="query" placeholder="api key exposure timeline">
+        </label>
+        <label>Prompt
+          <input id="promptInput" type="text" name="prompt" value="Build a deterministic casefile for this evidence.">
+        </label>
+        <button class="btn btn-primary" type="submit">Run Deterministic Build</button>
+      </form>
+    </section>
+
+    <section class="card" id="runSection">
+      <div class="card-head">
+        <h2>Run Progress</h2>
+        <p id="runStatusText">No run started.</p>
+      </div>
+      <ol id="steps" class="steps"></ol>
+      <pre id="runMeta" class="mono"></pre>
+    </section>
+
+    <section class="workspace">
+      <div class="card full">
+        <div class="card-head">
+          <h2>Case Workspace</h2>
+          <p id="workspaceTitle">Run a case to view timeline, contradictions, unknowns, receipts, and integrity proof.</p>
+        </div>
+      </div>
+
+      <div class="grid-two">
+        <section class="card">
+          <h3>Verified Timeline</h3>
+          <ul id="timelineList" class="list"></ul>
+        </section>
+        <section class="card">
+          <h3>Contradictions</h3>
+          <ul id="contradictionsList" class="list"></ul>
+        </section>
+      </div>
+
+      <div class="grid-two">
+        <section class="card">
+          <h3>Unknowns / Open Questions</h3>
+          <ul id="unknownsList" class="list"></ul>
+        </section>
+        <section class="card">
+          <h3>Findings and Narrative</h3>
+          <div id="narrativeBox" class="narrative"></div>
+        </section>
+      </div>
+
+      <div class="grid-two">
+        <section class="card">
+          <h3>Evidence Receipts</h3>
+          <pre id="receiptsBox" class="mono"></pre>
+        </section>
+        <section class="card">
+          <h3>Artifacts</h3>
+          <ul id="artifactsList" class="list"></ul>
+        </section>
+      </div>
+
+      <section class="card">
+        <h3>Integrity / Replay Lab</h3>
+        <div id="integrityGrid" class="integrity"></div>
+        <button id="replayBtn" class="btn btn-primary">Run Replay Verification</button>
+        <pre id="replayBox" class="mono"></pre>
+      </section>
+    </section>
+
+    <section class="card explainer">
+      <h2>Plain-English Trust Model</h2>
+      <ul class="list">
+        <li><strong>Verified:</strong> hashes, receipts, attestation linkage, and replay integrity checks.</li>
+        <li><strong>Inferred:</strong> world model structure, graph findings, and narratives derived deterministically from evidence.</li>
+        <li><strong>Unknown:</strong> missing actors, missing times, missing objects, and unresolved required info.</li>
+        <li><strong>Contradiction:</strong> mutually conflicting evidence states over the same referenced entity/key.</li>
+        <li><strong>Why replay matters:</strong> it proves sealed artifacts still match their original deterministic attestations.</li>
+      </ul>
+    </section>
+  </main>
+
+  <script src="/studio/assets/app.js"></script>
+</body>
+</html>

@@ -46,6 +46,7 @@ include = ["core", "core.*", "domains", "domains.*", "iota_verbum_api", "iota_ve
 
 [tool.setuptools.package-data]
 domains = ["**/*.json"]
+iota_verbum_api = ["static/**/*"]
 
 [tool.ruff]
 cache-dir = "C:/Users/chris/AppData/Local/Temp/iota_verbum_ruff_cache"

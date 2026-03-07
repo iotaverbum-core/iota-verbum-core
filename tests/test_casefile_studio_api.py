@@ -71,13 +71,26 @@ def _seed_workspace(base: Path, run_id: str) -> Path:
                     "time": {"kind": "date", "value": "2026-02-01"},
                     "action": "TOKEN environment only",
                     "objects": ["entity:a"],
-                    "evidence": [{"source_id": "doc:1", "chunk_id": "chunk:1", "offset_start": 0, "offset_end": 1, "text_sha256": "a" * 64}],
+                    "evidence": [
+                        {
+                            "source_id": "doc:1",
+                            "chunk_id": "chunk:1",
+                            "offset_start": 0,
+                            "offset_end": 1,
+                            "text_sha256": "a" * 64,
+                        }
+                    ],
                 },
             ],
             "conflicts": [
                 {
                     "kind": "state_conflict",
-                    "ref": {"entity_id": "entity:a", "event_ids": ["event:1", "event:2"], "key": "TOKEN", "values": ["env-only", "never-in-repo"]},
+                    "ref": {
+                        "entity_id": "entity:a",
+                        "event_ids": ["event:1", "event:2"],
+                        "key": "TOKEN",
+                        "values": ["env-only", "never-in-repo"],
+                    },
                     "reason": "TOKEN has conflicting states: env-only, never-in-repo",
                 }
             ],
@@ -90,7 +103,15 @@ def _seed_workspace(base: Path, run_id: str) -> Path:
                 "output_sha256": "5" * 64,
                 "attestation_sha256": "6" * 64,
                 "ruleset_sha256": "8" * 64,
-                "evidence_refs": [{"source_id": "doc:1", "chunk_id": "chunk:1", "offset_start": 0, "offset_end": 1, "text_sha256": "a" * 64}],
+                "evidence_refs": [
+                    {
+                        "source_id": "doc:1",
+                        "chunk_id": "chunk:1",
+                        "offset_start": 0,
+                        "offset_end": 1,
+                        "text_sha256": "a" * 64,
+                    }
+                ],
                 "proofs": [{"rule": "demo"}],
                 "findings": [{"code": "CYCLE_TEMPORAL_CONSTRAINT"}],
             },
@@ -216,7 +237,10 @@ def test_sample_run_endpoint_reports_progress(monkeypatch):
 
     monkeypatch.setattr(studio, "run_demo", _fake_run_demo)
     with TestClient(app) as client:
-        start = client.post("/api/runs/sample", json={"fixture_id": "timeline_breach_chain"})
+        start = client.post(
+            "/api/runs/sample",
+            json={"fixture_id": "timeline_breach_chain"},
+        )
         assert start.status_code == 200
         req_id = start.json()["run_request_id"]
 

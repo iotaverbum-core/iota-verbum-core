@@ -508,7 +508,10 @@ def api_run_casefile(run_id: str) -> dict:
 def api_run_timeline(run_id: str) -> dict:
     workspace = _run_workspace(run_id)
     world_model = workspace["world_model"]
-    entities = {item["entity_id"]: item["name"] for item in world_model.get("entities", [])}
+    entities = {
+        item["entity_id"]: item["name"]
+        for item in world_model.get("entities", [])
+    }
     events = sorted(world_model.get("events", []), key=_time_sort_key)
     items = []
     for event in events:

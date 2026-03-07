@@ -16,16 +16,15 @@ from fastapi import (
     UploadFile,
     status,
 )
-from fastapi.responses import JSONResponse
-from fastapi.responses import FileResponse
+from fastapi.responses import FileResponse, JSONResponse
 from fastapi.staticfiles import StaticFiles
 from sqlalchemy import select
 from sqlalchemy.exc import IntegrityError, SQLAlchemyError
 from sqlalchemy.orm import Session
 
 from core.determinism.replay import verify_run
-from iota_verbum_api.config import settings
 from iota_verbum_api.casefile_studio import router as casefile_studio_router
+from iota_verbum_api.config import settings
 from iota_verbum_api.constants import (
     API_VERSION,
     DETERMINISM_CONTRACT,

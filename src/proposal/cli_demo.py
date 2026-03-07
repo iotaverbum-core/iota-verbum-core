@@ -6,6 +6,7 @@ import os
 import subprocess
 import sys
 from pathlib import Path
+from typing import Callable
 
 from core.determinism.canonical_json import dumps_canonical
 from core.determinism.finalize import finalize
@@ -210,7 +211,12 @@ def run_demo(
     diff_against: str = "",
     max_events: int = 30,
     enrich: str = "",
+    progress_hook: Callable[[str, str], None] | None = None,
 ) -> dict:
+    def _emit(stage_id: str, message: str) -> None:
+        if progress_hook is not None:
+            progress_hook(stage_id, message)
+
     run_id = _compute_run_id(
         folder=folder,
         query=query,
@@ -224,10 +230,17 @@ def run_demo(
     )
     base_run_dir = Path("outputs") / "demo" / run_id
 
+    _emit("evidence_pack", "Building deterministic evidence pack")
     pack_obj, pack_bytes = build_evidence_pack(
         folder,
         root_hint=Path(folder).name,
     )
+
+    _emit("claim_proposer", "Proposing claim candidates from evidence")
+    preview_claim_graph = propose_claim_graph(pack_obj)
+    _emit("claim_graph", "Building claim graph")
+    _emit("graph_reasoning", "Running graph reasoning")
+    build_graph_reasoning_output(preview_claim_graph, target_claim_id=None)
 
     bundle_obj, bundle_bytes, bundle_sha256 = build_evidence_bundle_from_pack(
         pack_obj,
@@ -248,6 +261,7 @@ def run_demo(
     manifest_sha256 = _manifest_sha256()
     if world:
         target_claim_id = _world_target_claim_id(query)
+        _emit("world_model", "Building world model")
         world_model = propose_world_model_from_artifacts(
             pack_obj,
             bundle_obj["artifacts"],
@@ -324,6 +338,7 @@ def run_demo(
         output_obj["constraint_narrative_v2"] = constraint_narrative_v2
         output_obj["repair_hints_narrative_v2"] = repair_hints_narrative_v2
         output_obj["verification_result"] = verification_result
+        _emit("narrative_renderer", "Rendering deterministic narratives")
         run_dir = _resolve_run_dir(
             base_run_dir,
             {
@@ -347,6 +362,7 @@ def run_demo(
             attestation_sha256="0" * 64,
         )
         output_obj["casefile"] = provisional_casefile
+        _emit("ledger_attestation", "Sealing output and writing attestation")
         sealed = finalize(
             bundle_obj,
             output_obj,
@@ -531,12 +547,16 @@ def run_demo(
         if diff_path is not None and diff_narrative_path is not None:
             result["world_diff_path"] = str(diff_path)
             result["world_diff_narrative_path"] = str(diff_narrative_path)
+        _emit("replay_verification", "Ledger ready for strict replay verification")
         return result
 
+    _emit("claim_proposer", "Proposing claim candidates from evidence")
     claim_graph = propose_claim_graph(pack_obj)
+    _emit("claim_graph", "Building claim graph")
     claim_graph_bytes = dumps_claim_graph(claim_graph)
 
     target_claim_id = _select_target_claim_id(claim_graph, query)
+    _emit("graph_reasoning", "Running graph reasoning")
     output_obj = build_graph_reasoning_output(
         claim_graph,
         target_claim_id=target_claim_id,
@@ -561,6 +581,8 @@ def run_demo(
         show_receipts=show_receipts,
         max_lines=max_lines,
     )
+    _emit("narrative_renderer", "Rendering deterministic narratives")
+    _emit("ledger_attestation", "Sealing output and writing attestation")
     sealed = finalize(
         bundle_obj,
         output_obj,
@@ -616,6 +638,7 @@ def run_demo(
         .replace("\r\n", "\n")
         .replace("\r", "\n")
     )
+    _emit("replay_verification", "Ledger ready for strict replay verification")
     return {
         "run_dir": str(run_dir),
         "pack_path": str(pack_path),

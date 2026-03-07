@@ -4,6 +4,7 @@ import asyncio
 import time
 import uuid
 from contextlib import asynccontextmanager
+from pathlib import Path
 
 from fastapi import (
     Depends,
@@ -15,12 +16,14 @@ from fastapi import (
     UploadFile,
     status,
 )
-from fastapi.responses import HTMLResponse, JSONResponse
+from fastapi.responses import FileResponse, JSONResponse
+from fastapi.staticfiles import StaticFiles
 from sqlalchemy import select
 from sqlalchemy.exc import IntegrityError, SQLAlchemyError
 from sqlalchemy.orm import Session
 
 from core.determinism.replay import verify_run
+from iota_verbum_api.casefile_studio import router as casefile_studio_router
 from iota_verbum_api.config import settings
 from iota_verbum_api.constants import (
     API_VERSION,
@@ -120,6 +123,13 @@ async def lifespan(app: FastAPI):
 
 
 app = FastAPI(title="IOTA VERBUM CORE", version=VERSION, lifespan=lifespan)
+_STUDIO_STATIC_DIR = Path(__file__).resolve().parent / "static" / "casefile_studio"
+app.mount(
+    "/studio/assets",
+    StaticFiles(directory=str(_STUDIO_STATIC_DIR)),
+    name="casefile-studio-assets",
+)
+app.include_router(casefile_studio_router)
 
 
 @app.middleware("http")
@@ -132,8 +142,13 @@ async def audit_and_rate_limit(request: Request, call_next):
     api_key_hash = hash_sensitive(x_api_key)
     ip_address_hash = hash_sensitive(request.client.host if request.client else "")
 
-    public_paths = {"/health", "/v1/status", "/docs", "/openapi.json", "/v1/demo"}
-    requires_auth = request.url.path not in public_paths
+    public_paths = {"/", "/studio", "/health", "/v1/status", "/docs", "/openapi.json"}
+    public_prefixes = ("/api/", "/studio/assets/")
+    path = request.url.path
+    is_public = path in public_paths or any(
+        path.startswith(prefix) for prefix in public_prefixes
+    )
+    requires_auth = not is_public
     if requires_auth:
         if not x_api_key or not tenant_id:
             response = JSONResponse(
@@ -274,19 +289,14 @@ def status_endpoint(request: Request):
     }
 
 
-@app.get("/v1/demo", response_class=HTMLResponse)
-def demo():
-    return """
-    <html><body>
-    <h1>IOTA VERBUM CORE Demo</h1>
-    <p>PDF and plain text supported.</p>
-    <form action="/v1/analyse" method="post" enctype="multipart/form-data">
-      <input type="text" name="domain" value="nda" />
-      <input type="file" name="document" accept=".pdf,.txt" />
-      <button type="submit">Analyse</button>
-    </form>
-    </body></html>
-    """
+@app.get("/")
+def studio_home():
+    return FileResponse(_STUDIO_STATIC_DIR / "index.html")
+
+
+@app.get("/studio")
+def studio_page():
+    return FileResponse(_STUDIO_STATIC_DIR / "index.html")
 
 
 async def _extract_request_payload(

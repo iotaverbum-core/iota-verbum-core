@@ -1,0 +1,8 @@
+{
+  "$schema": "https://railway.app/railway.schema.json",
+  "deploy": {
+    "startCommand": "uvicorn iota_verbum_api.app:app --host 0.0.0.0 --port $PORT",
+    "healthcheckPath": "/api/health",
+    "healthcheckTimeout": 120
+  }
+}

@@ -1,0 +1,47 @@
+{
+  "fixtures_version": "1.0",
+  "items": [
+    {
+      "id": "timeline_breach_chain",
+      "title": "Breach Chain Timeline",
+      "category": "timeline-heavy",
+      "description": "A time-anchored credential incident chain from rotation to leak and remediation.",
+      "folder": "data/demo_cases/timeline_breach_chain",
+      "query": "prod token leak timeline",
+      "prompt": "Build a verified world timeline for this incident chain.",
+      "created_utc": "2026-03-05T00:00:00Z",
+      "core_version": "0.4.0",
+      "ruleset_id": "ruleset.core.v1",
+      "max_chunks": 8,
+      "max_events": 30
+    },
+    {
+      "id": "secret_state_conflict",
+      "title": "Secret State Conflict",
+      "category": "contradiction-heavy",
+      "description": "Conflicting claims around whether a production secret was env-only or present in source.",
+      "folder": "data/demo_cases/secret_state_conflict",
+      "query": "payments api key contradiction",
+      "prompt": "Produce a deterministic casefile focused on contradictions and unknowns.",
+      "created_utc": "2026-03-05T00:00:00Z",
+      "core_version": "0.4.0",
+      "ruleset_id": "ruleset.core.v1",
+      "max_chunks": 8,
+      "max_events": 30
+    },
+    {
+      "id": "policy_control_mismatch",
+      "title": "Policy Control Mismatch",
+      "category": "policy-compliance mismatch",
+      "description": "Control statements conflict with observed access and handling behavior.",
+      "folder": "data/demo_cases/policy_control_mismatch",
+      "query": "policy mismatch production access",
+      "prompt": "Build a world model that highlights policy violations and open questions.",
+      "created_utc": "2026-03-05T00:00:00Z",
+      "core_version": "0.4.0",
+      "ruleset_id": "ruleset.core.v1",
+      "max_chunks": 8,
+      "max_events": 30
+    }
+  ]
+}

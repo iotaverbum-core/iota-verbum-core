@@ -117,7 +117,11 @@ def test_fixtures_endpoint_is_sorted_and_stable():
         assert response.status_code == 200
         items = response.json()["items"]
         assert len(items) >= 3
-        assert [item["id"] for item in items] == sorted(item["id"] for item in items)
+        expected = sorted(
+            items,
+            key=lambda item: (item.get("featured_rank", 999), item["id"]),
+        )
+        assert [item["id"] for item in items] == [item["id"] for item in expected]
 
 
 def test_workspace_endpoints_are_available_and_ordered(monkeypatch, tmp_path: Path):
@@ -128,6 +132,13 @@ def test_workspace_endpoints_are_available_and_ordered(monkeypatch, tmp_path: Pa
         summary = client.get("/api/runs/run-alpha/summary")
         assert summary.status_code == 200
         assert summary.json()["casefile_id"].startswith("case:")
+        assert summary.json()["casefile"]["casefile_version"] == "1.0"
+        assert summary.json()["integrity"]["pack_sha256"] == ""
+        assert "verification_scope" in summary.json()
+
+        casefile = client.get("/api/runs/run-alpha/casefile")
+        assert casefile.status_code == 200
+        assert casefile.json()["casefile_id"].startswith("case:")
 
         timeline = client.get("/api/runs/run-alpha/timeline")
         assert timeline.status_code == 200
@@ -173,6 +184,8 @@ def test_replay_endpoint_reports_pass_and_fail(monkeypatch, tmp_path: Path):
         passed = client.post("/api/runs/run-beta/replay-verify", json={})
         assert passed.status_code == 200
         assert passed.json()["status"] == "VERIFIED_OK"
+        status = client.get("/api/runs/run-beta")
+        assert status.status_code == 404
 
     def _fail(*_args, **_kwargs):
         raise ValueError("manifest mismatch")
@@ -217,3 +230,4 @@ def test_sample_run_endpoint_reports_progress(monkeypatch):
             time.sleep(0.1)
         assert final["status"] == "completed"
         assert final["run_id"] == "fake-run"
+        assert final["replay_status"] == "NOT_RUN"

@@ -10,15 +10,17 @@
   <header class="hero">
     <div class="hero-inner">
       <p class="eyebrow">IOTA VERBUM CORE</p>
-      <h1>Deterministic casefiles from evidence.</h1>
-      <p class="subhead">Verified timeline, contradictions, unknowns, receipts, and replayable proof chain.</p>
+      <h1>From evidence to a replayable casefile.</h1>
+      <p class="subhead">See timeline, contradictions, unknowns, receipts, and integrity proof in one deterministic run.</p>
       <div class="hero-cta">
         <button id="openSampleBtn" class="btn btn-primary">Open Sample Case</button>
         <button id="runOwnBtn" class="btn btn-ghost">Run Your Own Case</button>
       </div>
       <div class="pipeline">
         <span>EvidencePack</span>
+        <span>Claim Proposer</span>
         <span>Claim Graph</span>
+        <span>Graph Reasoning</span>
         <span>World Model</span>
         <span>Narratives</span>
         <span>Ledger + Replay</span>
@@ -30,7 +32,7 @@
     <section class="card" id="gallerySection">
       <div class="card-head">
         <h2>Sample Case Gallery</h2>
-        <p>Curated deterministic fixtures. Same inputs, same casefile bytes.</p>
+        <p>Curated deterministic fixtures. Run the featured case first.</p>
       </div>
       <div id="fixtures" class="fixture-grid"></div>
     </section>
@@ -60,7 +62,6 @@
         <p id="runStatusText">No run started.</p>
       </div>
       <ol id="steps" class="steps"></ol>
-      <pre id="runMeta" class="mono"></pre>
     </section>
 
     <section class="workspace">
@@ -73,12 +74,27 @@
 
       <div class="grid-two">
         <section class="card">
-          <h3>Verified Timeline</h3>
+          <h3>Deterministic Timeline</h3>
+          <p class="muted-note">Evidence-derived timeline from world model extraction. Integrity is attested separately via replay.</p>
           <ul id="timelineList" class="list"></ul>
         </section>
         <section class="card">
           <h3>Contradictions</h3>
           <ul id="contradictionsList" class="list"></ul>
+        </section>
+      </div>
+
+      <div class="grid-two">
+        <section class="card">
+          <h3>Integrity / Replay Lab</h3>
+          <p id="verificationScope" class="muted-note"></p>
+          <div id="integrityGrid" class="integrity"></div>
+          <button id="replayBtn" class="btn btn-primary">Run Replay Verification</button>
+          <pre id="replayBox" class="mono"></pre>
+        </section>
+        <section class="card">
+          <h3>Evidence Receipts</h3>
+          <pre id="receiptsBox" class="mono"></pre>
         </section>
       </div>
 
@@ -93,22 +109,14 @@
         </section>
       </div>
 
-      <div class="grid-two">
-        <section class="card">
-          <h3>Evidence Receipts</h3>
-          <pre id="receiptsBox" class="mono"></pre>
-        </section>
-        <section class="card">
-          <h3>Artifacts</h3>
-          <ul id="artifactsList" class="list"></ul>
-        </section>
-      </div>
+      <section class="card">
+        <h3>Artifacts</h3>
+        <ul id="artifactsList" class="list"></ul>
+      </section>
 
       <section class="card">
-        <h3>Integrity / Replay Lab</h3>
-        <div id="integrityGrid" class="integrity"></div>
-        <button id="replayBtn" class="btn btn-primary">Run Replay Verification</button>
-        <pre id="replayBox" class="mono"></pre>
+        <h3>Casefile v1</h3>
+        <pre id="casefileBox" class="mono"></pre>
       </section>
     </section>
 

@@ -16,7 +16,7 @@ from fastapi import (
     UploadFile,
     status,
 )
-from fastapi.responses import HTMLResponse, JSONResponse
+from fastapi.responses import JSONResponse
 from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
 from sqlalchemy import select
@@ -143,7 +143,7 @@ async def audit_and_rate_limit(request: Request, call_next):
     api_key_hash = hash_sensitive(x_api_key)
     ip_address_hash = hash_sensitive(request.client.host if request.client else "")
 
-    public_paths = {"/", "/studio", "/health", "/v1/status", "/docs", "/openapi.json", "/v1/demo"}
+    public_paths = {"/", "/studio", "/health", "/v1/status", "/docs", "/openapi.json"}
     public_prefixes = ("/api/", "/studio/assets/")
     path = request.url.path
     is_public = path in public_paths or any(
@@ -288,21 +288,6 @@ def status_endpoint(request: Request):
         "last_successful_db_write": isoformat_utc(runtime.last_successful_db_write),
         "last_successful_analysis": isoformat_utc(runtime.last_successful_analysis),
     }
-
-
-@app.get("/v1/demo", response_class=HTMLResponse)
-def demo():
-    return """
-    <html><body>
-    <h1>IOTA VERBUM CORE Demo</h1>
-    <p>PDF and plain text supported.</p>
-    <form action="/v1/analyse" method="post" enctype="multipart/form-data">
-      <input type="text" name="domain" value="nda" />
-      <input type="file" name="document" accept=".pdf,.txt" />
-      <button type="submit">Analyse</button>
-    </form>
-    </body></html>
-    """
 
 
 @app.get("/")

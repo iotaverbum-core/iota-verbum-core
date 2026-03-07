@@ -47,6 +47,7 @@ def _normalize_fixture_list(raw: dict) -> list[dict]:
         fixture = {
             "id": str(item["id"]),
             "title": str(item["title"]),
+            "featured_rank": int(item.get("featured_rank", 999)),
             "category": str(item["category"]),
             "description": str(item["description"]),
             "folder": str(item["folder"]).replace("\\", "/"),
@@ -59,7 +60,7 @@ def _normalize_fixture_list(raw: dict) -> list[dict]:
             "max_events": int(item.get("max_events", 30)),
         }
         normalized.append(fixture)
-    return sorted(normalized, key=lambda item: item["id"])
+    return sorted(normalized, key=lambda item: (item["featured_rank"], item["id"]))
 
 
 def load_fixtures() -> list[dict]:
@@ -135,6 +136,7 @@ def _run_workspace(run_id: str) -> dict:
     run_dir = _resolve_run_dir(run_id)
     casefile = _load_json(run_dir / "casefile.json")
     sealed_output = _load_json(run_dir / "sealed_output.json")
+    evidence_pack = _load_json(run_dir / "evidence_pack.json")
     world_model = sealed_output.get("world_model", {})
     verification = sealed_output.get("verification_result", {})
     receipts = verification.get("receipts", {})
@@ -143,6 +145,7 @@ def _run_workspace(run_id: str) -> dict:
         "run_id": run_dir.name,
         "casefile": casefile,
         "sealed_output": sealed_output,
+        "evidence_pack": evidence_pack,
         "world_model": world_model,
         "verification_result": verification,
         "receipts": receipts,
@@ -190,6 +193,31 @@ def _step_state(current_stage: str, done: bool, failed: bool) -> list[dict]:
     return steps
 
 
+def _completed_with_replay_pending() -> list[dict]:
+    steps = []
+    for step_id, label in PIPELINE_STEPS:
+        status = "completed"
+        if step_id == "replay_verification":
+            status = "pending"
+        steps.append({"id": step_id, "label": label, "status": status})
+    return steps
+
+
+def _steps_with_replay_status(replay_status: str) -> list[dict]:
+    steps = []
+    for step_id, label in PIPELINE_STEPS:
+        status = "completed"
+        if step_id == "replay_verification":
+            if replay_status == "VERIFIED_OK":
+                status = "completed"
+            elif replay_status == "VERIFIED_FAIL":
+                status = "failed"
+            else:
+                status = "pending"
+        steps.append({"id": step_id, "label": label, "status": status})
+    return steps
+
+
 def _update_run(run_request_id: str, **updates: Any) -> None:
     with _RUNS_LOCK:
         run = _RUNS.get(run_request_id)
@@ -219,13 +247,14 @@ def _launch_run(run_request_id: str, run_kwargs: dict[str, Any]) -> None:
         _update_run(
             run_request_id,
             status="completed",
-            current_stage="replay_verification",
-            steps=_step_state("replay_verification", done=True, failed=False),
+            current_stage="ledger_attestation",
+            steps=_completed_with_replay_pending(),
             run_id=run_dir.name,
             run_dir=_to_posix(run_dir),
             casefile_id=result["casefile"]["casefile_id"],
             casefile=result["casefile"],
             hashes=result["casefile"]["hashes"],
+            replay_status="NOT_RUN",
             replay_command=(
                 "python -m core.determinism.replay "
                 f"{result['ledger_dir_rel']} --strict-manifest"
@@ -239,6 +268,36 @@ def _launch_run(run_request_id: str, run_kwargs: dict[str, Any]) -> None:
             traceback=traceback.format_exc(),
             steps=_step_state("replay_verification", done=False, failed=True),
         )
+
+
+def _update_replay_state_for_run(run_id: str, replay_status: str, detail: dict) -> None:
+    with _RUNS_LOCK:
+        for run_request_id, run in _RUNS.items():
+            if run.get("run_id") != run_id:
+                continue
+            _RUNS[run_request_id] = {
+                **run,
+                "replay_status": replay_status,
+                "replay_detail": detail,
+                "steps": _steps_with_replay_status(replay_status),
+            }
+
+
+def _tracked_run_by_run_id(run_id: str) -> dict | None:
+    with _RUNS_LOCK:
+        for run in _RUNS.values():
+            if run.get("run_id") == run_id:
+                return run
+    return None
+
+
+def _authoritative_replay_status(ledger_dir: str) -> tuple[str, dict]:
+    try:
+        verification = verify_run(ledger_dir, strict_manifest=True)
+        return "VERIFIED_OK", {"verification": verification}
+    except Exception as exc:  # noqa: BLE001
+        return "VERIFIED_FAIL", {"error": str(exc)}
+
 
 def _start_run(run_kwargs: dict[str, Any], source: dict[str, str]) -> dict:
     run_request_id = _next_run_request_id()
@@ -398,6 +457,8 @@ def api_run_summary(run_id: str) -> dict:
     workspace = _run_workspace(run_id)
     casefile = workspace["casefile"]
     sealed_output = workspace["sealed_output"]
+    pack_sha256 = workspace["evidence_pack"].get("pack_sha256", "")
+    replay_status, replay_detail = _authoritative_replay_status(casefile["ledger_dir"])
     world_narrative = (
         sealed_output.get("world_narrative_v2", {}).get("text")
         or sealed_output.get("world_narrative", {}).get("text")
@@ -407,18 +468,40 @@ def api_run_summary(run_id: str) -> dict:
     return {
         "run_id": workspace["run_id"],
         "casefile_id": casefile["casefile_id"],
+        "casefile": casefile,
         "summary": casefile["summary"],
         "hashes": casefile["hashes"],
+        "integrity": {
+            "pack_sha256": pack_sha256,
+            "manifest_sha256": casefile["hashes"]["manifest_sha256"],
+            "bundle_sha256": casefile["hashes"]["bundle_sha256"],
+            "world_sha256": casefile["hashes"]["world_sha256"],
+            "output_sha256": casefile["hashes"]["output_sha256"],
+            "attestation_sha256": casefile["hashes"]["attestation_sha256"],
+            "replay_status": replay_status,
+            "replay_detail": replay_detail,
+        },
         "ledger_dir": casefile["ledger_dir"],
         "narratives": {
             "world": world_narrative,
             "causal": causal_narrative,
         },
+        "verification_scope": (
+            "Verification status refers to deterministic ruleset evaluation for "
+            "the target claim/world assertions; replay verification separately "
+            "attests sealed artifact integrity."
+        ),
         "replay_command": (
             "python -m core.determinism.replay "
             f"{casefile['ledger_dir']} --strict-manifest"
         ),
     }
+
+
+@router.get("/api/runs/{run_id}/casefile")
+def api_run_casefile(run_id: str) -> dict:
+    workspace = _run_workspace(run_id)
+    return workspace["casefile"]
 
 
 @router.get("/api/runs/{run_id}/timeline")
@@ -524,14 +607,18 @@ def api_replay_verify(run_id: str, payload: dict | None = None) -> dict:
     ledger_dir = workspace["casefile"]["ledger_dir"]
     try:
         result = verify_run(ledger_dir, strict_manifest=True)
-        return {
+        response = {
             "status": "VERIFIED_OK",
             "ledger_dir": ledger_dir,
             "verification": result,
         }
+        _update_replay_state_for_run(run_id, "VERIFIED_OK", response)
+        return response
     except Exception as exc:  # noqa: BLE001
-        return {
+        response = {
             "status": "VERIFIED_FAIL",
             "ledger_dir": ledger_dir,
             "error": str(exc),
         }
+        _update_replay_state_for_run(run_id, "VERIFIED_FAIL", response)
+        return response

@@ -4,6 +4,7 @@
     {
       "id": "timeline_breach_chain",
       "title": "Breach Chain Timeline",
+      "featured_rank": 2,
       "category": "timeline-heavy",
       "description": "A time-anchored credential incident chain from rotation to leak and remediation.",
       "folder": "data/demo_cases/timeline_breach_chain",
@@ -18,6 +19,7 @@
     {
       "id": "secret_state_conflict",
       "title": "Secret State Conflict",
+      "featured_rank": 1,
       "category": "contradiction-heavy",
       "description": "Conflicting claims around whether a production secret was env-only or present in source.",
       "folder": "data/demo_cases/secret_state_conflict",
@@ -32,6 +34,7 @@
     {
       "id": "policy_control_mismatch",
       "title": "Policy Control Mismatch",
+      "featured_rank": 3,
       "category": "policy-compliance mismatch",
       "description": "Control statements conflict with observed access and handling behavior.",
       "folder": "data/demo_cases/policy_control_mismatch",

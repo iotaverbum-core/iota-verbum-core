@@ -105,10 +105,31 @@ h1 {
 .card h3 {
   margin: 0 0 10px;
 }
+.muted-note {
+  margin: 0 0 10px;
+  color: var(--muted);
+  font-size: 13px;
+}
 
 .card-head p {
   margin: 0;
   color: var(--muted);
+}
+
+.status {
+  font-weight: 600;
+}
+
+.status.working {
+  color: #8a6400;
+}
+
+.status.ok {
+  color: var(--accent);
+}
+
+.status.fail {
+  color: var(--warn);
 }
 
 .fixture-grid {
@@ -131,6 +152,17 @@ h1 {
 
 .fixture p {
   margin: 8px 0 10px;
+}
+
+.featured-tag {
+  display: inline-block;
+  margin: 0 0 10px;
+  font-size: 11px;
+  padding: 3px 8px;
+  border-radius: 999px;
+  border: 1px solid #c3d8d1;
+  background: var(--accent-soft);
+  color: #12483c;
 }
 
 .form {
@@ -255,6 +287,26 @@ input[type="file"] {
 
 .fail {
   color: var(--warn);
+}
+
+.state-note {
+  display: inline-block;
+  font-size: 12px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 5px 8px;
+  background: #fbfcfa;
+  color: var(--muted);
+}
+
+.state-note.loading {
+  color: #8a6400;
+}
+
+.state-note.fail {
+  color: var(--warn);
+  border-color: #e2b8b8;
+  background: #fff7f7;
 }
 
 @media (max-width: 980px) {

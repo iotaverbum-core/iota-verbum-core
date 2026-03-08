@@ -1,0 +1,46 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "graph_version",
+    "graph_sha256",
+    "entities",
+    "events",
+    "relations",
+    "claims",
+    "unknowns",
+    "conflicts"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "2.0"
+    },
+    "graph_version": {
+      "type": "string"
+    },
+    "graph_sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "entities": {
+      "type": "array"
+    },
+    "events": {
+      "type": "array"
+    },
+    "relations": {
+      "type": "array"
+    },
+    "claims": {
+      "type": "array"
+    },
+    "unknowns": {
+      "type": "array"
+    },
+    "conflicts": {
+      "type": "array"
+    }
+  }
+}

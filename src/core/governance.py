@@ -31,3 +31,24 @@ def build_neurosymbolic_boundary(domain: str) -> dict:
         "symbolic_confidence": "high",
         "boundary_version": "1.0",
     }
+
+
+def build_audit_controls(
+    *,
+    actor_id: str,
+    added_at_utc: str,
+    run_config: dict,
+    schema_version: str,
+    code_version: str,
+    commit_hash: str,
+    approval_hooks: list[str] | None = None,
+) -> dict:
+    return {
+        "actor_id": actor_id,
+        "evidence_added_at_utc": added_at_utc,
+        "run_configuration": run_config,
+        "schema_version": schema_version,
+        "code_version": code_version,
+        "commit_hash": commit_hash,
+        "approval_hooks": sorted(approval_hooks or []),
+    }

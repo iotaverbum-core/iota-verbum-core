@@ -1,0 +1,137 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/schemas/counterfactual_task.schema.json",
+  "title": "CounterfactualTask",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "version",
+    "created_utc",
+    "base",
+    "operation",
+    "options"
+  ],
+  "properties": {
+    "version": {
+      "type": "string",
+      "const": "1.0"
+    },
+    "task_id": {
+      "oneOf": [
+        {
+          "type": "string",
+          "pattern": "^cf:[0-9a-f]{64}$"
+        },
+        {
+          "type": "string",
+          "const": ""
+        }
+      ]
+    },
+    "created_utc": {
+      "type": "string",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(?:\\.\\d+)?Z$"
+    },
+    "base": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "source"
+      ],
+      "properties": {
+        "source": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "kind",
+            "path"
+          ],
+          "properties": {
+            "kind": {
+              "type": "string",
+              "enum": [
+                "ledger_dir",
+                "output_json"
+              ]
+            },
+            "path": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        },
+        "bundle_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "world_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "attestation_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        }
+      }
+    },
+    "operation": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "type",
+            "target_id"
+          ],
+          "properties": {
+            "type": {
+              "const": "REMOVE_EVENT"
+            },
+            "target_id": {
+              "type": "string",
+              "pattern": "^event:[0-9a-f]{64}$"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "type",
+            "target_id"
+          ],
+          "properties": {
+            "type": {
+              "const": "REMOVE_ENTITY"
+            },
+            "target_id": {
+              "type": "string",
+              "pattern": "^entity:[0-9a-f]{64}$"
+            }
+          }
+        }
+      ]
+    },
+    "options": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "mode",
+        "max_lines"
+      ],
+      "properties": {
+        "mode": {
+          "type": "string",
+          "enum": [
+            "brief",
+            "full"
+          ]
+        },
+        "max_lines": {
+          "type": "integer",
+          "minimum": 1
+        }
+      }
+    }
+  }
+}

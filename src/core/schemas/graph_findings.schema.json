@@ -1,0 +1,70 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/schemas/graph_findings.schema.json",
+  "title": "GraphFindings",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "findings_version",
+    "duplicates",
+    "contradictions"
+  ],
+  "properties": {
+    "findings_version": {
+      "type": "string",
+      "minLength": 1
+    },
+    "duplicates": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "claim_a",
+          "claim_b",
+          "reason"
+        ],
+        "properties": {
+          "claim_a": {
+            "type": "string",
+            "minLength": 1
+          },
+          "claim_b": {
+            "type": "string",
+            "minLength": 1
+          },
+          "reason": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      }
+    },
+    "contradictions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "claim_a",
+          "claim_b",
+          "reason"
+        ],
+        "properties": {
+          "claim_a": {
+            "type": "string",
+            "minLength": 1
+          },
+          "claim_b": {
+            "type": "string",
+            "minLength": 1
+          },
+          "reason": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      }
+    }
+  }
+}

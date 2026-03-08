@@ -1,0 +1,85 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/schemas/ruleset.schema.json",
+  "title": "Ruleset",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "ruleset_version",
+    "ruleset_id",
+    "rules"
+  ],
+  "$defs": {
+    "json_value": {
+      "oneOf": [
+        {
+          "type": "null"
+        },
+        {
+          "type": "boolean"
+        },
+        {
+          "type": "number"
+        },
+        {
+          "type": "string"
+        },
+        {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/json_value"
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "patternProperties": {
+            "^.*$": {
+              "$ref": "#/$defs/json_value"
+            }
+          }
+        }
+      ]
+    }
+  },
+  "properties": {
+    "ruleset_version": {
+      "type": "string",
+      "const": "1.0"
+    },
+    "ruleset_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "rules": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "rule_id",
+          "enabled",
+          "params"
+        ],
+        "properties": {
+          "rule_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "enabled": {
+            "type": "boolean"
+          },
+          "params": {
+            "type": "object",
+            "additionalProperties": false,
+            "patternProperties": {
+              "^.*$": {
+                "$ref": "#/$defs/json_value"
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

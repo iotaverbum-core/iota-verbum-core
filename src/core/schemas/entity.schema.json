@@ -1,0 +1,42 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/schemas/entity.schema.json",
+  "title": "Entity",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "entity_id",
+    "type",
+    "name",
+    "aliases"
+  ],
+  "properties": {
+    "entity_id": {
+      "type": "string",
+      "pattern": "^entity:[0-9a-f]{64}$"
+    },
+    "type": {
+      "type": "string",
+      "enum": [
+        "Person",
+        "Org",
+        "System",
+        "Secret",
+        "Policy",
+        "Service",
+        "Concept"
+      ]
+    },
+    "name": {
+      "type": "string",
+      "minLength": 1
+    },
+    "aliases": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    }
+  }
+}

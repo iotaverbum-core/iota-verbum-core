@@ -1,0 +1,430 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/schemas/world_patch.schema.json",
+  "title": "WorldPatch",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "version",
+    "patch_id",
+    "created_utc",
+    "base_ref",
+    "ops"
+  ],
+  "$defs": {
+    "json_value": {
+      "oneOf": [
+        {
+          "type": "null"
+        },
+        {
+          "type": "boolean"
+        },
+        {
+          "type": "number"
+        },
+        {
+          "type": "string"
+        },
+        {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/json_value"
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "patternProperties": {
+            "^.*$": {
+              "$ref": "#/$defs/json_value"
+            }
+          }
+        }
+      ]
+    },
+    "evidence_ref": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "source_id",
+        "chunk_id",
+        "offset_start",
+        "offset_end",
+        "text_sha256"
+      ],
+      "properties": {
+        "source_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "chunk_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "offset_start": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "offset_end": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "text_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        }
+      }
+    },
+    "relation_key": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "from_id",
+        "to_id",
+        "type"
+      ],
+      "properties": {
+        "from_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "to_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "type": {
+          "type": "string",
+          "enum": [
+            "before",
+            "after",
+            "same_time"
+          ]
+        }
+      }
+    },
+    "target": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "entity_id": {
+          "type": "string",
+          "pattern": "^entity:[0-9a-f]{64}$"
+        },
+        "event_id": {
+          "type": "string",
+          "pattern": "^event:[0-9a-f]{64}$"
+        },
+        "relation_key": {
+          "$ref": "#/$defs/relation_key"
+        }
+      }
+    },
+    "payload": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "entity_id": {
+          "type": "string",
+          "pattern": "^entity:[0-9a-f]{64}$"
+        },
+        "event_id": {
+          "type": "string",
+          "pattern": "^event:[0-9a-f]{64}$"
+        },
+        "type": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "aliases": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "time": {
+          "oneOf": [
+            {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "kind",
+                "value"
+              ],
+              "properties": {
+                "kind": {
+                  "const": "instant"
+                },
+                "value": {
+                  "type": "string",
+                  "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}Z$"
+                }
+              }
+            },
+            {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "kind",
+                "value"
+              ],
+              "properties": {
+                "kind": {
+                  "const": "date"
+                },
+                "value": {
+                  "type": "string",
+                  "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+                }
+              }
+            },
+            {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "kind"
+              ],
+              "properties": {
+                "kind": {
+                  "const": "unknown"
+                }
+              }
+            }
+          ]
+        },
+        "actors": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "objects": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "action": {
+          "type": "string",
+          "minLength": 1
+        },
+        "state": {
+          "oneOf": [
+            {
+              "type": "null"
+            },
+            {
+              "type": "object",
+              "additionalProperties": false,
+              "patternProperties": {
+                "^.*$": {
+                  "$ref": "#/$defs/json_value"
+                }
+              }
+            }
+          ]
+        },
+        "evidence": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/evidence_ref"
+          }
+        },
+        "from_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "to_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "derived": {
+          "type": "boolean"
+        },
+        "proof": {
+          "oneOf": [
+            {
+              "type": "null"
+            },
+            {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "rule",
+                  "a",
+                  "b"
+                ],
+                "properties": {
+                  "rule": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "a": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "b": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                }
+              }
+            }
+          ]
+        }
+      }
+    },
+    "receipts": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "patch_sha256"
+      ],
+      "properties": {
+        "patch_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "evidence_refs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/evidence_ref"
+          }
+        }
+      }
+    },
+    "op": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "op_id",
+        "op",
+        "target",
+        "receipts"
+      ],
+      "properties": {
+        "op_id": {
+          "type": "string",
+          "pattern": "^op:[0-9a-f]{64}$"
+        },
+        "op": {
+          "type": "string",
+          "enum": [
+            "ADD_ENTITY",
+            "UPDATE_ENTITY",
+            "REMOVE_ENTITY",
+            "ADD_EVENT",
+            "UPDATE_EVENT",
+            "REMOVE_EVENT",
+            "ADD_RELATION",
+            "REMOVE_RELATION"
+          ]
+        },
+        "target": {
+          "$ref": "#/$defs/target"
+        },
+        "payload": {
+          "$ref": "#/$defs/payload"
+        },
+        "receipts": {
+          "$ref": "#/$defs/receipts"
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "op": {
+                "enum": [
+                  "ADD_ENTITY",
+                  "UPDATE_ENTITY",
+                  "ADD_EVENT",
+                  "UPDATE_EVENT",
+                  "ADD_RELATION"
+                ]
+              }
+            }
+          },
+          "then": {
+            "required": [
+              "payload"
+            ]
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "op": {
+                "enum": [
+                  "REMOVE_ENTITY",
+                  "REMOVE_EVENT",
+                  "REMOVE_RELATION"
+                ]
+              }
+            }
+          },
+          "then": {
+            "not": {
+              "required": [
+                "payload"
+              ]
+            }
+          }
+        }
+      ]
+    }
+  },
+  "properties": {
+    "version": {
+      "type": "string",
+      "const": "1.0"
+    },
+    "patch_id": {
+      "type": "string",
+      "pattern": "^patch:[0-9a-f]{64}$"
+    },
+    "created_utc": {
+      "type": "string",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}Z$"
+    },
+    "base_ref": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "value"
+      ],
+      "properties": {
+        "kind": {
+          "type": "string",
+          "enum": [
+            "ledger_dir",
+            "output_json"
+          ]
+        },
+        "value": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "ops": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/op"
+      }
+    },
+    "notes": {
+      "type": "string"
+    }
+  }
+}

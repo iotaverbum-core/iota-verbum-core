@@ -1,0 +1,46 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/schemas/attestation_record.schema.json",
+  "title": "AttestationRecord",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "attestation_version",
+    "created_utc",
+    "bundle_sha256",
+    "core_version",
+    "ruleset_id",
+    "manifest_sha256",
+    "output_sha256"
+  ],
+  "properties": {
+    "attestation_version": {
+      "type": "string",
+      "minLength": 1
+    },
+    "created_utc": {
+      "type": "string",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(?:\\.\\d+)?Z$"
+    },
+    "bundle_sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "core_version": {
+      "type": "string",
+      "minLength": 1
+    },
+    "ruleset_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "manifest_sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "output_sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    }
+  }
+}

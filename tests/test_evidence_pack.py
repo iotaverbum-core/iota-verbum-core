@@ -39,7 +39,7 @@ def test_build_evidence_pack_offsets_and_hashes_are_correct(tmp_path: Path):
         overlap_chars=1,
     )
 
-    assert pack_obj["chunks"] == [
+    expected = [
         {
             "doc_id": pack_obj["documents"][0]["doc_id"],
             "chunk_id": f"chunk:{sha256_text('abcd')}",
@@ -68,6 +68,7 @@ def test_build_evidence_pack_offsets_and_hashes_are_correct(tmp_path: Path):
             "text_sha256": sha256_text("ghij"),
         },
     ]
+    assert [{k: chunk[k] for k in expected[0]} for chunk in pack_obj["chunks"]] == expected
 
 
 def test_build_evidence_pack_changes_hash_when_file_changes(tmp_path: Path):

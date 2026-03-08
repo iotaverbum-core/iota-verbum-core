@@ -117,6 +117,13 @@ def _compute_run_id(
     ruleset_id: str,
     world: bool,
     enrich: str,
+    max_docs: int,
+    max_total_words: int,
+    max_total_chunks: int,
+    chunk_target_words: int,
+    chunk_overlap_words: int,
+    extract_structure: bool,
+    categorize: bool,
 ) -> str:
     run_key = {
         "folder": Path(folder).resolve().as_posix(),
@@ -128,6 +135,13 @@ def _compute_run_id(
         "ruleset_id": ruleset_id,
         "world": world,
         "enrich": Path(enrich).resolve().as_posix() if enrich else "",
+        "max_docs": max_docs,
+        "max_total_words": max_total_words,
+        "max_total_chunks": max_total_chunks,
+        "chunk_target_words": chunk_target_words,
+        "chunk_overlap_words": chunk_overlap_words,
+        "extract_structure": extract_structure,
+        "categorize": categorize,
     }
     return sha256_bytes(dumps_canonical(run_key))
 
@@ -204,6 +218,13 @@ def run_demo(
     created_utc: str,
     core_version: str,
     ruleset_id: str,
+    max_docs: int = 100,
+    max_total_words: int = 500_000,
+    max_total_chunks: int = 2_000,
+    chunk_target_words: int = 450,
+    chunk_overlap_words: int = 75,
+    extract_structure: bool = False,
+    categorize: bool = False,
     world: bool = False,
     verbosity: str = "brief",
     show_receipts: bool = False,
@@ -227,6 +248,13 @@ def run_demo(
         ruleset_id=ruleset_id,
         world=world,
         enrich=enrich,
+        max_docs=max_docs,
+        max_total_words=max_total_words,
+        max_total_chunks=max_total_chunks,
+        chunk_target_words=chunk_target_words,
+        chunk_overlap_words=chunk_overlap_words,
+        extract_structure=extract_structure,
+        categorize=categorize,
     )
     base_run_dir = Path("outputs") / "demo" / run_id
 
@@ -234,6 +262,13 @@ def run_demo(
     pack_obj, pack_bytes = build_evidence_pack(
         folder,
         root_hint=Path(folder).name,
+        max_docs=max_docs,
+        max_total_words=max_total_words,
+        max_total_chunks=max_total_chunks,
+        chunk_target_words=chunk_target_words,
+        chunk_overlap_words=chunk_overlap_words,
+        extract_structure=extract_structure,
+        categorize=categorize,
     )
 
     _emit("claim_proposer", "Proposing claim candidates from evidence")
@@ -665,6 +700,13 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--created-utc", required=True)
     parser.add_argument("--core-version", required=True)
     parser.add_argument("--ruleset-id", required=True)
+    parser.add_argument("--max-docs", type=int, default=100)
+    parser.add_argument("--max-total-words", type=int, default=500000)
+    parser.add_argument("--max-total-chunks", type=int, default=2000)
+    parser.add_argument("--chunk-target-words", type=int, default=450)
+    parser.add_argument("--chunk-overlap-words", type=int, default=75)
+    parser.add_argument("--extract-structure", default="false")
+    parser.add_argument("--categorize", default="false")
     parser.add_argument("--world", default="false")
     parser.add_argument("--verbosity", default="brief", choices=["brief", "full"])
     parser.add_argument("--show-receipts", default="false")
@@ -682,6 +724,13 @@ def main(argv: list[str] | None = None) -> int:
         created_utc=args.created_utc,
         core_version=args.core_version,
         ruleset_id=args.ruleset_id,
+        max_docs=args.max_docs,
+        max_total_words=args.max_total_words,
+        max_total_chunks=args.max_total_chunks,
+        chunk_target_words=args.chunk_target_words,
+        chunk_overlap_words=args.chunk_overlap_words,
+        extract_structure=_parse_bool(args.extract_structure),
+        categorize=_parse_bool(args.categorize),
         world=_parse_bool(args.world),
         verbosity=args.verbosity,
         show_receipts=_parse_bool(args.show_receipts),

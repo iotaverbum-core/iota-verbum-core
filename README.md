@@ -133,3 +133,18 @@ Canonical outputs are written with stable JSON serialization, input fixtures are
 
 See `docs/DETERMINISM.md` and `docs/NONDETERMINISM_BOUNDARY.md` for the verification model. The biblical text example remains available as a fixture in `docs/examples/biblical_text.md`.
 See `docs/CASEFILE.md` for casefile contract details and replay usage.
+
+## Deterministic multi-document ingestion (v1.1 evidence pack)
+
+The ingestion layer now supports deterministic corpus processing for multiple `.md` / `.txt` files with stable ordering, deterministic structure extraction, section-aware chunking, and rule-based category inference.
+
+New CLI flags for `scripts/demo.py` / `proposal.cli_pack`:
+- `--max-docs`
+- `--max-total-words`
+- `--max-total-chunks`
+- `--chunk-target-words`
+- `--chunk-overlap-words`
+- `--extract-structure`
+- `--categorize`
+
+The deterministic engine remains authoritative. Structure/category enrichment is deterministic and schema-bounded; no nondeterministic model call is used in ingestion.

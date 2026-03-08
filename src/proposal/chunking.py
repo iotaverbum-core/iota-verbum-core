@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from core.determinism.hashing import sha256_text
+
 
 def chunk_document(
     text: str,
@@ -30,6 +32,7 @@ def chunk_document(
                     "offset_start": start,
                     "offset_end": end,
                     "text": chunk_text,
+                    "text_sha256": sha256_text(chunk_text),
                 }
             )
             index += 1

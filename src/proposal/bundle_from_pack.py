@@ -110,6 +110,10 @@ def build_evidence_bundle_from_pack(
                 "offset_end": chunk["offset_end"],
                 "text": chunk["text"],
                 "text_sha256": chunk["text_sha256"],
+                "heading_path": chunk.get("heading_path", []),
+                "title": chunk.get("title", ""),
+                "categories": chunk.get("categories", []),
+                "relative_path": chunk.get("relative_path", ""),
             }
             for chunk in selected_chunks
         ],
@@ -137,7 +141,7 @@ def build_evidence_bundle_from_pack(
             "schema_versions": {
                 "attestation_record": "1.0",
                 "evidence_bundle": "1.0",
-                "evidence_pack": "1.0",
+                "evidence_pack": "1.1",
             },
         },
         "policy": {

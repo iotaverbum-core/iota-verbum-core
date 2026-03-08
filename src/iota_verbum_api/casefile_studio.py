@@ -13,7 +13,8 @@ from core.determinism.hashing import sha256_bytes, sha256_text
 from core.determinism.replay import verify_run
 from proposal.cli_demo import run_demo
 
-FIXTURES_PATH = Path("data/demo_cases/fixtures.json")
+REPO_ROOT = Path(__file__).resolve().parents[2]
+FIXTURES_PATH = REPO_ROOT / "data" / "demo_cases" / "fixtures.json"
 OUTPUTS_DEMO_DIR = Path("outputs/demo")
 UPLOADS_DIR = Path("tmp_uploads/casefile_studio")
 
@@ -50,7 +51,7 @@ def _normalize_fixture_list(raw: dict) -> list[dict]:
             "featured_rank": int(item.get("featured_rank", 999)),
             "category": str(item["category"]),
             "description": str(item["description"]),
-            "folder": str(item["folder"]).replace("\\", "/"),
+            "folder": str((REPO_ROOT / str(item["folder"])).resolve().as_posix()),
             "query": str(item.get("query", "")),
             "prompt": str(item.get("prompt", "")),
             "created_utc": str(item["created_utc"]),

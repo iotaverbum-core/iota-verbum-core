@@ -1,0 +1,209 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/schemas/narrative.schema.json",
+  "title": "Narrative",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "narrative_version",
+    "target_claim_id",
+    "text",
+    "paragraphs"
+  ],
+  "$defs": {
+    "evidence_ref": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "source_id",
+        "chunk_id",
+        "offset_start",
+        "offset_end",
+        "text_sha256"
+      ],
+      "properties": {
+        "source_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "chunk_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "offset_start": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "offset_end": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "text_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        }
+      }
+    },
+    "proof_step": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "from_id",
+        "to_id",
+        "type"
+      ],
+      "properties": {
+        "from_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "to_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "type": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "proof_ref": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "from_id",
+        "to_id",
+        "type",
+        "proof"
+      ],
+      "properties": {
+        "from_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "to_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "type": {
+          "type": "string",
+          "minLength": 1
+        },
+        "proof": {
+          "type": "array",
+          "minItems": 2,
+          "items": {
+            "$ref": "#/$defs/proof_step"
+          }
+        }
+      }
+    },
+    "finding_ref": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "finding_type",
+        "claim_a",
+        "claim_b",
+        "reason"
+      ],
+      "properties": {
+        "finding_type": {
+          "type": "string",
+          "enum": [
+            "duplicate",
+            "contradiction"
+          ]
+        },
+        "claim_a": {
+          "type": "string",
+          "minLength": 1
+        },
+        "claim_b": {
+          "type": "string",
+          "minLength": 1
+        },
+        "reason": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "receipt": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "ref"
+      ],
+      "properties": {
+        "kind": {
+          "type": "string",
+          "enum": [
+            "evidence",
+            "proof",
+            "finding"
+          ]
+        },
+        "ref": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/evidence_ref"
+            },
+            {
+              "$ref": "#/$defs/proof_ref"
+            },
+            {
+              "$ref": "#/$defs/finding_ref"
+            }
+          ]
+        }
+      }
+    }
+  },
+  "properties": {
+    "narrative_version": {
+      "type": "string",
+      "minLength": 1
+    },
+    "target_claim_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "text": {
+      "type": "string"
+    },
+    "paragraphs": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "pid",
+          "title",
+          "body",
+          "receipts"
+        ],
+        "properties": {
+          "pid": {
+            "type": "string",
+            "minLength": 1
+          },
+          "title": {
+            "type": "string",
+            "minLength": 1
+          },
+          "body": {
+            "type": "string"
+          },
+          "receipts": {
+            "type": "array",
+            "items": {
+              "$ref": "#/$defs/receipt"
+            }
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,96 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/schemas/causal_edge.schema.json",
+  "title": "CausalEdge",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "from_event_id",
+    "to_event_id",
+    "type",
+    "reason_code",
+    "confidence",
+    "evidence"
+  ],
+  "$defs": {
+    "evidence_ref": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "source_id",
+        "chunk_id",
+        "offset_start",
+        "offset_end",
+        "text_sha256"
+      ],
+      "properties": {
+        "source_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "chunk_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "offset_start": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "offset_end": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "text_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        }
+      }
+    }
+  },
+  "properties": {
+    "from_event_id": {
+      "type": "string",
+      "pattern": "^event:[0-9a-f]{64}$"
+    },
+    "to_event_id": {
+      "type": "string",
+      "pattern": "^event:[0-9a-f]{64}$"
+    },
+    "type": {
+      "type": "string",
+      "enum": [
+        "before",
+        "after",
+        "causes",
+        "enables",
+        "mitigates",
+        "contradicts"
+      ]
+    },
+    "reason_code": {
+      "type": "string",
+      "enum": [
+        "RULE_TIME_EXPLICIT_DATE",
+        "RULE_TIME_PHRASE_BEFORE",
+        "RULE_POLICY_PRECEDES_CONFIG",
+        "RULE_SECRET_HANDLING_CAUSAL",
+        "RULE_CONFLICT_IMPLIED",
+        "RULE_UNKNOWN_BLOCKS_CAUSAL"
+      ]
+    },
+    "confidence": {
+      "type": "string",
+      "enum": [
+        "high",
+        "medium",
+        "low"
+      ]
+    },
+    "evidence": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/evidence_ref"
+      }
+    }
+  }
+}

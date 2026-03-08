@@ -1,0 +1,120 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/schemas/agent_step_record.schema.json",
+  "title": "AgentStepRecord",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "step_record_version",
+    "task_id",
+    "step_id",
+    "action",
+    "params",
+    "status",
+    "stdout_text",
+    "result",
+    "receipts"
+  ],
+  "$defs": {
+    "json_value": {
+      "oneOf": [
+        {
+          "type": "null"
+        },
+        {
+          "type": "boolean"
+        },
+        {
+          "type": "number"
+        },
+        {
+          "type": "string"
+        },
+        {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/json_value"
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "patternProperties": {
+            "^.*$": {
+              "$ref": "#/$defs/json_value"
+            }
+          }
+        }
+      ]
+    },
+    "params_object": {
+      "type": "object",
+      "additionalProperties": false,
+      "patternProperties": {
+        "^.*$": {
+          "$ref": "#/$defs/json_value"
+        }
+      }
+    }
+  },
+  "properties": {
+    "step_record_version": {
+      "type": "string",
+      "const": "1.0"
+    },
+    "task_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "step_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "action": {
+      "type": "string",
+      "minLength": 1
+    },
+    "params": {
+      "$ref": "#/$defs/params_object"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "EXECUTED",
+        "FAILED"
+      ]
+    },
+    "stdout_text": {
+      "type": "string"
+    },
+    "result": {
+      "type": "object",
+      "additionalProperties": false,
+      "patternProperties": {
+        "^.*$": {
+          "$ref": "#/$defs/json_value"
+        }
+      }
+    },
+    "receipts": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "ledger_dir",
+        "output_sha256",
+        "attestation_sha256"
+      ],
+      "properties": {
+        "ledger_dir": {
+          "type": "string"
+        },
+        "output_sha256": {
+          "type": "string"
+        },
+        "attestation_sha256": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}

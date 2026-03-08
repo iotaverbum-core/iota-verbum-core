@@ -13,7 +13,9 @@ def test_validate_evidence_pack_schema_from_unrelated_cwd(tmp_path, monkeypatch)
     except ValueError as exc:
         assert "required property" in str(exc)
     else:
-        raise AssertionError("Expected schema validation failure for empty evidence pack")
+        raise AssertionError(
+            "Expected schema validation failure for empty evidence pack"
+        )
 
 
 def test_schema_text_loads_from_packaged_resource(monkeypatch):

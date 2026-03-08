@@ -23,7 +23,7 @@ from sqlalchemy.exc import IntegrityError, SQLAlchemyError
 from sqlalchemy.orm import Session
 
 from core.determinism.replay import verify_run
-from iota_verbum_api.casefile_studio import router as casefile_studio_router
+from iota_verbum_api import casefile_studio
 from iota_verbum_api.config import settings
 from iota_verbum_api.constants import (
     API_VERSION,
@@ -129,7 +129,7 @@ app.mount(
     StaticFiles(directory=str(_STUDIO_STATIC_DIR)),
     name="casefile-studio-assets",
 )
-app.include_router(casefile_studio_router)
+app.include_router(casefile_studio.router)
 
 
 @app.middleware("http")
@@ -142,7 +142,15 @@ async def audit_and_rate_limit(request: Request, call_next):
     api_key_hash = hash_sensitive(x_api_key)
     ip_address_hash = hash_sensitive(request.client.host if request.client else "")
 
-    public_paths = {"/", "/studio", "/health", "/v1/status", "/docs", "/openapi.json"}
+    public_paths = {
+        "/",
+        "/studio",
+        "/health",
+        "/v1/status",
+        "/v1/demo",
+        "/docs",
+        "/openapi.json",
+    }
     public_prefixes = ("/api/", "/studio/assets/")
     path = request.url.path
     is_public = path in public_paths or any(
@@ -297,6 +305,14 @@ def studio_home():
 @app.get("/studio")
 def studio_page():
     return FileResponse(_STUDIO_STATIC_DIR / "index.html")
+
+
+@app.get("/v1/demo")
+def demo_fixture_gallery():
+    return {
+        "fixtures": casefile_studio.load_fixtures(),
+        "pipeline": [item[1] for item in casefile_studio.PIPELINE_STEPS],
+    }
 
 
 async def _extract_request_payload(

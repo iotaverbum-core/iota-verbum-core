@@ -145,6 +145,26 @@ def test_fixtures_endpoint_is_sorted_and_stable():
         assert [item["id"] for item in items] == [item["id"] for item in expected]
 
 
+def test_fixtures_endpoint_is_not_cwd_relative(monkeypatch):
+    cwd_probe = Path(".repro_check") / "fixture_cwd_probe"
+    cwd_probe.mkdir(parents=True, exist_ok=True)
+    monkeypatch.chdir(cwd_probe)
+    with TestClient(app) as client:
+        response = client.get("/api/fixtures")
+        assert response.status_code == 200
+        assert len(response.json()["items"]) >= 3
+
+
+def test_v1_demo_returns_fixture_gallery_payload():
+    with TestClient(app) as client:
+        response = client.get("/v1/demo")
+        assert response.status_code == 200
+        payload = response.json()
+        assert "fixtures" in payload
+        assert "pipeline" in payload
+        assert len(payload["fixtures"]) >= 3
+
+
 def test_workspace_endpoints_are_available_and_ordered(monkeypatch, tmp_path: Path):
     monkeypatch.setattr(studio, "OUTPUTS_DEMO_DIR", tmp_path)
     _seed_workspace(tmp_path, "run-alpha")

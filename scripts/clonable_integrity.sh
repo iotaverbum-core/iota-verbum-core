@@ -11,6 +11,8 @@ RULESET_ID="${RULESET_ID:-ruleset.core.v1}"
 MAX_CHUNKS="${MAX_CHUNKS:-20}"
 MAX_EVENTS="${MAX_EVENTS:-30}"
 
+export PYTHONPATH="$ROOT/src${PYTHONPATH:+:$PYTHONPATH}"
+
 required_paths=(
   "scripts/demo.py"
   "scripts/extract_ledger_dir.py"

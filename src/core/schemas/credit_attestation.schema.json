@@ -1,0 +1,138 @@
+{
+  "attestation_id": "",
+
+  "iota_engine": {
+    "name": "",
+    "version": "",
+    "environment": ""
+  },
+
+  "decision_context": {
+    "institution_id": "",
+    "jurisdiction": "",
+    "product_type": "",
+    "channel": "",
+    "timestamp_decision": ""
+  },
+
+  "subject": {
+    "subject_type": "",
+    "subject_reference": "",
+    "attributes_used": []
+  },
+
+  "request": {
+    "request_id": "",
+    "requested_amount": 0,
+    "requested_currency": "",
+    "requested_term_months": 0,
+    "purpose": ""
+  },
+
+  "policy_suite": {
+    "suite_id": "",
+    "suite_name": "",
+    "policy_version": "",
+    "policies_applied": [
+      {
+        "policy_id": "",
+        "name": "",
+        "source": "",
+        "source_reference": ""
+      }
+    ]
+  },
+
+  "tests": [
+    {
+      "test_id": "",
+      "name": "",
+      "category": "",
+      "modality": "",
+      "status": "",
+      "metric_value": null,
+      "threshold": null,
+      "rationale": "",
+      "references": []
+    }
+  ],
+
+  "model_trace": {
+    "model_id": "",
+    "model_version": "",
+    "model_role": "",
+    "features_used": [],
+    "score_output": {
+      "score": 0,
+      "score_band": "",
+      "score_interpretation": ""
+    }
+  },
+
+  "decision": {
+    "outcome": "",
+    "decision_reason_primary": "",
+    "decision_reason_detailed": "",
+    "risk_flags": [
+      {
+        "flag_id": "",
+        "severity": "",
+        "description": ""
+      }
+    ],
+    "conditions": [
+      {
+        "condition_id": "",
+        "description": ""
+      }
+    ]
+  },
+
+  "human_review": {
+    "required": false,
+    "reviewer_id": null,
+    "review_timestamp": null,
+    "review_action": null,
+    "review_notes": null
+  },
+
+    "iota_signature": {
+    "modal_ok": false,
+    "modal_summary": {
+      "identity": "",
+      "enactment": "",
+      "effect": ""
+    },
+    "hash_of_decision_payload": "",
+    "issued_by": "",
+    "issued_at": "",
+    "signature": ""
+  },
+
+  "lambda_assessment": {
+    "status": "",
+    "theological_drift_risk": "",
+    "recommended_action": null,
+    "concerns": [],
+    "flags": {
+      "triune_confessed": false,
+      "christ_event_present": false,
+      "bodily_resurrection_confessed": false,
+      "new_creation_confessed": false,
+      "image_bearer": true,
+      "genuine_suffering": true,
+      "oriented_to_repentance_trust": false,
+      "explicit_christ_union": false,
+      "ambiguous_religious_context": false,
+      "gnostic_language_present": false,
+      "universalist_language_present": false,
+      "pre_incarnation_context": false,
+      "pre_rational_subject": false,
+      "cheap_lament_indicators": false,
+      "notes": []
+    }
+  },
+
+  "extensions": {}
+}
+

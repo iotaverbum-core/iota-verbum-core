@@ -45,6 +45,7 @@ where = ["src"]
 include = ["core", "core.*", "domains", "domains.*", "iota_verbum_api", "iota_verbum_api.*", "proposal", "proposal.*"]
 
 [tool.setuptools.package-data]
+core = ["schemas/*.json"]
 domains = ["**/*.json"]
 iota_verbum_api = ["static/**/*"]
 

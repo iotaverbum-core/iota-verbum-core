@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import json
 import re
+from importlib import resources
 from pathlib import Path
 
 try:
@@ -21,8 +22,33 @@ _TYPE_MAP = {
 }
 
 
-def _repo_root() -> Path:
-    return Path(__file__).resolve().parents[3]
+def _iter_schema_path_candidates(schema_path: Path):
+    module_file = Path(__file__).resolve()
+    for parent in module_file.parents:
+        yield parent / schema_path
+        yield parent / "schemas" / schema_path.name
+
+
+def _read_schema_text(schema_path: str | Path) -> str:
+    schema_file = Path(schema_path)
+    if schema_file.is_absolute():
+        return schema_file.read_text(encoding="utf-8")
+
+    normalized = schema_file.as_posix()
+    if normalized.startswith("schemas/"):
+        schema_name = normalized.split("/", 1)[1]
+        try:
+            packaged_schema = resources.files("core.schemas").joinpath(schema_name)
+        except ModuleNotFoundError:  # pragma: no cover - package not installed
+            packaged_schema = None
+        if packaged_schema is not None and packaged_schema.is_file():
+            return packaged_schema.read_text(encoding="utf-8")
+
+    for candidate in _iter_schema_path_candidates(schema_file):
+        if candidate.is_file():
+            return candidate.read_text(encoding="utf-8")
+
+    raise FileNotFoundError(f"Schema file not found: {schema_path}")
 
 
 def _resolve_refs(schema: dict, root_schema: dict) -> dict:
@@ -144,11 +170,7 @@ def _minimal_validate(
 
 
 def validate(instance, schema_path: str | Path) -> None:
-    schema_file = Path(schema_path)
-    if not schema_file.is_absolute():
-        schema_file = _repo_root() / schema_file
-
-    raw_schema = json.loads(schema_file.read_text(encoding="utf-8"))
+    raw_schema = json.loads(_read_schema_text(schema_path))
     if jsonschema is not None:
         validator = jsonschema.Draft202012Validator(raw_schema)
         errors = sorted(validator.iter_errors(instance), key=lambda err: err.path)

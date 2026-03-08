@@ -59,7 +59,13 @@ def _extract_headings(lines: list[str]) -> list[Heading]:
             continue
         md_match = _MD_HEADING_RE.match(stripped)
         if md_match:
-            headings.append(Heading(i, len(md_match.group(1)), normalize_text(md_match.group(2))))
+            headings.append(
+                Heading(
+                    i,
+                    len(md_match.group(1)),
+                    normalize_text(md_match.group(2)),
+                )
+            )
             continue
         underlined, level = _is_underlined_heading(lines, i)
         if underlined:
@@ -69,7 +75,13 @@ def _extract_headings(lines: list[str]) -> list[Heading]:
         numbered_match = _NUMBERED_HEADING_RE.match(stripped)
         if numbered_match:
             depth = len(numbered_match.group(1).split("."))
-            headings.append(Heading(i, min(6, depth + 1), normalize_text(numbered_match.group(2))))
+            headings.append(
+                Heading(
+                    i,
+                    min(6, depth + 1),
+                    normalize_text(numbered_match.group(2)),
+                )
+            )
     return headings
 
 
@@ -100,7 +112,9 @@ def extract_document_structure(*, doc_id: str, relative_path: str, text: str) ->
             heading_stack.pop()
         heading_stack.append(heading.text)
         start_line = heading.line_index
-        end_line = headings[idx + 1].line_index if idx + 1 < len(headings) else len(lines)
+        end_line = (
+            headings[idx + 1].line_index if idx + 1 < len(headings) else len(lines)
+        )
         content = "\n".join(lines[start_line:end_line]).strip("\n")
         start_offset = line_starts[start_line] if start_line < len(line_starts) else 0
         if end_line < len(line_starts):
@@ -112,7 +126,11 @@ def extract_document_structure(*, doc_id: str, relative_path: str, text: str) ->
         section_id = "section:" + sha256_text(section_key)
         words = _WORD_RE.findall(content.lower())
         keyword_counts = sorted(
-            ((word, words.count(word)) for word in sorted(set(words)) if len(word) >= 4),
+            (
+                (word, words.count(word))
+                for word in sorted(set(words))
+                if len(word) >= 4
+            ),
             key=lambda item: (-item[1], item[0]),
         )
         context_keywords = [word for word, _ in keyword_counts[:8]]

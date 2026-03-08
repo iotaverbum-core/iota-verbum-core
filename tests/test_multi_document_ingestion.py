@@ -3,21 +3,28 @@ from __future__ import annotations
 from pathlib import Path
 
 from core.determinism.finalize import finalize
-from core.determinism.replay import verify_run
 from core.determinism.ledger import write_run
+from core.determinism.replay import verify_run
 from proposal.bundle_from_pack import build_evidence_bundle_from_pack
 from proposal.evidence_pack import build_evidence_pack
 
 
 def _write_docs(base: Path) -> None:
-    (base / "b.txt").write_text("Incident Report\n\n## Timeline\n- breach detected", encoding="utf-8")
-    (base / "a.md").write_text("# Access Policy\n\n## Requirements\n- MFA required", encoding="utf-8")
+    (base / "b.txt").write_text(
+        "Incident Report\n\n## Timeline\n- breach detected",
+        encoding="utf-8",
+    )
+    (base / "a.md").write_text(
+        "# Access Policy\n\n## Requirements\n- MFA required",
+        encoding="utf-8",
+    )
 
 
 def test_deterministic_corpus_ordering(tmp_path: Path) -> None:
     d1 = tmp_path / "left"
     d2 = tmp_path / "right"
-    d1.mkdir(); d2.mkdir()
+    d1.mkdir()
+    d2.mkdir()
     _write_docs(d1)
     _write_docs(d2)
 
@@ -42,7 +49,10 @@ def test_multi_document_manifest_and_chunk_metadata(tmp_path: Path) -> None:
 def test_heading_extraction_is_deterministic(tmp_path: Path) -> None:
     d = tmp_path / "docs"
     d.mkdir()
-    (d / "doc.md").write_text("Main Title\n====\n\n1. Overview\nBody", encoding="utf-8")
+    (d / "doc.md").write_text(
+        "Main Title\n====\n\n1. Overview\nBody",
+        encoding="utf-8",
+    )
     pack, _ = build_evidence_pack(str(d), extract_structure=True)
     structure = pack["document_structure"][0]
     assert structure["title"] == "Main Title"
@@ -66,7 +76,10 @@ def test_section_aware_chunking_preserves_heading_path(tmp_path: Path) -> None:
 def test_category_inference_stable_and_sorted(tmp_path: Path) -> None:
     d = tmp_path / "docs"
     d.mkdir()
-    (d / "doc.md").write_text("# Policy\n\nRunbook control policy standard", encoding="utf-8")
+    (d / "doc.md").write_text(
+        "# Policy\n\nRunbook control policy standard",
+        encoding="utf-8",
+    )
     pack, _ = build_evidence_pack(str(d), extract_structure=True, categorize=True)
     categories = pack["document_structure"][0]["categories"]
     assert "policy" in categories
@@ -77,8 +90,16 @@ def test_large_corpus_respects_limits(tmp_path: Path) -> None:
     d = tmp_path / "docs"
     d.mkdir()
     for i in range(30):
-        (d / f"doc_{i:03d}.txt").write_text(f"Doc {i}\n\n" + ("word " * 200), encoding="utf-8")
-    pack, _ = build_evidence_pack(str(d), extract_structure=True, max_docs=10, max_total_chunks=20)
+        (d / f"doc_{i:03d}.txt").write_text(
+            f"Doc {i}\n\n" + ("word " * 200),
+            encoding="utf-8",
+        )
+    pack, _ = build_evidence_pack(
+        str(d),
+        extract_structure=True,
+        max_docs=10,
+        max_total_chunks=20,
+    )
     assert len(pack["documents"]) == 10
     assert len(pack["chunks"]) <= 20
 

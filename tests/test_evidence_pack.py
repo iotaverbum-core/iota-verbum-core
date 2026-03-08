@@ -68,7 +68,8 @@ def test_build_evidence_pack_offsets_and_hashes_are_correct(tmp_path: Path):
             "text_sha256": sha256_text("ghij"),
         },
     ]
-    assert [{k: chunk[k] for k in expected[0]} for chunk in pack_obj["chunks"]] == expected
+    observed = [{k: chunk[k] for k in expected[0]} for chunk in pack_obj["chunks"]]
+    assert observed == expected
 
 
 def test_build_evidence_pack_changes_hash_when_file_changes(tmp_path: Path):

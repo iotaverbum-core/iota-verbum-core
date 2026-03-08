@@ -39,14 +39,20 @@ def chunk_document_by_sections(
     chunk_index_in_doc = 0
     global_index = global_chunk_start
     for section_index, section in enumerate(sections):
-        section_text = normalize_text(text[section["start_offset"] : section["end_offset"]]).strip()
+        section_text = normalize_text(
+            text[section["start_offset"] : section["end_offset"]]
+        ).strip()
         paragraphs = _split_paragraphs(section_text)
         current: list[str] = []
         current_words = 0
         overlap_buffer: list[str] = []
 
         def flush_chunk() -> None:
-            nonlocal current, current_words, overlap_buffer, chunk_index_in_doc, global_index
+            nonlocal current
+            nonlocal current_words
+            nonlocal overlap_buffer
+            nonlocal chunk_index_in_doc
+            nonlocal global_index
             if not current:
                 return
             chunk_text = "\n\n".join(current).strip()
@@ -72,8 +78,16 @@ def chunk_document_by_sections(
                     "word_count": _word_count(chunk_text),
                     "char_count": len(chunk_text),
                     "neighbor_section_ids": [
-                        sections[section_index - 1]["section_id"] if section_index > 0 else "",
-                        sections[section_index + 1]["section_id"] if section_index + 1 < len(sections) else "",
+                        (
+                            sections[section_index - 1]["section_id"]
+                            if section_index > 0
+                            else ""
+                        ),
+                        (
+                            sections[section_index + 1]["section_id"]
+                            if section_index + 1 < len(sections)
+                            else ""
+                        ),
                     ],
                     "section_context_keywords": section["context_keywords"],
                 }
@@ -81,7 +95,9 @@ def chunk_document_by_sections(
             chunk_index_in_doc += 1
             global_index += 1
             tokens = chunk_text.split()
-            overlap_buffer = tokens[-chunk_overlap_words:] if chunk_overlap_words else []
+            overlap_buffer = (
+                tokens[-chunk_overlap_words:] if chunk_overlap_words else []
+            )
             if overlap_buffer:
                 current = [" ".join(overlap_buffer)]
                 current_words = len(overlap_buffer)

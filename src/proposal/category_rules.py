@@ -58,7 +58,14 @@ def infer_categories(*, title: str, headings: list[str], content: str) -> dict:
                 count = normalized_text.count(normalized_keyword)
             if count <= 0:
                 continue
-            score = count * (3 if any(normalized_keyword in normalize_text(h).lower() for h in headings) else 1)
+            score = count * (
+                3
+                if any(
+                    normalized_keyword in normalize_text(heading).lower()
+                    for heading in headings
+                )
+                else 1
+            )
             scores[category] += score
             receipts.append(
                 {

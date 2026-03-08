@@ -7,7 +7,11 @@ from core.determinism.canonical_json import dumps_canonical
 from core.determinism.hashing import sha256_bytes
 from core.determinism.schema_validate import validate
 from proposal.chunking import chunk_document
-from proposal.corpus_pack import build_document_manifest_item, count_words, iter_source_files
+from proposal.corpus_pack import (
+    build_document_manifest_item,
+    count_words,
+    iter_source_files,
+)
 from proposal.section_chunker import chunk_document_by_sections
 from proposal.structure_extract import extract_document_structure
 from proposal.text_normalize import normalize_text
@@ -53,7 +57,11 @@ def build_evidence_pack(
             raise ValueError(f"file is not valid UTF-8: {relpath}") from exc
 
         canonical_doc_text = normalize_text(decoded_text)
-        doc_item = build_document_manifest_item(root=root, path=path, text=canonical_doc_text)
+        doc_item = build_document_manifest_item(
+            root=root,
+            path=path,
+            text=canonical_doc_text,
+        )
         if total_words + doc_item["word_count"] > max_total_words:
             break
         total_words += doc_item["word_count"]

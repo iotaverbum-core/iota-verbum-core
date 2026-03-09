@@ -1,0 +1,225 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/schemas/verification_result.schema.json",
+  "title": "VerificationResult",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "verification_version",
+    "ruleset_id",
+    "target_claim_id",
+    "status",
+    "reasons",
+    "required_info",
+    "receipts"
+  ],
+  "$defs": {
+    "evidence_ref": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "source_id",
+        "chunk_id",
+        "offset_start",
+        "offset_end",
+        "text_sha256"
+      ],
+      "properties": {
+        "source_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "chunk_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "offset_start": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "offset_end": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "text_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        }
+      }
+    },
+    "json_value": {
+      "oneOf": [
+        {
+          "type": "null"
+        },
+        {
+          "type": "boolean"
+        },
+        {
+          "type": "number"
+        },
+        {
+          "type": "string"
+        },
+        {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/json_value"
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "patternProperties": {
+            "^.*$": {
+              "$ref": "#/$defs/json_value"
+            }
+          }
+        }
+      ]
+    }
+  },
+  "properties": {
+    "verification_version": {
+      "type": "string",
+      "const": "1.0"
+    },
+    "ruleset_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "target_claim_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "VERIFIED_OK",
+        "VERIFIED_FAIL",
+        "VERIFIED_NEEDS_INFO"
+      ]
+    },
+    "reasons": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "code",
+          "message",
+          "ref"
+        ],
+        "properties": {
+          "code": {
+            "type": "string",
+            "minLength": 1
+          },
+          "message": {
+            "type": "string",
+            "minLength": 1
+          },
+          "ref": {
+            "type": "object",
+            "additionalProperties": false,
+            "patternProperties": {
+              "^.*$": {
+                "$ref": "#/$defs/json_value"
+              }
+            }
+          }
+        }
+      }
+    },
+    "required_info": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "kind",
+          "ref"
+        ],
+        "properties": {
+          "kind": {
+            "type": "string",
+            "enum": [
+              "missing_evidence",
+              "missing_time",
+              "missing_actor",
+              "missing_object",
+              "ambiguous_entity"
+            ]
+          },
+          "ref": {
+            "type": "object",
+            "additionalProperties": false,
+            "patternProperties": {
+              "^.*$": {
+                "$ref": "#/$defs/json_value"
+              }
+            }
+          }
+        }
+      }
+    },
+    "receipts": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "bundle_sha256",
+        "output_sha256",
+        "attestation_sha256",
+        "ruleset_sha256",
+        "evidence_refs",
+        "proofs",
+        "findings"
+      ],
+      "properties": {
+        "bundle_sha256": {
+          "type": "string"
+        },
+        "output_sha256": {
+          "type": "string"
+        },
+        "attestation_sha256": {
+          "type": "string"
+        },
+        "ruleset_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "evidence_refs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/evidence_ref"
+          }
+        },
+        "proofs": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "patternProperties": {
+              "^.*$": {
+                "$ref": "#/$defs/json_value"
+              }
+            }
+          }
+        },
+        "findings": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "patternProperties": {
+              "^.*$": {
+                "$ref": "#/$defs/json_value"
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

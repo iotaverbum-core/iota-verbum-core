@@ -1,0 +1,32 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "viable_explanations",
+    "eliminated_explanations",
+    "resolution_evidence_needed",
+    "ranked_final_assessment"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "2.0"
+    },
+    "viable_explanations": {
+      "type": "array"
+    },
+    "eliminated_explanations": {
+      "type": "array"
+    },
+    "resolution_evidence_needed": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "ranked_final_assessment": {
+      "type": "array"
+    }
+  }
+}

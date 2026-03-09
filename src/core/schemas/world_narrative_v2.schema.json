@@ -1,0 +1,102 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/schemas/world_narrative_v2.schema.json",
+  "title": "WorldNarrativeV2",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "narrative_version",
+    "mode",
+    "text",
+    "sections",
+    "receipts_summary",
+    "world_sha256"
+  ],
+  "properties": {
+    "narrative_version": {
+      "type": "string",
+      "const": "2.0"
+    },
+    "mode": {
+      "type": "string",
+      "enum": [
+        "brief",
+        "full"
+      ]
+    },
+    "text": {
+      "type": "string"
+    },
+    "world_sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "sections": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "title",
+          "lines"
+        ],
+        "properties": {
+          "title": {
+            "type": "string",
+            "minLength": 1
+          },
+          "lines": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "receipts_summary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "evidence_ref_count",
+        "proof_count",
+        "finding_count",
+        "top_evidence_refs",
+        "top_proofs",
+        "top_findings"
+      ],
+      "properties": {
+        "evidence_ref_count": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "proof_count": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "finding_count": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "top_evidence_refs": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "top_proofs": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "top_findings": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  }
+}

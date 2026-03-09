@@ -153,6 +153,143 @@ def _run_workspace(run_id: str) -> dict:
     }
 
 
+def _json_sort_key(item: dict) -> str:
+    return json.dumps(item, sort_keys=True, separators=(",", ":"))
+
+
+def _entity_name_map(world_model: dict) -> dict[str, str]:
+    return {
+        str(item.get("entity_id", "")): str(item.get("name", ""))
+        for item in world_model.get("entities", [])
+        if item.get("entity_id")
+    }
+
+
+def _canonical_hypotheses(sealed_output: dict) -> list[dict]:
+    payload = (
+        sealed_output.get("hypothesis_competition")
+        or sealed_output.get("hypotheses")
+        or {}
+    )
+    hypotheses = payload.get("hypotheses", []) if isinstance(payload, dict) else []
+    return sorted(
+        hypotheses,
+        key=lambda item: (
+            -float(item.get("confidence_score", 0)),
+            str(item.get("hypothesis_id", "")),
+        ),
+    )
+
+
+def _adjudication_by_hypothesis_id(sealed_output: dict) -> dict[str, dict]:
+    adjudication = sealed_output.get("adjudication") or {}
+    ranked = adjudication.get("ranked_final_assessment", [])
+    output = {}
+    for item in ranked:
+        hypothesis_id = str(item.get("hypothesis_id", ""))
+        if hypothesis_id:
+            output[hypothesis_id] = item
+    return output
+
+
+def _graph_payload(workspace: dict) -> dict:
+    world_model = workspace["world_model"]
+    entity_name_by_id = _entity_name_map(world_model)
+    entities = sorted(
+        world_model.get("entities", []),
+        key=lambda item: str(item.get("entity_id", "")),
+    )
+    events = sorted(world_model.get("events", []), key=_time_sort_key)
+
+    nodes = [
+        {
+            "id": entity["entity_id"],
+            "kind": "entity",
+            "label": entity.get("name", entity["entity_id"]),
+            "entity_type": entity.get("type", "entity"),
+            "unknown": False,
+            "meta": entity,
+        }
+        for entity in entities
+    ]
+    for event in events:
+        nodes.append(
+            {
+                "id": event["event_id"],
+                "kind": "event",
+                "label": event.get("action", event["event_id"]),
+                "event_type": event.get("type", "event"),
+                "time": event.get("time", {"kind": "unknown"}),
+                "confidence": float(event.get("confidence", 0.0) or 0.0),
+                "unknown": event.get("time", {}).get("kind") == "unknown",
+                "meta": event,
+            }
+        )
+
+    edges = []
+    for event in events:
+        event_id = event["event_id"]
+        actor = event.get("actor")
+        if actor:
+            edges.append(
+                {
+                    "id": f"edge:{event_id}:actor:{actor}",
+                    "source": actor,
+                    "target": event_id,
+                    "relation": "actor_of",
+                    "confidence": float(event.get("confidence", 0.0) or 0.0),
+                    "contradiction": False,
+                }
+            )
+        for object_id in sorted(event.get("objects", [])):
+            edges.append(
+                {
+                    "id": f"edge:{event_id}:object:{object_id}",
+                    "source": event_id,
+                    "target": object_id,
+                    "relation": "involves",
+                    "confidence": float(event.get("confidence", 0.0) or 0.0),
+                    "contradiction": False,
+                }
+            )
+
+    for index, conflict in enumerate(
+        sorted(world_model.get("conflicts", []), key=_json_sort_key)
+    ):
+        ref = conflict.get("ref", {})
+        for event_id in sorted(ref.get("event_ids", [])):
+            entity_id = ref.get("entity_id", "")
+            if event_id and entity_id:
+                edges.append(
+                    {
+                        "id": f"edge:conflict:{index}:{event_id}:{entity_id}",
+                        "source": event_id,
+                        "target": entity_id,
+                        "relation": "contradiction_link",
+                        "confidence": 0.0,
+                        "contradiction": True,
+                        "reason": conflict.get("reason", ""),
+                    }
+                )
+
+    facets = {
+        "entity_types": sorted(
+            {str(item.get("type", "entity")) for item in entities if item}
+        ),
+        "event_types": sorted(
+            {str(item.get("type", "event")) for item in events if item}
+        ),
+        "relation_types": sorted({edge["relation"] for edge in edges}),
+    }
+
+    return {
+        "nodes": sorted(nodes, key=lambda item: (item["kind"], item["id"])),
+        "edges": sorted(edges, key=lambda item: item["id"]),
+        "facets": facets,
+        "entity_name_by_id": entity_name_by_id,
+    }
+
+
 def _artifact_map(workspace: dict) -> dict[str, Path]:
     run_dir: Path = workspace["run_dir"]
     casefile = workspace["casefile"]
@@ -505,13 +642,317 @@ def api_run_casefile(run_id: str) -> dict:
     return workspace["casefile"]
 
 
+@router.get("/api/runs")
+def api_runs_list() -> dict:
+    items = []
+    if OUTPUTS_DEMO_DIR.exists():
+        for run_dir in sorted(
+            path for path in OUTPUTS_DEMO_DIR.iterdir() if path.is_dir()
+        ):
+            casefile_path = run_dir / "casefile.json"
+            if not casefile_path.exists():
+                continue
+            casefile = _load_json(casefile_path)
+            items.append(
+                {
+                    "run_id": run_dir.name,
+                    "casefile_id": casefile.get("casefile_id", ""),
+                    "created_utc": casefile.get("created_utc", ""),
+                    "graph_version": casefile.get("casefile_version", "1.0"),
+                }
+            )
+    return {"items": items}
+
+
+@router.get("/api/runs/{run_id}/overview")
+def api_run_overview(run_id: str) -> dict:
+    workspace = _run_workspace(run_id)
+    casefile = workspace["casefile"]
+    summary = casefile.get("summary", {})
+    sealed_output = workspace["sealed_output"]
+    world_narrative = (
+        sealed_output.get("world_narrative_v2", {}).get("text")
+        or sealed_output.get("world_narrative", {}).get("text")
+        or ""
+    )
+    headline = (
+        world_narrative.split("\n")[0] if world_narrative else "No narrative available."
+    )
+    hypotheses = _canonical_hypotheses(sealed_output)
+    return {
+        "case_id": casefile.get("casefile_id", ""),
+        "run_id": workspace["run_id"],
+        "graph_version": casefile.get("casefile_version", "1.0"),
+        "manifest_hash": casefile.get("hashes", {}).get("manifest_sha256", ""),
+        "ledger_hash": casefile.get("hashes", {}).get("bundle_sha256", ""),
+        "pipeline_status": "completed",
+        "metrics": {
+            "entity_count": int(summary.get("entities", 0)),
+            "event_count": int(summary.get("events", 0)),
+            "relation_count": int(summary.get("causal_edges", 0)),
+            "unknown_count": int(summary.get("unknowns", 0)),
+            "contradiction_count": int(summary.get("conflicts", 0)),
+            "hypothesis_count": len(hypotheses),
+            "verification_status": summary.get("verification_status", "UNKNOWN"),
+        },
+        "headline": headline,
+        "updated_utc": casefile.get("created_utc", ""),
+        "schema_versions": {
+            "ruleset_id": casefile.get("ruleset_id", ""),
+            "core_version": casefile.get("core_version", ""),
+        },
+    }
+
+
+@router.get("/api/runs/{run_id}/graph")
+def api_run_graph(run_id: str) -> dict:
+    workspace = _run_workspace(run_id)
+    payload = _graph_payload(workspace)
+    return {
+        "nodes": payload["nodes"],
+        "edges": payload["edges"],
+        "facets": payload["facets"],
+    }
+
+
+@router.get("/api/runs/{run_id}/nodes/{node_id}")
+def api_run_node_detail(run_id: str, node_id: str) -> dict:
+    workspace = _run_workspace(run_id)
+    graph = _graph_payload(workspace)
+    node = next((item for item in graph["nodes"] if item["id"] == node_id), None)
+    if node is None:
+        raise HTTPException(status_code=404, detail="node_not_found")
+    linked_edges = [
+        edge
+        for edge in graph["edges"]
+        if edge["source"] == node_id or edge["target"] == node_id
+    ]
+    hypotheses = _canonical_hypotheses(workspace["sealed_output"])
+    related_hypotheses = [
+        item
+        for item in hypotheses
+        if node_id in item.get("supporting_evidence", [])
+        or node_id in item.get("contradicting_evidence", [])
+    ]
+    contradictions = [
+        item
+        for item in sorted(
+            workspace["world_model"].get("conflicts", []), key=_json_sort_key
+        )
+        if node_id in item.get("ref", {}).get("event_ids", [])
+        or node_id == item.get("ref", {}).get("entity_id")
+    ]
+    return {
+        "node": node,
+        "edges": sorted(linked_edges, key=lambda item: item["id"]),
+        "related_hypotheses": related_hypotheses,
+        "contradictions": contradictions,
+    }
+
+
+@router.get("/api/runs/{run_id}/hypotheses")
+def api_run_hypotheses(run_id: str) -> dict:
+    workspace = _run_workspace(run_id)
+    sealed_output = workspace["sealed_output"]
+    hypotheses = _canonical_hypotheses(sealed_output)
+    adjudication = _adjudication_by_hypothesis_id(sealed_output)
+    items = []
+    for index, hypothesis in enumerate(hypotheses):
+        hid = str(hypothesis.get("hypothesis_id", ""))
+        adjudication_item = adjudication.get(hid, {})
+        items.append(
+            {
+                "hypothesis_id": hid,
+                "title": hypothesis.get("title", hid),
+                "narrative_type": hypothesis.get("type", "generic"),
+                "confidence_score": float(
+                    hypothesis.get("confidence_score", 0.0) or 0.0
+                ),
+                "causal_plausibility": float(
+                    hypothesis.get("causal_plausibility", 0.0) or 0.0
+                ),
+                "temporal_fit": float(hypothesis.get("temporal_fit", 0.0) or 0.0),
+                "source_reliability": float(
+                    hypothesis.get("source_reliability", 0.0) or 0.0
+                ),
+                "support_count": len(hypothesis.get("supporting_evidence", [])),
+                "contradiction_count": len(
+                    hypothesis.get("contradicting_evidence", [])
+                ),
+                "missing_evidence_count": len(hypothesis.get("missing_evidence", [])),
+                "adjudication_status": adjudication_item.get(
+                    "status", "viable" if index == 0 else "weakened"
+                ),
+                "rank": int(adjudication_item.get("rank", index + 1)),
+                "final_score": float(
+                    adjudication_item.get(
+                        "final_score", hypothesis.get("confidence_score", 0.0)
+                    )
+                    or 0.0
+                ),
+                "rationale": hypothesis.get("rationale", ""),
+                "supporting_evidence": sorted(
+                    hypothesis.get("supporting_evidence", [])
+                ),
+                "contradicting_evidence": sorted(
+                    hypothesis.get("contradicting_evidence", [])
+                ),
+                "missing_evidence": sorted(hypothesis.get("missing_evidence", [])),
+            }
+        )
+    return {
+        "items": sorted(items, key=lambda item: (item["rank"], item["hypothesis_id"]))
+    }
+
+
+@router.get("/api/runs/{run_id}/evidence")
+def api_run_evidence(run_id: str) -> dict:
+    workspace = _run_workspace(run_id)
+    receipts = workspace["receipts"]
+    refs = _sorted_evidence_refs(receipts)
+    hypotheses = _canonical_hypotheses(workspace["sealed_output"])
+    supported_by_ref = {}
+    contradicted_by_ref = {}
+    for hypothesis in hypotheses:
+        for ref in hypothesis.get("supporting_evidence", []):
+            supported_by_ref.setdefault(ref, []).append(
+                hypothesis.get("hypothesis_id", "")
+            )
+        for ref in hypothesis.get("contradicting_evidence", []):
+            contradicted_by_ref.setdefault(ref, []).append(
+                hypothesis.get("hypothesis_id", "")
+            )
+    items = []
+    for ref in refs:
+        ref_id = ":".join(
+            [
+                ref["source_id"],
+                ref["chunk_id"],
+                str(ref["offset_start"]),
+                str(ref["offset_end"]),
+            ]
+        )
+        items.append(
+            {
+                "evidence_id": ref_id,
+                "source_id": ref["source_id"],
+                "chunk_id": ref["chunk_id"],
+                "offset_start": ref["offset_start"],
+                "offset_end": ref["offset_end"],
+                "text_sha256": ref["text_sha256"],
+                "supports_hypotheses": sorted(
+                    supported_by_ref.get(ref["chunk_id"], [])
+                ),
+                "contradicts_hypotheses": sorted(
+                    contradicted_by_ref.get(ref["chunk_id"], [])
+                ),
+            }
+        )
+    return {"items": items}
+
+
+@router.get("/api/runs/{run_id}/narrative")
+def api_run_narrative(run_id: str) -> dict:
+    workspace = _run_workspace(run_id)
+    sealed_output = workspace["sealed_output"]
+    world_narrative = sealed_output.get("world_narrative_v2", {})
+    text = world_narrative.get("text", "")
+    lines = [line.strip() for line in text.split("\n") if line.strip()]
+    turning_points = [line for line in lines if "turn" in line.lower()][:8]
+    unresolved = [
+        line for line in lines if "unknown" in line.lower() or "missing" in line.lower()
+    ][:8]
+    world_model = workspace["world_model"]
+    principal_actors = sorted(
+        {
+            event.get("actor", "")
+            for event in world_model.get("events", [])
+            if event.get("actor")
+        }
+    )
+    return {
+        "narrative_type": "world_narrative_v2",
+        "headline": lines[0] if lines else "No narrative available.",
+        "sequence": lines[:20],
+        "principal_actors": principal_actors,
+        "turning_points": turning_points,
+        "unresolved_tensions": unresolved,
+        "confidence_posture": workspace["casefile"]
+        .get("summary", {})
+        .get("verification_status", "UNKNOWN"),
+        "summary_text": text,
+    }
+
+
+@router.get("/api/runs/{run_id}/diff")
+def api_run_diff(run_id: str, against_run_id: str = "") -> dict:
+    workspace = _run_workspace(run_id)
+    if not against_run_id:
+        return {
+            "current_run_id": run_id,
+            "baseline_run_id": "",
+            "available": False,
+            "message": "Provide against_run_id to compute world diff.",
+            "summary": {},
+            "details": {},
+        }
+    baseline = _run_workspace(against_run_id)
+    current_world = workspace["world_model"]
+    baseline_world = baseline["world_model"]
+    current_entities = {
+        item.get("entity_id", "") for item in current_world.get("entities", [])
+    }
+    baseline_entities = {
+        item.get("entity_id", "") for item in baseline_world.get("entities", [])
+    }
+    current_events = {
+        item.get("event_id", "") for item in current_world.get("events", [])
+    }
+    baseline_events = {
+        item.get("event_id", "") for item in baseline_world.get("events", [])
+    }
+    return {
+        "current_run_id": run_id,
+        "baseline_run_id": against_run_id,
+        "available": True,
+        "summary": {
+            "new_entities": len(current_entities - baseline_entities),
+            "new_events": len(current_events - baseline_events),
+            "resolved_unknowns": max(
+                len(baseline_world.get("unknowns", []))
+                - len(current_world.get("unknowns", [])),
+                0,
+            ),
+            "new_contradictions": max(
+                len(current_world.get("conflicts", []))
+                - len(baseline_world.get("conflicts", [])),
+                0,
+            ),
+            "removed_contradictions": max(
+                len(baseline_world.get("conflicts", []))
+                - len(current_world.get("conflicts", [])),
+                0,
+            ),
+        },
+        "details": {
+            "new_entity_ids": sorted(current_entities - baseline_entities),
+            "new_event_ids": sorted(current_events - baseline_events),
+            "current_unknowns": sorted(
+                current_world.get("unknowns", []), key=_json_sort_key
+            ),
+            "current_contradictions": sorted(
+                current_world.get("conflicts", []), key=_json_sort_key
+            ),
+        },
+    }
+
+
 @router.get("/api/runs/{run_id}/timeline")
 def api_run_timeline(run_id: str) -> dict:
     workspace = _run_workspace(run_id)
     world_model = workspace["world_model"]
     entities = {
-        item["entity_id"]: item["name"]
-        for item in world_model.get("entities", [])
+        item["entity_id"]: item["name"] for item in world_model.get("entities", [])
     }
     events = sorted(world_model.get("events", []), key=_time_sort_key)
     items = []

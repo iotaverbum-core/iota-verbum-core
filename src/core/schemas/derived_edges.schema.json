@@ -1,0 +1,75 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/schemas/derived_edges.schema.json",
+  "title": "DerivedEdges",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "derived_version",
+    "derived_edges"
+  ],
+  "properties": {
+    "derived_version": {
+      "type": "string",
+      "minLength": 1
+    },
+    "derived_edges": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "from_id",
+          "to_id",
+          "type",
+          "proof"
+        ],
+        "properties": {
+          "from_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "to_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "supports",
+              "implies",
+              "depends_on"
+            ]
+          },
+          "proof": {
+            "type": "array",
+            "minItems": 2,
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "from_id",
+                "to_id",
+                "type"
+              ],
+              "properties": {
+                "from_id": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "to_id": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "type": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

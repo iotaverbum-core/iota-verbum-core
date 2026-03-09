@@ -1,0 +1,94 @@
+{
+  "meta": {
+    "attestation_id": "ATTN-ROMANS-DEMO-0001",
+    "created_at": "2025-11-20T00:00:00Z",
+    "issuer": "iota-verbum-demo",
+    "version": "romans_v1"
+  },
+
+  "identity": {
+    "subject_type": "institution",      // e.g. "bank", "university", "church"
+    "subject_name": "demo_institution",
+    "jurisdiction": "ZA",
+    "description": "Demo attestation for Romans Drift Engine v1"
+  },
+
+  "decision": {
+    "summary": "Initial Romans 1–11 drift assessment (all metrics at baseline).",
+    "overall_risk": "unknown",          // e.g. "low" | "medium" | "high" | "unknown"
+    "notes": ""
+  },
+
+  "romans": {
+    "module1_exchange": {
+      "identity_drift": 0.0,
+      "truth_drift": 0.0,
+      "worship_drift": 0.0,
+      "runaway_drift_flag": false,
+      "notes": ""
+    },
+
+    "module2_hypocrisy": {
+      "double_standard": 0.0,
+      "badge_reliance": 0.0,
+      "kindness_presumption": 0.0,
+      "teach_vs_audit_ratio": 1.0,
+      "reputation_vs_reality_gap": 0.0,
+      "notes": ""
+    },
+
+    "module3_courtroom": {
+      "judge_reference": "",
+      "who_is_being_justified": "",
+      "standard_source": "",
+      "boast_indicator": 0.0,
+      "partiality_indicator": 0.0,
+      "law_mode": "",
+      "notes": ""
+    },
+
+    "module4_faith_badge": {
+      "sign_as_source": 0.0,
+      "wage_logic": 0.0,
+      "heritage_reliance": 0.0,
+      "metrics_confidence": 0.0,
+      "iota_as_badge_flag": false,
+      "notes": ""
+    },
+
+    "module5_suffering_refinement": {
+      "suffering_posture": 0.0,
+      "escapism_index": 0.0,
+      "entitlement_index": 0.0,
+      "endurance_marker": 0.0,
+      "character_depth": 0.0,
+      "honesty_about_pain": 0.0,
+      "hope_quality": "cheap",
+      "communal_lament_presence": 0.0,
+      "notes": ""
+    },
+
+    "module6_flesh_spirit": {
+      "law_dependence": 0.0,
+      "fear_control": 0.0,
+      "self_power_tone": 0.0,
+      "flesh_mindset_index": 0.0,
+      "spirit_language_presence": 0.0,
+      "no_condemnation_atmosphere": 0.0,
+      "sonship_posture": 0.0,
+      "notes": ""
+    },
+
+    "module7_nation_pruning": {
+      "self_righteousness_culture": 0.0,
+      "zeal_without_knowledge": 0.0,
+      "arrogant_branch_index": 0.0,
+      "remnant_visibility": 0.0,
+      "pruning_events_noted": 0,
+      "repentance_after_pruning": 0.0,
+      "grafting_posture": 0.0,
+      "mercy_trajectory_awareness": 0.0,
+      "notes": ""
+    }
+  }
+}

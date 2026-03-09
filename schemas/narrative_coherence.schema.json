@@ -1,0 +1,51 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "narrative_type",
+    "sequence_of_events",
+    "key_actors",
+    "turning_points",
+    "unresolved_tensions",
+    "confidence",
+    "supporting_evidence_map",
+    "template_note"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "2.0"
+    },
+    "narrative_type": {
+      "type": "string"
+    },
+    "sequence_of_events": {
+      "type": "array"
+    },
+    "key_actors": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "turning_points": {
+      "type": "array"
+    },
+    "unresolved_tensions": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "confidence": {
+      "type": "string"
+    },
+    "supporting_evidence_map": {
+      "type": "object"
+    },
+    "template_note": {
+      "type": "string"
+    }
+  }
+}

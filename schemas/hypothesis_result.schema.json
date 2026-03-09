@@ -1,0 +1,81 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "hypotheses"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "2.0"
+    },
+    "hypotheses": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "hypothesis_id",
+          "title",
+          "description",
+          "assumptions",
+          "supporting_evidence",
+          "contradicting_evidence",
+          "missing_evidence",
+          "confidence_score",
+          "causal_plausibility_score",
+          "temporal_fit_score",
+          "source_reliability_score"
+        ],
+        "properties": {
+          "hypothesis_id": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "assumptions": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "supporting_evidence": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "contradicting_evidence": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "missing_evidence": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "confidence_score": {
+            "type": "string"
+          },
+          "causal_plausibility_score": {
+            "type": "string"
+          },
+          "temporal_fit_score": {
+            "type": "string"
+          },
+          "source_reliability_score": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  }
+}

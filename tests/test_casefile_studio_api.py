@@ -116,8 +116,50 @@ def _seed_workspace(base: Path, run_id: str) -> Path:
                 "findings": [{"code": "CYCLE_TEMPORAL_CONSTRAINT"}],
             },
         },
-        "world_narrative_v2": {"text": "World narrative text"},
+        "world_narrative_v2": {
+            "text": (
+                "World narrative text\n"
+                "Turning point: scope narrowed\n"
+                "Unknown actor remains"
+            )
+        },
         "causal_narrative_v2": {"text": "Causal narrative text"},
+        "hypothesis_competition": {
+            "hypotheses": [
+                {
+                    "hypothesis_id": "hyp:1",
+                    "title": "Insider misuse",
+                    "confidence_score": 0.7,
+                    "supporting_evidence": ["chunk:1"],
+                    "contradicting_evidence": [],
+                    "missing_evidence": ["chunk:2"],
+                },
+                {
+                    "hypothesis_id": "hyp:2",
+                    "title": "External compromise",
+                    "confidence_score": 0.4,
+                    "supporting_evidence": [],
+                    "contradicting_evidence": ["chunk:1"],
+                    "missing_evidence": [],
+                },
+            ]
+        },
+        "adjudication": {
+            "ranked_final_assessment": [
+                {
+                    "hypothesis_id": "hyp:1",
+                    "rank": 1,
+                    "status": "leading",
+                    "final_score": 0.7,
+                },
+                {
+                    "hypothesis_id": "hyp:2",
+                    "rank": 2,
+                    "status": "weakened",
+                    "final_score": 0.4,
+                },
+            ]
+        },
     }
     _write_json(run_dir / "casefile.json", casefile)
     _write_json(run_dir / "sealed_output.json", sealed_output)
@@ -275,3 +317,40 @@ def test_sample_run_endpoint_reports_progress(monkeypatch):
         assert final["status"] == "completed"
         assert final["run_id"] == "fake-run"
         assert final["replay_status"] == "NOT_RUN"
+
+
+def test_investigation_endpoints(monkeypatch, tmp_path: Path):
+    monkeypatch.setattr(studio, "OUTPUTS_DEMO_DIR", tmp_path)
+    _seed_workspace(tmp_path, "run-gamma")
+
+    with TestClient(app) as client:
+        runs = client.get("/api/runs")
+        assert runs.status_code == 200
+        assert runs.json()["items"][0]["run_id"] == "run-gamma"
+
+        overview = client.get("/api/runs/run-gamma/overview")
+        assert overview.status_code == 200
+        assert overview.json()["metrics"]["hypothesis_count"] == 2
+
+        graph = client.get("/api/runs/run-gamma/graph")
+        assert graph.status_code == 200
+        assert len(graph.json()["nodes"]) >= 3
+
+        node = client.get("/api/runs/run-gamma/nodes/entity:a")
+        assert node.status_code == 200
+
+        hypotheses = client.get("/api/runs/run-gamma/hypotheses")
+        assert hypotheses.status_code == 200
+        assert hypotheses.json()["items"][0]["hypothesis_id"] == "hyp:1"
+
+        evidence = client.get("/api/runs/run-gamma/evidence")
+        assert evidence.status_code == 200
+        assert evidence.json()["items"][0]["supports_hypotheses"] == ["hyp:1"]
+
+        narrative = client.get("/api/runs/run-gamma/narrative")
+        assert narrative.status_code == 200
+        assert "turning_points" in narrative.json()
+
+        diff = client.get("/api/runs/run-gamma/diff")
+        assert diff.status_code == 200
+        assert diff.json()["available"] is False

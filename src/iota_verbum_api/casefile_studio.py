@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import logging
 import threading
 import traceback
 from pathlib import Path
@@ -32,6 +33,7 @@ PIPELINE_STEPS = [
 _RUNS_LOCK = threading.Lock()
 _RUNS: dict[str, dict[str, Any]] = {}
 _RUN_SEQ = 0
+LOGGER = logging.getLogger(__name__)
 
 
 def _next_run_request_id() -> str:
@@ -45,30 +47,51 @@ def _normalize_fixture_list(raw: dict) -> list[dict]:
     items = raw.get("items", [])
     normalized = []
     for item in items:
-        fixture = {
-            "id": str(item["id"]),
-            "title": str(item["title"]),
-            "featured_rank": int(item.get("featured_rank", 999)),
-            "category": str(item["category"]),
-            "description": str(item["description"]),
-            "folder": str((REPO_ROOT / str(item["folder"])).resolve().as_posix()),
-            "query": str(item.get("query", "")),
-            "prompt": str(item.get("prompt", "")),
-            "created_utc": str(item["created_utc"]),
-            "core_version": str(item["core_version"]),
-            "ruleset_id": str(item["ruleset_id"]),
-            "max_chunks": int(item.get("max_chunks", 8)),
-            "max_events": int(item.get("max_events", 30)),
-        }
-        normalized.append(fixture)
+        try:
+            fixture_folder = (REPO_ROOT / str(item["folder"])).resolve()
+            if not fixture_folder.exists():
+                LOGGER.warning(
+                    "Skipping fixture '%s' because folder is missing: %s",
+                    item.get("id", "<missing-id>"),
+                    fixture_folder,
+                )
+                continue
+            fixture = {
+                "id": str(item["id"]),
+                "title": str(item["title"]),
+                "featured_rank": int(item.get("featured_rank", 999)),
+                "category": str(item["category"]),
+                "description": str(item["description"]),
+                "folder": str(fixture_folder.as_posix()),
+                "query": str(item.get("query", "")),
+                "prompt": str(item.get("prompt", "")),
+                "created_utc": str(item["created_utc"]),
+                "core_version": str(item["core_version"]),
+                "ruleset_id": str(item["ruleset_id"]),
+                "max_chunks": int(item.get("max_chunks", 8)),
+                "max_events": int(item.get("max_events", 30)),
+            }
+            normalized.append(fixture)
+        except Exception:
+            LOGGER.exception(
+                "Skipping invalid fixture entry from registry: %s", item
+            )
     return sorted(normalized, key=lambda item: (item["featured_rank"], item["id"]))
 
 
 def load_fixtures() -> list[dict]:
-    if not FIXTURES_PATH.exists():
-        raise HTTPException(status_code=500, detail="fixture_registry_missing")
-    raw = json.loads(FIXTURES_PATH.read_text(encoding="utf-8"))
-    return _normalize_fixture_list(raw)
+    try:
+        if not FIXTURES_PATH.exists():
+            LOGGER.warning("Fixture registry not found at %s", FIXTURES_PATH)
+            return []
+        raw = json.loads(FIXTURES_PATH.read_text(encoding="utf-8"))
+        if not isinstance(raw, dict):
+            LOGGER.warning("Fixture registry at %s is not a JSON object", FIXTURES_PATH)
+            return []
+        return _normalize_fixture_list(raw)
+    except Exception:
+        LOGGER.exception("Failed to load fixtures from %s", FIXTURES_PATH)
+        return []
 
 
 def _fixture_by_id(fixture_id: str) -> dict:

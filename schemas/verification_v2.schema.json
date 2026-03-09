@@ -1,0 +1,69 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "graph_integrity",
+    "claim_support",
+    "identity_support",
+    "hypothesis_support",
+    "narrative_coherence_support",
+    "contradiction_resolution_quality",
+    "evidence_sufficiency",
+    "provenance_completeness",
+    "verification_report",
+    "unresolved_issues",
+    "insufficiency_report",
+    "continuity_report",
+    "provenance_audit_report",
+    "adjudication_snapshot"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "2.0"
+    },
+    "graph_integrity": {
+      "type": "boolean"
+    },
+    "claim_support": {
+      "type": "boolean"
+    },
+    "identity_support": {
+      "type": "boolean"
+    },
+    "hypothesis_support": {
+      "type": "boolean"
+    },
+    "narrative_coherence_support": {
+      "type": "boolean"
+    },
+    "contradiction_resolution_quality": {
+      "type": "string"
+    },
+    "evidence_sufficiency": {
+      "type": "string"
+    },
+    "provenance_completeness": {
+      "type": "boolean"
+    },
+    "verification_report": {
+      "type": "object"
+    },
+    "unresolved_issues": {
+      "type": "array"
+    },
+    "insufficiency_report": {
+      "type": "array"
+    },
+    "continuity_report": {
+      "type": "object"
+    },
+    "provenance_audit_report": {
+      "type": "object"
+    },
+    "adjudication_snapshot": {
+      "type": "array"
+    }
+  }
+}

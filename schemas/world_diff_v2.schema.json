@@ -1,0 +1,32 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "supported_change_types",
+    "old_graph_state",
+    "new_graph_state",
+    "diff_report"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "2.0"
+    },
+    "supported_change_types": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "old_graph_state": {
+      "type": "string"
+    },
+    "new_graph_state": {
+      "type": "string"
+    },
+    "diff_report": {
+      "type": "object"
+    }
+  }
+}

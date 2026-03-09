@@ -197,6 +197,17 @@ def test_fixtures_endpoint_is_not_cwd_relative(monkeypatch):
         assert len(response.json()["items"]) >= 3
 
 
+
+
+def test_fixtures_endpoint_returns_empty_when_registry_missing(monkeypatch, tmp_path: Path):
+    missing_registry = tmp_path / "demo_cases" / "fixtures.json"
+    monkeypatch.setattr(studio, "FIXTURES_PATH", missing_registry)
+
+    with TestClient(app) as client:
+        response = client.get("/api/fixtures")
+        assert response.status_code == 200
+        assert response.json() == {"items": []}
+
 def test_v1_demo_returns_fixture_gallery_payload():
     with TestClient(app) as client:
         response = client.get("/v1/demo")

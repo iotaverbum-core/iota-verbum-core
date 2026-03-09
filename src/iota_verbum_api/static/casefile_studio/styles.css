@@ -316,3 +316,9 @@ input[type="file"] {
     grid-template-columns: 1fr;
   }
 }
+
+.tabs { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 10px; }
+.tab { background: #fff; border: 1px solid var(--line); border-radius: 8px; padding: 6px 10px; cursor: pointer; }
+.tab.active { background: var(--accent-soft); border-color: #b9d7cf; }
+.tab-panel { display: none; }
+.tab-panel.active { display: block; }

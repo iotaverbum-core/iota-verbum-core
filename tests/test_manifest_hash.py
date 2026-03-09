@@ -51,3 +51,19 @@ def test_manifest_hash_script_hashes_requested_file(tmp_path: Path):
 
     assert first == second
     assert first == sha256_bytes(casefile.read_bytes())
+
+
+def test_manifest_hash_script_resolves_relative_target_from_cwd(tmp_path: Path):
+    casefile = tmp_path / "casefile.json"
+    casefile.write_text('{"z":1,"a":2}', encoding="utf-8")
+    script_path = Path("scripts/manifest_hash.py").resolve()
+
+    output = subprocess.run(
+        [sys.executable, str(script_path), "casefile.json"],
+        check=True,
+        capture_output=True,
+        text=True,
+        cwd=tmp_path,
+    ).stdout.strip()
+
+    assert output == sha256_bytes(casefile.read_bytes())

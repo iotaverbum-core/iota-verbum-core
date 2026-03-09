@@ -11,13 +11,12 @@ def _repo_root() -> Path:
 
 
 def _resolve_target(target: str | Path | None) -> Path:
-    repo_root = _repo_root()
     if target is None:
-        return repo_root / "MANIFEST.sha256"
+        return _repo_root() / "MANIFEST.sha256"
     path = Path(target)
     if path.is_absolute():
         return path
-    return (repo_root / path).resolve()
+    return path.resolve()
 
 
 def compute_manifest_sha256() -> str:

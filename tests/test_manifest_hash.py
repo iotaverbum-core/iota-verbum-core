@@ -3,13 +3,16 @@ import subprocess
 import sys
 from pathlib import Path
 
+from core.determinism.hashing import sha256_bytes
 from core.determinism.manifest_hash import compute_manifest_sha256
 
 
 def test_compute_manifest_sha256_is_deterministic_for_manifest_file():
+    expected = sha256_bytes(Path("MANIFEST.sha256").read_bytes())
     first = compute_manifest_sha256()
     second = compute_manifest_sha256()
 
+    assert first == expected
     assert first == second
 
 

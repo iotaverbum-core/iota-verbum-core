@@ -72,6 +72,9 @@ def compute_manifest_sha256(target: str | Path | None = None) -> str:
     if not manifest_target.is_absolute():
         manifest_target = (repo_root / manifest_target).resolve()
 
+    if target is None:
+        return sha256_bytes(manifest_target.read_bytes())
+
     hash_input = _build_hash_input(manifest_target)
     serialized = json.dumps(hash_input, sort_keys=True, separators=(",", ":"), ensure_ascii=False)
     return sha256_bytes(serialized.encode("utf-8"))

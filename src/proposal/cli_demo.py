@@ -43,6 +43,8 @@ from proposal.world_propose import (
     propose_world_model_from_artifacts,
 )
 
+REPO_ROOT = Path(__file__).resolve().parents[2]
+
 
 def _write_atomic(path: Path, data: bytes) -> None:
     temp_path = path.with_name(f".{path.name}.tmp")
@@ -191,8 +193,20 @@ def _world_target_claim_id(query: str) -> str:
     return "world:" + sha256_text(normalize_text(query))
 
 
+def _normalized_resolved_path(path: Path) -> Path:
+    resolved = str(path.resolve())
+    if resolved.startswith("\\\\?\\"):
+        resolved = resolved[4:]
+    return Path(resolved)
+
+
 def _repo_relative(path: Path) -> str:
-    return path.resolve().relative_to(Path.cwd().resolve()).as_posix()
+    resolved_path = _normalized_resolved_path(path)
+    repo_root = _normalized_resolved_path(REPO_ROOT)
+    try:
+        return resolved_path.relative_to(repo_root).as_posix()
+    except ValueError:
+        return resolved_path.as_posix()
 
 
 def run_demo(

@@ -1,7 +1,7 @@
 import argparse
 import hashlib
 import subprocess
-from pathlib import Path
+from pathlib import Path, PurePosixPath
 
 ROOT = Path(__file__).resolve().parents[1]
 MANIFEST_PATH = ROOT / "MANIFEST.sha256"
@@ -43,16 +43,25 @@ def _sha256(path: str) -> str:
     return hashlib.sha256(_read_index_bytes(path)).hexdigest()
 
 
-def _iter_files() -> list[str]:
-    tracked = set(_git_ls_files())
-    files = set()
+def _matches_include_globs(path: str) -> bool:
+    pure_path = PurePosixPath(path)
     for pattern in INCLUDE_GLOBS:
-        for path in ROOT.glob(pattern):
-            if path.is_file():
-                rel = path.relative_to(ROOT).as_posix()
-                if rel in tracked and rel != "MANIFEST.sha256":
-                    files.add(rel)
-    return sorted(files)
+        variants = [pattern]
+        if "**/" in pattern:
+            variants.append(pattern.replace("**/", ""))
+        if any(pure_path.match(candidate) for candidate in variants):
+            return True
+    return False
+
+
+def _iter_files() -> list[str]:
+    return sorted(
+        {
+            path
+            for path in _git_ls_files()
+            if path != "MANIFEST.sha256" and _matches_include_globs(path)
+        }
+    )
 
 
 def build_manifest_text() -> str:

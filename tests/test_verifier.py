@@ -1,7 +1,8 @@
 from pathlib import Path
 
-import core.reasoning.verifier as verifier
 import pytest
+
+import core.reasoning.verifier as verifier
 from core.reasoning.verifier import RulesetResolutionError, load_ruleset, verify_claim
 
 

@@ -8,11 +8,12 @@ import traceback
 from pathlib import Path
 from typing import Any
 
+from fastapi import APIRouter, File, Form, HTTPException, UploadFile
+from fastapi.responses import FileResponse
+
 from core.determinism.hashing import sha256_bytes, sha256_text
 from core.determinism.replay import verify_run_deterministic
 from core.reasoning.verifier import RulesetResolutionError
-from fastapi import APIRouter, File, Form, HTTPException, UploadFile
-from fastapi.responses import FileResponse
 from proposal.cli_demo import run_demo
 
 OUTPUTS_DEMO_DIR = Path("outputs/demo")

@@ -2,15 +2,16 @@ import importlib
 from datetime import timedelta
 from pathlib import Path
 
-from core.reasoning.verifier import RulesetResolutionError
 from fastapi.testclient import TestClient
+from sqlalchemy import select
+
+from core.reasoning.verifier import RulesetResolutionError
 from iota_verbum_api.app import app
 from iota_verbum_api.db.models import AuditLog, DocumentInput
 from iota_verbum_api.db.session import new_session
 from iota_verbum_api.services.pdf import ExtractionFailure
 from iota_verbum_api.services.retention import enforce_retention_policy
 from iota_verbum_api.utils import now_utc
-from sqlalchemy import select
 
 app_module = importlib.import_module("iota_verbum_api.app")
 

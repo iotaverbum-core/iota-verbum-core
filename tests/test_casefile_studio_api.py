@@ -2,9 +2,10 @@ import json
 import time
 from pathlib import Path
 
+from fastapi.testclient import TestClient
+
 import iota_verbum_api.casefile_studio as studio
 from core.reasoning.verifier import RulesetResolutionError
-from fastapi.testclient import TestClient
 from iota_verbum_api.app import app
 
 

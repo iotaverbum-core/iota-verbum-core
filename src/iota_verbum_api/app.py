@@ -6,8 +6,6 @@ import uuid
 from contextlib import asynccontextmanager
 from pathlib import Path
 
-from core.determinism.replay import verify_run_deterministic
-from core.reasoning.verifier import RulesetResolutionError
 from fastapi import (
     Depends,
     FastAPI,
@@ -20,11 +18,12 @@ from fastapi import (
 )
 from fastapi.responses import FileResponse, JSONResponse
 from fastapi.staticfiles import StaticFiles
-from proposal.cli_demo import run_demo
 from sqlalchemy import select
 from sqlalchemy.exc import IntegrityError, SQLAlchemyError
 from sqlalchemy.orm import Session
 
+from core.determinism.replay import verify_run_deterministic
+from core.reasoning.verifier import RulesetResolutionError
 from iota_verbum_api import casefile_studio
 from iota_verbum_api.config import settings
 from iota_verbum_api.constants import (
@@ -72,6 +71,7 @@ from iota_verbum_api.utils import (
     now_utc,
     sha256_text,
 )
+from proposal.cli_demo import run_demo
 
 rate_limiter = InMemoryRateLimiter(settings.rate_limit_per_minute)
 

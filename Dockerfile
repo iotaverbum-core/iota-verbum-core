@@ -13,6 +13,7 @@ RUN apt-get update && apt-get install -y \
 
 COPY pyproject.toml README.md ./
 COPY src ./src
+COPY rulesets ./rulesets
 COPY data ./data
 COPY scripts ./scripts
 COPY MANIFEST.sha256 ./

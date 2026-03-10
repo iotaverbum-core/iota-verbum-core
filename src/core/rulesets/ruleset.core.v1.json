@@ -1,0 +1,60 @@
+{
+  "ruleset_version": "1.0",
+  "ruleset_id": "ruleset.core.v1",
+  "rules": [
+    {
+      "rule_id": "RULE_CONTRADICTION",
+      "enabled": true,
+      "params": {}
+    },
+    {
+      "rule_id": "RULE_MIN_EVIDENCE",
+      "enabled": true,
+      "params": {
+        "min_evidence_count": 1
+      }
+    },
+    {
+      "rule_id": "RULE_WORLD_UNKNOWNS_SECURITY",
+      "enabled": true,
+      "params": {
+        "security_keywords": [
+          "key",
+          "secret",
+          "token",
+          "credential",
+          "access"
+        ],
+        "unknown_kinds_for_security": [
+          "missing_time",
+          "missing_actor"
+        ]
+      }
+    },
+    {
+      "rule_id": "RULE_CAUSAL_TEMPORAL_CYCLE",
+      "enabled": true,
+      "params": {}
+    },
+    {
+      "rule_id": "RULE_CAUSAL_NEEDS_INFO",
+      "enabled": true,
+      "params": {
+        "security_event_types": [
+          "Access",
+          "Config",
+          "Deployment",
+          "Leak",
+          "PolicyChange"
+        ]
+      }
+    },
+    {
+      "rule_id": "RULE_SCOPE",
+      "enabled": true,
+      "params": {
+        "fail_on_scope_mismatch": true
+      }
+    }
+  ]
+}

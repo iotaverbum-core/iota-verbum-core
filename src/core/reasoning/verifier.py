@@ -1,6 +1,9 @@
 from __future__ import annotations
 
 import json
+import logging
+import os
+from importlib.resources import files
 from pathlib import Path
 
 from core.determinism.bundle import build_evidence_bundle
@@ -15,21 +18,158 @@ _SECURITY_RELEVANT_EVENT_TYPES = {
     "Leak",
     "PolicyChange",
 }
+LOGGER = logging.getLogger(__name__)
 
 
-def _repo_root() -> Path:
-    return Path(__file__).resolve().parents[3]
+class RulesetResolutionError(ValueError):
+    def __init__(
+        self,
+        *,
+        requested_ruleset: str,
+        search_paths: list[str],
+        run_id: str = "",
+        sub_step: str = "ruleset_resolution",
+    ):
+        self.requested_ruleset = requested_ruleset
+        self.search_paths = search_paths
+        self.run_id = run_id
+        self.sub_step = sub_step
+        message = (
+            f"ruleset '{requested_ruleset}' could not be resolved via deterministic "
+            "search paths"
+        )
+        super().__init__(message)
+
+    def to_dict(self) -> dict:
+        return {
+            "error": "ruleset_not_found",
+            "reason": "requested ruleset could not be resolved",
+            "requested_ruleset": self.requested_ruleset,
+            "search_paths": self.search_paths,
+            "run_id": self.run_id,
+            "sub_step": self.sub_step,
+        }
 
 
 def _sort_key(obj: dict) -> str:
     return dumps_canonical(obj).decode("utf-8")
 
 
-def load_ruleset(ruleset_id: str) -> tuple[dict, str]:
-    ruleset_path = Path(ruleset_id)
-    if not ruleset_path.exists():
-        ruleset_path = _repo_root() / "rulesets" / f"{ruleset_id}.json"
-    ruleset_obj = json.loads(ruleset_path.read_text(encoding="utf-8"))
+def _ruleset_filename(ruleset_id: str) -> str:
+    if ruleset_id.endswith(".json"):
+        return Path(ruleset_id).name
+    return f"{ruleset_id}.json"
+
+
+def _record_candidate(
+    *,
+    requested_ruleset: str,
+    run_id: str,
+    candidate: str,
+    exists: bool,
+    search_paths: list[str],
+) -> None:
+    search_paths.append(candidate)
+    LOGGER.info(
+        "Ruleset resolution candidate requested_ruleset=%s run_id=%s "
+        "sub_step=ruleset_resolution resolved_path=%s exists=%s",
+        requested_ruleset,
+        run_id or "unknown",
+        candidate,
+        exists,
+    )
+
+
+def _package_ruleset_bytes(filename: str) -> tuple[bytes, str] | None:
+    try:
+        package_root = files("core.rulesets")
+    except ModuleNotFoundError:
+        return None
+    candidate = package_root.joinpath(filename)
+    if candidate.is_file():
+        return candidate.read_bytes(), f"package:core.rulesets/{filename}"
+    return None
+
+
+def _fallback_ruleset_paths(filename: str) -> list[Path]:
+    candidate_roots = []
+    configured_dir = os.environ.get("IOTA_VERBUM_RULESETS_DIR", "").strip()
+    if configured_dir:
+        candidate_roots.append(Path(configured_dir))
+    candidate_roots.append(Path.cwd())
+
+    module_path = Path(__file__).resolve()
+    candidate_roots.extend(module_path.parents)
+
+    unique_roots: list[Path] = []
+    seen: set[str] = set()
+    for root in candidate_roots:
+        resolved = root.resolve()
+        key = resolved.as_posix()
+        if key in seen:
+            continue
+        seen.add(key)
+        unique_roots.append(resolved)
+    return [root / "rulesets" / filename for root in unique_roots]
+
+
+def load_ruleset(ruleset_id: str, *, run_id: str = "") -> tuple[dict, str]:
+    requested_ruleset = str(ruleset_id).strip()
+    search_paths: list[str] = []
+
+    explicit_path = Path(requested_ruleset)
+    explicit_candidate = explicit_path.resolve(strict=False).as_posix()
+    explicit_exists = explicit_path.exists() and explicit_path.is_file()
+    _record_candidate(
+        requested_ruleset=requested_ruleset,
+        run_id=run_id,
+        candidate=explicit_candidate,
+        exists=explicit_exists,
+        search_paths=search_paths,
+    )
+    if explicit_exists:
+        ruleset_bytes = explicit_path.read_bytes()
+    else:
+        ruleset_bytes = b""
+
+    if not ruleset_bytes:
+        filename = _ruleset_filename(requested_ruleset)
+        package_candidate = f"package:core.rulesets/{filename}"
+        packaged = _package_ruleset_bytes(filename)
+        _record_candidate(
+            requested_ruleset=requested_ruleset,
+            run_id=run_id,
+            candidate=package_candidate,
+            exists=packaged is not None,
+            search_paths=search_paths,
+        )
+        if packaged is not None:
+            ruleset_bytes, _source = packaged
+
+    if not ruleset_bytes:
+        filename = _ruleset_filename(requested_ruleset)
+        for path in _fallback_ruleset_paths(filename):
+            candidate = path.resolve(strict=False).as_posix()
+            exists = path.exists() and path.is_file()
+            _record_candidate(
+                requested_ruleset=requested_ruleset,
+                run_id=run_id,
+                candidate=candidate,
+                exists=exists,
+                search_paths=search_paths,
+            )
+            if exists:
+                ruleset_bytes = path.read_bytes()
+                break
+
+    if not ruleset_bytes:
+        raise RulesetResolutionError(
+            requested_ruleset=requested_ruleset,
+            search_paths=search_paths,
+            run_id=run_id,
+        )
+
+    ruleset_obj = json.loads(ruleset_bytes.decode("utf-8"))
     validate(ruleset_obj, "schemas/ruleset.schema.json")
     return ruleset_obj, sha256_bytes(dumps_canonical(ruleset_obj))
 
@@ -224,10 +364,11 @@ def verify_claim(
     evidence_bundle_obj: dict,
     sealed_output_obj: dict,
     strict_manifest: bool = False,
+    run_id: str = "",
 ) -> dict:
     del strict_manifest
     validate(evidence_bundle_obj, "schemas/evidence_bundle.schema.json")
-    ruleset_obj, ruleset_sha256 = load_ruleset(ruleset_id)
+    ruleset_obj, ruleset_sha256 = load_ruleset(ruleset_id, run_id=run_id)
 
     _bundle_bytes, bundle_sha256 = build_evidence_bundle(evidence_bundle_obj)
     output_sha256 = sha256_bytes(dumps_canonical(sealed_output_obj))

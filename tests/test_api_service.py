@@ -2,15 +2,15 @@ import importlib
 from datetime import timedelta
 from pathlib import Path
 
+from core.reasoning.verifier import RulesetResolutionError
 from fastapi.testclient import TestClient
-from sqlalchemy import select
-
 from iota_verbum_api.app import app
 from iota_verbum_api.db.models import AuditLog, DocumentInput
 from iota_verbum_api.db.session import new_session
 from iota_verbum_api.services.pdf import ExtractionFailure
 from iota_verbum_api.services.retention import enforce_retention_policy
 from iota_verbum_api.utils import now_utc
+from sqlalchemy import select
 
 app_module = importlib.import_module("iota_verbum_api.app")
 
@@ -292,6 +292,42 @@ def test_casefile_generate_endpoint(monkeypatch):
     body = response.json()
     assert body["casefile"]["casefile_id"].startswith("case:")
     assert body["ledger_dir"].startswith("outputs/")
+
+
+def test_casefile_generate_returns_structured_ruleset_failure(monkeypatch):
+    monkeypatch.setattr(
+        app_module,
+        "run_demo",
+        lambda **_kwargs: (_ for _ in ()).throw(
+            RulesetResolutionError(
+                requested_ruleset="ruleset.core.v1",
+                search_paths=["package:core.rulesets/ruleset.core.v1.json"],
+                run_id="run-demo",
+            )
+        ),
+    )
+    with TestClient(app) as client:
+        response = client.post(
+            "/v1/casefile/generate",
+            headers={**_headers(), "Content-Type": "application/json"},
+            json={
+                "folder": "tests/fixtures",
+                "query": "",
+                "prompt": "",
+                "max_chunks": 1,
+                "max_events": 1,
+                "created_utc": "2026-03-05T00:00:00Z",
+                "core_version": "0.4.0",
+                "ruleset_id": "ruleset.core.v1",
+                "verbosity": "brief",
+                "show_receipts": False,
+            },
+        )
+    assert response.status_code == 422
+    body = response.json()["detail"]
+    assert body["error"] == "ruleset_not_found"
+    assert body["requested_ruleset"] == "ruleset.core.v1"
+    assert body["search_paths"] == ["package:core.rulesets/ruleset.core.v1.json"]
 
 
 def test_casefile_verify_endpoint(monkeypatch):

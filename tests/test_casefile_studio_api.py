@@ -197,6 +197,50 @@ def test_fixtures_endpoint_is_not_cwd_relative(monkeypatch):
         assert len(response.json()["items"]) >= 3
 
 
+def test_fixtures_endpoint_resolves_first_available_repo_root(
+    monkeypatch, tmp_path: Path
+):
+    missing_root = tmp_path / "missing-root"
+    missing_root.mkdir(parents=True, exist_ok=True)
+    repo_root = tmp_path / "repo-root"
+    fixtures_path = repo_root / "data" / "demo_cases" / "fixtures.json"
+    _write_json(
+        fixtures_path,
+        {
+            "items": [
+                {
+                    "id": "fixture:smoke",
+                    "title": "Smoke Fixture",
+                    "featured_rank": 1,
+                    "category": "test",
+                    "description": "Fixture discovery regression check.",
+                    "folder": "data/demo_cases/timeline_breach_chain",
+                    "query": "smoke",
+                    "prompt": "smoke",
+                    "created_utc": "2026-03-05T00:00:00Z",
+                    "core_version": "0.4.0",
+                    "ruleset_id": "ruleset.core.v1",
+                    "max_chunks": 8,
+                    "max_events": 30,
+                }
+            ]
+        },
+    )
+    monkeypatch.setattr(
+        studio, "_candidate_repo_roots", lambda: [missing_root, repo_root]
+    )
+    with TestClient(app) as client:
+        response = client.get("/api/fixtures")
+        assert response.status_code == 200
+        items = response.json()["items"]
+        assert [item["id"] for item in items] == ["fixture:smoke"]
+        assert items[0]["folder"] == str(
+            (repo_root / "data" / "demo_cases" / "timeline_breach_chain")
+            .resolve()
+            .as_posix()
+        )
+
+
 def test_v1_demo_returns_fixture_gallery_payload():
     with TestClient(app) as client:
         response = client.get("/v1/demo")

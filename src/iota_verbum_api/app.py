@@ -124,6 +124,7 @@ async def lifespan(app: FastAPI):
 
 app = FastAPI(title="IOTA VERBUM CORE", version=VERSION, lifespan=lifespan)
 _STUDIO_STATIC_DIR = Path(__file__).resolve().parent / "static" / "casefile_studio"
+_FAVICON_PATH = _STUDIO_STATIC_DIR / "favicon.ico"
 app.mount(
     "/studio/assets",
     StaticFiles(directory=str(_STUDIO_STATIC_DIR)),
@@ -145,6 +146,7 @@ async def audit_and_rate_limit(request: Request, call_next):
     public_paths = {
         "/",
         "/studio",
+        "/favicon.ico",
         "/health",
         "/v1/status",
         "/v1/demo",
@@ -305,6 +307,13 @@ def studio_home():
 @app.get("/studio")
 def studio_page():
     return FileResponse(_STUDIO_STATIC_DIR / "index.html")
+
+
+@app.get("/favicon.ico", include_in_schema=False)
+def favicon():
+    if _FAVICON_PATH.exists():
+        return FileResponse(_FAVICON_PATH)
+    return Response(status_code=status.HTTP_204_NO_CONTENT)
 
 
 @app.get("/v1/demo")

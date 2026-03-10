@@ -33,6 +33,13 @@ def test_health_and_status_endpoints():
         assert status_response.json()["status"] == "operational"
 
 
+def test_favicon_endpoint_is_public():
+    with TestClient(app) as client:
+        response = client.get("/favicon.ico")
+        assert response.status_code in {200, 204}
+        assert response.status_code != 401
+
+
 def test_full_json_flow_and_verify():
     text = Path("tests/fixtures/nda_fr.txt").read_text(encoding="utf-8")
     with TestClient(app) as client:

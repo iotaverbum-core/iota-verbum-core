@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import os
 import threading
 import traceback
 from pathlib import Path
@@ -13,8 +14,6 @@ from core.determinism.hashing import sha256_bytes, sha256_text
 from core.determinism.replay import verify_run
 from proposal.cli_demo import run_demo
 
-REPO_ROOT = Path(__file__).resolve().parents[2]
-FIXTURES_PATH = REPO_ROOT / "data" / "demo_cases" / "fixtures.json"
 OUTPUTS_DEMO_DIR = Path("outputs/demo")
 UPLOADS_DIR = Path("tmp_uploads/casefile_studio")
 
@@ -41,7 +40,36 @@ def _next_run_request_id() -> str:
         return f"studio-run-{_RUN_SEQ:06d}"
 
 
-def _normalize_fixture_list(raw: dict) -> list[dict]:
+def _candidate_repo_roots() -> list[Path]:
+    module_path = Path(__file__).resolve()
+    candidates: list[Path] = []
+    repo_root_hint = os.environ.get("IOTA_VERBUM_REPO_ROOT")
+    if repo_root_hint:
+        candidates.append(Path(repo_root_hint))
+    candidates.append(Path.cwd())
+    candidates.extend(module_path.parents)
+
+    unique_roots: list[Path] = []
+    seen: set[str] = set()
+    for candidate in candidates:
+        resolved = candidate.resolve()
+        key = resolved.as_posix()
+        if key in seen:
+            continue
+        seen.add(key)
+        unique_roots.append(resolved)
+    return unique_roots
+
+
+def _resolve_fixtures_path() -> tuple[Path, Path] | None:
+    for repo_root in _candidate_repo_roots():
+        fixtures_path = repo_root / "data" / "demo_cases" / "fixtures.json"
+        if fixtures_path.exists():
+            return fixtures_path, repo_root
+    return None
+
+
+def _normalize_fixture_list(raw: dict, repo_root: Path) -> list[dict]:
     items = raw.get("items", [])
     normalized = []
     for item in items:
@@ -51,7 +79,7 @@ def _normalize_fixture_list(raw: dict) -> list[dict]:
             "featured_rank": int(item.get("featured_rank", 999)),
             "category": str(item["category"]),
             "description": str(item["description"]),
-            "folder": str((REPO_ROOT / str(item["folder"])).resolve().as_posix()),
+            "folder": str((repo_root / str(item["folder"])).resolve().as_posix()),
             "query": str(item.get("query", "")),
             "prompt": str(item.get("prompt", "")),
             "created_utc": str(item["created_utc"]),
@@ -65,10 +93,12 @@ def _normalize_fixture_list(raw: dict) -> list[dict]:
 
 
 def load_fixtures() -> list[dict]:
-    if not FIXTURES_PATH.exists():
+    resolved = _resolve_fixtures_path()
+    if resolved is None:
         raise HTTPException(status_code=500, detail="fixture_registry_missing")
-    raw = json.loads(FIXTURES_PATH.read_text(encoding="utf-8"))
-    return _normalize_fixture_list(raw)
+    fixtures_path, repo_root = resolved
+    raw = json.loads(fixtures_path.read_text(encoding="utf-8"))
+    return _normalize_fixture_list(raw, repo_root=repo_root)
 
 
 def _fixture_by_id(fixture_id: str) -> dict:

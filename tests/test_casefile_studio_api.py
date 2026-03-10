@@ -5,6 +5,7 @@ from pathlib import Path
 from fastapi.testclient import TestClient
 
 import iota_verbum_api.casefile_studio as studio
+from core.reasoning.verifier import RulesetResolutionError
 from iota_verbum_api.app import app
 
 
@@ -433,6 +434,40 @@ def test_sample_run_failure_maps_empty_sequence_error(monkeypatch):
     assert "min() arg is an empty sequence" not in final["error"]
     assert "expected collection was empty" in final["error"]
     assert final["error_detail"]["raw_error"] == "min() arg is an empty sequence"
+
+
+def test_sample_run_failure_maps_missing_ruleset_error(monkeypatch):
+    def _failing_run_demo(**_kwargs):
+        raise RulesetResolutionError(
+            requested_ruleset="ruleset.core.v1",
+            search_paths=["package:core.rulesets/ruleset.core.v1.json"],
+            run_id="run-sample",
+        )
+
+    monkeypatch.setattr(studio, "run_demo", _failing_run_demo)
+    with TestClient(app) as client:
+        start = client.post(
+            "/api/runs/sample",
+            json={"fixture_id": "timeline_breach_chain"},
+        )
+        assert start.status_code == 200
+        req_id = start.json()["run_request_id"]
+
+        final = {}
+        for _ in range(10):
+            status = client.get(f"/api/runs/{req_id}")
+            assert status.status_code == 200
+            final = status.json()
+            if final["status"] == "failed":
+                break
+            time.sleep(0.1)
+
+    assert final["status"] == "failed"
+    assert "requested ruleset 'ruleset.core.v1' was not found" in final["error"]
+    assert final["error_detail"]["raw_error"].startswith(
+        "ruleset 'ruleset.core.v1' could not be resolved"
+    )
+    assert final["error_detail"]["structured_error"]["error"] == "ruleset_not_found"
 
 
 def test_investigation_endpoints(monkeypatch, tmp_path: Path):

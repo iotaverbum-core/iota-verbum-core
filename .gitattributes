@@ -8,5 +8,7 @@ data/** text eol=lf
 *.sh text eol=lf
 *.ps1 text eol=lf
 *.json text eol=lf
+*.toml text eol=lf
 *.txt text eol=lf
 *.sha256 text eol=lf
+MANIFEST.sha256 text eol=lf

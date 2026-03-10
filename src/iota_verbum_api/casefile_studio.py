@@ -13,6 +13,7 @@ from fastapi.responses import FileResponse
 
 from core.determinism.hashing import sha256_bytes, sha256_text
 from core.determinism.replay import verify_run_deterministic
+from core.reasoning.verifier import RulesetResolutionError
 from proposal.cli_demo import run_demo
 
 OUTPUTS_DEMO_DIR = Path("outputs/demo")
@@ -398,6 +399,13 @@ def _current_stage_for_run(run_request_id: str) -> str:
 
 
 def _run_failure_message(exc: Exception, failed_stage: str) -> str:
+    if isinstance(exc, RulesetResolutionError):
+        payload = exc.to_dict()
+        requested = payload["requested_ruleset"]
+        return (
+            f"Stage {failed_stage} failed deterministically: "
+            f"requested ruleset '{requested}' was not found."
+        )
     raw = str(exc)
     if raw == "min() arg is an empty sequence":
         return (
@@ -473,6 +481,9 @@ def _launch_run(run_request_id: str, run_kwargs: dict[str, Any]) -> None:
             error_detail={
                 "failed_stage": failed_stage,
                 "raw_error": str(exc),
+                "structured_error": (
+                    exc.to_dict() if isinstance(exc, RulesetResolutionError) else None
+                ),
             },
             traceback=traceback.format_exc(),
             steps=_step_state(failed_stage, done=False, failed=True),

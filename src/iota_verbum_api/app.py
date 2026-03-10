@@ -23,6 +23,7 @@ from sqlalchemy.exc import IntegrityError, SQLAlchemyError
 from sqlalchemy.orm import Session
 
 from core.determinism.replay import verify_run_deterministic
+from core.reasoning.verifier import RulesetResolutionError
 from iota_verbum_api import casefile_studio
 from iota_verbum_api.config import settings
 from iota_verbum_api.constants import (
@@ -590,20 +591,23 @@ def casefile_generate(
     auth: AuthContext = Depends(authenticate_api_key),
 ):
     del auth
-    result = run_demo(
-        folder=payload.folder,
-        query=payload.query,
-        prompt=payload.prompt,
-        max_chunks=payload.max_chunks,
-        created_utc=payload.created_utc,
-        core_version=payload.core_version,
-        ruleset_id=payload.ruleset_id,
-        world=True,
-        verbosity=payload.verbosity,
-        show_receipts=payload.show_receipts,
-        max_events=payload.max_events,
-        enrich=payload.enrich_path,
-    )
+    try:
+        result = run_demo(
+            folder=payload.folder,
+            query=payload.query,
+            prompt=payload.prompt,
+            max_chunks=payload.max_chunks,
+            created_utc=payload.created_utc,
+            core_version=payload.core_version,
+            ruleset_id=payload.ruleset_id,
+            world=True,
+            verbosity=payload.verbosity,
+            show_receipts=payload.show_receipts,
+            max_events=payload.max_events,
+            enrich=payload.enrich_path,
+        )
+    except RulesetResolutionError as exc:
+        raise HTTPException(status_code=422, detail=exc.to_dict()) from exc
     casefile = result["casefile"]
     return {
         "casefile": casefile,

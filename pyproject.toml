@@ -45,13 +45,22 @@ where = ["src"]
 include = ["core", "core.*", "domains", "domains.*", "iota_verbum_api", "iota_verbum_api.*", "proposal", "proposal.*"]
 
 [tool.setuptools.package-data]
-core = ["schemas/*.json"]
+core = ["schemas/*.json", "rulesets/*.json"]
 domains = ["**/*.json"]
 iota_verbum_api = ["static/**/*"]
 
 [tool.ruff]
 cache-dir = "C:/Users/chris/AppData/Local/Temp/iota_verbum_ruff_cache"
-exclude = [".pytest_tmp", ".ruff_cache", ".repro_check", "tmp_goldens", "tmp_repro_check"]
+exclude = [
+  ".git",
+  ".pytest_tmp",
+  ".repro_check",
+  ".ruff_cache",
+  ".venv",
+  ".venv311",
+  "tmp_goldens",
+  "tmp_repro_check",
+]
 line-length = 88
 src = ["src"]
 target-version = "py311"

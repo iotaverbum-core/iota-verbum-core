@@ -1,6 +1,9 @@
 from pathlib import Path
 
-from core.reasoning.verifier import load_ruleset, verify_claim
+import pytest
+
+import core.reasoning.verifier as verifier
+from core.reasoning.verifier import RulesetResolutionError, load_ruleset, verify_claim
 
 
 def _bundle_with_artifact(
@@ -338,3 +341,37 @@ def test_verify_claim_needs_info_for_security_causal_unknowns():
     assert result["required_info"] == [
         {"kind": "missing_object", "ref": {"event_id": "event:1"}}
     ]
+
+
+def test_ruleset_loads_from_packaged_resource_when_repo_rulesets_unavailable(
+    monkeypatch,
+):
+    packaged_ruleset_id = "ruleset.package.test"
+    packaged_ruleset = (
+        Path("rulesets")
+        / "ruleset.core.v1.json"
+    ).read_text(encoding="utf-8").replace("ruleset.core.v1", packaged_ruleset_id)
+    monkeypatch.setattr(
+        verifier,
+        "_package_ruleset_bytes",
+        lambda filename: (
+            packaged_ruleset.encode("utf-8"),
+            f"package:core.rulesets/{filename}",
+        ),
+    )
+    monkeypatch.setattr(verifier, "_fallback_ruleset_paths", lambda _filename: [])
+    ruleset, ruleset_sha = load_ruleset(packaged_ruleset_id)
+    assert ruleset["ruleset_id"] == packaged_ruleset_id
+    assert len(ruleset_sha) == 64
+
+
+def test_missing_ruleset_raises_structured_error():
+    missing_ruleset = "ruleset.missing.v9"
+    with pytest.raises(RulesetResolutionError) as excinfo:
+        load_ruleset(missing_ruleset, run_id="run-demo")
+    payload = excinfo.value.to_dict()
+    assert payload["error"] == "ruleset_not_found"
+    assert payload["requested_ruleset"] == missing_ruleset
+    assert payload["run_id"] == "run-demo"
+    assert payload["sub_step"] == "ruleset_resolution"
+    assert payload["search_paths"]

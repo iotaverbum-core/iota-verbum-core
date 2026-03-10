@@ -29,6 +29,15 @@ INCLUDE_GLOBS = [
     ".pre-commit-config.yaml",
 ]
 
+EXCLUDED_DIR_NAMES = {
+    ".venv",
+    ".venv311",
+    "venv",
+    ".git",
+    "__pycache__",
+    ".pytest_tmp_local",
+}
+
 
 def _git_ls_files() -> list[str]:
     output = subprocess.check_output(["git", "ls-files", "-z"], cwd=ROOT)
@@ -54,12 +63,18 @@ def _matches_include_globs(path: str) -> bool:
     return False
 
 
+def _is_excluded_path(path: str) -> bool:
+    return any(part in EXCLUDED_DIR_NAMES for part in PurePosixPath(path).parts)
+
+
 def _iter_files() -> list[str]:
     return sorted(
         {
             path
             for path in _git_ls_files()
-            if path != "MANIFEST.sha256" and _matches_include_globs(path)
+            if path != "MANIFEST.sha256"
+            and not _is_excluded_path(path)
+            and _matches_include_globs(path)
         }
     )
 

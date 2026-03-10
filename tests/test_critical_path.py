@@ -121,3 +121,19 @@ def test_compute_critical_path_uses_lexicographic_chain_tie_break():
         "event:" + ("1" * 64),
         "event:" + ("2" * 64),
     ]
+
+
+def test_compute_critical_path_handles_empty_nodes_deterministically():
+    critical_path = compute_critical_path(
+        {
+            "version": "1.0",
+            "nodes": [],
+            "edges": [],
+            "causal_order": [],
+            "findings": [],
+        }
+    )
+
+    assert critical_path["critical_chain"] == []
+    assert critical_path["top_events"] == []
+    assert critical_path["receipts"]["counts"] == {"nodes": 0, "edges": 0}

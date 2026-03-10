@@ -297,9 +297,15 @@ def test_casefile_generate_endpoint(monkeypatch):
 def test_casefile_verify_endpoint(monkeypatch):
     monkeypatch.setattr(
         app_module,
-        "verify_run",
+        "verify_run_deterministic",
         lambda _ledger_dir, strict_manifest: {
             "ok": True,
+            "status": "verified_ok",
+            "reason": "",
+            "replay_target": _ledger_dir,
+            "run_id": "run-demo",
+            "sub_step": "completed",
+            "empty_collection": "",
             "bundle_sha256": "a" * 64,
             "output_sha256": "b" * 64,
             "attestation_sha256": "c" * 64,
@@ -319,3 +325,37 @@ def test_casefile_verify_endpoint(monkeypatch):
     body = response.json()
     assert body["status"] == "VERIFIED_OK"
     assert body["ledger_dir"].startswith("outputs/")
+
+
+def test_casefile_verify_endpoint_returns_structured_failure(monkeypatch):
+    monkeypatch.setattr(
+        app_module,
+        "verify_run_deterministic",
+        lambda _ledger_dir, strict_manifest: {
+            "ok": False,
+            "status": "failed_deterministically",
+            "reason": "no comparable replay artifacts found",
+            "replay_target": _ledger_dir,
+            "run_id": "run-demo",
+            "sub_step": "artifact_discovery",
+            "empty_collection": "comparable_artifacts",
+            "bundle_sha256": "",
+            "output_sha256": "",
+            "attestation_sha256": "",
+            "warnings": [],
+        },
+    )
+    with TestClient(app) as client:
+        response = client.post(
+            "/v1/casefile/verify",
+            headers={**_headers(), "Content-Type": "application/json"},
+            json={
+                "ledger_dir": "outputs/demo/x/ledger/" + ("a" * 64),
+                "strict_manifest": True,
+            },
+        )
+    assert response.status_code == 200
+    body = response.json()
+    assert body["status"] == "VERIFIED_FAIL"
+    assert body["error"] == "no comparable replay artifacts found"
+    assert body["verification"]["status"] == "failed_deterministically"

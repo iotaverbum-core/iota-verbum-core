@@ -5,7 +5,7 @@ from core.determinism.finalize import canonicalize_output, finalize
 from core.determinism.hashing import sha256_bytes, sha256_text
 from core.determinism.ledger import ledger_path, write_run
 from core.determinism.manifest_hash import compute_manifest_sha256
-from core.determinism.replay import verify_run
+from core.determinism.replay import verify_run, verify_run_deterministic
 from core.determinism.schema_validate import validate
 
 __all__ = [
@@ -20,5 +20,6 @@ __all__ = [
     "sha256_text",
     "validate",
     "verify_run",
+    "verify_run_deterministic",
     "write_run",
 ]

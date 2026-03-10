@@ -22,7 +22,7 @@ from sqlalchemy import select
 from sqlalchemy.exc import IntegrityError, SQLAlchemyError
 from sqlalchemy.orm import Session
 
-from core.determinism.replay import verify_run
+from core.determinism.replay import verify_run_deterministic
 from iota_verbum_api import casefile_studio
 from iota_verbum_api.config import settings
 from iota_verbum_api.constants import (
@@ -618,19 +618,25 @@ def casefile_verify(
     auth: AuthContext = Depends(authenticate_api_key),
 ):
     del auth
-    try:
-        verification = verify_run(
-            payload.ledger_dir,
-            strict_manifest=payload.strict_manifest,
+    verification = verify_run_deterministic(
+        payload.ledger_dir,
+        strict_manifest=payload.strict_manifest,
+    )
+    verification_status = str(verification.get("status", ""))
+    if verification_status == "verified_ok":
+        status_text = "VERIFIED_OK"
+    elif verification_status == "skipped":
+        status_text = "VERIFIED_SKIPPED"
+    else:
+        status_text = "VERIFIED_FAIL"
+
+    response = {
+        "status": status_text,
+        "ledger_dir": payload.ledger_dir.replace("\\", "/"),
+        "verification": verification,
+    }
+    if status_text != "VERIFIED_OK":
+        response["error"] = str(
+            verification.get("reason", "replay verification failed")
         )
-        return {
-            "status": "VERIFIED_OK",
-            "ledger_dir": payload.ledger_dir.replace("\\", "/"),
-            "verification": verification,
-        }
-    except Exception as exc:  # noqa: BLE001
-        return {
-            "status": "VERIFIED_FAIL",
-            "ledger_dir": payload.ledger_dir.replace("\\", "/"),
-            "error": str(exc),
-        }
+    return response

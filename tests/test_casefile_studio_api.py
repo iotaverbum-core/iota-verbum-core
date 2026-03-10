@@ -298,9 +298,15 @@ def test_replay_endpoint_reports_pass_and_fail(monkeypatch, tmp_path: Path):
     _seed_workspace(tmp_path, "run-beta")
     monkeypatch.setattr(
         studio,
-        "verify_run",
+        "verify_run_deterministic",
         lambda *_args, **_kwargs: {
             "ok": True,
+            "status": "verified_ok",
+            "reason": "",
+            "replay_target": "",
+            "run_id": "",
+            "sub_step": "completed",
+            "empty_collection": "",
             "bundle_sha256": "a" * 64,
             "output_sha256": "b" * 64,
             "attestation_sha256": "c" * 64,
@@ -314,14 +320,52 @@ def test_replay_endpoint_reports_pass_and_fail(monkeypatch, tmp_path: Path):
         status = client.get("/api/runs/run-beta")
         assert status.status_code == 404
 
-    def _fail(*_args, **_kwargs):
-        raise ValueError("manifest mismatch")
-
-    monkeypatch.setattr(studio, "verify_run", _fail)
+    monkeypatch.setattr(
+        studio,
+        "verify_run_deterministic",
+        lambda *_args, **_kwargs: {
+            "ok": False,
+            "status": "failed_deterministically",
+            "reason": "no comparable replay artifacts found",
+            "replay_target": "",
+            "run_id": "",
+            "sub_step": "artifact_discovery",
+            "empty_collection": "comparable_artifacts",
+            "bundle_sha256": "",
+            "output_sha256": "",
+            "attestation_sha256": "",
+            "warnings": [],
+        },
+    )
     with TestClient(app) as client:
         failed = client.post("/api/runs/run-beta/replay-verify", json={})
         assert failed.status_code == 200
         assert failed.json()["status"] == "VERIFIED_FAIL"
+        assert failed.json()["error"] == "no comparable replay artifacts found"
+        assert failed.json()["verification"]["status"] == "failed_deterministically"
+
+    monkeypatch.setattr(
+        studio,
+        "verify_run_deterministic",
+        lambda *_args, **_kwargs: {
+            "ok": False,
+            "status": "skipped",
+            "reason": "no comparable replay artifacts found",
+            "replay_target": "",
+            "run_id": "",
+            "sub_step": "artifact_discovery",
+            "empty_collection": "comparable_artifacts",
+            "bundle_sha256": "",
+            "output_sha256": "",
+            "attestation_sha256": "",
+            "warnings": [],
+        },
+    )
+    with TestClient(app) as client:
+        skipped = client.post("/api/runs/run-beta/replay-verify", json={})
+        assert skipped.status_code == 200
+        assert skipped.json()["status"] == "VERIFIED_SKIPPED"
+        assert skipped.json()["error"] == "no comparable replay artifacts found"
 
 
 def test_sample_run_endpoint_reports_progress(monkeypatch):
@@ -361,6 +405,34 @@ def test_sample_run_endpoint_reports_progress(monkeypatch):
         assert final["status"] == "completed"
         assert final["run_id"] == "fake-run"
         assert final["replay_status"] == "NOT_RUN"
+
+
+def test_sample_run_failure_maps_empty_sequence_error(monkeypatch):
+    def _failing_run_demo(**_kwargs):
+        raise ValueError("min() arg is an empty sequence")
+
+    monkeypatch.setattr(studio, "run_demo", _failing_run_demo)
+    with TestClient(app) as client:
+        start = client.post(
+            "/api/runs/sample",
+            json={"fixture_id": "timeline_breach_chain"},
+        )
+        assert start.status_code == 200
+        req_id = start.json()["run_request_id"]
+
+        final = {}
+        for _ in range(10):
+            status = client.get(f"/api/runs/{req_id}")
+            assert status.status_code == 200
+            final = status.json()
+            if final["status"] == "failed":
+                break
+            time.sleep(0.1)
+
+    assert final["status"] == "failed"
+    assert "min() arg is an empty sequence" not in final["error"]
+    assert "expected collection was empty" in final["error"]
+    assert final["error_detail"]["raw_error"] == "min() arg is an empty sequence"
 
 
 def test_investigation_endpoints(monkeypatch, tmp_path: Path):

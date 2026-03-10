@@ -1,10 +1,12 @@
 from __future__ import annotations
 
+import logging
 from collections import deque
 
 from core.determinism.schema_validate import validate
 
 _INFLUENCE_EDGE_TYPES = ("before", "causes", "enables")
+LOGGER = logging.getLogger(__name__)
 
 
 def _adjacency_for_types(
@@ -72,6 +74,17 @@ def _top_events(
 def _longest_before_chain(causal_graph: dict) -> tuple[list[str], bool]:
     adjacency, before_edges = _adjacency_for_types(causal_graph, ("before",))
     nodes = list(causal_graph["nodes"])
+    if not nodes:
+        LOGGER.warning(
+            (
+                "Critical path received empty collection_name=%s "
+                "sub_step=%s run_scope=%s"
+            ),
+            "causal_graph.nodes",
+            "critical_chain_seed",
+            "compute_critical_path",
+        )
+        return [], False
     indegree = {node_id: 0 for node_id in nodes}
     for edge in before_edges:
         indegree[edge["to_event_id"]] += 1

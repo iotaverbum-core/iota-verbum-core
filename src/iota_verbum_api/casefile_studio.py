@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import logging
 import os
 import threading
 import traceback
@@ -11,7 +12,7 @@ from fastapi import APIRouter, File, Form, HTTPException, UploadFile
 from fastapi.responses import FileResponse
 
 from core.determinism.hashing import sha256_bytes, sha256_text
-from core.determinism.replay import verify_run
+from core.determinism.replay import verify_run_deterministic
 from proposal.cli_demo import run_demo
 
 OUTPUTS_DEMO_DIR = Path("outputs/demo")
@@ -31,6 +32,7 @@ PIPELINE_STEPS = [
 _RUNS_LOCK = threading.Lock()
 _RUNS: dict[str, dict[str, Any]] = {}
 _RUN_SEQ = 0
+LOGGER = logging.getLogger(__name__)
 
 
 def _next_run_request_id() -> str:
@@ -378,12 +380,39 @@ def _steps_with_replay_status(replay_status: str) -> list[dict]:
         if step_id == "replay_verification":
             if replay_status == "VERIFIED_OK":
                 status = "completed"
-            elif replay_status == "VERIFIED_FAIL":
+            elif replay_status in {"VERIFIED_FAIL", "VERIFIED_SKIPPED"}:
                 status = "failed"
             else:
                 status = "pending"
         steps.append({"id": step_id, "label": label, "status": status})
     return steps
+
+
+def _current_stage_for_run(run_request_id: str) -> str:
+    with _RUNS_LOCK:
+        run = _RUNS.get(run_request_id, {})
+    stage = str(run.get("current_stage") or "")
+    if stage:
+        return stage
+    return "replay_verification"
+
+
+def _run_failure_message(exc: Exception, failed_stage: str) -> str:
+    raw = str(exc)
+    if raw == "min() arg is an empty sequence":
+        return (
+            f"Stage {failed_stage} failed deterministically: "
+            "an expected collection was empty."
+        )
+    return raw
+
+
+def _replay_status_code(verification_status: str) -> str:
+    if verification_status == "verified_ok":
+        return "VERIFIED_OK"
+    if verification_status == "skipped":
+        return "VERIFIED_SKIPPED"
+    return "VERIFIED_FAIL"
 
 
 def _update_run(run_request_id: str, **updates: Any) -> None:
@@ -429,12 +458,24 @@ def _launch_run(run_request_id: str, run_kwargs: dict[str, Any]) -> None:
             ),
         )
     except Exception as exc:  # noqa: BLE001
+        failed_stage = _current_stage_for_run(run_request_id)
+        failure_message = _run_failure_message(exc, failed_stage)
+        LOGGER.exception(
+            "Casefile Studio run failed run_request_id=%s stage=%s error=%s",
+            run_request_id,
+            failed_stage,
+            failure_message,
+        )
         _update_run(
             run_request_id,
             status="failed",
-            error=str(exc),
+            error=failure_message,
+            error_detail={
+                "failed_stage": failed_stage,
+                "raw_error": str(exc),
+            },
             traceback=traceback.format_exc(),
-            steps=_step_state("replay_verification", done=False, failed=True),
+            steps=_step_state(failed_stage, done=False, failed=True),
         )
 
 
@@ -460,11 +501,12 @@ def _tracked_run_by_run_id(run_id: str) -> dict | None:
 
 
 def _authoritative_replay_status(ledger_dir: str) -> tuple[str, dict]:
-    try:
-        verification = verify_run(ledger_dir, strict_manifest=True)
-        return "VERIFIED_OK", {"verification": verification}
-    except Exception as exc:  # noqa: BLE001
-        return "VERIFIED_FAIL", {"error": str(exc)}
+    verification = verify_run_deterministic(ledger_dir, strict_manifest=True)
+    replay_status = _replay_status_code(str(verification.get("status", "")))
+    detail = {"verification": verification}
+    if not verification.get("ok", False):
+        detail["error"] = str(verification.get("reason", "replay verification failed"))
+    return replay_status, detail
 
 
 def _start_run(run_kwargs: dict[str, Any], source: dict[str, str]) -> dict:
@@ -1080,20 +1122,16 @@ def api_replay_verify(run_id: str, payload: dict | None = None) -> dict:
     del payload
     workspace = _run_workspace(run_id)
     ledger_dir = workspace["casefile"]["ledger_dir"]
-    try:
-        result = verify_run(ledger_dir, strict_manifest=True)
-        response = {
-            "status": "VERIFIED_OK",
-            "ledger_dir": ledger_dir,
-            "verification": result,
-        }
-        _update_replay_state_for_run(run_id, "VERIFIED_OK", response)
-        return response
-    except Exception as exc:  # noqa: BLE001
-        response = {
-            "status": "VERIFIED_FAIL",
-            "ledger_dir": ledger_dir,
-            "error": str(exc),
-        }
-        _update_replay_state_for_run(run_id, "VERIFIED_FAIL", response)
-        return response
+    verification = verify_run_deterministic(ledger_dir, strict_manifest=True)
+    replay_status = _replay_status_code(str(verification.get("status", "")))
+    response = {
+        "status": replay_status,
+        "ledger_dir": ledger_dir,
+        "verification": verification,
+    }
+    if not verification.get("ok", False):
+        response["error"] = str(
+            verification.get("reason", "replay verification failed")
+        )
+    _update_replay_state_for_run(run_id, replay_status, response)
+    return response

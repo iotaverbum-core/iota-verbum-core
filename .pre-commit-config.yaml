@@ -4,3 +4,10 @@
     hooks:
       - id: ruff
         args: ["--fix"]
+  - repo: local
+    hooks:
+      - id: verify-manifest-sha256
+        name: verify MANIFEST.sha256
+        entry: python scripts/generate_manifest.py --verify
+        language: system
+        pass_filenames: false

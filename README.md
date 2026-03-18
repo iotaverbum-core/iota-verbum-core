@@ -27,6 +27,8 @@ python -m venv .venv
 .\.venv\Scripts\Activate.ps1
 python -m pip install -r requirements.lock
 python -m pip install -e .
+python -m pip install pre-commit
+pre-commit install
 pytest tests/ -v
 ```
 
@@ -130,6 +132,8 @@ python scripts\generate_provenance_report.py `
 ## How Determinism Is Enforced
 
 Canonical outputs are written with stable JSON serialization, input fixtures are pinned by SHA-256, and CI runs both the test suite and a double-run reproducibility check. `MANIFEST.sha256` is regenerated from tracked repository bytes and verified for drift during reproducibility checks.
+
+If you use pre-commit, the repository includes a local `verify MANIFEST.sha256` hook so README/docs/source edits that impact tracked bytes are caught before push.
 
 See `docs/DETERMINISM.md` and `docs/NONDETERMINISM_BOUNDARY.md` for the verification model. The biblical text example remains available as a fixture in `docs/examples/biblical_text.md`.
 See `docs/CASEFILE.md` for casefile contract details and replay usage.

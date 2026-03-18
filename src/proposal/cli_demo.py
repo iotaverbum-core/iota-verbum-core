@@ -2,7 +2,6 @@ from __future__ import annotations
 
 import argparse
 import json
-import os
 import subprocess
 import sys
 from pathlib import Path
@@ -12,6 +11,7 @@ from core.determinism.canonical_json import dumps_canonical
 from core.determinism.finalize import finalize
 from core.determinism.hashing import sha256_bytes, sha256_text
 from core.determinism.ledger import write_run
+from core.files import write_bytes_deterministic
 from core.reasoning.casefile import build_casefile, casefile_artifact_sha256
 from core.reasoning.causal import compute_causal_graph
 from core.reasoning.causal_narrative_v2 import render_causal_narrative_v2
@@ -47,9 +47,7 @@ REPO_ROOT = Path(__file__).resolve().parents[2]
 
 
 def _write_atomic(path: Path, data: bytes) -> None:
-    temp_path = path.with_name(f".{path.name}.tmp")
-    temp_path.write_bytes(data)
-    os.replace(temp_path, path)
+    write_bytes_deterministic(path, data)
 
 
 def _write_or_verify(path: Path, data: bytes) -> None:

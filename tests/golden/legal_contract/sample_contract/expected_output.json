@@ -1,6 +1,100 @@
 {
   "domain": "legal_contract",
   "extraction": {
+    "analysis": {
+      "ambiguities": [
+        {
+          "ambiguity_id": "ambiguity:1657:promptly",
+          "offset": 1657,
+          "party": "Northwind Devices Ltd.",
+          "risk_level": "low",
+          "term": "promptly",
+          "text": "Licensee must maintain current administrative contact information and shall promptly notify Licensor of any unauthorized access, suspected credential compromise, or misuse of the Software."
+        },
+        {
+          "ambiguity_id": "ambiguity:2162:reasonably",
+          "offset": 2162,
+          "party": "Northwind Devices Ltd.",
+          "risk_level": "low",
+          "term": "reasonably",
+          "text": "Licensee agrees to provide timely access to personnel, systems, and information reasonably required for configuration, testing, and deployment."
+        },
+        {
+          "ambiguity_id": "ambiguity:2162:timely",
+          "offset": 2162,
+          "party": "Northwind Devices Ltd.",
+          "risk_level": "low",
+          "term": "timely",
+          "text": "Licensee agrees to provide timely access to personnel, systems, and information reasonably required for configuration, testing, and deployment."
+        }
+      ],
+      "contradictions": [],
+      "executive_summary": {
+        "ambiguity_count": 3,
+        "contradiction_count": 0,
+        "headline": "No direct contradictions detected; 3 ambiguity signal(s) remain.",
+        "highest_severity": "low",
+        "risk_score": 30
+      },
+      "risk_registry": [
+        {
+          "action": null,
+          "beneficiary": null,
+          "evidence_offsets": [
+            1657
+          ],
+          "party": "Northwind Devices Ltd.",
+          "risk_id": "risk:001",
+          "risk_type": "ambiguity",
+          "severity": "low",
+          "title": "Ambiguous qualifier: promptly"
+        },
+        {
+          "action": null,
+          "beneficiary": null,
+          "evidence_offsets": [
+            2162
+          ],
+          "party": "Northwind Devices Ltd.",
+          "risk_id": "risk:002",
+          "risk_type": "ambiguity",
+          "severity": "low",
+          "title": "Ambiguous qualifier: reasonably"
+        },
+        {
+          "action": null,
+          "beneficiary": null,
+          "evidence_offsets": [
+            2162
+          ],
+          "party": "Northwind Devices Ltd.",
+          "risk_id": "risk:003",
+          "risk_type": "ambiguity",
+          "severity": "low",
+          "title": "Ambiguous qualifier: timely"
+        }
+      ]
+    },
+    "conditional_triggers": [
+      {
+        "condition": "Upon mutual written agreement",
+        "consequence": "the parties may renew this Agreement for additional one-year periods",
+        "offset": 1179,
+        "text": "Upon mutual written agreement, the parties may renew this Agreement for additional one-year periods."
+      },
+      {
+        "condition": "Licensee disputes any invoice in good faith",
+        "consequence": "Licensee must give Licensor written notice describing the disputed amount and the basis for the dispute before the payment due date",
+        "offset": 2618,
+        "text": "If Licensee disputes any invoice in good faith, Licensee must give Licensor written notice describing the disputed amount and the basis for the dispute before the payment due date."
+      },
+      {
+        "condition": "Upon termination",
+        "consequence": "Licensee shall cease all use of the Software, and Licensor shall make Service Data available for export for thirty (30) days after the effective date of termination",
+        "offset": 4393,
+        "text": "Upon termination, Licensee shall cease all use of the Software, and Licensor shall make Service Data available for export for thirty (30) days after the effective date of termination."
+      }
+    ],
     "defined_terms": {
       "Agreement": "This Software Services Agreement",
       "Confidential Information": "any non-public business, technical, financial, or operational information disclosed by either party in any form",
@@ -17,68 +111,94 @@
     },
     "obligations": [
       {
+        "action": "restrict access to the software to its employees and contractors who have a need to use the software for authorized business purposes",
         "offset": 1507,
         "party": "Northwind Devices Ltd.",
+        "polarity": "positive",
         "text": "Licensee shall restrict access to the Software to its employees and contractors who have a need to use the Software for authorized business purposes."
       },
       {
+        "action": "maintain current administrative contact information and shall promptly notify licensor of any unauthorized access, suspected credential compromise, or misuse of the software",
         "offset": 1657,
         "party": "Northwind Devices Ltd.",
+        "polarity": "positive",
         "text": "Licensee must maintain current administrative contact information and shall promptly notify Licensor of any unauthorized access, suspected credential compromise, or misuse of the Software."
       },
       {
+        "action": "configure the software in accordance with the implementation plan within thirty (30) days after the effective date",
         "offset": 1878,
         "party": "Larkspur Analytics LLC",
+        "polarity": "positive",
         "text": "Licensor shall configure the Software in accordance with the Implementation Plan within thirty (30) days after the Effective Date."
       },
       {
+        "action": "provide remote onboarding sessions, administrator training materials, and standard email support during licensor's normal business hours",
         "offset": 2009,
         "party": "Larkspur Analytics LLC",
+        "polarity": "positive",
         "text": "Licensor shall provide remote onboarding sessions, administrator training materials, and standard email support during Licensor's normal business hours."
       },
       {
+        "action": "provide timely access to personnel, systems, and information reasonably required for configuration, testing, and deployment",
         "offset": 2162,
         "party": "Northwind Devices Ltd.",
+        "polarity": "positive",
         "text": "Licensee agrees to provide timely access to personnel, systems, and information reasonably required for configuration, testing, and deployment."
       },
       {
+        "action": "designate a project manager who is authorized to approve milestones, coordinate user acceptance testing, and consolidate implementation feedback",
         "offset": 2306,
         "party": "Northwind Devices Ltd.",
+        "polarity": "positive",
         "text": "Licensee will designate a project manager who is authorized to approve milestones, coordinate user acceptance testing, and consolidate implementation feedback."
       },
       {
+        "action": "pay the subscription fees set forth in schedule c within fifteen (15) days after receipt of an undisputed invoice",
         "offset": 2488,
         "party": "Northwind Devices Ltd.",
+        "polarity": "positive",
         "text": "Licensee shall pay the subscription fees set forth in Schedule C within fifteen (15) days after receipt of an undisputed invoice."
       },
       {
+        "action": "give licensor written notice describing the disputed amount and the basis for the dispute before the payment due date",
         "offset": 2618,
         "party": "Northwind Devices Ltd.",
+        "polarity": "positive",
         "text": "If Licensee disputes any invoice in good faith, Licensee must give Licensor written notice describing the disputed amount and the basis for the dispute before the payment due date."
       },
       {
+        "action": "not remove or obscure any proprietary notice embedded in the software, documentation, or training materials",
         "offset": 3432,
         "party": "Northwind Devices Ltd.",
+        "polarity": "negative",
         "text": "Licensee must not remove or obscure any proprietary notice embedded in the Software, documentation, or training materials."
       },
       {
+        "action": "process service data only for the purpose of providing, maintaining, securing, and improving the software as permitted by this agreement",
         "offset": 3574,
         "party": "Larkspur Analytics LLC",
+        "polarity": "positive",
         "text": "Licensor shall process Service Data only for the purpose of providing, maintaining, securing, and improving the Software as permitted by this Agreement."
       },
       {
+        "action": "maintain administrative, technical, and physical safeguards designed to protect service data against unauthorized access, loss, or disclosure",
         "offset": 3727,
         "party": "Larkspur Analytics LLC",
+        "polarity": "positive",
         "text": "Licensor must maintain administrative, technical, and physical safeguards designed to protect Service Data against unauthorized access, loss, or disclosure."
       },
       {
+        "action": "remain responsible for the accuracy, quality, and legality of all service data submitted to the software",
         "offset": 3884,
         "party": "Northwind Devices Ltd.",
+        "polarity": "positive",
         "text": "Licensee shall remain responsible for the accuracy, quality, and legality of all Service Data submitted to the Software."
       },
       {
+        "action": "cease all use of the software, and licensor shall make service data available for export for thirty (30) days after the effective date of termination",
         "offset": 4393,
         "party": "Northwind Devices Ltd.",
+        "polarity": "positive",
         "text": "Upon termination, Licensee shall cease all use of the Software, and Licensor shall make Service Data available for export for thirty (30) days after the effective date of termination."
       }
     ],
@@ -92,6 +212,78 @@
         "role": "licensee"
       }
     ],
+    "prohibitions": [
+      {
+        "action": "not remove or obscure any proprietary notice embedded in the software, documentation, or training materials",
+        "offset": 3432,
+        "party": "Northwind Devices Ltd.",
+        "text": "Licensee must not remove or obscure any proprietary notice embedded in the Software, documentation, or training materials."
+      }
+    ],
+    "rights": [
+      {
+        "action": "access and use the software during the term for licensee's internal business operations",
+        "offset": 1310,
+        "party": "Northwind Devices Ltd.",
+        "text": "Subject to the terms of this Agreement, Licensor grants Licensee a non-exclusive, non-transferable right to access and use the Software during the Term for Licensee's internal business operations."
+      },
+      {
+        "action": "terminate this agreement immediately upon written notice if licensee intentionally misuses the software, repeatedly violates the use restrictions, or becomes insolvent",
+        "offset": 4211,
+        "party": "Larkspur Analytics LLC",
+        "text": "Licensor may terminate this Agreement immediately upon written notice if Licensee intentionally misuses the Software, repeatedly violates the use restrictions, or becomes insolvent."
+      }
+    ],
+    "risk_report": {
+      "conditional_trigger_count": 3,
+      "executive_summary": {
+        "ambiguity_count": 3,
+        "contradiction_count": 0,
+        "headline": "No direct contradictions detected; 3 ambiguity signal(s) remain.",
+        "highest_severity": "low",
+        "risk_score": 30
+      },
+      "prohibition_count": 1,
+      "rights_count": 2,
+      "top_risks": [
+        {
+          "action": null,
+          "beneficiary": null,
+          "evidence_offsets": [
+            1657
+          ],
+          "party": "Northwind Devices Ltd.",
+          "risk_id": "risk:001",
+          "risk_type": "ambiguity",
+          "severity": "low",
+          "title": "Ambiguous qualifier: promptly"
+        },
+        {
+          "action": null,
+          "beneficiary": null,
+          "evidence_offsets": [
+            2162
+          ],
+          "party": "Northwind Devices Ltd.",
+          "risk_id": "risk:002",
+          "risk_type": "ambiguity",
+          "severity": "low",
+          "title": "Ambiguous qualifier: reasonably"
+        },
+        {
+          "action": null,
+          "beneficiary": null,
+          "evidence_offsets": [
+            2162
+          ],
+          "party": "Northwind Devices Ltd.",
+          "risk_id": "risk:003",
+          "risk_type": "ambiguity",
+          "severity": "low",
+          "title": "Ambiguous qualifier: timely"
+        }
+      ]
+    },
     "term": {
       "duration_string": "one (1) year",
       "end": "2025-01-14",
@@ -102,5 +294,72 @@
       "Licensor may terminate this Agreement immediately upon written notice if Licensee intentionally misuses the Software, repeatedly violates the use restrictions, or becomes insolvent."
     ]
   },
-  "schema_version": "1.0"
+  "review_findings": [
+    {
+      "category": "contract_clarity",
+      "details": {
+        "term": "promptly",
+        "text": "Licensee must maintain current administrative contact information and shall promptly notify Licensor of any unauthorized access, suspected credential compromise, or misuse of the Software."
+      },
+      "evidence_offsets": [
+        1657
+      ],
+      "finding_class": "ambiguity",
+      "finding_id": "ambiguity:1657:promptly",
+      "related_action": null,
+      "related_party": "Northwind Devices Ltd.",
+      "review_required": false,
+      "severity": "low",
+      "source_path": "extraction.analysis.ambiguities",
+      "summary": "Ambiguous term 'promptly' appears in a clause for Northwind Devices Ltd..",
+      "title": "Ambiguous qualifier: promptly"
+    },
+    {
+      "category": "contract_clarity",
+      "details": {
+        "term": "reasonably",
+        "text": "Licensee agrees to provide timely access to personnel, systems, and information reasonably required for configuration, testing, and deployment."
+      },
+      "evidence_offsets": [
+        2162
+      ],
+      "finding_class": "ambiguity",
+      "finding_id": "ambiguity:2162:reasonably",
+      "related_action": null,
+      "related_party": "Northwind Devices Ltd.",
+      "review_required": false,
+      "severity": "low",
+      "source_path": "extraction.analysis.ambiguities",
+      "summary": "Ambiguous term 'reasonably' appears in a clause for Northwind Devices Ltd..",
+      "title": "Ambiguous qualifier: reasonably"
+    },
+    {
+      "category": "contract_clarity",
+      "details": {
+        "term": "timely",
+        "text": "Licensee agrees to provide timely access to personnel, systems, and information reasonably required for configuration, testing, and deployment."
+      },
+      "evidence_offsets": [
+        2162
+      ],
+      "finding_class": "ambiguity",
+      "finding_id": "ambiguity:2162:timely",
+      "related_action": null,
+      "related_party": "Northwind Devices Ltd.",
+      "review_required": false,
+      "severity": "low",
+      "source_path": "extraction.analysis.ambiguities",
+      "summary": "Ambiguous term 'timely' appears in a clause for Northwind Devices Ltd..",
+      "title": "Ambiguous qualifier: timely"
+    }
+  ],
+  "review_summary": {
+    "finding_count": 3,
+    "headline": "Ambiguous term 'promptly' appears in a clause for Northwind Devices Ltd..",
+    "priority": "medium",
+    "requires_human_review": false,
+    "status": "ready_for_review",
+    "warning_count": 0
+  },
+  "schema_version": "1.2"
 }

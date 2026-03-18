@@ -97,7 +97,9 @@ def verify_run_deterministic(dir_path: str, *, strict_manifest: bool = False) ->
             )
 
         present_artifacts = sorted(
-            name for name in _REQUIRED_REPLAY_ARTIFACTS if (run_dir / name).exists()
+            name
+            for name in _REQUIRED_REPLAY_ARTIFACTS
+            if (run_dir / name).exists() and (run_dir / name).stat().st_size > 0
         )
         if not present_artifacts:
             return _deterministic_failure(

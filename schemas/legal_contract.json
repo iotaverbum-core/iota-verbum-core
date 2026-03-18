@@ -5,14 +5,16 @@
   "required": [
     "domain",
     "schema_version",
-    "extraction"
+    "extraction",
+    "review_findings",
+    "review_summary"
   ],
   "properties": {
     "domain": {
       "const": "legal_contract"
     },
     "schema_version": {
-      "const": "1.0"
+      "const": "1.2"
     },
     "governance_metadata": {
       "type": "object",
@@ -65,9 +67,14 @@
         "effective_date",
         "term",
         "obligations",
+        "rights",
+        "prohibitions",
         "defined_terms",
         "governing_law",
         "termination_conditions",
+        "conditional_triggers",
+        "analysis",
+        "risk_report",
         "extraction_warnings"
       ],
       "properties": {
@@ -101,11 +108,44 @@
           "type": "array",
           "items": {
             "type": "object",
-            "required": ["party", "text", "offset"],
+            "required": ["party", "text", "offset", "action", "polarity"],
             "properties": {
               "party": {"type": "string"},
               "text": {"type": "string"},
-              "offset": {"type": "integer", "minimum": 0}
+              "offset": {"type": "integer", "minimum": 0},
+              "action": {"type": "string"},
+              "polarity": {
+                "type": "string",
+                "enum": ["positive", "negative"]
+              }
+            },
+            "additionalProperties": false
+          }
+        },
+        "rights": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["party", "text", "offset", "action"],
+            "properties": {
+              "party": {"type": "string"},
+              "text": {"type": "string"},
+              "offset": {"type": "integer", "minimum": 0},
+              "action": {"type": "string"}
+            },
+            "additionalProperties": false
+          }
+        },
+        "prohibitions": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["party", "text", "offset", "action"],
+            "properties": {
+              "party": {"type": "string"},
+              "text": {"type": "string"},
+              "offset": {"type": "integer", "minimum": 0},
+              "action": {"type": "string"}
             },
             "additionalProperties": false
           }
@@ -129,10 +169,249 @@
           "type": "array",
           "items": {"type": "string"}
         },
+        "conditional_triggers": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["condition", "consequence", "offset", "text"],
+            "properties": {
+              "condition": {"type": "string"},
+              "consequence": {"type": "string"},
+              "offset": {"type": "integer", "minimum": 0},
+              "text": {"type": "string"}
+            },
+            "additionalProperties": false
+          }
+        },
+        "analysis": {
+          "type": "object",
+          "required": [
+            "executive_summary",
+            "contradictions",
+            "ambiguities",
+            "risk_registry"
+          ],
+          "properties": {
+            "executive_summary": {
+              "type": "object",
+              "required": [
+                "risk_score",
+                "contradiction_count",
+                "ambiguity_count",
+                "highest_severity",
+                "headline"
+              ],
+              "properties": {
+                "risk_score": {"type": "integer", "minimum": 0, "maximum": 100},
+                "contradiction_count": {"type": "integer", "minimum": 0},
+                "ambiguity_count": {"type": "integer", "minimum": 0},
+                "highest_severity": {
+                  "type": "string",
+                  "enum": ["low", "medium", "high"]
+                },
+                "headline": {"type": "string"}
+              },
+              "additionalProperties": false
+            },
+            "contradictions": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": [
+                  "contradiction_id",
+                  "contradiction_type",
+                  "title",
+                  "description",
+                  "party",
+                  "beneficiary",
+                  "action",
+                  "severity",
+                  "left_clause_text",
+                  "left_clause_offset",
+                  "right_clause_text",
+                  "right_clause_offset"
+                ],
+                "properties": {
+                  "contradiction_id": {"type": "string"},
+                  "contradiction_type": {"type": "string"},
+                  "title": {"type": "string"},
+                  "description": {"type": "string"},
+                  "party": {"type": "string"},
+                  "beneficiary": {"type": "string"},
+                  "action": {"type": "string"},
+                  "severity": {
+                    "type": "string",
+                    "enum": ["low", "medium", "high"]
+                  },
+                  "left_clause_text": {"type": "string"},
+                  "left_clause_offset": {"type": "integer", "minimum": 0},
+                  "right_clause_text": {"type": "string"},
+                  "right_clause_offset": {"type": "integer", "minimum": 0}
+                },
+                "additionalProperties": false
+              }
+            },
+            "ambiguities": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": [
+                  "ambiguity_id",
+                  "party",
+                  "term",
+                  "text",
+                  "offset",
+                  "risk_level"
+                ],
+                "properties": {
+                  "ambiguity_id": {"type": "string"},
+                  "party": {"type": "string"},
+                  "term": {"type": "string"},
+                  "text": {"type": "string"},
+                  "offset": {"type": "integer", "minimum": 0},
+                  "risk_level": {
+                    "type": "string",
+                    "enum": ["low", "medium", "high"]
+                  }
+                },
+                "additionalProperties": false
+              }
+            },
+            "risk_registry": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": [
+                  "risk_id",
+                  "risk_type",
+                  "severity",
+                  "title",
+                  "party",
+                  "action",
+                  "beneficiary",
+                  "evidence_offsets"
+                ],
+                "properties": {
+                  "risk_id": {"type": "string"},
+                  "risk_type": {"type": "string"},
+                  "severity": {
+                    "type": "string",
+                    "enum": ["low", "medium", "high"]
+                  },
+                  "title": {"type": "string"},
+                  "party": {"type": ["string", "null"]},
+                  "action": {"type": ["string", "null"]},
+                  "beneficiary": {"type": ["string", "null"]},
+                  "evidence_offsets": {
+                    "type": "array",
+                    "items": {"type": "integer", "minimum": 0}
+                  }
+                },
+                "additionalProperties": false
+              }
+            }
+          },
+          "additionalProperties": false
+        },
+        "risk_report": {
+          "type": "object",
+          "required": [
+            "executive_summary",
+            "top_risks",
+            "conditional_trigger_count",
+            "rights_count",
+            "prohibition_count"
+          ],
+          "properties": {
+            "executive_summary": {
+              "$ref": "#/properties/extraction/properties/analysis/properties/executive_summary"
+            },
+            "top_risks": {
+              "type": "array",
+              "items": {
+                "$ref": "#/properties/extraction/properties/analysis/properties/risk_registry/items"
+              }
+            },
+            "conditional_trigger_count": {"type": "integer", "minimum": 0},
+            "rights_count": {"type": "integer", "minimum": 0},
+            "prohibition_count": {"type": "integer", "minimum": 0}
+          },
+          "additionalProperties": false
+        },
         "extraction_warnings": {
           "type": "array",
           "items": {"type": "string"}
         }
+      },
+      "additionalProperties": false
+    },
+    "review_findings": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "finding_id",
+          "finding_class",
+          "category",
+          "severity",
+          "title",
+          "summary",
+          "source_path",
+          "evidence_offsets",
+          "review_required",
+          "related_party",
+          "related_action",
+          "details"
+        ],
+        "properties": {
+          "finding_id": { "type": "string" },
+          "finding_class": {
+            "type": "string",
+            "enum": ["contradiction", "ambiguity", "warning", "clause_detected"]
+          },
+          "category": { "type": "string" },
+          "severity": {
+            "type": "string",
+            "enum": ["low", "medium", "high"]
+          },
+          "title": { "type": "string" },
+          "summary": { "type": "string" },
+          "source_path": { "type": "string" },
+          "evidence_offsets": {
+            "type": "array",
+            "items": { "type": "integer", "minimum": 0 }
+          },
+          "review_required": { "type": "boolean" },
+          "related_party": { "type": ["string", "null"] },
+          "related_action": { "type": ["string", "null"] },
+          "details": { "type": "object" }
+        },
+        "additionalProperties": false
+      }
+    },
+    "review_summary": {
+      "type": "object",
+      "required": [
+        "status",
+        "priority",
+        "headline",
+        "finding_count",
+        "warning_count",
+        "requires_human_review"
+      ],
+      "properties": {
+        "status": {
+          "type": "string",
+          "enum": ["ready_for_review", "review_required"]
+        },
+        "priority": {
+          "type": "string",
+          "enum": ["low", "medium", "high"]
+        },
+        "headline": { "type": "string" },
+        "finding_count": { "type": "integer", "minimum": 0 },
+        "warning_count": { "type": "integer", "minimum": 0 },
+        "requires_human_review": { "type": "boolean" }
       },
       "additionalProperties": false
     }

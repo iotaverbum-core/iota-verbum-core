@@ -13,11 +13,18 @@ __pycache__/
 # Test artifacts
 .pytest_cache/
 .pytest_tmp/
+.pytest_tmp_local/
+.pytest_codex_tmp/
+.pytest_codex_paths/
+.pytest_tmp_probe/
 .coverage
 htmlcov/
 tmp_goldens/
 tmp_repro_check/
 .repro_check/
+codex_manual_check/
+codex_tmp_probe/
+tests/.tmp_probe/
 
 # Outputs
 outputs/

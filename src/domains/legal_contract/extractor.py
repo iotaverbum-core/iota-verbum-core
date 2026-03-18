@@ -4,6 +4,12 @@ import re
 from collections import OrderedDict
 from datetime import datetime
 
+from core.review_summary import build_review_findings, build_review_summary
+from domains.legal_contract.contract_contradiction import (
+    build_contract_analysis,
+    normalize_action,
+)
+from domains.legal_contract.risk_report import build_risk_report
 from domains.legal_contract.templates import build_output
 
 ROLE_NAMES = (
@@ -84,6 +90,14 @@ OBLIGATION_PATTERN = re.compile(
     r"\b(shall|must|agrees to|is required to|will)\b",
     re.IGNORECASE,
 )
+RIGHT_PATTERN = re.compile(
+    r"\b(may|grants?|has the right to|right to|permitted to)\b",
+    re.IGNORECASE,
+)
+PROHIBITION_PATTERN = re.compile(
+    r"\b(shall not|must not|may not|will not|is prohibited from)\b",
+    re.IGNORECASE,
+)
 GOVERNING_LAW_PATTERN = re.compile(
     (
         r"(?P<clause>This Agreement shall be governed by the laws of "
@@ -97,6 +111,14 @@ TERMINATION_PATTERN = re.compile(
 )
 SENTENCE_PATTERN = re.compile(r"[^.!?]+[.!?]", re.DOTALL)
 WHITESPACE_PATTERN = re.compile(r"[ \t]+")
+IF_THEN_PATTERN = re.compile(
+    r"^\s*if\s+(?P<condition>.+?),\s+(?P<consequence>.+?)\s*$",
+    re.IGNORECASE,
+)
+UPON_PATTERN = re.compile(
+    r"^\s*(?P<condition>upon [^,]+),\s*(?P<consequence>.+?)\s*$",
+    re.IGNORECASE,
+)
 
 
 def _normalize_text(text: str) -> str:
@@ -159,19 +181,56 @@ class LegalContractExtractors:
             obligations = self._extract_obligations(
                 normalized_text, parties, party_aliases
             )
+            rights = self._extract_rights(normalized_text, parties, party_aliases)
+            prohibitions = self._extract_prohibitions(
+                normalized_text, parties, party_aliases
+            )
             defined_terms = self._extract_defined_terms(normalized_text)
             governing_law = self._extract_governing_law(normalized_text)
             termination_conditions = self._extract_termination_conditions(
                 normalized_text
+            )
+            conditional_triggers = self._extract_conditional_triggers(normalized_text)
+            analysis = build_contract_analysis(
+                {
+                    "obligations": obligations,
+                    "rights": rights,
+                    "prohibitions": prohibitions,
+                    "conditional_triggers": conditional_triggers,
+                }
+            )
+            risk_report = build_risk_report(
+                {
+                    "rights": rights,
+                    "prohibitions": prohibitions,
+                    "conditional_triggers": conditional_triggers,
+                },
+                analysis,
             )
             warnings = self._warnings_for(
                 parties=parties,
                 effective_date=effective_date,
                 term=term,
                 obligations=obligations,
+                rights=rights,
+                prohibitions=prohibitions,
                 defined_terms=defined_terms,
                 governing_law=governing_law,
                 termination_conditions=termination_conditions,
+            )
+            review_summary = build_review_summary(
+                domain=self.domain,
+                extraction={
+                    "analysis": analysis,
+                    "extraction_warnings": warnings,
+                },
+            )
+            review_findings = build_review_findings(
+                domain=self.domain,
+                extraction={
+                    "analysis": analysis,
+                    "extraction_warnings": warnings,
+                },
             )
         except Exception as exc:
             return {
@@ -179,10 +238,50 @@ class LegalContractExtractors:
                 "effective_date": None,
                 "term": {"start": None, "end": None, "duration_string": None},
                 "obligations": [],
+                "rights": [],
+                "prohibitions": [],
                 "defined_terms": OrderedDict(),
                 "governing_law": {"jurisdiction": None, "full_clause": None},
                 "termination_conditions": [],
+                "conditional_triggers": [],
+                "analysis": build_contract_analysis(
+                    {
+                        "obligations": [],
+                        "rights": [],
+                        "prohibitions": [],
+                        "conditional_triggers": [],
+                    }
+                ),
+                "risk_report": build_risk_report(
+                    {
+                        "rights": [],
+                        "prohibitions": [],
+                        "conditional_triggers": [],
+                    },
+                    build_contract_analysis(
+                        {
+                            "obligations": [],
+                            "rights": [],
+                            "prohibitions": [],
+                            "conditional_triggers": [],
+                        }
+                    ),
+                ),
                 "extraction_warnings": [f"structured_error: {exc}"],
+                "review_findings": build_review_findings(
+                    domain=self.domain,
+                    extraction={
+                        "analysis": {},
+                        "extraction_warnings": [f"structured_error: {exc}"],
+                    },
+                ),
+                "review_summary": build_review_summary(
+                    domain=self.domain,
+                    extraction={
+                        "analysis": {},
+                        "extraction_warnings": [f"structured_error: {exc}"],
+                    },
+                ),
             }
 
         return {
@@ -190,16 +289,25 @@ class LegalContractExtractors:
             "effective_date": effective_date,
             "term": term,
             "obligations": obligations,
+            "rights": rights,
+            "prohibitions": prohibitions,
             "defined_terms": defined_terms,
             "governing_law": governing_law,
             "termination_conditions": termination_conditions,
+            "conditional_triggers": conditional_triggers,
+            "analysis": analysis,
+            "risk_report": risk_report,
             "extraction_warnings": warnings,
+            "review_findings": review_findings,
+            "review_summary": review_summary,
         }
 
     def build_evidence_map(self, extracted: dict, normalized_text: str):
         return {
             "parties": extracted["parties"],
             "obligations": extracted["obligations"],
+            "rights": extracted["rights"],
+            "prohibitions": extracted["prohibitions"],
             "defined_terms": [
                 {"term": term, "definition": definition}
                 for term, definition in extracted["defined_terms"].items()
@@ -239,10 +347,17 @@ class LegalContractExtractors:
             effective_date=extracted["effective_date"],
             term=extracted["term"],
             obligations=extracted["obligations"],
+            rights=extracted["rights"],
+            prohibitions=extracted["prohibitions"],
             defined_terms=extracted["defined_terms"],
             governing_law=extracted["governing_law"],
             termination_conditions=extracted["termination_conditions"],
+            conditional_triggers=extracted["conditional_triggers"],
+            analysis=extracted["analysis"],
+            risk_report=extracted["risk_report"],
             extraction_warnings=extracted["extraction_warnings"],
+            review_findings=extracted["review_findings"],
+            review_summary=extracted["review_summary"],
         )
 
     def _extract_parties(self, text: str) -> tuple[list[dict], dict[str, str]]:
@@ -325,10 +440,113 @@ class LegalContractExtractors:
                     "party": party_name,
                     "text": sentence,
                     "offset": match.start(),
+                    "action": normalize_action(sentence, party_name),
+                    "polarity": (
+                        "negative"
+                        if re.search(
+                            r"\b(shall not|must not|may not|will not)\b",
+                            sentence,
+                            re.IGNORECASE,
+                        )
+                        else "positive"
+                    ),
                 }
             )
         obligations.sort(key=lambda item: item["offset"])
         return obligations
+
+    def _extract_rights(
+        self, text: str, parties: list[dict], aliases: dict[str, str]
+    ) -> list[dict]:
+        return self._extract_modal_clauses(
+            text,
+            parties,
+            aliases,
+            RIGHT_PATTERN,
+            include_negative=False,
+        )
+
+    def _extract_prohibitions(
+        self, text: str, parties: list[dict], aliases: dict[str, str]
+    ) -> list[dict]:
+        return self._extract_modal_clauses(
+            text,
+            parties,
+            aliases,
+            PROHIBITION_PATTERN,
+            include_negative=True,
+        )
+
+    def _is_negative_clause(self, sentence: str) -> bool:
+        return bool(PROHIBITION_PATTERN.search(sentence))
+
+    def _extract_modal_clauses(
+        self,
+        text: str,
+        parties: list[dict],
+        aliases: dict[str, str],
+        pattern: re.Pattern,
+        *,
+        include_negative: bool,
+    ) -> list[dict]:
+        known_subjects = [(party["name"], party["name"]) for party in parties]
+        for alias, canonical in aliases.items():
+            known_subjects.append((alias, canonical))
+        for party in parties:
+            known_subjects.append((party["role"].title(), party["name"]))
+
+        clauses: list[dict] = []
+        for match in SENTENCE_PATTERN.finditer(text):
+            sentence = _clean_clause(match.group(0))
+            if not pattern.search(sentence):
+                continue
+            subject_hits = []
+            for subject, canonical in known_subjects:
+                subject_match = re.search(rf"\b{re.escape(subject)}\b", sentence)
+                if subject_match:
+                    subject_hits.append((subject_match.start(), canonical))
+            if not subject_hits:
+                continue
+            party_name = sorted(subject_hits, key=lambda item: item[0])[0][1]
+            if pattern is RIGHT_PATTERN:
+                party_name = self._resolve_right_party(
+                    sentence, known_subjects, default_party=party_name
+                )
+            action = normalize_action(sentence, party_name)
+            if include_negative and not self._is_negative_clause(sentence):
+                continue
+            clauses.append(
+                {
+                    "party": party_name,
+                    "text": sentence,
+                    "offset": match.start(),
+                    "action": action,
+                }
+            )
+        clauses.sort(key=lambda item: item["offset"])
+        return clauses
+
+    def _resolve_right_party(
+        self,
+        sentence: str,
+        known_subjects: list[tuple[str, str]],
+        *,
+        default_party: str,
+    ) -> str:
+        grant_index = re.search(r"\bgrants?\b", sentence, re.IGNORECASE)
+        if not grant_index:
+            return default_party
+        matches = []
+        for subject, canonical in known_subjects:
+            subject_match = re.search(rf"\b{re.escape(subject)}\b", sentence)
+            if not subject_match:
+                continue
+            if subject_match.start() <= grant_index.start():
+                continue
+            matches.append((subject_match.start(), canonical))
+        if not matches:
+            return default_party
+        return sorted(matches, key=lambda item: item[0])[0][1]
 
     def _extract_defined_terms(self, text: str) -> OrderedDict[str, str]:
         terms: dict[str, str] = {}
@@ -359,6 +577,32 @@ class LegalContractExtractors:
                 clauses.append(clause)
         return clauses
 
+    def _extract_conditional_triggers(self, text: str) -> list[dict]:
+        triggers = []
+        for match in SENTENCE_PATTERN.finditer(text):
+            sentence = _clean_clause(match.group(0))
+            trigger = None
+            if_match = IF_THEN_PATTERN.match(sentence.rstrip("."))
+            upon_match = UPON_PATTERN.match(sentence.rstrip("."))
+            if if_match:
+                trigger = {
+                    "condition": _clean_clause(if_match.group("condition")),
+                    "consequence": _clean_clause(if_match.group("consequence")),
+                    "offset": match.start(),
+                    "text": sentence,
+                }
+            elif upon_match:
+                trigger = {
+                    "condition": _clean_clause(upon_match.group("condition")),
+                    "consequence": _clean_clause(upon_match.group("consequence")),
+                    "offset": match.start(),
+                    "text": sentence,
+                }
+            if trigger:
+                triggers.append(trigger)
+        triggers.sort(key=lambda item: item["offset"])
+        return triggers
+
     def _warnings_for(self, **fields) -> list[str]:
         warnings = []
         if not fields["parties"]:
@@ -369,6 +613,10 @@ class LegalContractExtractors:
             warnings.append("term_not_found")
         if not fields["obligations"]:
             warnings.append("obligations_not_found")
+        if not fields["rights"]:
+            warnings.append("rights_not_found")
+        if not fields["prohibitions"]:
+            warnings.append("prohibitions_not_found")
         if not fields["defined_terms"]:
             warnings.append("defined_terms_not_found")
         if not fields["governing_law"].get("full_clause"):

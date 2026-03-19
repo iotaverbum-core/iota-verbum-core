@@ -6,11 +6,11 @@ if __package__ in {None, ""}:
 
     sys.path.insert(0, str(_BootstrapPath(__file__).resolve().parents[1]))
 
-from copy import deepcopy
 import json
+import tomllib
+from copy import deepcopy
 from datetime import datetime, timezone
 from pathlib import Path
-import tomllib
 
 from core import attestation
 from core.determinism.attest import build_attestation

@@ -1,0 +1,148 @@
+﻿{
+  "symbol": "DJI",
+  "timestamp": "2026-03-19T09:29:59Z",
+  "last_close": 46225.15,
+  "day_change_pts": -768.11,
+  "day_change_pct": -1.63,
+  "year_low": 46193.68,
+  "year_high": 50512.0,
+  "mtd_pct": -5.2,
+  "vix": 25.09,
+  "vix_change_pct": 12.16,
+  "futures_pts": -77.0,
+  "ma_200_status": "BELOW",
+  "commodity": {
+    "name": "Brent Crude",
+    "price": 113.0,
+    "unit": "USD/bbl"
+  },
+  "macro_forces": [
+    {
+      "label": "US-Iran War Active",
+      "direction": "BEARISH",
+      "intensity": "HIGH",
+      "actor": "geopolitical"
+    },
+    {
+      "label": "Fed Rate Hold",
+      "direction": "NEUTRAL",
+      "intensity": "HIGH",
+      "actor": "federal_reserve"
+    },
+    {
+      "label": "Hot PPI Reading",
+      "direction": "BEARISH",
+      "intensity": "HIGH",
+      "actor": "inflation"
+    },
+    {
+      "label": "Nvidia H200 Approval",
+      "direction": "BULLISH",
+      "intensity": "MEDIUM",
+      "actor": "tech_sector"
+    },
+    {
+      "label": "Micron Extended Decline",
+      "direction": "BEARISH",
+      "intensity": "MEDIUM",
+      "actor": "tech_sector"
+    },
+    {
+      "label": "Jones Act Waiver 60-day",
+      "direction": "BULLISH",
+      "intensity": "LOW",
+      "actor": "policy"
+    }
+  ],
+  "sentiment": {
+    "consensus": "BEARISH",
+    "vix_signal": "ELEVATED_FEAR",
+    "futures_signal": "EXHAUSTION_POSSIBLE"
+  },
+  "scenarios": [
+    {
+      "scenario_id": "scen:B:bounce",
+      "label": "Dead Cat Bounce",
+      "probability": 0.4,
+      "trigger": "Oversold + VIX exhaustion + shallow futures",
+      "invalidations": [
+        "inv:oil_spike",
+        "inv:iran_escalation"
+      ],
+      "target_value": 46600.0
+    },
+    {
+      "scenario_id": "scen:A:continuation",
+      "label": "Bearish Continuation",
+      "probability": 0.35,
+      "trigger": "Oil spike OR new Iran escalation headline",
+      "invalidations": [],
+      "target_value": 45800.0
+    },
+    {
+      "scenario_id": "scen:C:reversal",
+      "label": "Sharp Reversal",
+      "probability": 0.15,
+      "trigger": "Ceasefire signal OR emergency Fed pivot",
+      "invalidations": [],
+      "target_value": 47000.0
+    },
+    {
+      "scenario_id": "scen:D:consolidation",
+      "label": "Consolidation",
+      "probability": 0.1,
+      "trigger": "No new catalysts \u2014 market digests",
+      "invalidations": [],
+      "target_value": 46300.0
+    }
+  ],
+  "unknowns": [
+    {
+      "id": "unk:001",
+      "label": "Exact timing of Iran headlines today",
+      "affects": "inv:iran_escalation"
+    },
+    {
+      "id": "unk:002",
+      "label": "Fed speaker schedule today",
+      "affects": "inv:fed_emergency"
+    },
+    {
+      "id": "unk:003",
+      "label": "Jones Act waiver immediate oil price impact",
+      "affects": "state:commodity:price"
+    },
+    {
+      "id": "unk:004",
+      "label": "Retail trader sentiment direction",
+      "affects": "state:volatility:vix"
+    },
+    {
+      "id": "unk:005",
+      "label": "Micron bleed into broader tech sentiment",
+      "affects": "macro_forces:4"
+    }
+  ],
+  "invalidations": [
+    {
+      "id": "inv:oil_spike",
+      "trigger": "Brent crude spikes above $120/bbl intraday"
+    },
+    {
+      "id": "inv:iran_escalation",
+      "trigger": "New Iran escalation \u2014 direct US military involvement"
+    },
+    {
+      "id": "inv:fed_emergency",
+      "trigger": "Emergency Fed statement issued"
+    },
+    {
+      "id": "inv:breadth_fail",
+      "trigger": "More than 20 of 30 DJI components down at 11:00 ET"
+    },
+    {
+      "id": "inv:support_breach",
+      "trigger": "46193 (2026 low) broken on high volume"
+    }
+  ]
+}

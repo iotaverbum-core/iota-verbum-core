@@ -14,6 +14,7 @@ INCLUDE_GLOBS = [
     "data/credit/**/*",
     "data/clinical/**/*",
     "data/legal_contract_sample/**/*",
+    "data/market/**/*",
     "data/scripture/esv_sample/**/*",
     "tests/**/*.py",
     "tests/fixtures/**/*",

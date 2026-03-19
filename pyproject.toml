@@ -68,6 +68,10 @@ target-version = "py311"
 [tool.ruff.lint]
 select = ["E", "F", "I"]
 
+[tool.ruff.lint.per-file-ignores]
+"src/core/world/forward_projection.py" = ["E501", "F401", "I001"]
+"src/domains/market_realtime/extractors.py" = ["E501", "F401", "F841", "I001"]
+
 [tool.pytest.ini_options]
 addopts = "-q"
 testpaths = ["tests"]

@@ -9,6 +9,10 @@ from domains.biblical_text.extractors import BiblicalTextExtractors
 from domains.clinical_records.extractors import ClinicalRecordsExtractors
 from domains.credit_scoring.extractors import CreditScoringExtractors
 from domains.legal_contract.extractor import LegalContractExtractors
+from domains.market_realtime.integration import (
+    MarketRealtimePipelineAdapter,
+    compile_market_forward_artifacts,
+)
 
 
 def _find_repo_root(start: Path) -> Path:
@@ -51,6 +55,12 @@ DOMAIN_REGISTRY = {
         "templates": CODE_ROOT / "domains/legal_contract/templates",
         "manifest": DATA_ROOT / "legal_contract_sample/manifest.json",
         "input_kind": "text",
+    },
+    "market_realtime": {
+        "extractor": MarketRealtimePipelineAdapter(),
+        "templates": CODE_ROOT / "domains/market_realtime/templates",
+        "manifest": DATA_ROOT / "market/manifest.json",
+        "input_kind": "json",
     },
 }
 
@@ -131,20 +141,23 @@ def run_pipeline(args):
     if not domain_config:
         raise ValueError(f"unknown domain: {args.domain}")
 
-    pipeline = DeterministicPipeline(
-        args.domain,
-        domain_config["extractor"],
-        domain_config["templates"],
-        manifest_path=domain_config["manifest"],
-    )
-
     context = _parse_context(args.context)
     resolved = _load_input(
         args.domain, args.input_ref, args.input_file, args.dataset, args.manifest
     )
+    extractor = domain_config["extractor"]
+    if hasattr(extractor, "set_input_ref"):
+        extractor.set_input_ref(resolved["ref"])
+
+    pipeline = DeterministicPipeline(
+        args.domain,
+        extractor,
+        domain_config["templates"],
+        manifest_path=domain_config["manifest"],
+    )
 
     output_dir = Path(args.out)
-    return pipeline.process(
+    result = pipeline.process(
         resolved["ref"],
         resolved["data"],
         resolved["bytes"],
@@ -153,6 +166,13 @@ def run_pipeline(args):
         input_meta=resolved["input_meta"],
         provenance_meta=_build_provenance_meta(args, resolved),
     )
+    if args.domain == "market_realtime":
+        result["forward_projection"] = compile_market_forward_artifacts(
+            output_dir,
+            result["output_data"],
+            context,
+        )
+    return result
 
 
 def validate_provenance(paths):

@@ -1,0 +1,11 @@
+{
+  "domain": "market_realtime",
+  "version": "1.0",
+  "entries": [
+    {
+      "ref": "DJI-2026-03-19",
+      "file": "data/market/dji_20260319.json",
+      "sha256": ""
+    }
+  ]
+}

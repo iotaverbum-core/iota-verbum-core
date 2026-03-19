@@ -10,6 +10,7 @@ from core.determinism.hashing import sha256_bytes
 from core.determinism.ledger import write_run
 from core.determinism.replay import verify_run
 from core.determinism.schema_validate import validate
+from core.files import write_bytes_deterministic
 from core.reasoning.causal import compute_causal_graph
 from core.reasoning.causal_narrative_v2 import render_causal_narrative_v2
 from core.reasoning.constraint_diff import compute_constraint_diff
@@ -37,9 +38,7 @@ from proposal.world_propose import propose_world_model_from_artifacts
 
 
 def _write_atomic(path: Path, data: bytes) -> None:
-    temp_path = path.with_name(f".{path.name}.tmp")
-    temp_path.write_bytes(data)
-    temp_path.replace(path)
+    write_bytes_deterministic(path, data)
 
 
 def _write_or_verify(path: Path, data: bytes) -> None:

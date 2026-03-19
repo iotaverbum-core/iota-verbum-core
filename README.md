@@ -111,6 +111,15 @@ python -m deterministic_ai `
   --out outputs\legal_sample
 ```
 
+The legal contract output now includes deterministic clause analysis for:
+
+- rights and prohibitions
+- conditional triggers
+- contradiction and ambiguity detection
+- a compact risk report inside `output.json`
+- a top-level `review_findings` collection shared across domains
+- a top-level `review_summary` for operator triage
+
 ## Verify A Provenance Record
 
 ```powershell

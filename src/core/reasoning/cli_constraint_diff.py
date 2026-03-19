@@ -4,6 +4,7 @@ import argparse
 from pathlib import Path
 
 from core.determinism.canonical_json import dumps_canonical
+from core.files import write_bytes_deterministic
 from core.reasoning.constraint_diff import (
     compute_constraint_diff,
     load_constraint_diff_input,
@@ -14,9 +15,7 @@ from core.reasoning.constraint_diff_narrative_v2 import (
 
 
 def _write_atomic(path: Path, data: bytes) -> None:
-    temp_path = path.with_name(f".{path.name}.tmp")
-    temp_path.write_bytes(data)
-    temp_path.replace(path)
+    write_bytes_deterministic(path, data)
 
 
 def main(argv: list[str] | None = None) -> int:

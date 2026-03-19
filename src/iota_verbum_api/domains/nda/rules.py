@@ -3,7 +3,10 @@ from __future__ import annotations
 import re
 from dataclasses import dataclass
 
+from core.review_summary import build_review_findings, build_review_summary
 from iota_verbum_api.utils import normalize_text
+
+SCHEMA_VERSION = "1.1"
 
 CLAUSE_TRANSLATIONS = {
     "confidentiality_obligations": "confidentiality obligations",
@@ -48,14 +51,24 @@ class LanguageRuleSet:
                     "rule_id": rule.rule_id,
                 }
             )
+        extraction = {
+            "clauses": clauses,
+            "language": self.language,
+            "rule_set_version": self.version,
+        }
+        review_findings = build_review_findings(
+            domain=self.domain,
+            extraction=extraction,
+        )
         return {
             "domain": self.domain,
-            "schema_version": "1.0",
-            "extraction": {
-                "clauses": clauses,
-                "language": self.language,
-                "rule_set_version": self.version,
-            },
+            "schema_version": SCHEMA_VERSION,
+            "extraction": extraction,
+            "review_findings": review_findings,
+            "review_summary": build_review_summary(
+                domain=self.domain,
+                extraction=extraction,
+            ),
         }
 
 
@@ -73,7 +86,7 @@ RULE_SETS = {
     "en": LanguageRuleSet(
         language="en",
         domain="nda",
-        version="en-nda-v1.0",
+        version="en-nda-v1.1",
         rules=(
             RuleDefinition(
                 "confidentiality_obligations",
@@ -122,7 +135,7 @@ RULE_SETS = {
     "fr": LanguageRuleSet(
         language="fr",
         domain="nda",
-        version="fr-nda-v1.0",
+        version="fr-nda-v1.1",
         rules=(
             RuleDefinition(
                 "confidentialite",
@@ -171,7 +184,7 @@ RULE_SETS = {
     "de": LanguageRuleSet(
         language="de",
         domain="nda",
-        version="de-nda-v1.0",
+        version="de-nda-v1.1",
         rules=(
             RuleDefinition(
                 "vertraulichkeitspflichten",
@@ -220,7 +233,7 @@ RULE_SETS = {
     "es": LanguageRuleSet(
         language="es",
         domain="nda",
-        version="es-nda-v1.0",
+        version="es-nda-v1.1",
         rules=(
             RuleDefinition(
                 "obligaciones_confidencialidad",

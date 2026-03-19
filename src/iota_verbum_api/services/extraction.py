@@ -3,7 +3,9 @@ from __future__ import annotations
 from dataclasses import dataclass
 
 from core.governance import GOVERNANCE_METADATA
+from core.review_summary import build_review_findings
 from domains.legal_contract.extractor import LegalContractExtractors
+from domains.legal_contract.schema_ref import SCHEMA_VERSION
 from iota_verbum_api.constants import NEUROSYMBOLIC_BOUNDARY
 from iota_verbum_api.domains.nda.rules import RULE_SETS
 
@@ -32,15 +34,17 @@ def extract_symbolic(domain: str, language: str, text: str) -> ExtractionBundle:
         )
         result = {
             "domain": domain,
-            "schema_version": "1.0",
+            "schema_version": SCHEMA_VERSION,
             "extraction": extracted,
+            "review_findings": extracted["review_findings"],
+            "review_summary": extracted["review_summary"],
             "governance_metadata": GOVERNANCE_METADATA[domain],
             "neurosymbolic_boundary": NEUROSYMBOLIC_BOUNDARY,
         }
         return ExtractionBundle(
             result=result,
             extraction_language="en",
-            rule_set_version="en-legal_contract-v1.0",
+            rule_set_version=f"en-legal_contract-v{SCHEMA_VERSION}",
         )
 
     if domain == "nda":
@@ -48,6 +52,11 @@ def extract_symbolic(domain: str, language: str, text: str) -> ExtractionBundle:
         if not rules:
             raise UnsupportedDomainLanguage("unsupported_language")
         result = rules.extract(text)
+        if "review_findings" not in result:
+            result["review_findings"] = build_review_findings(
+                domain=domain,
+                extraction=result["extraction"],
+            )
         result["governance_metadata"] = GOVERNANCE_METADATA[domain]
         result["neurosymbolic_boundary"] = NEUROSYMBOLIC_BOUNDARY
         return ExtractionBundle(
@@ -57,4 +66,3 @@ def extract_symbolic(domain: str, language: str, text: str) -> ExtractionBundle:
         )
 
     raise UnsupportedDomainLanguage("unsupported_domain")
-

@@ -5,14 +5,16 @@
   "required": [
     "domain",
     "schema_version",
-    "extraction"
+    "extraction",
+    "review_findings",
+    "review_summary"
   ],
   "properties": {
     "domain": {
       "const": "nda"
     },
     "schema_version": {
-      "const": "1.0"
+      "const": "1.1"
     },
     "governance_metadata": {
       "type": "object",
@@ -60,6 +62,76 @@
     },
     "extraction": {
       "type": "object"
+    },
+    "review_findings": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "finding_id",
+          "finding_class",
+          "category",
+          "severity",
+          "title",
+          "summary",
+          "source_path",
+          "evidence_offsets",
+          "review_required",
+          "related_party",
+          "related_action",
+          "details"
+        ],
+        "properties": {
+          "finding_id": { "type": "string" },
+          "finding_class": {
+            "type": "string",
+            "enum": ["contradiction", "ambiguity", "warning", "clause_detected"]
+          },
+          "category": { "type": "string" },
+          "severity": {
+            "type": "string",
+            "enum": ["low", "medium", "high"]
+          },
+          "title": { "type": "string" },
+          "summary": { "type": "string" },
+          "source_path": { "type": "string" },
+          "evidence_offsets": {
+            "type": "array",
+            "items": { "type": "integer", "minimum": 0 }
+          },
+          "review_required": { "type": "boolean" },
+          "related_party": { "type": ["string", "null"] },
+          "related_action": { "type": ["string", "null"] },
+          "details": { "type": "object" }
+        },
+        "additionalProperties": false
+      }
+    },
+    "review_summary": {
+      "type": "object",
+      "required": [
+        "status",
+        "priority",
+        "headline",
+        "finding_count",
+        "warning_count",
+        "requires_human_review"
+      ],
+      "properties": {
+        "status": {
+          "type": "string",
+          "enum": ["ready_for_review", "review_required"]
+        },
+        "priority": {
+          "type": "string",
+          "enum": ["low", "medium", "high"]
+        },
+        "headline": { "type": "string" },
+        "finding_count": { "type": "integer", "minimum": 0 },
+        "warning_count": { "type": "integer", "minimum": 0 },
+        "requires_human_review": { "type": "boolean" }
+      },
+      "additionalProperties": false
     }
   },
   "additionalProperties": false

@@ -9,6 +9,7 @@ from core.reasoning.verifier import RulesetResolutionError
 from iota_verbum_api.app import app
 from iota_verbum_api.db.models import AuditLog, DocumentInput
 from iota_verbum_api.db.session import new_session
+from iota_verbum_api.services.extraction import extract_symbolic
 from iota_verbum_api.services.pdf import ExtractionFailure
 from iota_verbum_api.services.retention import enforce_retention_policy
 from iota_verbum_api.utils import now_utc
@@ -396,3 +397,30 @@ def test_casefile_verify_endpoint_returns_structured_failure(monkeypatch):
     assert body["status"] == "VERIFIED_FAIL"
     assert body["error"] == "no comparable replay artifacts found"
     assert body["verification"]["status"] == "failed_deterministically"
+
+
+def test_legal_contract_service_uses_current_schema_version():
+    text = Path("data/legal_contract_sample/sample_contract.txt").read_text(
+        encoding="utf-8"
+    )
+
+    bundle = extract_symbolic("legal_contract", "en", text)
+
+    assert bundle.result["schema_version"] == "1.2"
+    assert bundle.rule_set_version == "en-legal_contract-v1.2"
+    assert bundle.result["review_findings"]
+    assert bundle.result["review_summary"]["status"] == "ready_for_review"
+    assert bundle.result["extraction"]["rights"]
+    assert bundle.result["extraction"]["prohibitions"]
+
+
+def test_nda_service_emits_shared_review_findings():
+    text = Path("tests/fixtures/nda_fr.txt").read_text(encoding="utf-8")
+
+    bundle = extract_symbolic("nda", "fr", text)
+
+    assert bundle.result["schema_version"] == "1.1"
+    assert bundle.rule_set_version == "fr-nda-v1.1"
+    assert bundle.result["review_findings"]
+    assert bundle.result["review_findings"][0]["finding_class"] == "clause_detected"
+    assert bundle.result["review_findings"][0]["details"]["language"] == "fr"

@@ -3,13 +3,12 @@ from __future__ import annotations
 import argparse
 from pathlib import Path
 
+from core.files import write_bytes_deterministic
 from proposal.evidence_pack import build_evidence_pack
 
 
 def _write_atomic(path: Path, data: bytes) -> None:
-    temp_path = path.with_name(f".{path.name}.tmp")
-    temp_path.write_bytes(data)
-    temp_path.replace(path)
+    write_bytes_deterministic(path, data)
 
 
 def main(argv: list[str] | None = None) -> int:

@@ -1,7 +1,7 @@
 {
   "context": {},
   "domain": "legal_contract",
-  "extraction_sha256": "6243f81767eddc13318cb30f344c55d81f021792ecb81b91cd342d687362b06f",
+  "extraction_sha256": "59a3bf93e41f6365a18dd365cf704b7004842bbbe702de9b33be48f0cf011496",
   "generator_sha256": "13feab6f09d56290b017f2aead793ed00637958ae545c0a395fd9ab49c16b03e",
   "governance_metadata": {
     "audit_ready": true,
@@ -25,7 +25,7 @@
     ],
     "symbolic_confidence": "high"
   },
-  "output_sha256": "dec8e97a56c6980891950a9ff3dfa6dddb63c31acbed05abf14ec00c07ebb874",
+  "output_sha256": "c6dbca0c85fec60cbf122bcd80eb4b85c15e622ea05fa1a22fe221434bc8bff1",
   "provenance_meta": {
     "commit_ref": "e20fbd8",
     "repo_tag": "v0.2.0-legal-domain",

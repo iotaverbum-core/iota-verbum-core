@@ -3,6 +3,7 @@ from __future__ import annotations
 from pathlib import Path
 
 from core.determinism.hashing import sha256_bytes
+from core.files import write_bytes_deterministic
 
 
 def ledger_path(root_dir: str, bundle_sha256: str) -> Path:
@@ -10,9 +11,7 @@ def ledger_path(root_dir: str, bundle_sha256: str) -> Path:
 
 
 def _write_atomic(path: Path, data: bytes) -> None:
-    temp_path = path.with_name(f".{path.name}.tmp")
-    temp_path.write_bytes(data)
-    temp_path.replace(path)
+    write_bytes_deterministic(path, data)
 
 
 def _write_or_verify(path: Path, data: bytes) -> None:

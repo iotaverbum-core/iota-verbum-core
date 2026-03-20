@@ -18,6 +18,7 @@ _CONFIDENCE_BY_REASON = {
     "RULE_POLICY_PRECEDES_CONFIG": "high",
     "RULE_SECRET_HANDLING_CAUSAL": "high",
     "RULE_CONFLICT_IMPLIED": "high",
+    "RULE_CAUSAL_PHRASE_TEXT": "medium",
 }
 _REASON_PRIORITY = {
     "RULE_CONFLICT_IMPLIED": 0,
@@ -25,12 +26,25 @@ _REASON_PRIORITY = {
     "RULE_POLICY_PRECEDES_CONFIG": 2,
     "RULE_TIME_PHRASE_BEFORE": 3,
     "RULE_TIME_EXPLICIT_DATE": 4,
+    "RULE_CAUSAL_PHRASE_TEXT": 5,
 }
 _PHRASE_TERMS = {
     "before": "forward",
     "prior to": "forward",
     "after": "inverse",
     "following": "inverse",
+    # Causal / market domain
+    "caused": "forward",
+    "triggered": "forward",
+    "drove": "forward",
+    "resulted in": "forward",
+    "led to": "forward",
+    "forced": "forward",
+    "accelerated": "forward",
+    "confirmed": "forward",
+    "established": "forward",
+    "because of": "inverse",
+    "due to": "inverse",
 }
 _EVENT_TYPE_TERMS = {
     "Access": ("access", "login"),
@@ -40,6 +54,12 @@ _EVENT_TYPE_TERMS = {
     "Other": (),
     "PolicyChange": ("policy", "policy change"),
     "Rotation": ("rotation", "rotate", "rotated"),
+    "MarketMove": ("price", "market", "trade", "rally", "sell", "buy", "drop"),
+    "MarketOpen": ("open", "opening", "gap up", "gap down"),
+    "MarketClose": ("close", "closing", "settlement"),
+    "MacroEvent": ("fed", "rate", "inflation", "oil", "crude", "war", "macro"),
+    "PriceLevel": ("support", "resistance", "moving average", "rsi", "vix"),
+    "CausalLink": ("caused", "triggered", "reversed", "drove", "resulted"),
 }
 _SECRET_NEVER_TERMS = ("never in source", "never in repo")
 _SECRET_ENV_TERMS = ("environment only", "env-only")
@@ -137,6 +157,29 @@ def _shared_object_tokens(left: dict, right: dict) -> list[str]:
     return sorted(
         set(_extract_object_tokens(left)).intersection(_extract_object_tokens(right))
     )
+
+
+def _shared_text_tokens(left: dict, right: dict) -> list[str]:
+    """
+    Find meaningful words shared between two event action texts.
+    Used to detect causal relationships in prose where objects are empty.
+    Only considers words of 4+ characters to avoid noise.
+    """
+    left_words = {
+        w for w in _WORD_RE.findall(_normalized_text(left)) if len(w) >= 4
+    }
+    right_words = {
+        w for w in _WORD_RE.findall(_normalized_text(right)) if len(w) >= 4
+    }
+    # Exclude stop words that appear in almost every sentence
+    stop = {
+        "this", "that", "with", "from", "have", "been", "were", "they",
+        "their", "which", "when", "what", "will", "also", "more", "than",
+        "into", "onto", "upon", "over", "under", "about", "above",
+        "below", "after", "before", "during", "through",
+    }
+    shared = (left_words & right_words) - stop
+    return sorted(shared)
 
 
 def _build_unknown_block_finding(
@@ -464,6 +507,34 @@ def compute_causal_graph(world_model: dict) -> dict:
                         evidence=left["evidence"] + right["evidence"],
                     ),
                 )
+
+        # Also check phrase relation on shared text tokens (causal prose)
+        # Fires when events share meaningful words even without shared objects
+        if not shared_tokens:
+            shared_text = _shared_text_tokens(left, right)
+            if shared_text:
+                left_relation = _phrase_relation(left, right)
+                if left_relation is not None:
+                    _register_edge(
+                        edges_by_key,
+                        _before_edge(
+                            from_event_id=left_relation[0],
+                            to_event_id=left_relation[1],
+                            reason_code="RULE_CAUSAL_PHRASE_TEXT",
+                            evidence=left["evidence"] + right["evidence"],
+                        ),
+                    )
+                right_relation = _phrase_relation(right, left)
+                if right_relation is not None:
+                    _register_edge(
+                        edges_by_key,
+                        _before_edge(
+                            from_event_id=right_relation[0],
+                            to_event_id=right_relation[1],
+                            reason_code="RULE_CAUSAL_PHRASE_TEXT",
+                            evidence=left["evidence"] + right["evidence"],
+                        ),
+                    )
 
     for conflict in sorted(
         world_model["conflicts"],

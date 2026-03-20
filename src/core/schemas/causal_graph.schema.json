@@ -84,7 +84,8 @@
             "RULE_POLICY_PRECEDES_CONFIG",
             "RULE_SECRET_HANDLING_CAUSAL",
             "RULE_CONFLICT_IMPLIED",
-            "RULE_UNKNOWN_BLOCKS_CAUSAL"
+            "RULE_UNKNOWN_BLOCKS_CAUSAL",
+            "RULE_CAUSAL_PHRASE_TEXT"
           ]
         },
         "confidence": {

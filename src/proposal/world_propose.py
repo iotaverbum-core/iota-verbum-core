@@ -288,7 +288,9 @@ def _classify_event_type(action: str) -> str:
     ):
         return "Config"
     # Market domain classifications
-    if any(term in lower for term in ["open", "opened", "opening", "gap up", "gap down"]):
+    if any(term in lower for term in [
+        "open", "opened", "opening", "gap up", "gap down"
+    ]):
         return "MarketOpen"
     if any(term in lower for term in ["close", "closed", "closing", "settlement"]):
         return "MarketClose"

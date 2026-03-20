@@ -94,6 +94,12 @@
         "Rotation",
         "Deployment",
         "PolicyChange",
+        "MarketMove",
+        "MarketOpen",
+        "MarketClose",
+        "MacroEvent",
+        "PriceLevel",
+        "CausalLink",
         "Other"
       ]
     },

@@ -20,6 +20,18 @@ _ISO_INSTANT_RE = re.compile(r"\b\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z\b")
 _ISO_DATE_RE = re.compile(r"\b\d{4}-\d{2}-\d{2}\b")
 _TOKEN_RE = re.compile(r"[a-z0-9]+")
 _SECURITY_KEYWORDS = ("key", "secret", "token", "credential", "access")
+_MARKET_KEYWORDS = (
+    "dow jones", "nasdaq", "s&p 500", "dji", "stock market",
+    "federal reserve", "brent crude", "crude oil", "vix index",
+    "price action", "market open", "market close", "trading session",
+    "institutional", "algorithmic", "intraday", "pre-market",
+    "moving average", "oversold", "overbought", "resistance level",
+    "support level", "short covering", "distribution",
+    "caused the", "caused price", "caused market",
+    "triggered selling", "triggered buying",
+    "reversed from", "reversed course",
+    "declined to", "rallied to", "dropped to",
+)
 _QUERY_CATEGORY_HINTS = {
     "access": {"Access", "PolicyChange"},
     "control": {"Access", "PolicyChange"},
@@ -32,7 +44,32 @@ _QUERY_CATEGORY_HINTS = {
     "rotation": {"Rotation"},
     "rotate": {"Rotation"},
     "leak": {"Leak"},
+    # Market domain
+    "market": {"MarketMove", "MarketOpen", "MarketClose"},
+    "price": {"MarketMove", "PriceLevel"},
+    "trade": {"MarketMove"},
+    "sell": {"MarketMove"},
+    "buy": {"MarketMove"},
+    "open": {"MarketOpen"},
+    "close": {"MarketClose"},
+    "fed": {"MacroEvent"},
+    "rate": {"MacroEvent"},
+    "inflation": {"MacroEvent"},
+    "oil": {"MacroEvent"},
+    "crude": {"MacroEvent"},
+    "war": {"MacroEvent"},
+    "vix": {"MarketMove"},
+    "caused": {"CausalLink"},
+    "reversed": {"MarketMove"},
 }
+# Sentence-level extraction pattern for causal prose
+# Matches sentences containing causal verbs
+_CAUSAL_SENTENCE_RE = re.compile(
+    r"([A-Z][^.!?]*(?:caused|triggered|reversed|drove|signalled|confirmed|"
+    r"established|created|accelerated|removed|eliminated|produced|forced|"
+    r"resulted in|led to|caused the)[^.!?]*[.!?])",
+    re.IGNORECASE,
+)
 
 
 def load_world_pack(path: str) -> dict:
@@ -250,6 +287,39 @@ def _classify_event_type(action: str) -> str:
         for term in ["config", "configure", "configured", "environment", "env-only"]
     ):
         return "Config"
+    # Market domain classifications
+    if any(term in lower for term in [
+        "open", "opened", "opening", "gap up", "gap down"
+    ]):
+        return "MarketOpen"
+    if any(term in lower for term in ["close", "closed", "closing", "settlement"]):
+        return "MarketClose"
+    if any(term in lower for term in [
+        "caused", "triggered", "drove", "resulted in", "led to",
+        "created", "accelerated", "removed", "eliminated", "forced",
+        "signalled", "confirmed", "established", "produced",
+    ]):
+        return "CausalLink"
+    if any(term in lower for term in [
+        "sell", "sold", "selling", "distribution", "distributed",
+        "buy", "bought", "buying", "accumulation", "accumulated",
+        "rally", "rallied", "reverse", "reversed", "reversal",
+        "drop", "dropped", "decline", "declined", "fall", "fell",
+        "rise", "rose", "surge", "surged", "crash", "crashed",
+        "price", "trade", "traded", "trading",
+    ]):
+        return "MarketMove"
+    if any(term in lower for term in [
+        "fed", "federal reserve", "rate", "inflation", "ppi", "cpi",
+        "oil", "crude", "brent", "war", "conflict", "geopolitical",
+        "macro", "economic",
+    ]):
+        return "MacroEvent"
+    if any(term in lower for term in [
+        "support", "resistance", "level", "sma", "moving average",
+        "rsi", "oversold", "overbought", "vix", "volatility",
+    ]):
+        return "PriceLevel"
     return "Other"
 
 
@@ -418,6 +488,8 @@ def _is_relevant_world_line(action: str, query_tokens: list[str]) -> bool:
     action_lower = action.lower()
     if any(keyword in action_lower for keyword in _SECURITY_KEYWORDS):
         return True
+    if any(keyword in action_lower for keyword in _MARKET_KEYWORDS):
+        return True
     if not query_tokens:
         return True
     return any(token in action_lower for token in query_tokens)
@@ -434,19 +506,13 @@ def _propose_events(
 
     events_by_id: dict[str, dict] = {}
     effective_query_tokens = query_tokens or []
-    for source_item, line_index, line in _iter_source_lines(source_items):
-        if not line:
-            continue
-        bullet_match = _BULLET_RE.match(line)
-        if bullet_match is None:
-            continue
 
-        action = normalize_text(bullet_match.group(1))
+    def _process_action(action: str, source_item: dict, line_index: int) -> None:
+        action = normalize_text(action)
         if not action:
-            continue
+            return
         if not _is_relevant_world_line(action, effective_query_tokens):
-            continue
-
+            return
         time_ref = _parse_time_ref(action)
         objects = _extract_objects(action, entities)
         state = _extract_state(action, entities)
@@ -458,14 +524,7 @@ def _propose_events(
             "offset_end": source_item["offset_end"],
             "text_sha256": source_item["text_sha256"],
         }
-        event_id = _event_id(
-            event_type,
-            time_ref,
-            action,
-            [],
-            objects,
-            state,
-        )
+        event_id = _event_id(event_type, time_ref, action, [], objects, state)
         event_obj = {
             "event_id": event_id,
             "type": event_type,
@@ -494,10 +553,27 @@ def _propose_events(
         existing = events_by_id.get(event_id)
         if existing is None:
             events_by_id[event_id] = event_obj
+        else:
+            existing["evidence"] = _sort_evidence_refs(
+                existing["evidence"] + [evidence_ref]
+            )
+
+    for source_item, line_index, line in _iter_source_lines(source_items):
+        if not line:
             continue
-        existing["evidence"] = _sort_evidence_refs(
-            existing["evidence"] + [evidence_ref]
-        )
+
+        # Primary path: bullet points (original behaviour)
+        bullet_match = _BULLET_RE.match(line)
+        if bullet_match is not None:
+            _process_action(bullet_match.group(1), source_item, line_index)
+            continue
+
+        # Secondary path: causal sentences in prose
+        # Extracts sentences containing causal verbs for market/narrative domains
+        for sentence_match in _CAUSAL_SENTENCE_RE.finditer(line):
+            sentence = sentence_match.group(1).strip()
+            if len(sentence) > 20:  # skip trivially short matches
+                _process_action(sentence, source_item, line_index)
 
     events = sorted(events_by_id.values(), key=lambda event: event["_sort_key"])
     normalized_events = []

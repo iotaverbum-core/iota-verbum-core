@@ -18,6 +18,7 @@ _CONFIDENCE_BY_REASON = {
     "RULE_POLICY_PRECEDES_CONFIG": "high",
     "RULE_SECRET_HANDLING_CAUSAL": "high",
     "RULE_CONFLICT_IMPLIED": "high",
+    "RULE_CAUSAL_PHRASE_TEXT": "medium",
 }
 _REASON_PRIORITY = {
     "RULE_CONFLICT_IMPLIED": 0,
@@ -25,12 +26,25 @@ _REASON_PRIORITY = {
     "RULE_POLICY_PRECEDES_CONFIG": 2,
     "RULE_TIME_PHRASE_BEFORE": 3,
     "RULE_TIME_EXPLICIT_DATE": 4,
+    "RULE_CAUSAL_PHRASE_TEXT": 5,
 }
 _PHRASE_TERMS = {
     "before": "forward",
     "prior to": "forward",
     "after": "inverse",
     "following": "inverse",
+    # Causal / market domain
+    "caused": "forward",
+    "triggered": "forward",
+    "drove": "forward",
+    "resulted in": "forward",
+    "led to": "forward",
+    "forced": "forward",
+    "accelerated": "forward",
+    "confirmed": "forward",
+    "established": "forward",
+    "because of": "inverse",
+    "due to": "inverse",
 }
 _EVENT_TYPE_TERMS = {
     "Access": ("access", "login"),
@@ -40,6 +54,12 @@ _EVENT_TYPE_TERMS = {
     "Other": (),
     "PolicyChange": ("policy", "policy change"),
     "Rotation": ("rotation", "rotate", "rotated"),
+    "MarketMove": ("price", "market", "trade", "rally", "sell", "buy", "drop"),
+    "MarketOpen": ("open", "opening", "gap up", "gap down"),
+    "MarketClose": ("close", "closing", "settlement"),
+    "MacroEvent": ("fed", "rate", "inflation", "oil", "crude", "war", "macro"),
+    "PriceLevel": ("support", "resistance", "moving average", "rsi", "vix"),
+    "CausalLink": ("caused", "triggered", "reversed", "drove", "resulted"),
 }
 _SECRET_NEVER_TERMS = ("never in source", "never in repo")
 _SECRET_ENV_TERMS = ("environment only", "env-only")
@@ -464,6 +484,12 @@ def compute_causal_graph(world_model: dict) -> dict:
                         evidence=left["evidence"] + right["evidence"],
                     ),
                 )
+
+        # Note: causal prose edges via shared text tokens were removed
+        # because they create fully-connected graphs and temporal cycles
+        # when domain vocabulary is shared across many sentences.
+        # Causal edges in market/narrative domains are instead captured
+        # via the explicit EDGE | FORMAT in structured evidence files.
 
     for conflict in sorted(
         world_model["conflicts"],

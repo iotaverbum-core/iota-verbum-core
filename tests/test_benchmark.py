@@ -194,6 +194,43 @@ def test_q2_scoring_matches_free_form_invalidated_scenario_strings() -> None:
     assert row["over_revision_count"] == 0
 
 
+def test_q1_q3_id_matching_and_unchanged_unknowns_are_scored() -> None:
+    diff_payload = {
+        "domain": CASE_METADATA["DJI-2026-03-19-LIVE"]["domain"],
+        "perturbation_type": CASE_METADATA["DJI-2026-03-19-LIVE"][
+            "perturbation_type"
+        ],
+        "changed_states": [],
+        "changed_edges": [],
+        "fired_invalidations": ["inv_001"],
+        "invalidated_scenarios": [],
+        "resolved_unknowns": ["unk_002"],
+        "unchanged_unknowns": ["unk_004"],
+        "new_unknowns": [],
+    }
+    response_text = "\n".join(
+        [
+            "Q1 DETECTION:",
+            "- inv_001 fired after the threshold breach was confirmed.",
+            "Q3 UNKNOWN TRACKING:",
+            "- unk_002 resolved once the timestamp was confirmed.",
+            "- unk_004 remains open and unchanged pending waiver guidance.",
+        ]
+    )
+
+    row = score_case_response(
+        case_id="DJI-2026-03-19-LIVE",
+        diff_payload=diff_payload,
+        model_slug="openai_gpt-4o",
+        response_text=response_text,
+        response_file=Path("benchmark/runs/DJI-2026-03-19-LIVE/openai_gpt-4o_run2.txt"),
+    )
+
+    assert row["q1_score"] == 3
+    assert row["q3_score"] == 6
+    assert row["hallucination_count"] == 0
+
+
 def test_metadata_json_schema_validation_function() -> None:
     record = {
         "case_id": "DJI-2026-03-19-LIVE",

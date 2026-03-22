@@ -32,7 +32,9 @@ SECTION_HEADER_PATTERN = re.compile(
     r"(?im)^[ \t]*(?:##\s*)?(?P<axis>Q[123])(?:\s*[:\-—–]\s*|\s+)"
     r"(?P<label>DETECTION|SELF-CORRECTION|UNKNOWN TRACKING):?\s*$"
 )
-ID_PATTERN = re.compile(r"\b(?:scen_[A-Za-z0-9]+|inv_\d+|state_\d+|edge_\d+)\b")
+ID_PATTERN = re.compile(
+    r"\b(?:scen_[A-Za-z0-9]+|inv_\d+|state_\d+|edge_\d+|unk_\d+)\b"
+)
 Q2_REVISION_MARKERS = (
     "invalidated",
     "weakened",
@@ -225,7 +227,11 @@ def score_detected_changes(
     score = 0
     hallucinations = 0
     for claim in claims:
-        match_index = best_match_index(claim, truth_items, used_truth_indices)
+        match_index = _best_match_index_by_id_or_similarity(
+            claim,
+            truth_items,
+            used_truth_indices,
+        )
         if match_index is None:
             hallucinations += 1
             score -= penalty
@@ -239,6 +245,23 @@ def _extract_ids(text: str) -> set[str]:
     """Extract stable scenario or invalidation identifiers from a claim."""
 
     return {match.group(0).lower() for match in ID_PATTERN.finditer(text)}
+
+
+def _best_match_index_by_id_or_similarity(
+    claim: str,
+    truth_items: list[str],
+    used: set[int],
+) -> int | None:
+    """Prefer exact ID overlap before falling back to fuzzy matching."""
+
+    claim_ids = _extract_ids(claim)
+    if claim_ids:
+        for index, truth_item in enumerate(truth_items):
+            if index in used:
+                continue
+            if claim_ids & _extract_ids(truth_item):
+                return index
+    return best_match_index(claim, truth_items, used)
 
 
 def _is_connected_to_fired_invalidations(
@@ -367,6 +390,7 @@ def score_case_response(
         flatten_truth_item(item)
         for item in (
             list(diff_payload.get("resolved_unknowns", []))
+            + list(diff_payload.get("unchanged_unknowns", []))
             + list(diff_payload.get("new_unknowns", []))
         )
     ]

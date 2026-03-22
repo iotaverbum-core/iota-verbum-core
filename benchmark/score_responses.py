@@ -6,6 +6,7 @@ import argparse
 import csv
 import json
 import logging
+import re
 import sys
 from datetime import datetime, timezone
 from difflib import SequenceMatcher
@@ -19,9 +20,30 @@ except ModuleNotFoundError:
 
 LOGGER = logging.getLogger(__name__)
 
-Q1_HEADER = "Q1 DETECTION:"
-Q2_HEADER = "Q2 SELF-CORRECTION:"
-Q3_HEADER = "Q3 UNKNOWN TRACKING:"
+Q1_HEADER = "Q1"
+Q2_HEADER = "Q2"
+Q3_HEADER = "Q3"
+SECTION_LABELS = {
+    Q1_HEADER: "DETECTION",
+    Q2_HEADER: "SELF-CORRECTION",
+    Q3_HEADER: "UNKNOWN TRACKING",
+}
+SECTION_HEADER_PATTERN = re.compile(
+    r"(?im)^[ \t]*(?:##\s*)?(?P<axis>Q[123])(?:\s*[:\-—–]\s*|\s+)"
+    r"(?P<label>DETECTION|SELF-CORRECTION|UNKNOWN TRACKING):?\s*$"
+)
+ID_PATTERN = re.compile(r"\b(?:scen_[A-Za-z0-9]+|inv_\d+|state_\d+|edge_\d+)\b")
+Q2_REVISION_MARKERS = (
+    "invalidated",
+    "weakened",
+    "wrong",
+    "revise",
+    "revised",
+    "no longer",
+    "must be revised",
+    "must revise",
+    "invalid",
+)
 SCORE_COLUMNS = (
     "case_id",
     "domain",
@@ -107,11 +129,13 @@ def best_match_index(
     candidate: str,
     truth_items: list[str],
     used: set[int],
+    *,
+    threshold: float = 0.75,
 ) -> int | None:
     """Return the best unused truth item index above threshold."""
 
     best_index: int | None = None
-    best_ratio = 0.75
+    best_ratio = threshold
     for index, truth_item in enumerate(truth_items):
         if index in used:
             continue
@@ -149,56 +173,31 @@ def flatten_truth_item(item: Any) -> str:
     return str(item)
 
 
-def extract_revision_reference(item: Any) -> str:
-    """Return the reference text for a required revision."""
-
-    if isinstance(item, dict):
-        for key in ("original_conclusion", "scenario", "description"):
-            if key in item:
-                return str(item[key])
-    return flatten_truth_item(item)
-
-
-def extract_revision_target(item: Any) -> str:
-    """Return the revision target text for a required revision."""
-
-    if isinstance(item, dict):
-        for key in (
-            "revision",
-            "revised_conclusion",
-            "updated_conclusion",
-            "resolution",
-        ):
-            if key in item:
-                return str(item[key])
-    return flatten_truth_item(item)
-
-
-def parse_sections(response_text: str) -> dict[str, str]:
+def parse_sections(
+    response_text: str,
+    *,
+    case_id: str | None = None,
+    model_slug: str | None = None,
+) -> dict[str, str]:
     """Extract Q1/Q2/Q3 sections from a run2 response."""
 
-    headers = (Q1_HEADER, Q2_HEADER, Q3_HEADER)
-    positions = {}
-    for header in headers:
-        index = response_text.find(header)
-        positions[header] = len(response_text) if index == -1 else index
-    ordered_headers = sorted(positions, key=lambda key: positions[key])
-    sections: dict[str, str] = {}
-    for position, header in enumerate(ordered_headers):
-        start = positions[header]
-        if start >= len(response_text):
-            sections[header] = ""
-            continue
-        body_start = start + len(header)
-        body_end = len(response_text)
-        for later_header in ordered_headers[position + 1 :]:
-            later_index = positions[later_header]
-            if later_index > start:
-                body_end = later_index
-                break
-        sections[header] = response_text[body_start:body_end].strip()
-    for header in headers:
-        sections.setdefault(header, "")
+    sections = {Q1_HEADER: "", Q2_HEADER: "", Q3_HEADER: ""}
+    matches = []
+    for match in SECTION_HEADER_PATTERN.finditer(response_text):
+        axis = match.group("axis").upper()
+        label = match.group("label").upper()
+        if SECTION_LABELS.get(axis) == label:
+            matches.append((axis, match))
+    if not matches:
+        LOGGER.warning(
+            "No Q1/Q2/Q3 section headers found for case=%s model=%s",
+            case_id or "<unknown>",
+            model_slug or "<unknown>",
+        )
+        return sections
+    for index, (axis, match) in enumerate(matches):
+        body_end = matches[index + 1][1].start() if index + 1 < len(matches) else None
+        sections[axis] = response_text[match.end() : body_end].strip()
     return sections
 
 
@@ -236,37 +235,74 @@ def score_detected_changes(
     return score, hallucinations
 
 
-def score_revisions(claims: list[str], truth_items: list[Any]) -> tuple[int, int]:
-    """Score Q2 self-correction."""
+def _extract_ids(text: str) -> set[str]:
+    """Extract stable scenario or invalidation identifiers from a claim."""
+
+    return {match.group(0).lower() for match in ID_PATTERN.finditer(text)}
+
+
+def _is_connected_to_fired_invalidations(
+    claim: str,
+    fired_invalidations: list[str],
+) -> bool:
+    """Return True when a claim overlaps materially with a fired invalidation."""
+
+    claim_ids = _extract_ids(claim)
+    if claim_ids:
+        fired_ids = {
+            item
+            for invalidation in fired_invalidations
+            for item in _extract_ids(invalidation)
+        }
+        if claim_ids & fired_ids:
+            return True
+    return any(
+        similarity(claim, invalidation) >= 0.65
+        for invalidation in fired_invalidations
+    )
+
+
+def _is_over_revision_claim(
+    claim: str,
+    required_revisions: list[str],
+    fired_invalidations: list[str],
+) -> bool:
+    """Return True when a claim asserts an unsupported specific revision."""
+
+    normalized_claim = normalize_text(claim)
+    if not any(marker in normalized_claim for marker in Q2_REVISION_MARKERS):
+        return False
+    if any(similarity(claim, revision) >= 0.65 for revision in required_revisions):
+        return False
+    if _is_connected_to_fired_invalidations(claim, fired_invalidations):
+        return False
+    return bool(_extract_ids(claim))
+
+
+def score_revisions(
+    claims: list[str],
+    truth_items: list[str],
+    fired_invalidations: list[str],
+) -> tuple[int, int]:
+    """Score Q2 self-correction against free-form required revision strings."""
 
     used_truth_indices: set[int] = set()
     score = 0
     over_revisions = 0
     for claim in claims:
-        match_index = None
-        for index, truth_item in enumerate(truth_items):
-            if index in used_truth_indices:
-                continue
-            original_text = extract_revision_reference(truth_item)
-            revised_text = extract_revision_target(truth_item)
-            normalized_claim = normalize_text(claim)
-            original_match = (
-                normalize_text(original_text) in normalized_claim
-                or similarity(claim, original_text) >= 0.75
-            )
-            revised_match = (
-                normalize_text(revised_text) in normalized_claim
-                or similarity(claim, revised_text) >= 0.45
-            )
-            if original_match and revised_match:
-                match_index = index
-                break
-        if match_index is None:
+        match_index = best_match_index(
+            claim,
+            truth_items,
+            used_truth_indices,
+            threshold=0.65,
+        )
+        if match_index is not None:
+            used_truth_indices.add(match_index)
+            score += 3
+            continue
+        if _is_over_revision_claim(claim, truth_items, fired_invalidations):
             over_revisions += 1
             score -= 3
-            continue
-        used_truth_indices.add(match_index)
-        score += 3
     return score, over_revisions
 
 
@@ -306,7 +342,11 @@ def score_case_response(
 ) -> dict[str, Any]:
     """Score a single Run 2 response and return the CSV row payload."""
 
-    sections = parse_sections(response_text)
+    sections = parse_sections(
+        response_text,
+        case_id=case_id,
+        model_slug=model_slug,
+    )
     q1_claims = split_claims(sections[Q1_HEADER])
     q2_claims = split_claims(sections[Q2_HEADER])
     q3_claims = split_claims(sections[Q3_HEADER])
@@ -319,7 +359,10 @@ def score_case_response(
             + list(diff_payload.get("fired_invalidations", []))
         )
     ]
-    q2_truth = list(diff_payload.get("invalidated_scenarios", []))
+    q2_truth = [
+        flatten_truth_item(item)
+        for item in diff_payload.get("invalidated_scenarios", [])
+    ]
     q3_truth = [
         flatten_truth_item(item)
         for item in (
@@ -327,9 +370,19 @@ def score_case_response(
             + list(diff_payload.get("new_unknowns", []))
         )
     ]
+    fired_invalidations = [
+        flatten_truth_item(item) for item in diff_payload.get("fired_invalidations", [])
+    ]
 
     q1_raw, q1_hallucinations = score_detected_changes(q1_claims, q1_truth, penalty=5)
-    q2_raw, over_revisions = score_revisions(q2_claims, q2_truth)
+    # Keep Kaggle-scoring criteria aligned: Q2 ground truth is free-form revision text,
+    # not original/revised claim pairs, and over-revision penalties only apply to
+    # unsupported specific revision claims not connected to fired invalidations.
+    q2_raw, over_revisions = score_revisions(
+        q2_claims,
+        q2_truth,
+        fired_invalidations,
+    )
     q3_raw, q3_hallucinations = score_detected_changes(q3_claims, q3_truth, penalty=5)
 
     q1_score = clamp_score(q1_raw, 33)

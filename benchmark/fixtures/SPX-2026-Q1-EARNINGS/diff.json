@@ -1,0 +1,31 @@
+{
+  "perturbation_type": "P3_INVALIDATION",
+  "description": "4th MAG7 name misses estimates \u2014 inv_001 fires, sealed scenario scen_A invalidated",
+  "changed_states": [
+    "state_007 context updated \u2014 miss recorded",
+    "state_008 updated \u2014 miss magnitude added"
+  ],
+  "changed_edges": [
+    "edge_004 strength downgraded HIGH->LOW"
+  ],
+  "fired_invalidations": [
+    "inv_001"
+  ],
+  "invalidated_scenarios": [
+    "scen_A"
+  ],
+  "resolved_unknowns": [
+    "unk_001 \u2014 RESOLVED: miss confirmed"
+  ],
+  "new_unknowns": [
+    "Whether miss is company-specific or sector-wide signal",
+    "Analyst estimate revision direction for remaining MAG7"
+  ],
+  "ground_truth_q1": "inv_001 fired. state_008 changed to reflect miss. edge_004 downgraded. unk_001 resolved as miss.",
+  "ground_truth_q2": "scen_A sealed scenario must be revised to scen_C or scen_B. Earnings carry thesis broken. Technical bearish regime (below 50SMA) now uncontested.",
+  "ground_truth_q3": "unk_001 resolved (miss). New unknowns: company-specific vs sector signal; remaining MAG7 estimates. unk_002 now more uncertain.",
+  "replay_key_clean": "A99C5A918C10EC76",
+  "replay_key_perturbed": "293DD47A06294D98",
+  "case_id": "SPX-2026-Q1-EARNINGS",
+  "generated_at": "2026-03-21T12:00:00Z"
+}

@@ -1,0 +1,30 @@
+{
+  "perturbation_type": "P3_INVALIDATION",
+  "description": "Iran ceasefire announced \u2014 inv_001 fires, geopolitical premium deflates",
+  "changed_states": [
+    "state_007 status changed to CEASEFIRE"
+  ],
+  "changed_edges": [
+    "edge_003 strength downgraded HIGH->LOW"
+  ],
+  "fired_invalidations": [
+    "inv_001"
+  ],
+  "invalidated_scenarios": [
+    "scen_A partially \u2014 CB demand and dollar weakness still valid"
+  ],
+  "resolved_unknowns": [
+    "unk_001 \u2014 RESOLVED: ceasefire confirmed"
+  ],
+  "new_unknowns": [
+    "Whether CB buying pace sufficient to hold price without war premium",
+    "Duration and stability of ceasefire"
+  ],
+  "ground_truth_q1": "inv_001 fired. state_007 changed to CEASEFIRE. edge_003 downgraded. unk_001 resolved.",
+  "ground_truth_q2": "scen_A partially invalidated. War premium leg broken. CB demand and dollar-weakness legs still intact. Target must be revised down. scen_B now more likely.",
+  "ground_truth_q3": "unk_001 resolved (ceasefire). New unknowns: CB buying sufficiency; ceasefire durability. unk_004 (DXY) now primary driver.",
+  "replay_key_clean": "F5A759B6BCE4D3FD",
+  "replay_key_perturbed": "688F318081D5D544",
+  "case_id": "GOLD-2026-ATH-BREAKOUT",
+  "generated_at": "2026-03-21T12:00:00Z"
+}

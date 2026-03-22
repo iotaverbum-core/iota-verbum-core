@@ -1,0 +1,31 @@
+{
+  "perturbation_type": "P3_INVALIDATION",
+  "description": "US formally invokes MDT Article 4 \u2014 inv_001 fires, full defense commitment triggered",
+  "changed_states": [
+    "state_002 upgraded \u2014 from consultation to formal Article 4 invocation"
+  ],
+  "changed_edges": [
+    "edge_002 strength dramatically increased"
+  ],
+  "fired_invalidations": [
+    "inv_001"
+  ],
+  "invalidated_scenarios": [
+    "scen_A invalidated"
+  ],
+  "resolved_unknowns": [
+    "unk_001 \u2014 RESOLVED: US commits to Article 4"
+  ],
+  "new_unknowns": [
+    "US military response type and timeline",
+    "China response to Article 4 invocation",
+    "Whether China backs down or escalates"
+  ],
+  "ground_truth_q1": "state_002 upgraded to formal Article 4. inv_001 fired. edge_002 strength increased. unk_001 resolved.",
+  "ground_truth_q2": "scen_A invalidated. scen_B is now primary scenario. ASEAN disunity (state_006) still unchanged \u2014 still a weakness in the multilateral response.",
+  "ground_truth_q3": "unk_001 resolved. New unknowns: US military response; China counter; whether China backs down. unk_002 (China next orders) now most critical.",
+  "replay_key_clean": "8A0536B589FE1C44",
+  "replay_key_perturbed": "F3D04DA5CC5872E0",
+  "case_id": "SCS-2026-SPRATLY-INCIDENT",
+  "generated_at": "2026-03-21T12:00:00Z"
+}

@@ -1,0 +1,31 @@
+{
+  "perturbation_type": "P3_INVALIDATION",
+  "description": "US carrier group withdrawn to Guam \u2014 inv_003 fires, deterrence gap opens",
+  "changed_states": [
+    "state_003 changed \u2014 carrier group now at Guam, not 200nm east of Taiwan"
+  ],
+  "changed_edges": [
+    "edge_003 strength reduced significantly"
+  ],
+  "fired_invalidations": [
+    "inv_003"
+  ],
+  "invalidated_scenarios": [
+    "scen_A partially weakened"
+  ],
+  "resolved_unknowns": [
+    "unk_003 \u2014 RESOLVED: carrier withdrawn"
+  ],
+  "new_unknowns": [
+    "Replacement carrier group ETA",
+    "Whether PRC will exploit the deterrence gap",
+    "US response timeline"
+  ],
+  "ground_truth_q1": "state_003 changed to Guam withdrawal. inv_003 fired. edge_003 weakened. unk_003 resolved.",
+  "ground_truth_q2": "scen_A probability reduces \u2014 deterrence architecture partially broken. scen_B probability rises. Japan-US pact (edge_004) and PRC economic weakness (edge_005) still intact and unchanged.",
+  "ground_truth_q3": "unk_003 resolved (carrier withdrawn). New unknowns: replacement ETA; PRC exploitation; US response. unk_001 (PLA 72hr orders) now more urgent.",
+  "replay_key_clean": "39E82E92F0CC1AA3",
+  "replay_key_perturbed": "1EF1C022CC159A07",
+  "case_id": "TAIWAN-2026-STRAIT-TENSIONS",
+  "generated_at": "2026-03-21T12:00:00Z"
+}

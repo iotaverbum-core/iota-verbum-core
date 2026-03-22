@@ -1,0 +1,29 @@
+{
+  "perturbation_type": "P3_INVALIDATION",
+  "description": "CloudZen voluntarily reduces exit fees \u2014 inv_002 fires, exclusionary conduct claim weakened",
+  "changed_states": [
+    "state_003 changed \u2014 exit fees reduced back to 2023 levels"
+  ],
+  "changed_edges": [
+    "edge_003 strength significantly reduced \u2014 conduct evidence weakened"
+  ],
+  "fired_invalidations": [
+    "inv_002"
+  ],
+  "invalidated_scenarios": [
+    "scen_A probability reduced; scen_B (consent decree) more likely"
+  ],
+  "resolved_unknowns": [],
+  "new_unknowns": [
+    "Whether DOJ views voluntary fee reduction as admission or as mooting conduct claim",
+    "Whether fee reduction is sufficient to avoid complaint",
+    "Timing and sincerity of voluntary remediation"
+  ],
+  "ground_truth_q1": "state_003 changed (exit fees reduced). inv_002 fired. edge_003 weakened. No unknowns resolved.",
+  "ground_truth_q2": "scen_A weakened \u2014 exclusionary conduct (exit fees) claim is the clearest behavioral evidence, now reduced. Market share (state_001), API lock-in (state_002), customer declarations (state_005) all unchanged.",
+  "ground_truth_q3": "No unknowns resolved by this change. New unknowns: DOJ interpretation of voluntary reduction; sufficiency; sincerity. unk_001 (CEO email) remains the most important open question.",
+  "replay_key_clean": "1B2FA12A86A75A80",
+  "replay_key_perturbed": "6E206658354D50BD",
+  "case_id": "DOJ-2026-CLOUDZEN-ANTITRUST",
+  "generated_at": "2026-03-21T12:00:00Z"
+}

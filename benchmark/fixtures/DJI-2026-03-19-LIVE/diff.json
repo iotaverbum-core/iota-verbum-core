@@ -1,0 +1,36 @@
+{
+  "case_id": "DJI-2026-03-19-LIVE",
+  "perturbation_type": "P3_INVALIDATION",
+  "description": "Iran ceasefire announced \u2014 inv_001 fires, war risk premium removed, bearish macro thesis broken",
+  "changed_states": [
+    "state_008 label changed from 'Brent crude elevated near 100 USD \u2014 war-driven inflation' to 'Brent crude falling sharply on ceasefire \u2014 war premium unwinding'; value changed 100->85",
+    "state_010 label changed from 'US-Iran war active \u2014 elevated geopolitical risk' to 'Iran ceasefire announced \u2014 US-Iran war suspended'",
+    "actor_iran status changed from ACTIVE to CEASEFIRE"
+  ],
+  "changed_edges": [
+    "edge_001 strength downgraded HIGH->LOW; note added: CEASEFIRE \u2014 war premium unwinding",
+    "edge_002 strength downgraded HIGH->MEDIUM; note added: WEAKENED \u2014 Brent now falling",
+    "edge_003 strength downgraded HIGH->MEDIUM; note added: WEAKENED \u2014 inflation path now improving"
+  ],
+  "fired_invalidations": [
+    "inv_001"
+  ],
+  "invalidated_scenarios": [
+    "scen_A partially \u2014 technical distribution structure (999-point reversal, 200-day SMA resistance, algo sell programs) remains intact; war-through-oil-through-Fed causal chain is now broken; scen_C (macro reversal) probability must be upgraded"
+  ],
+  "resolved_unknowns": [
+    "unk_001 \u2014 RESOLVED: ceasefire confirmed at 18:00 UTC"
+  ],
+  "new_unknowns": [
+    "Whether Brent oil decline is sufficient to change Fed's near-term rate path",
+    "How quickly institutional actors reprice equity risk now that war premium is removed",
+    "Whether ceasefire holds or collapses \u2014 durability is unknown",
+    "Whether scen_C (47,000-48,000 target) now becomes primary path or technical damage overrides macro relief"
+  ],
+  "ground_truth_q1": "inv_001 fired. state_010 changed to CEASEFIRE. state_008 changed \u2014 Brent falling, value 100->85. actor_iran status changed ACTIVE->CEASEFIRE. edge_001 downgraded HIGH->LOW. edge_002 and edge_003 downgraded HIGH->MEDIUM. unk_001 resolved. New event event_t8 added.",
+  "ground_truth_q2": "scen_A partially invalidated. The war-through-oil-through-Fed causal chain (edge_001->edge_002->edge_003) that underpinned the bearish macro thesis is now broken or weakened. The technical distribution structure (999-point reversal, 200-day SMA resistance, algo sell programs via edge_004 and edge_005) remains intact and UNCHANGED. Claims about the gap-up failure, institutional distribution, and RSI oversold reading are all still valid. scen_C (macro reversal target 47,000-48,000) must now be upgraded in probability. scen_A remains structurally possible on technical grounds alone but its macro foundation is removed.",
+  "ground_truth_q3": "unk_001 resolved (ceasefire confirmed). New unknowns created: (1) whether Brent decline changes Fed rate path; (2) how quickly institutions reprice equity risk post-ceasefire; (3) ceasefire durability; (4) whether scen_C now dominates or technical damage overrides macro relief. unk_002 (Fed speaker comments), unk_003 (power-hour rebalancing), and unk_004 (2026 low close) remain OPEN and are now more consequential given the macro shift.",
+  "replay_key_clean": "34A3126490C3B9F6",
+  "replay_key_perturbed": "63BDA48217BA36AC",
+  "generated_at": "2026-03-22T00:00:00Z"
+}

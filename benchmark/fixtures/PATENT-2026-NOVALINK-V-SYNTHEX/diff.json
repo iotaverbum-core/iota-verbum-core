@@ -1,0 +1,34 @@
+{
+  "perturbation_type": "P1_QUANTITATIVE + P3_INVALIDATION",
+  "description": "PTAB invalidates all 8 claims \u2014 inv_001 fires, case collapses",
+  "changed_states": [
+    "state_003 changes from 3 claims to 8 claims invalidated",
+    "state_004 changes \u2014 0 remaining claims, damages claim void"
+  ],
+  "changed_edges": [
+    "edge_001 (broad construction) now moot \u2014 no valid claims",
+    "edge_002 (source code evidence) now moot \u2014 no valid claims to infringe"
+  ],
+  "fired_invalidations": [
+    "inv_001"
+  ],
+  "invalidated_scenarios": [
+    "scen_A invalidated",
+    "scen_B invalidated \u2014 no case to settle"
+  ],
+  "resolved_unknowns": [
+    "unk_003 \u2014 RESOLVED: MIT paper fully anticipates all 8 claims"
+  ],
+  "new_unknowns": [
+    "Whether Novalink appeals PTAB decision to CAFC",
+    "Timeline for CAFC appeal",
+    "Whether April 14 trial is stayed pending appeal"
+  ],
+  "ground_truth_q1": "state_003 changed to all 8 invalidated. state_004 shows zero remaining claims. inv_001 fired. unk_003 resolved as anticipation accepted.",
+  "ground_truth_q2": "scen_A and scen_B both invalidated. scen_C (case dismissed/collapsed) is the realized path. Source code evidence (state_006) is unchanged but now irrelevant \u2014 there are no valid claims to infringe.",
+  "ground_truth_q3": "unk_003 resolved (PTAB accepted all). New unknowns: CAFC appeal; stay motion; April 14 trial status. unk_001 (settlement offer) is now moot.",
+  "replay_key_clean": "4DC19C3274BE5A8F",
+  "replay_key_perturbed": "5A042ADC471ADA90",
+  "case_id": "PATENT-2026-NOVALINK-V-SYNTHEX",
+  "generated_at": "2026-03-21T12:00:00Z"
+}

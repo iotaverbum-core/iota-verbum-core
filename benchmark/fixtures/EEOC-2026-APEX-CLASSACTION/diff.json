@@ -1,0 +1,29 @@
+{
+  "perturbation_type": "P4_UNKNOWN_RESOLUTION",
+  "description": "HR emails found to contain explicit discriminatory language \u2014 unk_001 resolved, inv_001 fires",
+  "changed_states": [
+    "state_007 updated \u2014 emails reviewed, direct evidence found"
+  ],
+  "changed_edges": [
+    "edge_005 strength dramatically increased \u2014 direct evidence now in hand"
+  ],
+  "fired_invalidations": [
+    "inv_001"
+  ],
+  "invalidated_scenarios": [],
+  "resolved_unknowns": [
+    "unk_001 \u2014 RESOLVED: explicit discriminatory language confirmed"
+  ],
+  "new_unknowns": [
+    "Identity and seniority of VP who wrote discriminatory emails",
+    "Whether Apex will now settle urgently to avoid trial",
+    "Whether criminal referral is possible from DOJ"
+  ],
+  "ground_truth_q1": "state_007 updated. inv_001 fired. edge_005 strength increased. unk_001 resolved as direct evidence found.",
+  "ground_truth_q2": "scen_A strengthened \u2014 now includes direct evidence, not just statistical. scen_C (defense prevails) now near-impossible. Statistical evidence (state_003) unchanged and still valid as corroboration.",
+  "ground_truth_q3": "unk_001 resolved (emails found). New unknowns: VP identity; settlement urgency; criminal referral. unk_003 (settlement discussions) now much more likely to be triggered.",
+  "replay_key_clean": "912E80DBB64CDA19",
+  "replay_key_perturbed": "81F22D2975CAC9FB",
+  "case_id": "EEOC-2026-APEX-CLASSACTION",
+  "generated_at": "2026-03-21T12:00:00Z"
+}

@@ -1,0 +1,31 @@
+{
+  "perturbation_type": "P1_QUANTITATIVE",
+  "description": "ARIA-E adverse event rate increases from 21% to 28%, crossing the 25% threshold in inv_002",
+  "changed_states": [
+    "state_003 changes from 21% to 28%"
+  ],
+  "changed_edges": [
+    "edge_003 strength increased \u2014 now critical",
+    "edge_006 strength increased"
+  ],
+  "fired_invalidations": [
+    "inv_002 threshold breached (not formally fired yet \u2014 final analysis pending)"
+  ],
+  "invalidated_scenarios": [
+    "scen_A weakened; scen_B (REMS) now more likely"
+  ],
+  "resolved_unknowns": [
+    "unk_002 partially \u2014 interim update shows 28%"
+  ],
+  "new_unknowns": [
+    "Whether final analysis ARIA-E rate stabilises below 28% or worsens",
+    "FDA informal guidance on 28% rate"
+  ],
+  "ground_truth_q1": "state_003 changes from 21% to 28%. edge_003 strength increased. inv_002 threshold breached. unk_002 partially informed.",
+  "ground_truth_q2": "scen_A probability reduces \u2014 28% ARIA-E threatens full approval. scen_B (REMS) now primary. Efficacy data (state_001, state_002, state_007) unchanged \u2014 still strong.",
+  "ground_truth_q3": "unk_002 partially resolved (28% interim). New unknowns: final stabilisation; FDA guidance. unk_003 (advisory committee) now more important for safety risk assessment.",
+  "replay_key_clean": "94387896B1A95146",
+  "replay_key_perturbed": "E6A5B118A1432E0F",
+  "case_id": "ALZHM-2026-PHASE3-TRIAL",
+  "generated_at": "2026-03-21T12:00:00Z"
+}

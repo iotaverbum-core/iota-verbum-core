@@ -27,6 +27,7 @@ INCLUDE_GLOBS = [
     "LICENSE",
     "docs/**/*.md",
     "docs/**/*.html",
+    "benchmark/**/*",
     ".pre-commit-config.yaml",
 ]
 

@@ -1,0 +1,29 @@
+{
+  "perturbation_type": "P3_INVALIDATION",
+  "description": "MIT independent replication fails to confirm higher threshold \u2014 inv_002 fires, scientific controversy",
+  "changed_states": [],
+  "changed_edges": [
+    "edge_004 and edge_006 credibility weakened by replication failure"
+  ],
+  "fired_invalidations": [
+    "inv_002"
+  ],
+  "invalidated_scenarios": [
+    "scen_A weakened; scen_B (scientific debate) now primary"
+  ],
+  "resolved_unknowns": [
+    "unk_001 \u2014 RESOLVED: MIT failed to replicate"
+  ],
+  "new_unknowns": [
+    "Methodological differences between Copenhagen and MIT studies",
+    "NOAA replication result",
+    "Whether Nature Climate Change issues editorial note"
+  ],
+  "ground_truth_q1": "inv_002 fired. unk_001 resolved as replication failure. edges 004 and 006 weakened. No quantitative states changed.",
+  "ground_truth_q2": "scen_B is now primary \u2014 scientific debate active. scen_A (IPCC revision) delayed pending resolution. Physical measurements (state_001, state_002, state_005, state_006) are unchanged \u2014 the underlying climate data is still the same.",
+  "ground_truth_q3": "unk_001 resolved (MIT failed). New unknowns: methodological differences; NOAA result; editorial response. unk_003 (IPCC timeline) now delayed.",
+  "replay_key_clean": "727E982E19F4329F",
+  "replay_key_perturbed": "FC81FB8A51877B48",
+  "case_id": "CLIMATE-2026-AMOC-TIPPING",
+  "generated_at": "2026-03-21T12:00:00Z"
+}

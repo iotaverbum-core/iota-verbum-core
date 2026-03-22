@@ -1,0 +1,31 @@
+{
+  "perturbation_type": "P3_INVALIDATION",
+  "description": "Ukraine front collapses in Kharkiv \u2014 inv_004 fires, Suwalki pressure escalation risk increases",
+  "changed_states": [
+    "state_007 changed \u2014 front no longer stable, major Russian advance"
+  ],
+  "changed_edges": [
+    "edge_005 reverses \u2014 front collapse increases Russian escalation incentive"
+  ],
+  "fired_invalidations": [
+    "inv_004"
+  ],
+  "invalidated_scenarios": [
+    "scen_A probability reduced"
+  ],
+  "resolved_unknowns": [
+    "unk_003 \u2014 RESOLVED: front collapsed in Kharkiv"
+  ],
+  "new_unknowns": [
+    "Whether Russian forces redirect to Suwalki after Kharkiv success",
+    "NATO emergency response to Ukraine collapse",
+    "Whether US increases NATO commitment in response"
+  ],
+  "ground_truth_q1": "state_007 changed to collapse. inv_004 fired. edge_005 reversed. unk_003 resolved.",
+  "ground_truth_q2": "scen_A probability reduced. scen_C probability rises. B-52 deployment (state_006), battlegroups (state_002), Article 4 (state_008) all unchanged \u2014 still deterring.",
+  "ground_truth_q3": "unk_003 resolved (collapse). New unknowns: force reallocation; NATO emergency response; US commitment increase. unk_001 (Russian 48hr orders) now most urgent.",
+  "replay_key_clean": "91484988DA4C0085",
+  "replay_key_perturbed": "CD8E34EB273F1FEA",
+  "case_id": "NATO-2026-ARTICLE5-THRESHOLD",
+  "generated_at": "2026-03-21T12:00:00Z"
+}

@@ -1,0 +1,31 @@
+{
+  "perturbation_type": "P3_INVALIDATION",
+  "description": "ETF inflow streak broken on day 15 with net outflow \u2014 inv_001 fires",
+  "changed_states": [
+    "state_003 changes from 14-day inflow to outflow",
+    "state_004 changes from +412M inflow to -156M outflow"
+  ],
+  "changed_edges": [
+    "edge_001 reverses \u2014 outflow creates sell pressure"
+  ],
+  "fired_invalidations": [
+    "inv_001"
+  ],
+  "invalidated_scenarios": [
+    "scen_A"
+  ],
+  "resolved_unknowns": [
+    "unk_001 \u2014 RESOLVED: streak broken at day 15"
+  ],
+  "new_unknowns": [
+    "Whether outflow is single-day anomaly or trend reversal",
+    "Reason for IBIT outflow \u2014 redemptions or rotation"
+  ],
+  "ground_truth_q1": "inv_001 fired. state_003 changed to net outflow. state_004 flipped negative. unk_001 resolved as broken.",
+  "ground_truth_q2": "scen_A sealed scenario must be revised toward scen_B or scen_C. Structural demand thesis weakened. Whale/miner signals still valid and unchanged.",
+  "ground_truth_q3": "unk_001 resolved. New unknowns: single-day vs trend reversal; IBIT redemption rationale. unk_002 (macro risk) now more relevant.",
+  "replay_key_clean": "544E7B509FEEB21B",
+  "replay_key_perturbed": "9B48840A496C3FB8",
+  "case_id": "BTC-2026-ETF-FLOWS",
+  "generated_at": "2026-03-21T12:00:00Z"
+}

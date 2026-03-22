@@ -1,0 +1,29 @@
+{
+  "perturbation_type": "P3_INVALIDATION",
+  "description": "CFO Voss flips and accepts plea deal \u2014 inv_002 fires",
+  "changed_states": [],
+  "changed_edges": [
+    "New strong edge: Voss testimony directly implicates Harlan"
+  ],
+  "fired_invalidations": [
+    "inv_002"
+  ],
+  "invalidated_scenarios": [
+    "scen_A not invalidated but now converges with scen_B for Voss; Harlan indictment probability increases"
+  ],
+  "resolved_unknowns": [
+    "unk_002 \u2014 RESOLVED: Voss flipped"
+  ],
+  "new_unknowns": [
+    "Terms of Voss plea agreement",
+    "What Voss testimony covers and implicates",
+    "Whether Harlan now seeks own plea before indictment"
+  ],
+  "ground_truth_q1": "inv_002 fired. unk_002 resolved as flip. New evidence edge from Voss testimony added. No prior states changed.",
+  "ground_truth_q2": "scen_B partially realised for Voss. scen_A strengthened for Harlan \u2014 insider testimony increases indictment certainty. Server forensics (state_007) and wire transfers (state_004) still important and unchanged.",
+  "ground_truth_q3": "unk_002 resolved (Voss flipped). New unknowns: plea terms; testimony scope; Harlan's response. unk_001 (forensics content) still open and now potentially corroborated by Voss.",
+  "replay_key_clean": "0CFFF49C3417568B",
+  "replay_key_perturbed": "2E763DE677795E7F",
+  "case_id": "DOJ-2026-MERIDIAN-FRAUD",
+  "generated_at": "2026-03-21T12:00:00Z"
+}

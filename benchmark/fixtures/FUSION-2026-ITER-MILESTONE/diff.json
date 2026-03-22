@@ -1,0 +1,31 @@
+{
+  "perturbation_type": "P3_INVALIDATION",
+  "description": "ITER magnet quench event \u2014 inv_003 fires, project crisis, 18-month delay",
+  "changed_states": [
+    "state_007 changed from nominal to FAILURE"
+  ],
+  "changed_edges": [
+    "edge_001, edge_002, edge_005 all weakened by magnet failure"
+  ],
+  "fired_invalidations": [
+    "inv_003"
+  ],
+  "invalidated_scenarios": [
+    "scen_A invalidated; scen_C (delay) now primary"
+  ],
+  "resolved_unknowns": [
+    "unk_001 partially \u2014 timeline now extended by 18 months minimum"
+  ],
+  "new_unknowns": [
+    "Repair cost and budget impact",
+    "Whether magnet design flaw affects all TF coils",
+    "Political fallout for ITER funding"
+  ],
+  "ground_truth_q1": "state_007 changed to failure. inv_003 fired. unk_001 partially resolved as delayed. edges 001, 002, 005 weakened.",
+  "ground_truth_q2": "scen_A invalidated. scen_C is now primary. Prior plasma achievements (state_001, state_002, state_003) are still valid \u2014 the physics milestones were real. But the project timeline is broken.",
+  "ground_truth_q3": "unk_001 partially resolved (18-month delay). New unknowns: repair cost; all-coil flaw risk; political support. unk_002 (SPARC) now more significant \u2014 private sector may lead.",
+  "replay_key_clean": "0DB63E010152AAE1",
+  "replay_key_perturbed": "AB22D70D389A9F3A",
+  "case_id": "FUSION-2026-ITER-MILESTONE",
+  "generated_at": "2026-03-21T12:00:00Z"
+}

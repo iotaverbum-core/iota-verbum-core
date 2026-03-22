@@ -1,0 +1,30 @@
+{
+  "perturbation_type": "P1_QUANTITATIVE + P3_INVALIDATION",
+  "description": "EPA remediation cost revised from 340M to 145M \u2014 inv_002 fires, Halcyon is now solvent relative to liability",
+  "changed_states": [
+    "state_005 changes from 340M to 145M remediation estimate"
+  ],
+  "changed_edges": [
+    "edge_004 changes \u2014 145M is below 180M net worth, insolvency risk removed",
+    "edge_005 settlement leverage reduced"
+  ],
+  "fired_invalidations": [
+    "inv_002"
+  ],
+  "invalidated_scenarios": [
+    "scen_B (bankruptcy) substantially less likely"
+  ],
+  "resolved_unknowns": [],
+  "new_unknowns": [
+    "Whether Halcyon now pays full 145M voluntarily or still litigates",
+    "New consent decree terms given changed liability figure",
+    "Whether residents class action medical monitoring costs could push total above 180M again"
+  ],
+  "ground_truth_q1": "state_005 changed from 340M to 145M. inv_002 fired. edge_004 and edge_005 changed. No unknowns resolved.",
+  "ground_truth_q2": "scen_B (bankruptcy) now much less likely \u2014 Halcyon net worth exceeds revised liability. scen_A (consent decree) terms change \u2014 now a full-payment consent decree is possible, not just ability-to-pay. Liability evidence (state_001, state_004, state_007) is unchanged.",
+  "ground_truth_q3": "No unknowns resolved. New unknowns: voluntary full payment; new consent decree terms; whether residents class adds enough to exceed 180M again. unk_001 (criminal referral) unchanged and still pending.",
+  "replay_key_clean": "C94F580521546D71",
+  "replay_key_perturbed": "45FFF1DDB336B8A8",
+  "case_id": "EPA-2026-HALCYON-SUPERFUND",
+  "generated_at": "2026-03-21T12:00:00Z"
+}

@@ -1,0 +1,31 @@
+{
+  "perturbation_type": "P1_QUANTITATIVE + P3_INVALIDATION",
+  "description": "Iran enrichment crosses 90% \u2014 inv_001 fires, Israeli strike imminent",
+  "changed_states": [
+    "state_001 changes from 84% to 90%"
+  ],
+  "changed_edges": [
+    "edge_006 strength increases \u2014 red line crossed"
+  ],
+  "fired_invalidations": [
+    "inv_001"
+  ],
+  "invalidated_scenarios": [
+    "scen_A severely weakened \u2014 diplomatic timeline compressed by military pressure"
+  ],
+  "resolved_unknowns": [
+    "unk_002 \u2014 RESOLVED: 90% threshold crossed"
+  ],
+  "new_unknowns": [
+    "Israeli strike timeline (days vs weeks?)",
+    "US response to Israeli strike preparation",
+    "Whether talks continue after red line crossed"
+  ],
+  "ground_truth_q1": "state_001 changed to 90%. inv_001 fired. unk_002 resolved. edge_006 strength increased.",
+  "ground_truth_q2": "scen_A dramatically less likely \u2014 military action now imminent. scen_C is primary path. Economic pressure (edge_001), sanctions offer (edge_003) still present but now secondary.",
+  "ground_truth_q3": "unk_002 resolved (90% crossed). New unknowns: Israeli timeline; US response; whether talks survive red line crossing. unk_003 (Israeli readiness) now critical.",
+  "replay_key_clean": "778C12E1EFE3D412",
+  "replay_key_perturbed": "1A6DF3F2C17EB37E",
+  "case_id": "IRAN-NUCLEAR-2026-TALKS",
+  "generated_at": "2026-03-21T12:00:00Z"
+}

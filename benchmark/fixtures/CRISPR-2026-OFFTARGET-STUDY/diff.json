@@ -1,0 +1,29 @@
+{
+  "perturbation_type": "P3_INVALIDATION",
+  "description": "FDA mandates GUIDE-seq v3 for all approved CRISPR drugs \u2014 inv_003 fires",
+  "changed_states": [],
+  "changed_edges": [
+    "edge_004 strength increased \u2014 regulatory overhaul now underway"
+  ],
+  "fired_invalidations": [
+    "inv_003"
+  ],
+  "invalidated_scenarios": [
+    "scen_A partially \u2014 safety confirmed for NCL but regulatory overhaul adds uncertainty"
+  ],
+  "resolved_unknowns": [
+    "unk_002 \u2014 RESOLVED: FDA mandates GUIDE-seq v3 industry-wide"
+  ],
+  "new_unknowns": [
+    "12-18 month review impact on Casgevy commercial trajectory",
+    "Whether other CRISPR drugs pass GUIDE-seq v3 retrospective review",
+    "Timeline for FDA review completion"
+  ],
+  "ground_truth_q1": "inv_003 fired. edge_004 strength increased. unk_002 resolved. No quantitative states changed.",
+  "ground_truth_q2": "scen_B is now concurrent with scen_A \u2014 both are active. The Broad study findings (safety below threshold) are unchanged. The NEW element is industry-wide regulatory review triggered.",
+  "ground_truth_q3": "unk_002 resolved (FDA mandate). New unknowns: review timeline; other drugs' results under v3. unk_003 (Vertex retrospective) now mandatory rather than optional.",
+  "replay_key_clean": "5B8EF83A72EF7FD0",
+  "replay_key_perturbed": "8DAA78171352D235",
+  "case_id": "CRISPR-2026-OFFTARGET-STUDY",
+  "generated_at": "2026-03-21T12:00:00Z"
+}

@@ -1,0 +1,32 @@
+{
+  "perturbation_type": "P1_QUANTITATIVE + P3_INVALIDATION",
+  "description": "USD/JPY breaks 152 without MOF intervention \u2014 inv_003 fires, MOF credibility collapses",
+  "changed_states": [
+    "state_001 changes from 151.82 to 152.84",
+    "state_005 updated \u2014 second verbal intervention at 152 also ignored"
+  ],
+  "changed_edges": [
+    "edge_004 strength further reduced",
+    "edge_005 invalidated \u2014 152 no longer a hard threshold"
+  ],
+  "fired_invalidations": [
+    "inv_003"
+  ],
+  "invalidated_scenarios": [
+    "scen_A"
+  ],
+  "resolved_unknowns": [
+    "unk_001 \u2014 RESOLVED: MOF did NOT intervene at 152"
+  ],
+  "new_unknowns": [
+    "New MOF credibility threshold (155? 160?)",
+    "Whether BOJ will be forced to act instead"
+  ],
+  "ground_truth_q1": "state_001 changed to 152.84. inv_003 fired. state_005 updated. edge_005 invalidated. unk_001 resolved.",
+  "ground_truth_q2": "scen_A invalidated \u2014 MOF intervention at 152 was the sealed thesis. scen_B now primary. Rate differential driver (edge_001, edge_002) unchanged.",
+  "ground_truth_q3": "unk_001 resolved (no intervention). New unknowns: new threshold level; BOJ pressure to act. unk_002 (BOJ next decision) now more urgent.",
+  "replay_key_clean": "77DEF06F7651FF66",
+  "replay_key_perturbed": "AC4AEFBDD25D38FA",
+  "case_id": "USDJPY-2026-BOJ-INTERVENTION",
+  "generated_at": "2026-03-21T12:00:00Z"
+}

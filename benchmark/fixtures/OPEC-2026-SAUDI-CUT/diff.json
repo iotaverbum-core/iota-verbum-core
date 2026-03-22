@@ -1,0 +1,29 @@
+{
+  "perturbation_type": "P1_QUANTITATIVE + P2_CAUSAL",
+  "description": "Russia compliance drops from 87% to 61% \u2014 significant non-compliance, edge_004 upgraded",
+  "changed_states": [
+    "state_003 changes from 87% to 61% compliance"
+  ],
+  "changed_edges": [
+    "edge_004 strength upgraded MEDIUM->HIGH \u2014 non-compliance now a major price suppressor"
+  ],
+  "fired_invalidations": [],
+  "invalidated_scenarios": [
+    "scen_A weakened \u2014 even if Saudi cuts, Russia cheating undermines effectiveness"
+  ],
+  "resolved_unknowns": [
+    "unk_002 partially \u2014 Russia likely to resist at March 20 meeting"
+  ],
+  "new_unknowns": [
+    "Whether Saudi confronts Russia at March 20 meeting",
+    "Whether Saudi increases own cut to compensate for Russian cheating",
+    "Cartel cohesion risk"
+  ],
+  "ground_truth_q1": "state_003 changed from 87% to 61%. edge_004 upgraded to HIGH. No invalidation conditions fired.",
+  "ground_truth_q2": "scen_A weakened \u2014 Russian non-compliance undermines cut effectiveness even if Saudi agrees. scen_B or lower now more likely. Saudi fiscal pressure (edge_001) and China demand weakness (edge_002) unchanged.",
+  "ground_truth_q3": "unk_002 now partially informed (Russia likely resistant). New unknowns: Saudi response to Russia cheating; cartel cohesion. unk_001 (meeting outcome) still the key unknown but now more uncertain.",
+  "replay_key_clean": "5981D2CC7841D03D",
+  "replay_key_perturbed": "5EF529B825DF093A",
+  "case_id": "OPEC-2026-SAUDI-CUT",
+  "generated_at": "2026-03-21T12:00:00Z"
+}

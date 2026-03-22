@@ -1,0 +1,29 @@
+{
+  "perturbation_type": "P4_UNKNOWN_RESOLUTION",
+  "description": "CMS approves obesity coverage \u2014 unk_001 resolved as approval, inv_002 fires",
+  "changed_states": [],
+  "changed_edges": [
+    "edge_006 now active \u2014 15M patients gaining access"
+  ],
+  "fired_invalidations": [
+    "inv_002"
+  ],
+  "invalidated_scenarios": [
+    "scen_B invalidated; scen_A confirmed as primary path"
+  ],
+  "resolved_unknowns": [
+    "unk_001 \u2014 RESOLVED: CMS approved"
+  ],
+  "new_unknowns": [
+    "Uptake pace given approval \u2014 prescriber readiness",
+    "Supply chain capacity for 15M new patients",
+    "Lilly competitive response to Novo advantage"
+  ],
+  "ground_truth_q1": "inv_002 fired. unk_001 resolved as approval. edge_006 now activated. No states changed.",
+  "ground_truth_q2": "scen_A confirmed. scen_B invalidated. Thyroid signal (state_003, state_004) unchanged \u2014 still a monitoring concern even with approval.",
+  "ground_truth_q3": "unk_001 resolved (approved). New unknowns: uptake pace; supply chain; Lilly response. unk_002 (Lilly data) now more commercially significant.",
+  "replay_key_clean": "E86A9EC59F10C24E",
+  "replay_key_perturbed": "A7DE09BAC2ACC8D8",
+  "case_id": "GLP1-2026-LONGTERM-OUTCOMES",
+  "generated_at": "2026-03-21T12:00:00Z"
+}

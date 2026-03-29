@@ -112,6 +112,24 @@
           "text_sha256": {
             "type": "string",
             "pattern": "^[0-9a-f]{64}$"
+          },
+          "heading_path": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "title": {
+            "type": "string"
+          },
+          "categories": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "relative_path": {
+            "type": "string"
           }
         }
       }

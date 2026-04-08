@@ -1,0 +1,19 @@
+CUC v4 candidate patched Kaggle pilot
+Date: 2026-04-08
+Exported at UTC: 2026-04-08T19:14:02Z
+Task JSON path: /kaggle/input/datasets/matthewnealiotacore/cuc-v4-candidate-pilot-inputs-patched/cuc_metacognition_v4_candidate.task.json
+Params JSON path: /kaggle/input/datasets/matthewnealiotacore/cuc-v4-candidate-pilot-inputs-patched/cuc_v4_candidate_params.json
+Case count: 2
+Pass count: 2
+Fail count: 0
+Model: google/gemini-2.5-flash
+Key finding: the canonical ID reference removed fabricated_ids and fabricated_evidence_ids hard fails in the patched rerun.
+Caveat: the original assertion policy still showed one causal-propagation assertion failure on case 1 despite overall_pass=True; the repo task now treats axis checks as diagnostics once the operational pass rule succeeds.
+
+Per-run summary:
+- CUCV4-PRESERVE-01-SIBLING-STABILITY-LEGAL-CONTRACT
+  result=True status=success start=2026-04-08T19:11:02.196275+00:00 end=2026-04-08T19:11:37.193262+00:00
+  failed_assertion_ids=4c6c25923f644ec6889135c1e14afcff
+- CUCV4-PRESERVE-02-SIBLING-STABILITY-SECURITY-INCIDENT
+  result=True status=success start=2026-04-08T19:11:37.198523+00:00 end=2026-04-08T19:12:54.544161+00:00
+  failed_assertion_ids=(none)

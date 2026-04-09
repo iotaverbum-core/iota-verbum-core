@@ -220,9 +220,13 @@ def test_v4_candidate_notebook_stub_readme_links_main_handoff_files() -> None:
     assert "copy_cuc_v4_candidate_kaggle_cell.ps1" in readme_text
     assert "export_cuc_v4_candidate_kaggle_cells.ps1" in readme_text
     assert "build_cuc_v4_candidate_params.py" in readme_text
+    assert "prepare_cuc_v4_candidate_five_model_sweep.ps1" in readme_text
+    assert "import_cuc_v4_candidate_five_model_sweep.py" in readme_text
+    assert "import_cuc_v4_candidate_five_model_sweep.ps1" in readme_text
     assert "benchmark/cuc_metacognition_v4_candidate.task.json" in readme_text
     assert "benchmark/cuc_v4_candidate_params.json" in readme_text
     assert "/kaggle/working/cuc_v4_candidate_export/" in readme_text
+    assert "CUC_V4_CANDIDATE_FIVE_MODEL_SWEEP_2026_04_08.md" in readme_text
 
 
 def test_v4_candidate_task_uses_axis_assertions_as_diagnostics_after_operational_pass() -> None:

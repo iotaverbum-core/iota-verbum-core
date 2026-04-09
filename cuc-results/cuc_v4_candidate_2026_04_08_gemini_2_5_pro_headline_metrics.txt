@@ -1,0 +1,6 @@
+cuc_metacognition_v4_candidate v4 candidate import (results.zip)
+- Completed runs: 2/2
+- Passed runs: 0/2 = 0.0%
+- Fabricated-id regressions: 0
+- Score/export inconsistencies: 0
+- Hard-fail reasons seen: none

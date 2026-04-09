@@ -25,12 +25,24 @@
 - **Current repo-local v4 draft**: first runnable local draft now exists as `benchmark/cuc_metacognition_v4_candidate.task.json` plus `benchmark/cuc_v4_candidate_params.json`, currently covering 2 preserve-heavy candidate cases.
 - **Live v4 pilot status as of 2026-04-08**: the patched Kaggle rerun completed end to end with 2 completed runs on `google/gemini-2.5-flash`, and both runs passed the scorer's operational pass rule.
 - **Live v4 pilot finding**: nested structured param fields are accepted by Kaggle Benchmarks in the current notebook/task flow, and the canonical-id prompt contract fixed the first pilot's `fabricated_ids` / `fabricated_evidence_ids` hard failures.
+- **Five-model v4 candidate sweep status as of 2026-04-09**: a 5-model Kaggle smoke sweep completed on the same 2-case preserve-heavy pack with imported repo-side artifacts for GPT-5.4, Claude Sonnet 4.6, Gemini 2.5 Pro, Gemini 2.5 Flash, and Qwen 3 Next 80B Thinking.
+- **Five-model v4 candidate sweep result**:
+  - GPT-5.4: 2/2
+  - Claude Sonnet 4.6: 2/2
+  - Qwen 3 Next 80B Thinking: 2/2
+  - Gemini 2.5 Flash: 1/2 with a `fabricated_evidence_ids` hard fail on one case
+  - Gemini 2.5 Pro: 0/2
+- **Five-model v4 sweep interpretation**: the 2-case `v4` candidate is meaningfully discriminative at smoke-test scale (`2/2` disagreement cases across the five-model matrix), but it is still too small for flagship claims and still exposes at least one provider-specific grounding regression.
 - **Current v4 evidence artifact**:
   - `cuc-results/cuc_v4_candidate_patched_pilot_2026_04_08_results_export.json`
   - `cuc-results/cuc_v4_candidate_patched_pilot_2026_04_08_headline_metrics.txt`
   - `cuc-docs/CUC_V4_CANDIDATE_PATCHED_PILOT_2026_04_08.md`
+  - `cuc-results/cuc_v4_candidate_2026_04_08_model_summary.csv`
+  - `cuc-results/cuc_v4_candidate_2026_04_08_case_matrix.csv`
+  - `cuc-docs/CUC_V4_CANDIDATE_FIVE_MODEL_SWEEP_2026_04_08.md`
 - **Notebook export note**: the original repo stub export cell hit Kaggle result serialization on `_thread.RLock`; the repo notebook now uses a summarized export payload instead of serializing the raw `results` object, and the patched rerun produced the full export bundle successfully.
-- **Current v4 caution**: the successful pilot is still only 2 preserve-heavy cases. One exported run cleared `overall_pass=True` at the threshold while still carrying a pre-alignment causal-propagation assertion failure, so the repo task now treats per-axis assertions as diagnostics once the operational pass rule succeeds.
+- **Current v4 caution**: the successful pilot plus five-model sweep still cover only 2 preserve-heavy cases. The pack is good enough for smoke-comparison and regression hunting, but not yet for headline leaderboard claims or more model-budget spend on the same tiny slice.
+- **Current v4 build decision**: expand the candidate to at least 24 scored cases, with a preferred target of 32 to 40, before spending more model budget beyond the already-imported 5-model sweep.
 - **Full v4 must-have gates**:
   - at least 24 scored cases, with a preferred target of 32 to 40
   - non-empty `must_preserve` coverage in at least 25% of cases

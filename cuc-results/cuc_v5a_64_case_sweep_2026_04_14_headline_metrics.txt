@@ -1,0 +1,14 @@
+CUC v5a 64-case sweep import
+- Distinct imported models: 8
+- Duplicate zips ignored: 2
+- Cases per model: 64
+- All-model task-pass cases: 6/64
+- All-model task-fail cases: 4/64
+- Claude Sonnet 4.6: 2A 60/64, 2B 60/64, task 60/64, advantage=0.0pp
+- GPT-5.4: 2A 60/64, 2B 57/64, task 57/64, advantage=4.7pp
+- Claude Sonnet 4.5: 2A 60/64, 2B 46/64, task 46/64, advantage=21.9pp
+- Gemini 2.5 Flash: 2A 59/64, 2B 48/64, task 48/64, advantage=17.2pp
+- google/gemma-4-26b-a4b: 2A 53/62, 2B 57/62, task 52/62, advantage=-6.5pp
+- Qwen 3 Next 80B Thinking: 2A 49/61, 2B 48/61, task 42/61, advantage=1.6pp
+- Gemini 2.5 Pro: 2A 45/64, 2B 30/64, task 23/64, advantage=23.4pp
+- DeepSeek V3.2: 2A 43/64, 2B 40/64, task 27/64, advantage=4.7pp

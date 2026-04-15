@@ -1,148 +1,98 @@
 # iota-verbum-core
 
-IOTA VERBUM CORE is a deterministic extraction and provenance engine for audit-sensitive document workflows. The core promise is that the same committed input, pinned dependencies, and repository state produce the same output bytes and the same verification record.
+This repo contains the deterministic benchmark and provenance tooling behind the CUC metacognition benchmark line.
 
-This repository contains the deterministic core only: domain extractors, schemas, manifests, provenance tools, and reproducibility checks.
+## Start Here
 
-Casefile v1 is now available as the beachhead world output contract: a deterministic index artifact (`casefile.json`) that summarizes verified timeline state, contradictions, unknowns, receipts, and links to sealed ledger outputs.
+If you only need the current public benchmark surface, start with:
 
-## 30-Second Trust Loop
+- `cuc-docs/CUC_BENCHMARK_INDEX_2026_04_14.md`
 
-1. Generate deterministic self-casefile + strict replay:
-   - `.\scripts\clonable_integrity.ps1`
-2. Inspect casefile:
-   - `python -m core.casefile.inspect outputs/demo/<run_id>/casefile.json`
-   - `docs/proof_trace_viewer.html` (read-only)
-3. Authoritative replay command:
-   - `python -m core.determinism.replay outputs/demo/<run_id>/ledger/<bundle_sha256> --strict-manifest`
-4. Tamper check (copied artifacts only; original ledger unchanged):
-   - `.\scripts\tamper_casefile.ps1 -LedgerDir outputs/demo/<run_id>/ledger/<bundle_sha256>`
+That index is the canonical map for:
 
-See `docs/INTEGRITY_PATH.md` for the canonical 4-step path.
+- the current flagship benchmark
+- the supporting benchmark set
+- the authoritative result artifacts
+- the small set of docs that should be cited externally
 
-## Quickstart
+## Current Flagship
 
-```powershell
-python -m venv .venv
-.\.venv\Scripts\Activate.ps1
-python -m pip install -r requirements.lock
-python -m pip install -e .
-python -m pip install pre-commit
-pre-commit install
-pytest tests/ -v
-```
+The current flagship benchmark story is:
 
-## Codex Quickstart
+- `CUC v5a 64-case`
+- focus: scaffold-sensitive selective belief revision
+- canonical task: `benchmark/cuc_metacognition_v5a_candidate.task.json`
+- canonical full-pack params: `benchmark/cuc_v5_64_params.json`
+- canonical runner notebook: `scripts/cuc_metacognition_v5a_candidate_runner_export_stub.ipynb`
 
-```powershell
-.\.venv\Scripts\Activate.ps1
-python -m pytest -q
-.\scripts\clonable_integrity.ps1
-```
+Primary flagship docs:
 
-## Casefile Studio Demo App
+- sweep summary: `cuc-docs/CUC_V5A_64_CASE_SWEEP_2026_04_14.md`
+- submission-safe draft: `cuc-docs/CUC_V5A_FINAL_SUBMISSION_DRAFT_2026_04_14.md`
 
-Run the production demo app locally:
+Primary flagship result artifacts:
 
-```powershell
-.\.venv\Scripts\Activate.ps1
-python -m pip install -r requirements.lock
-python -m pip install -e .[dev]
-uvicorn iota_verbum_api.app:app --host 0.0.0.0 --port 8000
-```
+- `cuc-results/cuc_v5a_64_case_sweep_2026_04_14_model_summary.csv`
+- `cuc-results/cuc_v5a_64_case_sweep_2026_04_14_case_matrix.csv`
+- `cuc-results/cuc_v5a_64_case_sweep_2026_04_14_family_summary.csv`
+- `cuc-results/cuc_v5a_64_case_sweep_2026_04_14_headline_metrics.txt`
 
-Open:
+## Supporting Benchmarks
 
-- `http://localhost:8000/` for Casefile Studio
+Two older CUC benchmark lines remain important and are still supported:
 
-Primary API endpoints:
+- `CUC v4 24-case`
+  - compact discriminator benchmark
+  - strongest supporting doc: `cuc-docs/CUC_V4_24_CASE_STRONGER_MODEL_SWEEP_2026_04_11.md`
+- `CUC v3.1 Hardened`
+  - broader two-state supporting benchmark
+  - strongest supporting doc: `cuc-docs/CUC_V31_HARDENED_SUBMISSION_DRAFT_2026_04_07.md`
 
-- `GET /api/fixtures`
-- `POST /api/runs/sample`
-- `POST /api/runs/upload`
-- `GET /api/runs/{run_id}/summary`
-- `POST /api/runs/{run_id}/replay-verify`
+## Repo Structure
 
-## Demo Fixtures
+- `benchmark/`
+  - canonical task JSONs, benchmark params, and shared scorer/runtime code
+- `scripts/`
+  - notebook builders, importers, bundle tools, and helper scripts
+- `cuc-results/`
+  - imported run artifacts, flat results, matrices, and headline metrics
+- `cuc-docs/`
+  - benchmark writeups, specs, submission drafts, and handovers
+- `fixtures/`
+  - benchmark source fixtures and supporting source material
 
-Curated deterministic fixtures are in `data/demo_cases/`:
+## Public-Facing Rule
 
-- `timeline_breach_chain`
-- `secret_state_conflict`
-- `policy_control_mismatch`
+This repo has a lot of benchmark history. Not every document in `cuc-docs/` is canonical.
 
-Fixture contract and behavior notes:
+For external communication:
 
-- `docs/DEMO_FIXTURES.md`
+- use the benchmark index first
+- treat the v5a flagship docs as primary
+- treat v4 and v3.1 as supporting evidence
+- treat per-run findings, patch logs, and older planning docs as internal history unless the index points to them
 
-## Artifact Inspection
+## Kaggle and Import Workflow
 
-After a sample run completes:
+Canonical Kaggle outputs should be normalized into repo artifacts with the importer scripts rather than quoted directly from screenshots or notebook UIs.
 
-1. Inspect casefile:
-   - `python -m core.casefile.inspect outputs/demo/<run_id>/casefile.json`
-2. Inspect run artifacts:
-   - `outputs/demo/<run_id>/`
-3. Inspect canonical ledger payload:
-   - `outputs/demo/<run_id>/ledger/<bundle_sha256>/`
+Key import path:
 
-## Replay Verification
+- `scripts/import_cuc_kaggle_results_zip.py`
 
-Authoritative integrity check:
+The v5a full sweep also has a dedicated importer:
 
-```powershell
-python -m core.determinism.replay outputs/demo/<run_id>/ledger/<bundle_sha256> --strict-manifest
-```
+- `scripts/import_cuc_v5a_64_case_model_sweep.py`
 
-Casefile Studio also exposes replay verification at:
+## Integrity and Verification
 
-- `POST /api/runs/{run_id}/replay-verify`
+Trust-loop entry points:
 
-Run the legal contract extractor:
+- `scripts/clonable_integrity.ps1`
+- `python -m core.casefile.inspect`
+- `python -m core.determinism.replay`
+- `docs/proof_trace_viewer.html`
 
-```powershell
-python -m deterministic_ai `
-  --domain legal_contract `
-  --input-ref sample_contract `
-  --input-file data\legal_contract_sample\sample_contract.txt `
-  --timestamp 2026-02-28T14:32:00Z `
-  --commit-ref e20fbd8 `
-  --repo-tag v0.2.0-legal-domain `
-  --out outputs\legal_sample
-```
+Step-by-step local SDK notes live at:
 
-The legal contract output now includes deterministic clause analysis for:
-
-- rights and prohibitions
-- conditional triggers
-- contradiction and ambiguity detection
-- a compact risk report inside `output.json`
-- a top-level `review_findings` collection shared across domains
-- a top-level `review_summary` for operator triage
-
-## Verify A Provenance Record
-
-```powershell
-python scripts\view_provenance.py `
-  --verify `
-  --record outputs\legal_sample\provenance.json `
-  --input data\legal_contract_sample\sample_contract.txt `
-  --output outputs\legal_sample\output.json
-```
-
-Generate a printable HTML report:
-
-```powershell
-python scripts\generate_provenance_report.py `
-  --record outputs\legal_sample\provenance.json `
-  --out outputs\legal_sample\provenance_report.html
-```
-
-## How Determinism Is Enforced
-
-Canonical outputs are written with stable JSON serialization, input fixtures are pinned by SHA-256, and CI runs both the test suite and a double-run reproducibility check. `MANIFEST.sha256` is regenerated from tracked repository bytes and verified for drift during reproducibility checks.
-
-If you use pre-commit, the repository includes a local `verify MANIFEST.sha256` hook so README/docs/source edits that impact tracked bytes are caught before push.
-
-See `docs/DETERMINISM.md` and `docs/NONDETERMINISM_BOUNDARY.md` for the verification model. The biblical text example remains available as a fixture in `docs/examples/biblical_text.md`.
-See `docs/CASEFILE.md` for casefile contract details and replay usage.
+- `cuc-docs/CREATE_CUC_KBENCH_STEPS.md`

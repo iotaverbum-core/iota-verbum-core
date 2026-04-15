@@ -1,0 +1,207 @@
+# Hackathon Project Context (Current)
+
+## 0. Current Flagship Status
+- **Current flagship benchmark story**: CUC v5a 64-case scaffold-sensitive selective belief revision, backed by a completed imported 8-model `Run 2A` vs `Run 2B` sweep.
+- **Canonical v5a task**: `benchmark/cuc_metacognition_v5a_candidate.task.json`
+- **Canonical v5a full-pack params**: `benchmark/cuc_v5_64_params.json`
+- **Canonical v5a runner**: `scripts/cuc_metacognition_v5a_candidate_runner_export_stub.ipynb`
+- **Current v5a sweep artifacts**:
+  - `cuc-results/cuc_v5a_64_case_sweep_2026_04_14_model_summary.csv`
+  - `cuc-results/cuc_v5a_64_case_sweep_2026_04_14_case_matrix.csv`
+  - `cuc-results/cuc_v5a_64_case_sweep_2026_04_14_family_summary.csv`
+  - `cuc-results/cuc_v5a_64_case_sweep_2026_04_14_headline_metrics.txt`
+  - `cuc-docs/CUC_V5A_64_CASE_SWEEP_2026_04_14.md`
+  - `cuc-docs/CUC_V5A_FINAL_SUBMISSION_DRAFT_2026_04_14.md`
+- **Current v5a sweep result**:
+  - Claude Sonnet 4.6: `Run 2A 60/64`, `Run 2B 60/64`, task `60/64`
+  - GPT-5.4: `Run 2A 60/64`, `Run 2B 57/64`, task `57/64`
+  - Claude Sonnet 4.5: `Run 2A 60/64`, `Run 2B 46/64`, task `46/64`
+  - Gemini 2.5 Flash: `Run 2A 59/64`, `Run 2B 48/64`, task `48/64`
+  - google/gemma-4-26b-a4b: `Run 2A 53/62`, `Run 2B 57/62`, task `52/62`
+  - Qwen 3 Next 80B Thinking: `Run 2A 49/61`, `Run 2B 48/61`, task `42/61`
+  - DeepSeek V3.2: `Run 2A 43/64`, `Run 2B 40/64`, task `27/64`
+  - Gemini 2.5 Pro: `Run 2A 45/64`, `Run 2B 30/64`, task `23/64`
+- **Current strongest supported claim**: `v5a` measures scaffold-sensitive selective belief revision. Prior context helps many models, but not all; Claude Sonnet 4.6 is the top and only scaffold-independent model in the imported sweep.
+- **Current strongest family findings**:
+  - `threshold_crossing` is the strongest scaffold-sensitive family: `Run 2A 32/32`, `Run 2B 13/32`
+  - `evidence_removal` is the universal hard family: `Run 2A 0/32`, `Run 2B 0/32`
+- **Current caution**:
+  - do not describe the sweep as proving a universal prior-as-scaffold or pride-like law
+  - Gemma 4 26B is a real counterexample where `Run 2B` beats `Run 2A`
+  - no-op controls are not universally scaffold-sensitive; the strong no-op effect is concentrated in Gemini 2.5 Pro
+  - the benchmark is still two-state, not sequential multi-step restoration
+  - Qwen and Gemma exported incomplete case counts (`61/64` and `62/64`)
+- **Supporting benchmark story**:
+  - `CUC v4 24-case` remains the strongest compact discriminator benchmark
+  - `CUC v3.1 Hardened` remains the broader supporting two-state benchmark
+- **Supporting v3.1 pack**: `cuc_v31_hardened_kaggle_pack_candidate.zip`, generated from the v3 hardening loop.
+- **v3.1 size / structure**: 68 cases total: 48 inherited geometry-hardened cases, 8 no-op controls, and 12 hop-depth-3 holdout candidates.
+- **v3.1 zip-backed leaderboard imported on 2026-04-07**:
+  - Claude Sonnet 4.6: 67/68
+  - GPT-5.4: 66/68
+  - Qwen 3 Next 80B Thinking: 57/68
+  - Claude Sonnet 4.5: 57/68 with 2 provider/runtime errors
+  - DeepSeek V3.2: 54/68
+  - Gemini 2.5 Pro: 44/68
+  - Gemini 2.5 Flash: 43/68
+- **v3.1 primary artifacts**:
+  - `cuc-results/cuc_v31_hardened_2026_04_07_leaderboard.csv`
+  - `cuc-results/cuc_v31_hardened_2026_04_07_failures.csv`
+  - `cuc-results/cuc_v31_hardened_2026_04_07_case_matrix.csv`
+  - `cuc-docs/CUC_V31_HARDENED_SUBMISSION_DRAFT_2026_04_07.md`
+- **Current v4 candidate**: `cuc_metacognition_v40_revision_pressure`.
+- **Current v4 verdict**: `GO` as a benchmark-grade `v4 candidate` with a completed 8-model stronger-model sweep; still not an automatic flagship replacement for `v3.1 Hardened`.
+- **Current repo-local v4 draft**: the runnable local draft now exists as `benchmark/cuc_metacognition_v4_candidate.task.json` plus `benchmark/cuc_v4_candidate_params.json`, and now covers 24 candidate cases:
+  - 2 preserve-heavy sibling-stability cases
+  - 4 no-op / restraint controls
+  - 18 additional substantive family-expansion cases across temporal reorder, alternative-cause insertion, deferred effect, source reliability collapse, conflict reconciliation, counterparty response, and exception activation
+  - hop-depth mix: 4 hop-1, 10 hop-2, 10 hop-3
+  - sector mix: 7 legal, 5 security, 5 compliance, 5 procurement, 2 operations
+- **Live v4 pilot status as of 2026-04-08**: the patched Kaggle rerun completed end to end with 2 completed runs on `google/gemini-2.5-flash`, and both runs passed the scorer's operational pass rule.
+- **Live v4 pilot finding**: nested structured param fields are accepted by Kaggle Benchmarks in the current notebook/task flow, and the canonical-id prompt contract fixed the first pilot's `fabricated_ids` / `fabricated_evidence_ids` hard failures.
+- **Five-model v4 candidate sweep status as of 2026-04-09**: a 5-model Kaggle smoke sweep completed on the same 2-case preserve-heavy pack with imported repo-side artifacts for GPT-5.4, Claude Sonnet 4.6, Gemini 2.5 Pro, Gemini 2.5 Flash, and Qwen 3 Next 80B Thinking.
+- **Five-model v4 candidate sweep result**:
+  - GPT-5.4: 2/2
+  - Claude Sonnet 4.6: 2/2
+  - Qwen 3 Next 80B Thinking: 2/2
+  - Gemini 2.5 Flash: 1/2 with a `fabricated_evidence_ids` hard fail on one case
+  - Gemini 2.5 Pro: 0/2
+- **Five-model v4 sweep interpretation**: the 2-case `v4` candidate is meaningfully discriminative at smoke-test scale (`2/2` disagreement cases across the five-model matrix), but it is still too small for flagship claims and still exposes at least one provider-specific grounding regression.
+- **Current v4 evidence artifact**:
+  - `cuc-results/cuc_v4_candidate_patched_pilot_2026_04_08_results_export.json`
+  - `cuc-results/cuc_v4_candidate_patched_pilot_2026_04_08_headline_metrics.txt`
+  - `cuc-docs/CUC_V4_CANDIDATE_PATCHED_PILOT_2026_04_08.md`
+  - `cuc-results/cuc_v4_candidate_2026_04_08_model_summary.csv`
+  - `cuc-results/cuc_v4_candidate_2026_04_08_case_matrix.csv`
+  - `cuc-docs/CUC_V4_CANDIDATE_FIVE_MODEL_SWEEP_2026_04_08.md`
+- **Notebook export note**: the original repo stub export cell hit Kaggle result serialization on `_thread.RLock`; the repo notebook now uses a summarized export payload instead of serializing the raw `results` object, and the patched rerun produced the full export bundle successfully.
+- **24-case v4 validation status as of 2026-04-10**: the expanded 24-case candidate now builds and runs in Kaggle on `google/gemini-2.5-flash`, with imported repo-side reruns at six checkpoints: `16/24` pre-fix, `21/24` after the grounding and first structural fixes, `23/24` after the final-three patch pass, `21/24` after the `CORE-09` patch rerun, `20/24` after the first prompt/parser contract-hardening rerun, and `18/24` after the follow-up `q2_revision` id-only hardening rerun.
+- **24-case v4 validation finding**: the grounding-contract repair fully cleared the prior `fabricated_evidence_ids` failure cluster, the targeted structural fixes flipped `CUCV4-GROUNDING-01-SOURCE-RELIABILITY-COLLAPSE-PROCUREMENT-REVIEW`, `CUCV4-GROUNDING-02-CONFLICT-RECONCILIATION-SECURITY-INCIDENT`, and `CUCV4-CORE-08-DEFERRED-EFFECT-SECURITY-INCIDENT` to pass in the imported `23/24` rerun, and the subsequent `CORE-09` patch did flip `CUCV4-CORE-09-EXCEPTION-ACTIVATION-SECURITY-INCIDENT` itself to pass.
+- **Current v4 caution**: the latest imported rerun cleared the remaining hard-fail contract issues on `google/gemini-2.5-flash` (`0` fabricated-id regressions, `0` response-schema violations, `0` hard-fail reasons overall), but overall score stability worsened to `18/24`, with six non-hard-fail misses spread across `CUCV4-CORE-02-TEMPORAL-REORDER-COMPLIANCE-AUDIT`, `CUCV4-CORE-03-TEMPORAL-REORDER-LEGAL-CONTRACT`, `CUCV4-CORE-08-DEFERRED-EFFECT-SECURITY-INCIDENT`, `CUCV4-GROUNDING-04-SOURCE-RELIABILITY-COLLAPSE-LEGAL-CONTRACT`, `CUCV4-GROUNDING-06-CONFLICT-RECONCILIATION-PROCUREMENT-REVIEW`, and `CUCV4-INVARIANT-02-COUNTERPARTY-RESPONSE-COMPLIANCE-AUDIT`.
+- **Current v4 build decision**: treat prompt-contract hardening as done for now. The current evidence says the remaining issue is run-to-run semantic variability from `google/gemini-2.5-flash`, not unresolved schema enforcement. Keep the 24-case content frozen, use the imported artifacts to distinguish contract failures from substantive misses, and decide the next benchmark phase from a stronger model or a multi-model matrix rather than more local prompt-contract tweaks on the same Gemini control lane.
+- **Local prompt-contract status as of 2026-04-10**: the repo-local notebook stub now includes strict run-2 formatting instructions, a stricter `extract_json_object` helper that rejects malformed outer JSON and trailing text, and explicit `q2_revision` id-only guidance that bans natural-language claim text, evidence ids, and surface artifact labels in revision lists. Those changes removed the prior hard-fail contract noise, but did not improve Gemini stability enough to justify more prompt-only iteration.
+- **24-case v4 stronger-model sweep status as of 2026-04-11**: the frozen stronger-model sweep is now complete at 8/8 planned model slots. Imported repo-side artifacts cover GPT-5.4, Claude Sonnet 4.6, Claude Sonnet 4.5, Gemini 2.5 Pro, Gemini 2.5 Flash, DeepSeek V3.2, DeepSeek V3.1, and Qwen 3 Next 80B Thinking; a bonus sidecar import also exists for Gemma 4 31B.
+- **24-case v4 stronger-model sweep result**:
+  - GPT-5.4: 24/24
+  - Claude Sonnet 4.6: 24/24
+  - Claude Sonnet 4.5: 23/24
+  - Gemini 2.5 Flash: 19/24
+  - Qwen 3 Next 80B Thinking: 17/23
+  - DeepSeek V3.1: 13/24
+  - DeepSeek V3.2: 12/24
+  - Gemini 2.5 Pro: 5/24
+  - Gemma 4 31B sidecar: 13/24
+- **24-case v4 stronger-model sweep interpretation**: this is the cleanest v4 signal yet. Across the imported eight-model matrix, the frozen 24-case pack shows `20/24` disagreement cases, `4/24` all-pass cases, `0/24` all-fail cases, and `0` fabricated-id or fabricated-evidence-id regressions across all imported runs. That is stronger per-case separation and cleaner contract behavior than the earlier Gemini-only control lane.
+- **Current v4 flagship caution**: despite the stronger completed sweep, weigh the 24-case pack's smaller size and the one missing exported Qwen case (`17/23`) against the broader 68-case `v3.1 Hardened` pack before replacing `v3.1` as the repo's lead benchmark story.
+- **Current next-step design path**: the repo now has the full runnable `v5a` pilot path: shared scorer code at `benchmark/cuc_metacognition_shared.py`, the frozen `10`-case pilot pack at `benchmark/cuc_v5a_candidate_params.json`, the runnable task at `benchmark/cuc_metacognition_v5a_candidate.task.json`, and the notebook stub at `scripts/cuc_metacognition_v5a_candidate_runner_export_stub.ipynb`. `v5a` remains intentionally narrower than the reviewed external `v5` concept bundle: it keeps `Run 1`, `Run 2A`, and `Run 2B`, and explicitly defers `Run 3`, partial restoration, and minimal-surface families to a later sequential benchmark.
+- **Full v4 must-have gates**:
+  - at least 24 scored cases, with a preferred target of 32 to 40
+  - non-empty `must_preserve` coverage in at least 25% of cases
+  - 4 to 8 no-op / restraint controls
+  - no single family above 30% of the pack and no single sector above 35%
+  - imported cross-model evidence before any flagship rename
+- **v4 planning docs**:
+  - `cuc-docs/CUC_V4_GO_NO_GO_CHECKLIST_2026_04_08.md`
+  - `cuc-docs/CUC_V4_BUILD_PLAN_2026_04_08.md`
+  - `cuc-docs/CUC_V4_IMPLEMENTATION_BACKLOG_2026_04_08.md`
+  - `cuc-docs/CUC_V4_24_CASE_STRONGER_MODEL_SWEEP_2026_04_11.md`
+  - `cuc-docs/CUC_V4_FLAGSHIP_HANDOVER_2026_04_12.md`
+  - `cuc-docs/CUC_V5A_PRIOR_ANCHORED_REVISION_SPEC_2026_04_12.md`
+  - `cuc-docs/CUC_V5A_PILOT_CASE_PACK_2026_04_12.md`
+  - `cuc-docs/CUC_V41_SEQUENTIAL_PERTURBATION_SPEC_2026_04_12.md`
+- **Next active benchmark-design step**: run the first focused `v5a` pilot on the frozen `10`-case pack, starting with the stronger comparison lane and Gemini Flash as control. Treat the 3-state upgrade as `CUC v4.1 Sequential` internally after the `v5a` pilot readout, with `CUC v5` reserved for a post-pilot expansion that clears the sequential validation gates.
+
+## 1. Dataset
+- **Name / source**: CUC Legal Metacognition Benchmark v2, staged for Kaggle at `benchmark/kaggle/cuc-fixtures-final 50/new_fixtures/`.
+- **Size**: 50 hosted cases. Each case folder contains `clean.md`, `perturbed.md`, and `diff.json`.
+- **Type**: Structured text benchmark with paired evidence packs plus supervised change labels.
+- **Key features / columns**: `case_id`, `clean_md`, `perturbed_md`, `ground_truth_q1`, `ground_truth_q2`, `ground_truth_q3`, `fired_invalidations`, `changed_states`, `changed_edges`, `resolved_unknowns`, `new_unknowns`.
+- **Known issues**:
+  - The benchmark is hard and discriminative, but structurally template-heavy.
+  - 46/50 cases reuse the same generic state, edge, and unknown role slots.
+  - Perturbations are highly regular: all 50 cases fire exactly one invalidation and create exactly four new unknowns.
+  - A small set of scorer-shape fragility cases still needs audit, especially `BIOTECH-2026-GENE-THERAPY-IND`, `SUPPLY-2026-NEXCORE-CHIPSHORTAGE`, `AIRLINE-2026-SLOT-RULING`, `CRYPTO-2026-STAKING-REGULATION`, and `TECH-2026-OPENAI-APIBREAK`.
+
+## 2. Notebook & Code
+- **Platform**: Kaggle notebook / Jupyter.
+- **Primary hosted notebook path**: `scripts/cuc_metacognition_legal_v2_matthewneal_20260405.ipynb` in the repo workspace and the corresponding uploaded Kaggle notebook.
+- **Task name**: Hosted Kaggle task `cuc_metacognition_legal_v2`.
+- **Current task structure**:
+  - two-pass prompting (`clean_md` analysis followed by `perturbed_md` self-correction)
+  - 15 judged criteria across Q1 detection, Q2 self-correction, and Q3 unknown tracking
+  - case pass threshold of at least 11/15 criteria
+- **Important implementation rule**:
+  - In the notebook source, use `kbench.llm` rather than a hard-coded model list.
+  - Inside Kaggle runtime evaluation calls, use `[kbench.llm]` as the grid value when calling `task.evaluate(...)`.
+- **Repo-side import/export tooling**:
+  - `scripts/import_cuc_kaggle_results_zip.py`
+  - `cuc-results/`
+  - `cuc-docs/`
+
+## 3. Models & Runs
+- **Current imported hosted results**: Eight one-model Kaggle exports imported on April 6, 2026.
+- **Models evaluated**:
+  - Claude Sonnet 4.6
+  - Claude Haiku 4.5
+  - Gemini 3.1 Pro Preview
+  - Gemini 2.5 Pro
+  - Gemini 2.5 Flash
+  - DeepSeek V3.2
+  - GPT-5.4
+  - Qwen 3 Next 80B Thinking
+- **Current case-level pass results**:
+  - Claude Sonnet 4.6: 19/50
+  - Claude Haiku 4.5: 2/50
+  - Gemini 3.1 Pro Preview: 0/50
+  - Gemini 2.5 Pro: 0/50
+  - Gemini 2.5 Flash: 0/50
+  - DeepSeek V3.2: 0/50
+  - GPT-5.4: 0/50
+  - Qwen 3 Next 80B Thinking: 0/50
+- **Aggregate hosted result shape**:
+  - 400/400 completed runs
+  - 21/400 boolean passes
+  - 370/400 clean runs
+  - 0/50 all-pass cases
+  - 29/50 all-fail cases
+  - 21/50 disagreement cases
+- **Missing target comparison models**:
+  - Claude Sonnet 4.5
+  - Gemma 3 12B
+
+## 4. Competition Positioning
+- **Theme / problem statement**: CUC tests whether a model detects what changed, revises only the impacted claims, and tracks uncertainty correctly when evidence shifts.
+- **Why this fits the metacognition/cognitive track**: The benchmark is about selective belief revision under perturbation, not just one-shot answer quality.
+- **Strongest safe claim right now**: `CUC v4` demonstrates strong single-step selective belief revision discrimination under a strict canonical schema across an imported 8-model sweep, while `v3.1 Hardened` provides the broader supporting scale story.
+- **Unsafe claim right now**: Do not claim that the current benchmark suite already proves robust multi-step truth maintenance or low-template naturalism without the sequential upgrade and additional hardening.
+- **Submission risk to acknowledge**:
+  - `v4` is still only 24 cases
+  - capability versus format compliance is not yet fully separated for the ambiguous middle tier
+  - robust sequential revision has not yet been demonstrated
+  - template-heaviness
+  - scorer fragility on a small cluster of cases
+
+## 5. Goals
+- **Primary goal**: Build the strongest possible metacognition-track submission and compete for the grand prize with a benchmark-centered story.
+- **Immediate benchmark goals**:
+  - behaviorally audit raw outputs for the ambiguous middle tier to separate reasoning misses from strict-schema misses
+  - implement the `CUC v4.1 Sequential` schema and scorer design before generating any new sequential cases
+  - build a `6` to `10` case sequential pilot only after the scoring contract is frozen
+  - preserve the current flagship positioning: `v4` as the sharp discriminator benchmark and `v3.1 Hardened` as the broader supporting benchmark
+- **Help most likely needed**:
+  - behavioral audit of raw model outputs
+  - sequential benchmark schema and scorer design
+  - pilot-case authoring and deterministic validation
+  - benchmark analysis and evidence-backed judge-safe positioning
+
+## 6. Additional Resources
+- **Core artifact paths**:
+  - `cuc-results/cuc_results_flat_hosted_legal_v2_2026_04_06.csv`
+  - `cuc-results/hosted_legal_v2_2026_04_06_case_matrix.csv`
+  - `cuc-results/hosted_legal_v2_2026_04_06_headline_metrics.txt`
+  - `cuc-results/hosted_legal_v2_2026_04_06_summary.txt`
+  - `cuc-docs/CUC_submission_draft_hosted_legal_v2_2026_04_06.md`
+  - `cuc-docs/CODEX_GRAND_PRIZE_MODE_PROMPT.md`
+  - `cuc-docs/CUC_V41_SEQUENTIAL_PERTURBATION_SPEC_2026_04_12.md`
+- **APIs / tools available**: `OPENAI_API_KEY`, `GOOGLE_API_KEY`, `ANTHROPIC_API_KEY`, Kaggle Benchmarks runtime, repo-side scoring and import scripts.
+- **Frontend / demo surface**: The benchmark submission surface is the Kaggle notebook and Kaggle task page. The repo also contains Casefile Studio, but that is secondary to the competition benchmark workflow.

@@ -1,0 +1,8 @@
+cuc_metacognition_v4_candidate v4 candidate import:
+- Authoritative source: results.zip
+- Completed runs: 2/2
+- Passed runs: 2/2 = 100.0%
+- Hard-fail reasons seen: none
+- Per-case pass summary:
+  - CUCV4-PRESERVE-01-SIBLING-STABILITY-LEGAL-CONTRACT: passed=True, overall_score=1.000000, hard_fail_reasons=[]
+  - CUCV4-PRESERVE-02-SIBLING-STABILITY-SECURITY-INCIDENT: passed=True, overall_score=1.000000, hard_fail_reasons=[]

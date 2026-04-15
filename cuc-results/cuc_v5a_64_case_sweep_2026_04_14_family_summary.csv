@@ -1,0 +1,8 @@
+family_id,model_case_pairs,distinct_cases,run2a_pass_count,run2b_pass_count,run2a_pass_rate,run2b_pass_rate,scaffold_cases,reverse_scaffold_cases,both_fail_cases
+conflict_reconciliation,117,15,113,92,0.966,0.786,24,3,1
+deferred_effect,79,10,70,73,0.886,0.924,3,6,3
+evidence_removal,32,4,0,0,0.000,0.000,0,0,32
+no_op_control,72,9,72,62,1.000,0.861,10,0,0
+selective_preservation_sibling_stability,72,9,65,56,0.903,0.778,12,3,4
+source_reliability_collapse,103,13,77,90,0.748,0.874,6,19,7
+threshold_crossing,32,4,32,13,1.000,0.406,19,0,0

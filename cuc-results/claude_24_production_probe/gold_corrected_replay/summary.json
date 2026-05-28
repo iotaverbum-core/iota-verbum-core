@@ -1,0 +1,602 @@
+{
+  "case_ids": [
+    "CUCV4-PRESERVE-01-SIBLING-STABILITY-LEGAL-CONTRACT",
+    "CUCV4-PRESERVE-02-SIBLING-STABILITY-SECURITY-INCIDENT",
+    "CUCV4-NOOP-01-COMPLIANCE-AUDIT",
+    "CUCV4-NOOP-02-OPERATIONS-BRIEF",
+    "CUCV4-CORE-01-TEMPORAL-REORDER-OPERATIONS-BRIEF",
+    "CUCV4-GROUNDING-01-SOURCE-RELIABILITY-COLLAPSE-PROCUREMENT-REVIEW",
+    "CUCV4-GROUNDING-02-CONFLICT-RECONCILIATION-SECURITY-INCIDENT",
+    "CUCV4-INVARIANT-01-COUNTERPARTY-RESPONSE-LEGAL-CONTRACT",
+    "CUCV4-NOOP-03-LEGAL-CONTRACT",
+    "CUCV4-NOOP-04-PROCUREMENT-REVIEW",
+    "CUCV4-CORE-02-TEMPORAL-REORDER-COMPLIANCE-AUDIT",
+    "CUCV4-CORE-03-TEMPORAL-REORDER-LEGAL-CONTRACT",
+    "CUCV4-CORE-04-ALTERNATIVE-CAUSE-INSERTION-COMPLIANCE-AUDIT",
+    "CUCV4-CORE-05-ALTERNATIVE-CAUSE-INSERTION-SECURITY-INCIDENT",
+    "CUCV4-CORE-06-ALTERNATIVE-CAUSE-INSERTION-PROCUREMENT-REVIEW",
+    "CUCV4-CORE-07-DEFERRED-EFFECT-LEGAL-CONTRACT",
+    "CUCV4-CORE-08-DEFERRED-EFFECT-SECURITY-INCIDENT",
+    "CUCV4-GROUNDING-03-SOURCE-RELIABILITY-COLLAPSE-COMPLIANCE-AUDIT",
+    "CUCV4-GROUNDING-04-SOURCE-RELIABILITY-COLLAPSE-LEGAL-CONTRACT",
+    "CUCV4-GROUNDING-05-CONFLICT-RECONCILIATION-LEGAL-CONTRACT",
+    "CUCV4-GROUNDING-06-CONFLICT-RECONCILIATION-PROCUREMENT-REVIEW",
+    "CUCV4-INVARIANT-02-COUNTERPARTY-RESPONSE-COMPLIANCE-AUDIT",
+    "CUCV4-INVARIANT-03-COUNTERPARTY-RESPONSE-PROCUREMENT-REVIEW",
+    "CUCV4-CORE-09-EXCEPTION-ACTIVATION-SECURITY-INCIDENT"
+  ],
+  "fallback_model": "",
+  "ledger_root": "cuc-results/claude_24_production_probe/gold_corrected_replay/ledger",
+  "max_tokens": 8192,
+  "model": "claude-sonnet-4-6-existing-output-replay",
+  "output_dir": "cuc-results/claude_24_production_probe/gold_corrected_replay",
+  "params_path": "C:/iotaverbum/iota-verbum-core/benchmark/cuc_v4_candidate_params.json",
+  "rate_limit_retries": 0,
+  "rate_limit_sleep_seconds": 0.0,
+  "results": [
+    {
+      "case_id": "CUCV4-PRESERVE-01-SIBLING-STABILITY-LEGAL-CONTRACT",
+      "fixture_dir": "C:/iotaverbum/iota-verbum-core/benchmark/kaggle/fixtures/CUCV4-PRESERVE-01-SIBLING-STABILITY-LEGAL-CONTRACT",
+      "gap_report_path": "cuc-results/claude_24_production_probe/gold_corrected_replay/CUCV4-PRESERVE-01-SIBLING-STABILITY-LEGAL-CONTRACT/gap_report.json",
+      "gap_summary": {
+        "compared_fields": 148,
+        "matching_fields": 110,
+        "similarity_score_percent": 74.32
+      },
+      "json_valid": true,
+      "ledger_commit": {
+        "attestation_sha256": "d42443591597328233c33370a6af4d98cf91abc9a492d95761938375f3461ef1",
+        "bundle_sha256": "0b5b6796013cf1e171edc40ae8c30c9d717d771ac3b4dba5b1893a618b5c5617",
+        "output_sha256": "cf93ecace1feea156a3c4bb08c46c06b3bceb5fad276b22a30d49e73f78ae687",
+        "run_dir": "cuc-results/claude_24_production_probe/gold_corrected_replay/ledger/0b5b6796013cf1e171edc40ae8c30c9d717d771ac3b4dba5b1893a618b5c5617"
+      },
+      "ledger_committed": true,
+      "model_delta_path": "cuc-results/claude_24_production_probe/gold_corrected_replay/CUCV4-PRESERVE-01-SIBLING-STABILITY-LEGAL-CONTRACT/model_delta.json",
+      "source_case_id": "CUCV4-PRESERVE-01-SIBLING-STABILITY-LEGAL-CONTRACT",
+      "verifier_accepted": true,
+      "verifier_reason_families": [],
+      "verifier_reasons": []
+    },
+    {
+      "case_id": "CUCV4-PRESERVE-02-SIBLING-STABILITY-SECURITY-INCIDENT",
+      "fixture_dir": "C:/iotaverbum/iota-verbum-core/benchmark/kaggle/fixtures/CUCV4-PRESERVE-02-SIBLING-STABILITY-SECURITY-INCIDENT",
+      "gap_report_path": "cuc-results/claude_24_production_probe/gold_corrected_replay/CUCV4-PRESERVE-02-SIBLING-STABILITY-SECURITY-INCIDENT/gap_report.json",
+      "gap_summary": {
+        "compared_fields": 158,
+        "matching_fields": 136,
+        "similarity_score_percent": 86.08
+      },
+      "json_valid": true,
+      "ledger_commit": {
+        "attestation_sha256": "957de2703750e8b379c23a164393b1fbc9e43759fab169313c50e36eafeb0739",
+        "bundle_sha256": "3adac3b34ebb4d113d0e7cbee807e1741e07a9560855b25a6bb39dbd693426d9",
+        "output_sha256": "4e17f7ed1eb6fbfa4688c7d72129fb1db4b3bf0f6d1ab3bef7d1ca8187973a9a",
+        "run_dir": "cuc-results/claude_24_production_probe/gold_corrected_replay/ledger/3adac3b34ebb4d113d0e7cbee807e1741e07a9560855b25a6bb39dbd693426d9"
+      },
+      "ledger_committed": true,
+      "model_delta_path": "cuc-results/claude_24_production_probe/gold_corrected_replay/CUCV4-PRESERVE-02-SIBLING-STABILITY-SECURITY-INCIDENT/model_delta.json",
+      "source_case_id": "CUCV4-PRESERVE-02-SIBLING-STABILITY-SECURITY-INCIDENT",
+      "verifier_accepted": true,
+      "verifier_reason_families": [],
+      "verifier_reasons": []
+    },
+    {
+      "case_id": "CUCV4-NOOP-01-COMPLIANCE-AUDIT",
+      "fixture_dir": "C:/iotaverbum/iota-verbum-core/benchmark/kaggle/fixtures/CUCV4-NOOP-01-COMPLIANCE-AUDIT",
+      "gap_report_path": "cuc-results/claude_24_production_probe/gold_corrected_replay/CUCV4-NOOP-01-COMPLIANCE-AUDIT/gap_report.json",
+      "gap_summary": {
+        "compared_fields": 27,
+        "matching_fields": 22,
+        "similarity_score_percent": 81.48
+      },
+      "json_valid": true,
+      "ledger_commit": {
+        "attestation_sha256": "febb33070372aaedcd8f4cb6392949591d640ce10ea47ceeb3fba48311ec77b7",
+        "bundle_sha256": "156bff9016865b806c7ddca874141def4b027d7b18536a3a7db98954c1b79128",
+        "output_sha256": "71f8b75e892b466329653c86d1035ce34876d0c70572b8336bb61430f024df9d",
+        "run_dir": "cuc-results/claude_24_production_probe/gold_corrected_replay/ledger/156bff9016865b806c7ddca874141def4b027d7b18536a3a7db98954c1b79128"
+      },
+      "ledger_committed": true,
+      "model_delta_path": "cuc-results/claude_24_production_probe/gold_corrected_replay/CUCV4-NOOP-01-COMPLIANCE-AUDIT/model_delta.json",
+      "source_case_id": "CUCV4-NOOP-01-COMPLIANCE-AUDIT",
+      "verifier_accepted": true,
+      "verifier_reason_families": [],
+      "verifier_reasons": []
+    },
+    {
+      "case_id": "CUCV4-NOOP-02-OPERATIONS-BRIEF",
+      "fixture_dir": "C:/iotaverbum/iota-verbum-core/benchmark/kaggle/fixtures/CUCV4-NOOP-02-OPERATIONS-BRIEF",
+      "gap_report_path": "cuc-results/claude_24_production_probe/gold_corrected_replay/CUCV4-NOOP-02-OPERATIONS-BRIEF/gap_report.json",
+      "gap_summary": {
+        "compared_fields": 31,
+        "matching_fields": 26,
+        "similarity_score_percent": 83.87
+      },
+      "json_valid": true,
+      "ledger_commit": {
+        "attestation_sha256": "e3d4b241e1de34f26d8c5bd568f635a68fd6b800e5b36cb2b40cc443fcef259c",
+        "bundle_sha256": "21c1bf988fab9323ef7195d87eee8b0012897f76c4171a738bc958f16556d918",
+        "output_sha256": "1e998cd8444af34d10ef4534715120cec7563c1b545bf18785a07b2d83d065b9",
+        "run_dir": "cuc-results/claude_24_production_probe/gold_corrected_replay/ledger/21c1bf988fab9323ef7195d87eee8b0012897f76c4171a738bc958f16556d918"
+      },
+      "ledger_committed": true,
+      "model_delta_path": "cuc-results/claude_24_production_probe/gold_corrected_replay/CUCV4-NOOP-02-OPERATIONS-BRIEF/model_delta.json",
+      "source_case_id": "CUCV4-NOOP-02-OPERATIONS-BRIEF",
+      "verifier_accepted": true,
+      "verifier_reason_families": [],
+      "verifier_reasons": []
+    },
+    {
+      "case_id": "CUCV4-CORE-01-TEMPORAL-REORDER-OPERATIONS-BRIEF",
+      "fixture_dir": "C:/iotaverbum/iota-verbum-core/benchmark/kaggle/fixtures/CUCV4-CORE-01-TEMPORAL-REORDER-OPERATIONS-BRIEF",
+      "gap_report_path": "cuc-results/claude_24_production_probe/gold_corrected_replay/CUCV4-CORE-01-TEMPORAL-REORDER-OPERATIONS-BRIEF/gap_report.json",
+      "gap_summary": {
+        "compared_fields": 115,
+        "matching_fields": 94,
+        "similarity_score_percent": 81.74
+      },
+      "json_valid": true,
+      "ledger_commit": {
+        "attestation_sha256": "de624615562318c1cb613a76ddb2a7285dfe153f3ad976ce93e31875a4ac1e73",
+        "bundle_sha256": "6c90b37e3b211b7bf3ac489d1e8d67b7c83546947339cebc77c956a717b950d5",
+        "output_sha256": "17ea2fb6c4f038548e479e923d0e35d04aad97309a037d48195055fd2e05bb7c",
+        "run_dir": "cuc-results/claude_24_production_probe/gold_corrected_replay/ledger/6c90b37e3b211b7bf3ac489d1e8d67b7c83546947339cebc77c956a717b950d5"
+      },
+      "ledger_committed": true,
+      "model_delta_path": "cuc-results/claude_24_production_probe/gold_corrected_replay/CUCV4-CORE-01-TEMPORAL-REORDER-OPERATIONS-BRIEF/model_delta.json",
+      "source_case_id": "CUCV4-CORE-01-TEMPORAL-REORDER-OPERATIONS-BRIEF",
+      "verifier_accepted": true,
+      "verifier_reason_families": [],
+      "verifier_reasons": []
+    },
+    {
+      "case_id": "CUCV4-GROUNDING-01-SOURCE-RELIABILITY-COLLAPSE-PROCUREMENT-REVIEW",
+      "fixture_dir": "C:/iotaverbum/iota-verbum-core/benchmark/kaggle/fixtures/CUCV4-GROUNDING-01-SOURCE-RELIABILITY-COLLAPSE-PROCUREMENT-REVIEW",
+      "gap_report_path": "cuc-results/claude_24_production_probe/gold_corrected_replay/CUCV4-GROUNDING-01-SOURCE-RELIABILITY-COLLAPSE-PROCUREMENT-REVIEW/gap_report.json",
+      "gap_summary": {
+        "compared_fields": 98,
+        "matching_fields": 82,
+        "similarity_score_percent": 83.67
+      },
+      "json_valid": true,
+      "ledger_commit": {
+        "attestation_sha256": "65432bbb8b0fc6db8b05328da714ef7b0e20f39cef8ee4a2ed5e2649c5d37b12",
+        "bundle_sha256": "eea64967d360e5c8089e21fdf11fd876b31b30128c3a050489e3b6ce5852e08f",
+        "output_sha256": "f6376db56e72c7142f7f477cdb5e945fd8737347a358eede89f77a5c8b125eb1",
+        "run_dir": "cuc-results/claude_24_production_probe/gold_corrected_replay/ledger/eea64967d360e5c8089e21fdf11fd876b31b30128c3a050489e3b6ce5852e08f"
+      },
+      "ledger_committed": true,
+      "model_delta_path": "cuc-results/claude_24_production_probe/gold_corrected_replay/CUCV4-GROUNDING-01-SOURCE-RELIABILITY-COLLAPSE-PROCUREMENT-REVIEW/model_delta.json",
+      "source_case_id": "CUCV4-GROUNDING-01-SOURCE-RELIABILITY-COLLAPSE-PROCUREMENT-REVIEW",
+      "verifier_accepted": true,
+      "verifier_reason_families": [],
+      "verifier_reasons": []
+    },
+    {
+      "case_id": "CUCV4-GROUNDING-02-CONFLICT-RECONCILIATION-SECURITY-INCIDENT",
+      "fixture_dir": "C:/iotaverbum/iota-verbum-core/benchmark/kaggle/fixtures/CUCV4-GROUNDING-02-CONFLICT-RECONCILIATION-SECURITY-INCIDENT",
+      "gap_report_path": "cuc-results/claude_24_production_probe/gold_corrected_replay/CUCV4-GROUNDING-02-CONFLICT-RECONCILIATION-SECURITY-INCIDENT/gap_report.json",
+      "gap_summary": {
+        "compared_fields": 103,
+        "matching_fields": 77,
+        "similarity_score_percent": 74.76
+      },
+      "json_valid": true,
+      "ledger_commit": {
+        "attestation_sha256": "7e603bdfca0aaf382624cf31a34f2a34639f5a3dd92d67695a1f4562094395c4",
+        "bundle_sha256": "b8bc38d0530458df0eac70629c2529908f2b825807300da438ea52af9440aac8",
+        "output_sha256": "83b5f4196b1c4cd3648d312949df85ae0e60c6816ce07892320b40c9237ecb72",
+        "run_dir": "cuc-results/claude_24_production_probe/gold_corrected_replay/ledger/b8bc38d0530458df0eac70629c2529908f2b825807300da438ea52af9440aac8"
+      },
+      "ledger_committed": true,
+      "model_delta_path": "cuc-results/claude_24_production_probe/gold_corrected_replay/CUCV4-GROUNDING-02-CONFLICT-RECONCILIATION-SECURITY-INCIDENT/model_delta.json",
+      "source_case_id": "CUCV4-GROUNDING-02-CONFLICT-RECONCILIATION-SECURITY-INCIDENT",
+      "verifier_accepted": true,
+      "verifier_reason_families": [],
+      "verifier_reasons": []
+    },
+    {
+      "case_id": "CUCV4-INVARIANT-01-COUNTERPARTY-RESPONSE-LEGAL-CONTRACT",
+      "fixture_dir": "C:/iotaverbum/iota-verbum-core/benchmark/kaggle/fixtures/CUCV4-INVARIANT-01-COUNTERPARTY-RESPONSE-LEGAL-CONTRACT",
+      "gap_report_path": "cuc-results/claude_24_production_probe/gold_corrected_replay/CUCV4-INVARIANT-01-COUNTERPARTY-RESPONSE-LEGAL-CONTRACT/gap_report.json",
+      "gap_summary": {
+        "compared_fields": 118,
+        "matching_fields": 95,
+        "similarity_score_percent": 80.51
+      },
+      "json_valid": true,
+      "ledger_commit": {
+        "attestation_sha256": "d03b5dfe8a52b23d058b63a107be9911da0093d925e73e727295224174d60fcc",
+        "bundle_sha256": "a7721ed2dcd6bd3c86b08baf1c5849fe26182ace1d5323180240f4eb7a118a51",
+        "output_sha256": "aea41f5eca071caa37b3b14ef715cdd2971033b5f0eba1dfe728ed377dbbfbd4",
+        "run_dir": "cuc-results/claude_24_production_probe/gold_corrected_replay/ledger/a7721ed2dcd6bd3c86b08baf1c5849fe26182ace1d5323180240f4eb7a118a51"
+      },
+      "ledger_committed": true,
+      "model_delta_path": "cuc-results/claude_24_production_probe/gold_corrected_replay/CUCV4-INVARIANT-01-COUNTERPARTY-RESPONSE-LEGAL-CONTRACT/model_delta.json",
+      "source_case_id": "CUCV4-INVARIANT-01-COUNTERPARTY-RESPONSE-LEGAL-CONTRACT",
+      "verifier_accepted": true,
+      "verifier_reason_families": [],
+      "verifier_reasons": []
+    },
+    {
+      "case_id": "CUCV4-NOOP-03-LEGAL-CONTRACT",
+      "fixture_dir": "C:/iotaverbum/iota-verbum-core/benchmark/kaggle/fixtures/CUCV4-NOOP-03-LEGAL-CONTRACT",
+      "gap_report_path": "cuc-results/claude_24_production_probe/gold_corrected_replay/CUCV4-NOOP-03-LEGAL-CONTRACT/gap_report.json",
+      "gap_summary": {
+        "compared_fields": 35,
+        "matching_fields": 14,
+        "similarity_score_percent": 40.0
+      },
+      "json_valid": true,
+      "ledger_commit": {
+        "attestation_sha256": "5141029cfa5d5d33d76ffb3747c7405efd911f8e672daa16d69bb969ddd880a2",
+        "bundle_sha256": "63c45ede9b18b2059ac45152ce5f6d846ed594c30e95dbe083aa6dd7f412cac9",
+        "output_sha256": "8d04106679691e67050bbe7a183ccfcaf5d12fae030376f2edaf16a7fe0247e8",
+        "run_dir": "cuc-results/claude_24_production_probe/gold_corrected_replay/ledger/63c45ede9b18b2059ac45152ce5f6d846ed594c30e95dbe083aa6dd7f412cac9"
+      },
+      "ledger_committed": true,
+      "model_delta_path": "cuc-results/claude_24_production_probe/gold_corrected_replay/CUCV4-NOOP-03-LEGAL-CONTRACT/model_delta.json",
+      "source_case_id": "CUCV4-NOOP-03-LEGAL-CONTRACT",
+      "verifier_accepted": true,
+      "verifier_reason_families": [],
+      "verifier_reasons": []
+    },
+    {
+      "case_id": "CUCV4-NOOP-04-PROCUREMENT-REVIEW",
+      "fixture_dir": "C:/iotaverbum/iota-verbum-core/benchmark/kaggle/fixtures/CUCV4-NOOP-04-PROCUREMENT-REVIEW",
+      "gap_report_path": "cuc-results/claude_24_production_probe/gold_corrected_replay/CUCV4-NOOP-04-PROCUREMENT-REVIEW/gap_report.json",
+      "gap_summary": {
+        "compared_fields": 25,
+        "matching_fields": 14,
+        "similarity_score_percent": 56.0
+      },
+      "json_valid": true,
+      "ledger_commit": {
+        "attestation_sha256": "99d950c23b15795fe3291db0516bec4378e01e574f7fcf11648aaf66826e22f4",
+        "bundle_sha256": "e241c6d1342ef5ba16f07de56d041c58f27f1808e612dd24924c8892322c3ec6",
+        "output_sha256": "1b87c8d54374b5c83a6eda36c5ade073d323d9ab4f00464da29280ebb6a8d10f",
+        "run_dir": "cuc-results/claude_24_production_probe/gold_corrected_replay/ledger/e241c6d1342ef5ba16f07de56d041c58f27f1808e612dd24924c8892322c3ec6"
+      },
+      "ledger_committed": true,
+      "model_delta_path": "cuc-results/claude_24_production_probe/gold_corrected_replay/CUCV4-NOOP-04-PROCUREMENT-REVIEW/model_delta.json",
+      "source_case_id": "CUCV4-NOOP-04-PROCUREMENT-REVIEW",
+      "verifier_accepted": true,
+      "verifier_reason_families": [],
+      "verifier_reasons": []
+    },
+    {
+      "case_id": "CUCV4-CORE-02-TEMPORAL-REORDER-COMPLIANCE-AUDIT",
+      "fixture_dir": "C:/iotaverbum/iota-verbum-core/benchmark/kaggle/fixtures/CUCV4-CORE-02-TEMPORAL-REORDER-COMPLIANCE-AUDIT",
+      "gap_report_path": "cuc-results/claude_24_production_probe/gold_corrected_replay/CUCV4-CORE-02-TEMPORAL-REORDER-COMPLIANCE-AUDIT/gap_report.json",
+      "gap_summary": {
+        "compared_fields": 115,
+        "matching_fields": 94,
+        "similarity_score_percent": 81.74
+      },
+      "json_valid": true,
+      "ledger_commit": {
+        "attestation_sha256": "aac8f398a5572ed736e1dc06a817e0482c6bc018aac131ff30e994cdd9e1f5fc",
+        "bundle_sha256": "9e73f2bd74689968b3042309c758bd62872baf1bcb67a6ea3cd7bffcc1962556",
+        "output_sha256": "4f5ef588c40b08450fca3ccd730c200847a5fc79694c1ad04a807f1709c3d153",
+        "run_dir": "cuc-results/claude_24_production_probe/gold_corrected_replay/ledger/9e73f2bd74689968b3042309c758bd62872baf1bcb67a6ea3cd7bffcc1962556"
+      },
+      "ledger_committed": true,
+      "model_delta_path": "cuc-results/claude_24_production_probe/gold_corrected_replay/CUCV4-CORE-02-TEMPORAL-REORDER-COMPLIANCE-AUDIT/model_delta.json",
+      "source_case_id": "CUCV4-CORE-02-TEMPORAL-REORDER-COMPLIANCE-AUDIT",
+      "verifier_accepted": true,
+      "verifier_reason_families": [],
+      "verifier_reasons": []
+    },
+    {
+      "case_id": "CUCV4-CORE-03-TEMPORAL-REORDER-LEGAL-CONTRACT",
+      "fixture_dir": "C:/iotaverbum/iota-verbum-core/benchmark/kaggle/fixtures/CUCV4-CORE-03-TEMPORAL-REORDER-LEGAL-CONTRACT",
+      "gap_report_path": "cuc-results/claude_24_production_probe/gold_corrected_replay/CUCV4-CORE-03-TEMPORAL-REORDER-LEGAL-CONTRACT/gap_report.json",
+      "gap_summary": {
+        "compared_fields": 115,
+        "matching_fields": 94,
+        "similarity_score_percent": 81.74
+      },
+      "json_valid": true,
+      "ledger_commit": {
+        "attestation_sha256": "5e35c5ab0fe6e115d3427bbc82c723161d9d1ba933e417512c13ae64898f0d0a",
+        "bundle_sha256": "95dd84bb5c4e98cb8b5f275466a419d9731634716c54500e20af79df4d4d4ea3",
+        "output_sha256": "e00586e9de46110f4c8cc59cba4fc97902f89433018a6d75a2c979e2fedad8d7",
+        "run_dir": "cuc-results/claude_24_production_probe/gold_corrected_replay/ledger/95dd84bb5c4e98cb8b5f275466a419d9731634716c54500e20af79df4d4d4ea3"
+      },
+      "ledger_committed": true,
+      "model_delta_path": "cuc-results/claude_24_production_probe/gold_corrected_replay/CUCV4-CORE-03-TEMPORAL-REORDER-LEGAL-CONTRACT/model_delta.json",
+      "source_case_id": "CUCV4-CORE-03-TEMPORAL-REORDER-LEGAL-CONTRACT",
+      "verifier_accepted": true,
+      "verifier_reason_families": [],
+      "verifier_reasons": []
+    },
+    {
+      "case_id": "CUCV4-CORE-04-ALTERNATIVE-CAUSE-INSERTION-COMPLIANCE-AUDIT",
+      "fixture_dir": "C:/iotaverbum/iota-verbum-core/benchmark/kaggle/fixtures/CUCV4-CORE-04-ALTERNATIVE-CAUSE-INSERTION-COMPLIANCE-AUDIT",
+      "gap_report_path": "cuc-results/claude_24_production_probe/gold_corrected_replay/CUCV4-CORE-04-ALTERNATIVE-CAUSE-INSERTION-COMPLIANCE-AUDIT/gap_report.json",
+      "gap_summary": {
+        "compared_fields": 62,
+        "matching_fields": 55,
+        "similarity_score_percent": 88.71
+      },
+      "json_valid": true,
+      "ledger_commit": {
+        "attestation_sha256": "012ad79812d6171e3d105f1a7be534a5d3ffbf6748fb7d0560f5af2d2eecf608",
+        "bundle_sha256": "6537b61f6ecdc91d2db9fff0005050b81acaea38c30fe2bf4183115c862f9678",
+        "output_sha256": "c8d90ea41310d5e00897e2796872774a0704356f4ff17d22d51b6be5c401784c",
+        "run_dir": "cuc-results/claude_24_production_probe/gold_corrected_replay/ledger/6537b61f6ecdc91d2db9fff0005050b81acaea38c30fe2bf4183115c862f9678"
+      },
+      "ledger_committed": true,
+      "model_delta_path": "cuc-results/claude_24_production_probe/gold_corrected_replay/CUCV4-CORE-04-ALTERNATIVE-CAUSE-INSERTION-COMPLIANCE-AUDIT/model_delta.json",
+      "source_case_id": "CUCV4-CORE-04-ALTERNATIVE-CAUSE-INSERTION-COMPLIANCE-AUDIT",
+      "verifier_accepted": true,
+      "verifier_reason_families": [],
+      "verifier_reasons": []
+    },
+    {
+      "case_id": "CUCV4-CORE-05-ALTERNATIVE-CAUSE-INSERTION-SECURITY-INCIDENT",
+      "fixture_dir": "C:/iotaverbum/iota-verbum-core/benchmark/kaggle/fixtures/CUCV4-CORE-05-ALTERNATIVE-CAUSE-INSERTION-SECURITY-INCIDENT",
+      "gap_report_path": "cuc-results/claude_24_production_probe/gold_corrected_replay/CUCV4-CORE-05-ALTERNATIVE-CAUSE-INSERTION-SECURITY-INCIDENT/gap_report.json",
+      "gap_summary": {
+        "compared_fields": 133,
+        "matching_fields": 104,
+        "similarity_score_percent": 78.2
+      },
+      "json_valid": true,
+      "ledger_commit": {
+        "attestation_sha256": "c4bf6cdd5fc7f7fb0a9275d22c9deda55a70df06efae3f0511de51ed1682c76a",
+        "bundle_sha256": "e5c6c1a59308ffeb2aea5678d6df99c31a7166f08d3632318547cfca363f5c55",
+        "output_sha256": "8f6ba86faaf33dfcdb2115f15f124a975f188e5e12301dc31e4316d0222208c4",
+        "run_dir": "cuc-results/claude_24_production_probe/gold_corrected_replay/ledger/e5c6c1a59308ffeb2aea5678d6df99c31a7166f08d3632318547cfca363f5c55"
+      },
+      "ledger_committed": true,
+      "model_delta_path": "cuc-results/claude_24_production_probe/gold_corrected_replay/CUCV4-CORE-05-ALTERNATIVE-CAUSE-INSERTION-SECURITY-INCIDENT/model_delta.json",
+      "source_case_id": "CUCV4-CORE-05-ALTERNATIVE-CAUSE-INSERTION-SECURITY-INCIDENT",
+      "verifier_accepted": true,
+      "verifier_reason_families": [],
+      "verifier_reasons": []
+    },
+    {
+      "case_id": "CUCV4-CORE-06-ALTERNATIVE-CAUSE-INSERTION-PROCUREMENT-REVIEW",
+      "fixture_dir": "C:/iotaverbum/iota-verbum-core/benchmark/kaggle/fixtures/CUCV4-CORE-06-ALTERNATIVE-CAUSE-INSERTION-PROCUREMENT-REVIEW",
+      "gap_report_path": "cuc-results/claude_24_production_probe/gold_corrected_replay/CUCV4-CORE-06-ALTERNATIVE-CAUSE-INSERTION-PROCUREMENT-REVIEW/gap_report.json",
+      "gap_summary": {
+        "compared_fields": 127,
+        "matching_fields": 104,
+        "similarity_score_percent": 81.89
+      },
+      "json_valid": true,
+      "ledger_commit": {
+        "attestation_sha256": "a3a3b72553c371babf840f700706e2ee046257a874411070b719f2d0478aa901",
+        "bundle_sha256": "689e7a7daa0ea4f0aef8fadbb16c3bf234c6c5ab6fc6e148c8a8b50144d849f4",
+        "output_sha256": "02e4d32b472143bd26ee91cdd13108da02a8773d930b28cd3b9bd97447992bdb",
+        "run_dir": "cuc-results/claude_24_production_probe/gold_corrected_replay/ledger/689e7a7daa0ea4f0aef8fadbb16c3bf234c6c5ab6fc6e148c8a8b50144d849f4"
+      },
+      "ledger_committed": true,
+      "model_delta_path": "cuc-results/claude_24_production_probe/gold_corrected_replay/CUCV4-CORE-06-ALTERNATIVE-CAUSE-INSERTION-PROCUREMENT-REVIEW/model_delta.json",
+      "source_case_id": "CUCV4-CORE-06-ALTERNATIVE-CAUSE-INSERTION-PROCUREMENT-REVIEW",
+      "verifier_accepted": true,
+      "verifier_reason_families": [],
+      "verifier_reasons": []
+    },
+    {
+      "case_id": "CUCV4-CORE-07-DEFERRED-EFFECT-LEGAL-CONTRACT",
+      "fixture_dir": "C:/iotaverbum/iota-verbum-core/benchmark/kaggle/fixtures/CUCV4-CORE-07-DEFERRED-EFFECT-LEGAL-CONTRACT",
+      "gap_report_path": "cuc-results/claude_24_production_probe/gold_corrected_replay/CUCV4-CORE-07-DEFERRED-EFFECT-LEGAL-CONTRACT/gap_report.json",
+      "gap_summary": {
+        "compared_fields": 114,
+        "matching_fields": 93,
+        "similarity_score_percent": 81.58
+      },
+      "json_valid": true,
+      "ledger_commit": {
+        "attestation_sha256": "5ed3923487ef67046f9e07755e8eea1e0f8c10130ff9d8c629a979a561643bfb",
+        "bundle_sha256": "221f219f71385c6460ea1b18d1ce061ab0f048e3352942f7855ec7f7e006d9f2",
+        "output_sha256": "610a3c1dfb170c8a2a9b5a419727db4c59637ae5b49444439eb0164639fd8cca",
+        "run_dir": "cuc-results/claude_24_production_probe/gold_corrected_replay/ledger/221f219f71385c6460ea1b18d1ce061ab0f048e3352942f7855ec7f7e006d9f2"
+      },
+      "ledger_committed": true,
+      "model_delta_path": "cuc-results/claude_24_production_probe/gold_corrected_replay/CUCV4-CORE-07-DEFERRED-EFFECT-LEGAL-CONTRACT/model_delta.json",
+      "source_case_id": "CUCV4-CORE-07-DEFERRED-EFFECT-LEGAL-CONTRACT",
+      "verifier_accepted": true,
+      "verifier_reason_families": [],
+      "verifier_reasons": []
+    },
+    {
+      "case_id": "CUCV4-CORE-08-DEFERRED-EFFECT-SECURITY-INCIDENT",
+      "fixture_dir": "C:/iotaverbum/iota-verbum-core/benchmark/kaggle/fixtures/CUCV4-CORE-08-DEFERRED-EFFECT-SECURITY-INCIDENT",
+      "gap_report_path": "cuc-results/claude_24_production_probe/gold_corrected_replay/CUCV4-CORE-08-DEFERRED-EFFECT-SECURITY-INCIDENT/gap_report.json",
+      "gap_summary": {
+        "compared_fields": 143,
+        "matching_fields": 116,
+        "similarity_score_percent": 81.12
+      },
+      "json_valid": true,
+      "ledger_commit": {
+        "attestation_sha256": "2cc29a875d318e416525419ca2a55bf836fcd0a6afd3ae2e623983d386618349",
+        "bundle_sha256": "03bb87db9948cd716b0deb7aea3c2ea0e0a0f769fcd7ab9332b8c4764cae5631",
+        "output_sha256": "ac48acf0666bd26198905a4c7d2f5e3ca1ca71c220f8e92a3b22037791c0e83b",
+        "run_dir": "cuc-results/claude_24_production_probe/gold_corrected_replay/ledger/03bb87db9948cd716b0deb7aea3c2ea0e0a0f769fcd7ab9332b8c4764cae5631"
+      },
+      "ledger_committed": true,
+      "model_delta_path": "cuc-results/claude_24_production_probe/gold_corrected_replay/CUCV4-CORE-08-DEFERRED-EFFECT-SECURITY-INCIDENT/model_delta.json",
+      "source_case_id": "CUCV4-CORE-08-DEFERRED-EFFECT-SECURITY-INCIDENT",
+      "verifier_accepted": true,
+      "verifier_reason_families": [],
+      "verifier_reasons": []
+    },
+    {
+      "case_id": "CUCV4-GROUNDING-03-SOURCE-RELIABILITY-COLLAPSE-COMPLIANCE-AUDIT",
+      "fixture_dir": "C:/iotaverbum/iota-verbum-core/benchmark/kaggle/fixtures/CUCV4-GROUNDING-03-SOURCE-RELIABILITY-COLLAPSE-COMPLIANCE-AUDIT",
+      "gap_report_path": "cuc-results/claude_24_production_probe/gold_corrected_replay/CUCV4-GROUNDING-03-SOURCE-RELIABILITY-COLLAPSE-COMPLIANCE-AUDIT/gap_report.json",
+      "gap_summary": {
+        "compared_fields": 72,
+        "matching_fields": 54,
+        "similarity_score_percent": 75.0
+      },
+      "json_valid": true,
+      "ledger_commit": {
+        "attestation_sha256": "90922a8866a7eaeaa6381a20b80867bb9c714f31ed85acf96aea7f223939d22b",
+        "bundle_sha256": "0b348c74a45e2388aa3e8112c65fb580807d526f31e55ec59360716f40051388",
+        "output_sha256": "7e9f2a96e4e33bbd957779186370a310147b24eacaa1fca08456c56dfeea78b5",
+        "run_dir": "cuc-results/claude_24_production_probe/gold_corrected_replay/ledger/0b348c74a45e2388aa3e8112c65fb580807d526f31e55ec59360716f40051388"
+      },
+      "ledger_committed": true,
+      "model_delta_path": "cuc-results/claude_24_production_probe/gold_corrected_replay/CUCV4-GROUNDING-03-SOURCE-RELIABILITY-COLLAPSE-COMPLIANCE-AUDIT/model_delta.json",
+      "source_case_id": "CUCV4-GROUNDING-03-SOURCE-RELIABILITY-COLLAPSE-COMPLIANCE-AUDIT",
+      "verifier_accepted": true,
+      "verifier_reason_families": [],
+      "verifier_reasons": []
+    },
+    {
+      "case_id": "CUCV4-GROUNDING-04-SOURCE-RELIABILITY-COLLAPSE-LEGAL-CONTRACT",
+      "fixture_dir": "C:/iotaverbum/iota-verbum-core/benchmark/kaggle/fixtures/CUCV4-GROUNDING-04-SOURCE-RELIABILITY-COLLAPSE-LEGAL-CONTRACT",
+      "gap_report_path": "cuc-results/claude_24_production_probe/gold_corrected_replay/CUCV4-GROUNDING-04-SOURCE-RELIABILITY-COLLAPSE-LEGAL-CONTRACT/gap_report.json",
+      "gap_summary": {
+        "compared_fields": 70,
+        "matching_fields": 54,
+        "similarity_score_percent": 77.14
+      },
+      "json_valid": true,
+      "ledger_commit": {
+        "attestation_sha256": "fe94cf1722f1d959e2c1afce96251682cd28134374f8787c5fba4926dbbdfc8f",
+        "bundle_sha256": "e1925701fa043cbbf169063abb790938f47c4ac7290d651f84577de9a25a2641",
+        "output_sha256": "fca2d1e8ed7fb72695749e708a0ca43483d83ea9d4f975475874611468bb953e",
+        "run_dir": "cuc-results/claude_24_production_probe/gold_corrected_replay/ledger/e1925701fa043cbbf169063abb790938f47c4ac7290d651f84577de9a25a2641"
+      },
+      "ledger_committed": true,
+      "model_delta_path": "cuc-results/claude_24_production_probe/gold_corrected_replay/CUCV4-GROUNDING-04-SOURCE-RELIABILITY-COLLAPSE-LEGAL-CONTRACT/model_delta.json",
+      "source_case_id": "CUCV4-GROUNDING-04-SOURCE-RELIABILITY-COLLAPSE-LEGAL-CONTRACT",
+      "verifier_accepted": true,
+      "verifier_reason_families": [],
+      "verifier_reasons": []
+    },
+    {
+      "case_id": "CUCV4-GROUNDING-05-CONFLICT-RECONCILIATION-LEGAL-CONTRACT",
+      "fixture_dir": "C:/iotaverbum/iota-verbum-core/benchmark/kaggle/fixtures/CUCV4-GROUNDING-05-CONFLICT-RECONCILIATION-LEGAL-CONTRACT",
+      "gap_report_path": "cuc-results/claude_24_production_probe/gold_corrected_replay/CUCV4-GROUNDING-05-CONFLICT-RECONCILIATION-LEGAL-CONTRACT/gap_report.json",
+      "gap_summary": {
+        "compared_fields": 157,
+        "matching_fields": 120,
+        "similarity_score_percent": 76.43
+      },
+      "json_valid": true,
+      "ledger_commit": {
+        "attestation_sha256": "02b39bfea44f0065b9c6f33f789956b1cf88623e88b24f87d759018abc69e93d",
+        "bundle_sha256": "d378a8ebdabdea6e991860063deee115e9c9100a0b71a41a80df0f571de9979e",
+        "output_sha256": "c2985c6a0fdaade82b5d259081514485eb8e6a219ad6c4313162cccd1d357d20",
+        "run_dir": "cuc-results/claude_24_production_probe/gold_corrected_replay/ledger/d378a8ebdabdea6e991860063deee115e9c9100a0b71a41a80df0f571de9979e"
+      },
+      "ledger_committed": true,
+      "model_delta_path": "cuc-results/claude_24_production_probe/gold_corrected_replay/CUCV4-GROUNDING-05-CONFLICT-RECONCILIATION-LEGAL-CONTRACT/model_delta.json",
+      "source_case_id": "CUCV4-GROUNDING-05-CONFLICT-RECONCILIATION-LEGAL-CONTRACT",
+      "verifier_accepted": true,
+      "verifier_reason_families": [],
+      "verifier_reasons": []
+    },
+    {
+      "case_id": "CUCV4-GROUNDING-06-CONFLICT-RECONCILIATION-PROCUREMENT-REVIEW",
+      "fixture_dir": "C:/iotaverbum/iota-verbum-core/benchmark/kaggle/fixtures/CUCV4-GROUNDING-06-CONFLICT-RECONCILIATION-PROCUREMENT-REVIEW",
+      "gap_report_path": "cuc-results/claude_24_production_probe/gold_corrected_replay/CUCV4-GROUNDING-06-CONFLICT-RECONCILIATION-PROCUREMENT-REVIEW/gap_report.json",
+      "gap_summary": {
+        "compared_fields": 160,
+        "matching_fields": 120,
+        "similarity_score_percent": 75.0
+      },
+      "json_valid": true,
+      "ledger_commit": {
+        "attestation_sha256": "0ac5eafe84c8448d40d12a51a885ca967174588297e365884a84df3873b56d68",
+        "bundle_sha256": "a538aec4b32cfd040ea30e89b6fa8eeaa7d17ee3f84f6c650a31af87aac1b376",
+        "output_sha256": "cf28e9485516ef460035319992b76e0121e8fd95fd7c7d8a8e90fb3683b8a52a",
+        "run_dir": "cuc-results/claude_24_production_probe/gold_corrected_replay/ledger/a538aec4b32cfd040ea30e89b6fa8eeaa7d17ee3f84f6c650a31af87aac1b376"
+      },
+      "ledger_committed": true,
+      "model_delta_path": "cuc-results/claude_24_production_probe/gold_corrected_replay/CUCV4-GROUNDING-06-CONFLICT-RECONCILIATION-PROCUREMENT-REVIEW/model_delta.json",
+      "source_case_id": "CUCV4-GROUNDING-06-CONFLICT-RECONCILIATION-PROCUREMENT-REVIEW",
+      "verifier_accepted": true,
+      "verifier_reason_families": [],
+      "verifier_reasons": []
+    },
+    {
+      "case_id": "CUCV4-INVARIANT-02-COUNTERPARTY-RESPONSE-COMPLIANCE-AUDIT",
+      "fixture_dir": "C:/iotaverbum/iota-verbum-core/benchmark/kaggle/fixtures/CUCV4-INVARIANT-02-COUNTERPARTY-RESPONSE-COMPLIANCE-AUDIT",
+      "gap_report_path": "cuc-results/claude_24_production_probe/gold_corrected_replay/CUCV4-INVARIANT-02-COUNTERPARTY-RESPONSE-COMPLIANCE-AUDIT/gap_report.json",
+      "gap_summary": {
+        "compared_fields": 121,
+        "matching_fields": 93,
+        "similarity_score_percent": 76.86
+      },
+      "json_valid": true,
+      "ledger_commit": {
+        "attestation_sha256": "e8667af75e9b5cedb4b2379ca19a4736713afba63a638f5725984c1b200d8b8e",
+        "bundle_sha256": "2b53245fcb4af9703239b183b547a27db8113944f9b16b943e00d752910879ad",
+        "output_sha256": "d3e02c2cb142b8abeef7ec75ae11cc464b82f6330a56d2562a7c45215b6ec535",
+        "run_dir": "cuc-results/claude_24_production_probe/gold_corrected_replay/ledger/2b53245fcb4af9703239b183b547a27db8113944f9b16b943e00d752910879ad"
+      },
+      "ledger_committed": true,
+      "model_delta_path": "cuc-results/claude_24_production_probe/gold_corrected_replay/CUCV4-INVARIANT-02-COUNTERPARTY-RESPONSE-COMPLIANCE-AUDIT/model_delta.json",
+      "source_case_id": "CUCV4-INVARIANT-02-COUNTERPARTY-RESPONSE-COMPLIANCE-AUDIT",
+      "verifier_accepted": true,
+      "verifier_reason_families": [],
+      "verifier_reasons": []
+    },
+    {
+      "case_id": "CUCV4-INVARIANT-03-COUNTERPARTY-RESPONSE-PROCUREMENT-REVIEW",
+      "fixture_dir": "C:/iotaverbum/iota-verbum-core/benchmark/kaggle/fixtures/CUCV4-INVARIANT-03-COUNTERPARTY-RESPONSE-PROCUREMENT-REVIEW",
+      "gap_report_path": "cuc-results/claude_24_production_probe/gold_corrected_replay/CUCV4-INVARIANT-03-COUNTERPARTY-RESPONSE-PROCUREMENT-REVIEW/gap_report.json",
+      "gap_summary": {
+        "compared_fields": 123,
+        "matching_fields": 93,
+        "similarity_score_percent": 75.61
+      },
+      "json_valid": true,
+      "ledger_commit": {
+        "attestation_sha256": "52232dc934998ef6895a1a360bca0d47b04e9a354551bcca7980f3c09713dd77",
+        "bundle_sha256": "b6618a2fde1f46a203da62f541f4e178fe7e498b07ec9ce6fa1593837f2e9f65",
+        "output_sha256": "36d8da158ef55e05d602fd32c2843b1ad8d598c1437756dce126d8a7fb08c937",
+        "run_dir": "cuc-results/claude_24_production_probe/gold_corrected_replay/ledger/b6618a2fde1f46a203da62f541f4e178fe7e498b07ec9ce6fa1593837f2e9f65"
+      },
+      "ledger_committed": true,
+      "model_delta_path": "cuc-results/claude_24_production_probe/gold_corrected_replay/CUCV4-INVARIANT-03-COUNTERPARTY-RESPONSE-PROCUREMENT-REVIEW/model_delta.json",
+      "source_case_id": "CUCV4-INVARIANT-03-COUNTERPARTY-RESPONSE-PROCUREMENT-REVIEW",
+      "verifier_accepted": true,
+      "verifier_reason_families": [],
+      "verifier_reasons": []
+    },
+    {
+      "case_id": "CUCV4-CORE-09-EXCEPTION-ACTIVATION-SECURITY-INCIDENT",
+      "fixture_dir": "C:/iotaverbum/iota-verbum-core/benchmark/kaggle/fixtures/CUCV4-CORE-09-EXCEPTION-ACTIVATION-SECURITY-INCIDENT",
+      "gap_report_path": "cuc-results/claude_24_production_probe/gold_corrected_replay/CUCV4-CORE-09-EXCEPTION-ACTIVATION-SECURITY-INCIDENT/gap_report.json",
+      "gap_summary": {
+        "compared_fields": 137,
+        "matching_fields": 105,
+        "similarity_score_percent": 76.64
+      },
+      "json_valid": true,
+      "ledger_commit": {
+        "attestation_sha256": "fe7e86bfcfecf0818a5a49be0ad072240ab0e4646dcd7d338e231554b0d576cd",
+        "bundle_sha256": "5a402a5664ed34036863e753f083646e8dd21236803eabd878445ee13869e79d",
+        "output_sha256": "3c254888ad19f0d87d4c75354f181dd91c67e819debf2d9fa13f80f14128cde7",
+        "run_dir": "cuc-results/claude_24_production_probe/gold_corrected_replay/ledger/5a402a5664ed34036863e753f083646e8dd21236803eabd878445ee13869e79d"
+      },
+      "ledger_committed": true,
+      "model_delta_path": "cuc-results/claude_24_production_probe/gold_corrected_replay/CUCV4-CORE-09-EXCEPTION-ACTIVATION-SECURITY-INCIDENT/model_delta.json",
+      "source_case_id": "CUCV4-CORE-09-EXCEPTION-ACTIVATION-SECURITY-INCIDENT",
+      "verifier_accepted": true,
+      "verifier_reason_families": [],
+      "verifier_reasons": []
+    }
+  ],
+  "schema_version": "iv.cuc_harness.claude_24_production_probe.v1",
+  "summary": {
+    "acceptance_rate": 1.0,
+    "average_similarity_score_percent": 77.087083,
+    "case_count": 24,
+    "json_valid_count": 24,
+    "json_valid_rate": 1.0,
+    "ledger_commit_rate": 1.0,
+    "ledger_committed_count": 24,
+    "requested_case_count": 24,
+    "verifier_accepted_count": 24
+  }
+}

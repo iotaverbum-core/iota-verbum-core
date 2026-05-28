@@ -1,0 +1,54 @@
+{
+  "extra_fields": [
+    "$.changed_states[id='state:hop3_dependency'].after.attributes.authoring_role",
+    "$.forbidden_revisions[value='edge:primary_support']",
+    "$.forbidden_revisions[value='state:primary']",
+    "$.forbidden_revisions[value='unknown:primary']",
+    "$.must_preserve_claims[value='state:primary']",
+    "$.new_unknowns[id='unknown:hop3_dependency'].before",
+    "$.new_unknowns[id='unknown:response_sufficiency'].before",
+    "$.preserved_items[value='edge:primary_support']",
+    "$.preserved_items[value='state:primary']",
+    "$.preserved_items[value='unknown:primary']",
+    "$.supporting_evidence_map[\"scenario:bg_1\"][0]",
+    "$.supporting_evidence_map[\"scenario:hop3_escalation\"][0]",
+    "$.supporting_evidence_map[\"scenario:primary\"][0]"
+  ],
+  "missing_fields": [
+    "$.changed_edges[id='edge:hop3_dependency'].source_op_ids[value='op:hop3']",
+    "$.changed_events[id='event:hop3'].source_op_ids[value='op:hop3']",
+    "$.changed_states[id='state:hop3_dependency'].source_op_ids[value='op:hop3']",
+    "$.new_unknowns[id='unknown:hop3_dependency'].source_op_ids[value='op:hop3']",
+    "$.supporting_evidence_map[\"event:hop3\"][0]",
+    "$.supporting_evidence_map[\"event:response\"][0]"
+  ],
+  "summary": {
+    "compared_fields": 118,
+    "matching_fields": 95,
+    "similarity_score_percent": 80.51
+  },
+  "type_mismatches": [
+    {
+      "gold_type": "null",
+      "model_type": "int",
+      "path": "$.scenario_rank_changes[scenario_id='scenario:hop3_escalation'].before_rank"
+    }
+  ],
+  "value_differences": [
+    {
+      "gold_value": "Preserve the delivery-record branch and the stable legal-administration background branches.",
+      "model_value": "state:secondary (delivery-record branch, preserve_focus) and state:primary (breach-claim branch) are unchanged between clean and perturbed packs. Their supporting edges, unknowns, and scenario:alternate rank-2 placement are fully preserved and forbidden from revision.",
+      "path": "$.preservation_notes"
+    },
+    {
+      "gold_value": "Track the new counterparty-response event and the added third-hop dependency branch while keeping the delivery-record branch stable.",
+      "model_value": "The perturbed pack introduces state:hop3_dependency (revise_focus), edge:hop3_dependency, edge:response_support, event:response, event:hop3, evidence:response, evidence:hop3, unknown:response_sufficiency, and unknown:hop3_dependency. scenario:hop3_escalation is newly introduced at rank 1, displacing scenario:primary from rank 1 to rank 3 and scenario:bg_1 from rank 3 to rank 4. scenario:alternate remains at rank 2 unchanged.",
+      "path": "$.revision_notes"
+    },
+    {
+      "gold_value": "A model that notices the exception response but misses the new downstream dependency has stopped too early. A model that rewrites the delivery-record branch without contrary evidence has over-revised.",
+      "model_value": "Under-revision failure: omitting state:hop3_dependency, edge:hop3_dependency, or scenario:hop3_escalation would leave the third-hop dependency and counterparty response perturbation unrecorded; over-revision failure: modifying state:secondary, edge:secondary_support, or state:primary would incorrectly rewrite the preserved delivery-record and breach-claim branches that carry no contrary evidence in the perturbed pack.",
+      "path": "$.structural_invariant"
+    }
+  ]
+}

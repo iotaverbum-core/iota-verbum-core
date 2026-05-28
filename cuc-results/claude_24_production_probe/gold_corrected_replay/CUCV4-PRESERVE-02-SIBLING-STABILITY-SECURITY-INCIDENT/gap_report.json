@@ -1,0 +1,65 @@
+{
+  "extra_fields": [
+    "$.new_unknowns[id='unknown:data_exfiltration_scope'].before",
+    "$.supporting_evidence_map[\"scenario:internal_misconfig\"][0]",
+    "$.supporting_evidence_map[\"scenario:internal_misconfig\"][1]",
+    "$.supporting_evidence_map[\"scenario:vendor_compromise\"][0]"
+  ],
+  "missing_fields": [
+    "$.changed_edges[id='edge:initial_forensics_support'].source_op_ids[value='op:003']",
+    "$.changed_edges[id='edge:vendor_compromise_support'].source_op_ids[value='op:001']",
+    "$.changed_events[id='event:credential_compromise'].source_op_ids[value='op:002']",
+    "$.changed_states[id='state:attack_origin_attribution'].source_op_ids[value='op:001']",
+    "$.changed_states[id='state:attack_origin_attribution'].source_op_ids[value='op:003']",
+    "$.changed_states[id='state:external_escalation_required'].source_op_ids[value='op:004']",
+    "$.changed_states[id='state:severity_level'].source_op_ids[value='op:001']",
+    "$.changed_states[id='state:severity_level'].source_op_ids[value='op:004']",
+    "$.new_unknowns[id='unknown:data_exfiltration_scope'].source_op_ids[value='op:005']",
+    "$.supporting_evidence_map[\"edge:initial_forensics_support\"][value='evidence:vendor_credential_alert']",
+    "$.supporting_evidence_map[\"event:credential_compromise\"][0]"
+  ],
+  "summary": {
+    "compared_fields": 158,
+    "matching_fields": 136,
+    "similarity_score_percent": 86.08
+  },
+  "type_mismatches": [
+    {
+      "gold_type": "null",
+      "model_type": "int",
+      "path": "$.scenario_rank_changes[scenario_id='scenario:vendor_compromise'].before_rank"
+    }
+  ],
+  "value_differences": [
+    {
+      "gold_value": "revised",
+      "model_value": "modified",
+      "path": "$.changed_states[id='state:attack_origin_attribution'].change_type"
+    },
+    {
+      "gold_value": "revised",
+      "model_value": "modified",
+      "path": "$.changed_states[id='state:external_escalation_required'].change_type"
+    },
+    {
+      "gold_value": "revised",
+      "model_value": "modified",
+      "path": "$.changed_states[id='state:severity_level'].change_type"
+    },
+    {
+      "gold_value": "Preserve backup integrity and restoration completeness. BR-112 and RR-211 remain unchanged and still support those branches.",
+      "model_value": "state:backup_integrity_verified and state:restoration_complete, along with their supporting edges (edge:backup_support, edge:restore_support) and unknown (unknown:secondary_backup_followup), are unchanged by the new credential alert evidence. The service resilience branch (scenario:service_resilience) remains semantically stable at rank 2 and is not affected by the attribution revision.",
+      "path": "$.preservation_notes"
+    },
+    {
+      "gold_value": "Revise attack origin from internal error to vendor credential compromise. Upgrade severity and require external escalation.",
+      "model_value": "New evidence:vendor_credential_alert (Credential Alert AC-778) establishes a vendor credential compromise origin, superseding the internal_operator_error attribution. state:attack_origin_attribution revised to vendor_credential_compromise at high confidence. state:severity_level escalated from moderate to high. state:external_escalation_required flipped from false to true. edge:initial_forensics_support weakened from strong to low. New edge:vendor_compromise_support added. scenario:vendor_compromise introduced at rank 1; scenario:internal_misconfig demoted to rank 2. New unknown:data_exfiltration_scope opened to track remaining exposure scope.",
+      "path": "$.revision_notes"
+    },
+    {
+      "gold_value": "If attack origin changes to an external credential compromise, severity and escalation must also be revised. Backup and restoration findings remain stable sibling branches.",
+      "model_value": "Under-revision failure: stopping at edge:initial_forensics_support weakening without updating the three revise_focus states and scenario ranks would leave the attribution, severity, and escalation claims inconsistent with the new high-reliability credential alert. Over-revision failure: applying the credential alert evidence to the preserve_focus branch (backup-integrity and restoration-complete) would incorrectly destabilize states, edges, and unknowns that have no causal or evidential dependency on the attribution change.",
+      "path": "$.structural_invariant"
+    }
+  ]
+}

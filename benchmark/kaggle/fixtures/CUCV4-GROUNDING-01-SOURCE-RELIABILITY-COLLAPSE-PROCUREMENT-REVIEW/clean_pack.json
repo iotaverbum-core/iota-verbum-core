@@ -1,0 +1,354 @@
+{
+  "pack_role": "clean",
+  "render_profile": "procurement_memo_v1",
+  "schema_version": "1.0.0",
+  "sections": {
+    "causal_edges": [
+      {
+        "edge_id": "edge:primary_support",
+        "evidence_ids": [
+          "evidence:primary"
+        ],
+        "from_id": "evidence:primary",
+        "relation": "supports",
+        "strength": "strong",
+        "to_id": "state:primary"
+      },
+      {
+        "edge_id": "edge:secondary_support",
+        "evidence_ids": [
+          "evidence:secondary"
+        ],
+        "from_id": "evidence:secondary",
+        "relation": "supports",
+        "strength": "strong",
+        "to_id": "state:secondary"
+      },
+      {
+        "edge_id": "edge:bg_1",
+        "evidence_ids": [
+          "evidence:bg_1"
+        ],
+        "from_id": "evidence:bg_1",
+        "relation": "supports_background_context",
+        "strength": "strong",
+        "to_id": "state:bg_1"
+      },
+      {
+        "edge_id": "edge:bg_2",
+        "evidence_ids": [
+          "evidence:bg_2"
+        ],
+        "from_id": "evidence:bg_2",
+        "relation": "supports_background_context",
+        "strength": "medium",
+        "to_id": "state:bg_2"
+      }
+    ],
+    "entities": [
+      {
+        "entity_id": "entity:org",
+        "label": "Harbor Transit",
+        "type": "organization",
+        "attributes": {}
+      },
+      {
+        "entity_id": "entity:asset",
+        "label": "emergency chassis waiver",
+        "type": "asset",
+        "attributes": {}
+      },
+      {
+        "entity_id": "entity:reviewer",
+        "label": "oversight unit",
+        "type": "role",
+        "attributes": {}
+      },
+      {
+        "entity_id": "entity:bg_1",
+        "label": "vendor diligence packet a-1",
+        "type": "background_context",
+        "attributes": {}
+      },
+      {
+        "entity_id": "entity:bg_2",
+        "label": "renewal routing desk a-2",
+        "type": "background_context",
+        "attributes": {}
+      }
+    ],
+    "events": [
+      {
+        "action": "checkpoint evaluation recorded",
+        "actor_ids": [
+          "entity:org"
+        ],
+        "event_id": "event:primary",
+        "evidence_ids": [
+          "evidence:primary"
+        ],
+        "object_ids": [
+          "entity:asset"
+        ],
+        "time": {
+          "kind": "exact",
+          "value": "2026-04-09T14:00:00Z"
+        },
+        "type": "checkpoint_event",
+        "attributes": {}
+      },
+      {
+        "action": "routine review completed",
+        "actor_ids": [
+          "entity:reviewer"
+        ],
+        "event_id": "event:secondary",
+        "evidence_ids": [
+          "evidence:secondary"
+        ],
+        "object_ids": [
+          "entity:org"
+        ],
+        "time": {
+          "kind": "exact",
+          "value": "2026-04-09T08:00:00Z"
+        },
+        "type": "review_event",
+        "attributes": {}
+      },
+      {
+        "action": "background procurement review checkpoint logged #1",
+        "actor_ids": [
+          "entity:bg_1"
+        ],
+        "event_id": "event:bg_1",
+        "evidence_ids": [
+          "evidence:bg_1"
+        ],
+        "object_ids": [
+          "entity:asset"
+        ],
+        "time": {
+          "kind": "exact",
+          "value": "2026-04-09T14:00:00Z"
+        },
+        "type": "procurement_admin_event",
+        "attributes": {}
+      }
+    ],
+    "evidence": [
+      {
+        "content": "Harbor Transit records suggest emergency chassis waiver still satisfies the primary condition under source_reliability_collapse review.",
+        "evidence_id": "evidence:primary",
+        "reliability": "high",
+        "source_id": "src:primary",
+        "source_type": "award_memo",
+        "time": {
+          "kind": "exact",
+          "value": "2026-04-09T14:00:00Z"
+        },
+        "attributes": {}
+      },
+      {
+        "content": "Independent review shows Harbor Transit completed the routine control step for emergency chassis waiver.",
+        "evidence_id": "evidence:secondary",
+        "reliability": "high",
+        "source_id": "src:secondary",
+        "source_type": "committee_minutes",
+        "time": {
+          "kind": "exact",
+          "value": "2026-04-09T08:00:00Z"
+        },
+        "attributes": {}
+      },
+      {
+        "content": "Supplementary procurement administration record preserved outside the core sourcing dispute. Case=CUCV4-GROUNDING-01-SOURCE-RELIABILITY-COLLAPSE-PROCUREMENT-REVIEW family=source reliability collapse profile=procurement_memo_v1 context=1.",
+        "evidence_id": "evidence:bg_1",
+        "reliability": "high",
+        "source_id": "src:bg_1",
+        "source_type": "procurement_note",
+        "time": {
+          "kind": "exact",
+          "value": "2026-04-09T14:00:00Z"
+        },
+        "attributes": {}
+      },
+      {
+        "content": "Supplementary procurement administration record preserved outside the core sourcing dispute. Case=CUCV4-GROUNDING-01-SOURCE-RELIABILITY-COLLAPSE-PROCUREMENT-REVIEW family=source reliability collapse profile=procurement_memo_v1 context=2.",
+        "evidence_id": "evidence:bg_2",
+        "reliability": "medium",
+        "source_id": "src:bg_2",
+        "source_type": "procurement_note",
+        "time": {
+          "kind": "exact",
+          "value": "2026-04-09T14:00:00Z"
+        },
+        "attributes": {}
+      }
+    ],
+    "scenarios": [
+      {
+        "basis_ids": [
+          "state:primary",
+          "edge:primary_support"
+        ],
+        "label": "Waiver-justification theory remains most likely",
+        "rank": 1,
+        "scenario_id": "scenario:primary",
+        "status": "live"
+      },
+      {
+        "basis_ids": [
+          "state:secondary",
+          "edge:secondary_support"
+        ],
+        "label": "Committee-review theory remains secondary",
+        "rank": 2,
+        "scenario_id": "scenario:alternate",
+        "status": "live"
+      },
+      {
+        "basis_ids": [
+          "state:bg_1",
+          "edge:bg_1"
+        ],
+        "label": "Administrative procurement context remains tertiary (background_branch)",
+        "rank": 3,
+        "scenario_id": "scenario:bg_1",
+        "status": "live"
+      }
+    ],
+    "states": [
+      {
+        "evidence_ids": [
+          "evidence:primary"
+        ],
+        "object": "true",
+        "predicate": "award_exception_justified",
+        "state_id": "state:primary",
+        "status": "supported",
+        "subject_id": "entity:asset",
+        "time": {
+          "kind": "exact",
+          "value": "2026-04-09T10:00:00Z"
+        },
+        "attributes": {
+          "authoring_role": "revise_branch"
+        },
+        "confidence_band": "medium"
+      },
+      {
+        "evidence_ids": [
+          "evidence:secondary"
+        ],
+        "object": "true",
+        "predicate": "committee_review_recorded",
+        "state_id": "state:secondary",
+        "status": "supported",
+        "subject_id": "entity:org",
+        "time": {
+          "kind": "exact",
+          "value": "2026-04-09T09:00:00Z"
+        },
+        "attributes": {
+          "authoring_role": "preserve_branch"
+        },
+        "confidence_band": "high"
+      },
+      {
+        "evidence_ids": [
+          "evidence:bg_1"
+        ],
+        "object": "true",
+        "predicate": "procurement_context_stable_1",
+        "state_id": "state:bg_1",
+        "status": "supported",
+        "subject_id": "entity:bg_1",
+        "time": {
+          "kind": "exact",
+          "value": "2026-04-09T10:00:00Z"
+        },
+        "attributes": {
+          "authoring_role": "background_branch"
+        },
+        "confidence_band": "medium"
+      },
+      {
+        "evidence_ids": [
+          "evidence:bg_2"
+        ],
+        "object": "true",
+        "predicate": "procurement_context_stable_2",
+        "state_id": "state:bg_2",
+        "status": "supported",
+        "subject_id": "entity:bg_2",
+        "time": {
+          "kind": "exact",
+          "value": "2026-04-09T10:00:00Z"
+        },
+        "attributes": {
+          "authoring_role": "background_branch"
+        },
+        "confidence_band": "medium"
+      }
+    ],
+    "unknowns": [
+      {
+        "category": "fact",
+        "evidence_ids": [
+          "evidence:primary"
+        ],
+        "question": "Is the primary conclusion about emergency chassis waiver still valid at the checkpoint?",
+        "status": "open",
+        "target_id": "state:primary",
+        "unknown_id": "unknown:primary"
+      },
+      {
+        "category": "other",
+        "evidence_ids": [
+          "evidence:secondary"
+        ],
+        "question": "Does the preserved review evidence need any further follow-up?",
+        "status": "open",
+        "target_id": "event:secondary",
+        "unknown_id": "unknown:secondary"
+      },
+      {
+        "category": "other",
+        "evidence_ids": [
+          "evidence:bg_1"
+        ],
+        "question": "Does the background procurement context require separate diligence for source reliability collapse context 1 in source_reliability_collapse_procurement_review?",
+        "status": "open",
+        "target_id": "state:bg_1",
+        "unknown_id": "unknown:bg_1"
+      }
+    ],
+    "metadata": {
+      "authoring_status": "draft_surface_v1",
+      "design_intent": "Revise the waiver-justification branch after a source reliability collapse while preserving the independent committee-review branch.",
+      "named_evidence_artifact": "Certification Withdrawal CW-512",
+      "preserve_focus": [
+        "state:secondary"
+      ],
+      "revise_focus": [
+        "state:primary"
+      ],
+      "sector_skin": "procurement_review",
+      "surface_title": "PROCUREMENT REVIEW - EMERGENCY CHASSIS WAIVER"
+    }
+  },
+  "seed": 40006,
+  "summary": {
+    "edge_count": 4,
+    "entity_count": 5,
+    "event_count": 3,
+    "evidence_count": 4,
+    "scenario_count": 3,
+    "state_count": 4,
+    "unknown_count": 3
+  },
+  "template_id": "tpl.v4.grounding.01.source.reliability.collapse.procurement.review",
+  "world_id": "world:cucv4-grounding-01-source-reliability-collapse-procurement-review",
+  "notes": "Draft v4 candidate case for CUCV4-GROUNDING-01-SOURCE-RELIABILITY-COLLAPSE-PROCUREMENT-REVIEW. Revise the waiver-justification branch after a source reliability collapse while preserving the independent committee-review branch."
+}

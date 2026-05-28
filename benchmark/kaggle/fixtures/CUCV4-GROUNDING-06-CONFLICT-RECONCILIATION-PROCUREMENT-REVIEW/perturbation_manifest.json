@@ -1,0 +1,111 @@
+{
+  "family_id": "conflict_reconciliation",
+  "family_version": "1.0.0",
+  "notes": "conflict_reconciliation perturbation for procurement_review",
+  "ops": [
+    {
+      "after": {
+        "attributes": {},
+        "content": "An independent corroborating source confirms the contested primary state.",
+        "evidence_id": "evidence:corroboration",
+        "reliability": "high",
+        "source_id": "src:corroboration",
+        "source_type": "independent_confirmation",
+        "time": {
+          "kind": "exact",
+          "value": "2026-04-01T15:00:00Z"
+        }
+      },
+      "op_id": "op:001",
+      "op_type": "add_evidence",
+      "postconditions": [
+        "corroboration added"
+      ],
+      "preconditions": [
+        "new corroboration found"
+      ],
+      "target_id": "evidence:primary"
+    },
+    {
+      "after": {
+        "edge_id": "edge:corroboration_support",
+        "evidence_ids": [
+          "evidence:corroboration"
+        ],
+        "from_id": "evidence:corroboration",
+        "relation": "corroborates",
+        "strength": "strong",
+        "to_id": "state:primary"
+      },
+      "op_id": "op:002",
+      "op_type": "add_causal_edge",
+      "postconditions": [
+        "corroboration edge added"
+      ],
+      "preconditions": [
+        "corroboration linked"
+      ],
+      "target_id": "state:primary"
+    },
+    {
+      "after": {
+        "strength": "strong"
+      },
+      "before": {
+        "strength": "weak"
+      },
+      "op_id": "op:003",
+      "op_type": "change_threshold_relation",
+      "postconditions": [
+        "edge strengthened"
+      ],
+      "preconditions": [
+        "support upgraded"
+      ],
+      "target_id": "edge:primary_support"
+    },
+    {
+      "after": {
+        "status": "supported"
+      },
+      "before": {
+        "status": "contested"
+      },
+      "op_id": "op:004",
+      "op_type": "replace_state_status",
+      "postconditions": [
+        "state supported"
+      ],
+      "preconditions": [
+        "conflict resolved"
+      ],
+      "target_id": "state:primary"
+    },
+    {
+      "after": {
+        "resolution_value": "confirmed",
+        "status": "resolved"
+      },
+      "before": {
+        "status": "open"
+      },
+      "op_id": "op:005",
+      "op_type": "resolve_unknown",
+      "postconditions": [
+        "unknown resolved"
+      ],
+      "preconditions": [
+        "conflict closed"
+      ],
+      "target_id": "unknown:primary"
+    }
+  ],
+  "schema_version": "1.0.0",
+  "seed": 40021,
+  "template_id": "tpl.v4.grounding.06.conflict.reconciliation.procurement.review",
+  "world_id": "world:cucv4-grounding-06-conflict-reconciliation-procurement-review",
+  "metadata": {
+    "sector_skin": "procurement_review",
+    "render_profile": "procurement_memo_v1"
+  }
+}

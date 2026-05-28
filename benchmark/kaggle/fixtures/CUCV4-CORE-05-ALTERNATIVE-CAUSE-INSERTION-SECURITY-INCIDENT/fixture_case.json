@@ -1,0 +1,22 @@
+{
+  "authoring_status": "draft_surface_v1",
+  "benchmark_version": "CUC.v4.candidate",
+  "case_id": "CUCV4-CORE-05-ALTERNATIVE-CAUSE-INSERTION-SECURITY-INCIDENT",
+  "clean_pack_sha256": "db8eab3f8436915dfa094452946aab5e50a9c84c61f3935aef1f0599910e175f",
+  "difficulty_band": "C",
+  "expected_delta_sha256": "e7d01d732690e65d40ce89f4a6de6bf3cfd581d128a48e229bcc94259617e03f",
+  "family_id": "alternative_cause_insertion",
+  "family_version": "0.1.0",
+  "geometry_profile": "alternative_cause_insertion_security_incident_hop3_scaffold_v4",
+  "hop_depth": 3,
+  "judge_profile": "structured_json_v1",
+  "perturbed_pack_sha256": "34c793de55bb1d855019cf858ebc2376feebf5cfdd0c6821e03d8cebe9c54018",
+  "public_split": "candidate_main",
+  "render_profile": "incident_digest_v1",
+  "scaffold_notes": "Draft alternative-cause-insertion security-incident case expanded into the v4 candidate pack.",
+  "schema_version": "1.0.0",
+  "scoring_manifest_sha256": "30bc7068f5b909e925a063dba750fa80d7afb71b0f345cec6a4d25c5af414cb1",
+  "sector_skin": "security_incident",
+  "seed": 40014,
+  "template_id": "tpl.v4.core.05.alternative.cause.insertion.security.incident"
+}

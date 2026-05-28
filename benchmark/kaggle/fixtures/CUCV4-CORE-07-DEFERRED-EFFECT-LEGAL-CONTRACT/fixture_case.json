@@ -1,0 +1,22 @@
+{
+  "authoring_status": "draft_surface_v1",
+  "benchmark_version": "CUC.v4.candidate",
+  "case_id": "CUCV4-CORE-07-DEFERRED-EFFECT-LEGAL-CONTRACT",
+  "clean_pack_sha256": "45fc40ad43265b3b28277ca66de259d2fb77e9ae25403cc75c889e0f82c4e7e8",
+  "difficulty_band": "B",
+  "expected_delta_sha256": "4bf41a68c8d03fea77fc6b3ad303e0d84fe5cd35fc39033635b91815ea6a5b90",
+  "family_id": "deferred_effect",
+  "family_version": "0.1.0",
+  "geometry_profile": "deferred_effect_legal_contract_hop2_scaffold_v4",
+  "hop_depth": 2,
+  "judge_profile": "structured_json_v1",
+  "perturbed_pack_sha256": "43c4d29863d73be0458a5c781b24fd5837d0e5f98281c2577dfa3be5ed4c1b08",
+  "public_split": "candidate_main",
+  "render_profile": "legal_formal_v1",
+  "scaffold_notes": "Draft deferred-effect legal-contract case expanded into the v4 candidate pack.",
+  "schema_version": "1.0.0",
+  "scoring_manifest_sha256": "61febe3db625e1ff935fa5f43056c355eb9eb01981608797936a14ece22f2d8b",
+  "sector_skin": "legal_contract",
+  "seed": 40016,
+  "template_id": "tpl.v4.core.07.deferred.effect.legal.contract"
+}

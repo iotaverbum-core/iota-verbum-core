@@ -1,0 +1,22 @@
+{
+  "authoring_status": "draft_surface_v1",
+  "benchmark_version": "CUC.v4.candidate",
+  "case_id": "CUCV4-GROUNDING-06-CONFLICT-RECONCILIATION-PROCUREMENT-REVIEW",
+  "clean_pack_sha256": "d1e45a87b4da997b6d3537e95cd83d3ceed0b0a8b8dab436ccfbbf234f4856ed",
+  "difficulty_band": "C",
+  "expected_delta_sha256": "a4a10862d3da7d89056e1d44888ac662f95990b7a90b089289afcd26ef6774da",
+  "family_id": "conflict_reconciliation",
+  "family_version": "0.1.0",
+  "geometry_profile": "conflict_reconciliation_procurement_review_hop3_scaffold_v4",
+  "hop_depth": 3,
+  "judge_profile": "structured_json_v1",
+  "perturbed_pack_sha256": "65dd2c4da689d0f3066459d2f2fa9423050ac840d6cc0d69394223bab6073afd",
+  "public_split": "candidate_main",
+  "render_profile": "procurement_memo_v1",
+  "scaffold_notes": "Draft conflict-reconciliation procurement-review case expanded into the v4 candidate pack.",
+  "schema_version": "1.0.0",
+  "scoring_manifest_sha256": "98bc6fa56ea33182dc3ec2cfe2e114a204891a5dea88ec181d75278214b25a8a",
+  "sector_skin": "procurement_review",
+  "seed": 40021,
+  "template_id": "tpl.v4.grounding.06.conflict.reconciliation.procurement.review"
+}

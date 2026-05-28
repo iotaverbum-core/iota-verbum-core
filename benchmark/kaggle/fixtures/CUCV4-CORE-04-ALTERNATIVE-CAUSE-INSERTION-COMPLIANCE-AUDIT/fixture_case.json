@@ -1,0 +1,22 @@
+{
+  "authoring_status": "draft_surface_v1",
+  "benchmark_version": "CUC.v4.candidate",
+  "case_id": "CUCV4-CORE-04-ALTERNATIVE-CAUSE-INSERTION-COMPLIANCE-AUDIT",
+  "clean_pack_sha256": "00edcd839ecbbb61c35f36bd6e0807082d05770c2b688c0d8b8c7c5513185423",
+  "difficulty_band": "B",
+  "expected_delta_sha256": "1ed7e47a134fe4d946b7a568375ef43bf4a04947ce47a06878e2201c682d2380",
+  "family_id": "alternative_cause_insertion",
+  "family_version": "0.1.0",
+  "geometry_profile": "alternative_cause_insertion_compliance_audit_hop2_scaffold_v4",
+  "hop_depth": 2,
+  "judge_profile": "structured_json_v1",
+  "perturbed_pack_sha256": "80f7dcd64ee3ace9a6bdbe0fadf308973ad548e18b36e7092ed5661e96eb55b7",
+  "public_split": "candidate_main",
+  "render_profile": "compliance_memo_v1",
+  "scaffold_notes": "Draft alternative-cause-insertion compliance-audit case expanded into the v4 candidate pack.",
+  "schema_version": "1.0.0",
+  "scoring_manifest_sha256": "4797920f0a99fb54e7347e52e236d63a4eb9c3ed62502281a3f3e155f13debdd",
+  "sector_skin": "compliance_audit",
+  "seed": 40013,
+  "template_id": "tpl.v4.core.04.alternative.cause.insertion.compliance.audit"
+}

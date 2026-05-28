@@ -1,0 +1,22 @@
+{
+  "authoring_status": "draft_surface_v1",
+  "benchmark_version": "CUC.v4.candidate",
+  "case_id": "CUCV4-CORE-06-ALTERNATIVE-CAUSE-INSERTION-PROCUREMENT-REVIEW",
+  "clean_pack_sha256": "f7c4fbf6de1204d35c3fcba2294b49d9f8069f475e02bf6e0cccb21d6d2b1a97",
+  "difficulty_band": "C",
+  "expected_delta_sha256": "e5fce0ed2ae4510527740843129f8f43f407ba19f250e447733ada1875387fab",
+  "family_id": "alternative_cause_insertion",
+  "family_version": "0.1.0",
+  "geometry_profile": "alternative_cause_insertion_procurement_review_hop3_scaffold_v4",
+  "hop_depth": 3,
+  "judge_profile": "structured_json_v1",
+  "perturbed_pack_sha256": "6761a2cad2f1555f9951b1e943f3e5a6fe304ab4271cf2d84822fb3911ce0d27",
+  "public_split": "candidate_main",
+  "render_profile": "procurement_memo_v1",
+  "scaffold_notes": "Draft alternative-cause-insertion procurement-review case expanded into the v4 candidate pack.",
+  "schema_version": "1.0.0",
+  "scoring_manifest_sha256": "30bc7068f5b909e925a063dba750fa80d7afb71b0f345cec6a4d25c5af414cb1",
+  "sector_skin": "procurement_review",
+  "seed": 40015,
+  "template_id": "tpl.v4.core.06.alternative.cause.insertion.procurement.review"
+}

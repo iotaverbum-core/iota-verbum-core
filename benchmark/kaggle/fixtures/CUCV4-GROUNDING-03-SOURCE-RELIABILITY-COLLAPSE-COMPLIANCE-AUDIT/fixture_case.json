@@ -1,0 +1,22 @@
+{
+  "authoring_status": "draft_surface_v1",
+  "benchmark_version": "CUC.v4.candidate",
+  "case_id": "CUCV4-GROUNDING-03-SOURCE-RELIABILITY-COLLAPSE-COMPLIANCE-AUDIT",
+  "clean_pack_sha256": "4b86b8fdf8848c3944c83e696c1f9501190b87559cdf9201c0dc00fb09cbe457",
+  "difficulty_band": "B",
+  "expected_delta_sha256": "634c9cc4a466d51bc4c02ce136861f26adefa0962a602b40642ebbf411363393",
+  "family_id": "source_reliability_collapse",
+  "family_version": "0.1.0",
+  "geometry_profile": "source_reliability_collapse_compliance_audit_hop2_scaffold_v4",
+  "hop_depth": 2,
+  "judge_profile": "structured_json_v1",
+  "perturbed_pack_sha256": "fb7901ca3e1a68320c1ca0feec1cac2c6d3236508fca4dc369c4fa861e4e9e3c",
+  "public_split": "candidate_main",
+  "render_profile": "compliance_memo_v1",
+  "scaffold_notes": "Draft source-reliability-collapse compliance-audit case expanded into the v4 candidate pack.",
+  "schema_version": "1.0.0",
+  "scoring_manifest_sha256": "11a6b7cc6d65429a403434c94444fe837a905cf7b10072c479f62474cd099442",
+  "sector_skin": "compliance_audit",
+  "seed": 40018,
+  "template_id": "tpl.v4.grounding.03.source.reliability.collapse.compliance.audit"
+}

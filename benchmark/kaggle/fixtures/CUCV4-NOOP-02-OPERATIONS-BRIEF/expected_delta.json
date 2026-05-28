@@ -1,0 +1,47 @@
+{
+  "changed_edges": [],
+  "changed_events": [],
+  "changed_states": [],
+  "forbidden_revisions": [
+    "edge:primary_support",
+    "edge:secondary_support",
+    "edge:bg_1",
+    "edge:bg_2",
+    "state:primary",
+    "state:secondary",
+    "state:bg_1",
+    "state:bg_2",
+    "unknown:primary",
+    "unknown:secondary",
+    "unknown:bg_1"
+  ],
+  "new_conflicts": [],
+  "new_unknowns": [],
+  "preserved_items": [
+    "edge:primary_support",
+    "edge:secondary_support",
+    "edge:bg_1",
+    "edge:bg_2",
+    "state:primary",
+    "state:secondary",
+    "state:bg_1",
+    "state:bg_2",
+    "unknown:primary",
+    "unknown:secondary",
+    "unknown:bg_1"
+  ],
+  "pruned_conflicts": [],
+  "resolved_unknowns": [],
+  "scenario_rank_changes": [],
+  "schema_version": "1.0.0",
+  "supporting_evidence_map": {},
+  "must_preserve_claims": [
+    "state:primary",
+    "state:secondary"
+  ],
+  "must_revise_claims": [],
+  "named_evidence_artifact": "Formatting Addendum FA-118",
+  "preservation_notes": "Preserve the arrival-window status, the dispatch reschedule record, and the unchanged operations background branches.",
+  "revision_notes": "No substantive revision is expected. The formatting addendum only normalizes schedule wording and timezone notation.",
+  "structural_invariant": "A model that revises the dispatch assessment on this no-op control has overreacted to wording-only noise."
+}

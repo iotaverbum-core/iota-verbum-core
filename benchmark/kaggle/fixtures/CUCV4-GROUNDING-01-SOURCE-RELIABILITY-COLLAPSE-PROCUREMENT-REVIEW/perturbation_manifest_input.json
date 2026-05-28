@@ -1,0 +1,142 @@
+{
+  "family_id": "source_reliability_collapse",
+  "family_version": "1.0.0",
+  "notes": "source_reliability_collapse perturbation for procurement_review",
+  "ops": [
+    {
+      "after": {
+        "reliability": "low"
+      },
+      "before": {
+        "reliability": "high"
+      },
+      "op_id": "op:001",
+      "op_type": "downgrade_source_reliability",
+      "postconditions": [
+        "source reliability low"
+      ],
+      "preconditions": [
+        "source recanted"
+      ],
+      "target_id": "evidence:primary"
+    },
+    {
+      "after": {
+        "strength": "weak"
+      },
+      "before": {
+        "strength": "strong"
+      },
+      "op_id": "op:002",
+      "op_type": "change_threshold_relation",
+      "postconditions": [
+        "edge weakened"
+      ],
+      "preconditions": [
+        "support weakened"
+      ],
+      "target_id": "edge:primary_support"
+    },
+    {
+      "after": {
+        "status": "contested"
+      },
+      "before": {
+        "status": "supported"
+      },
+      "op_id": "op:003",
+      "op_type": "replace_state_status",
+      "postconditions": [
+        "state contested"
+      ],
+      "preconditions": [
+        "evidence not enough"
+      ],
+      "target_id": "state:primary"
+    },
+    {
+      "after": {
+        "category": "credibility",
+        "evidence_ids": [
+          "evidence:primary"
+        ],
+        "question": "What independent corroboration can replace the impaired source?",
+        "status": "open",
+        "target_id": "state:primary",
+        "unknown_id": "unknown:corroboration"
+      },
+      "op_id": "op:004",
+      "op_type": "add_unknown",
+      "postconditions": [
+        "corroboration unknown added"
+      ],
+      "preconditions": [
+        "source collapse"
+      ],
+      "target_id": "unknown:primary"
+    },
+    {
+      "after": {
+        "action": "waiver-source reliability downgrade recorded",
+        "attributes": {
+          "source_reliability": "low"
+        }
+      },
+      "before": {
+        "action": "checkpoint evaluation recorded",
+        "attributes": {}
+      },
+      "op_id": "op:005",
+      "op_type": "update_event_interpretation",
+      "postconditions": [
+        "waiver checkpoint event reframed as source-impaired"
+      ],
+      "preconditions": [
+        "certification withdrawal received"
+      ],
+      "target_id": "event:primary"
+    },
+    {
+      "after": {
+        "rank": 2
+      },
+      "before": {
+        "rank": 1
+      },
+      "op_id": "op:006",
+      "op_type": "change_scenario_rank",
+      "postconditions": [
+        "waiver path demoted"
+      ],
+      "preconditions": [
+        "source-dependent theory weakened"
+      ],
+      "target_id": "scenario:primary"
+    },
+    {
+      "after": {
+        "rank": 1
+      },
+      "before": {
+        "rank": 2
+      },
+      "op_id": "op:007",
+      "op_type": "change_scenario_rank",
+      "postconditions": [
+        "committee-review scenario promoted"
+      ],
+      "preconditions": [
+        "independent sibling branch remains stable"
+      ],
+      "target_id": "scenario:alternate"
+    }
+  ],
+  "schema_version": "1.0.0",
+  "seed": 40006,
+  "template_id": "tpl.v4.grounding.01.source.reliability.collapse.procurement.review",
+  "world_id": "world:cucv4-grounding-01-source-reliability-collapse-procurement-review",
+  "metadata": {
+    "sector_skin": "procurement_review",
+    "render_profile": "procurement_memo_v1"
+  }
+}

@@ -1,0 +1,72 @@
+{
+  "extra_fields": [
+    "$.changed_edges[id='edge:recovery_dependency'].after.edge_id",
+    "$.changed_edges[id='edge:recovery_dependency'].after.evidence_ids[0]",
+    "$.changed_edges[id='edge:recovery_dependency'].after.from_id",
+    "$.changed_edges[id='edge:recovery_dependency'].after.relation",
+    "$.changed_edges[id='edge:recovery_dependency'].after.strength",
+    "$.changed_edges[id='edge:recovery_dependency'].after.to_id",
+    "$.changed_edges[id='edge:recovery_dependency'].before.edge_id",
+    "$.changed_edges[id='edge:recovery_dependency'].before.evidence_ids[0]",
+    "$.changed_edges[id='edge:recovery_dependency'].before.from_id",
+    "$.changed_edges[id='edge:recovery_dependency'].before.relation",
+    "$.changed_edges[id='edge:recovery_dependency'].before.strength",
+    "$.changed_edges[id='edge:recovery_dependency'].before.to_id",
+    "$.changed_edges[id='edge:recovery_dependency'].change_type",
+    "$.changed_edges[id='edge:recovery_dependency'].id",
+    "$.changed_edges[id='edge:recovery_dependency'].source_op_ids",
+    "$.forbidden_revisions[value='edge:delivery_support']",
+    "$.forbidden_revisions[value='edge:notice_support']",
+    "$.forbidden_revisions[value='unknown:secondary_followup']",
+    "$.new_unknowns[id='unknown:penalty_enforceability'].before",
+    "$.supporting_evidence_map[\"edge:recovery_dependency\"][0]",
+    "$.supporting_evidence_map[\"scenario:performance_record\"][0]",
+    "$.supporting_evidence_map[\"scenario:performance_record\"][1]",
+    "$.supporting_evidence_map[\"scenario:recovery_path\"][0]",
+    "$.supporting_evidence_map[\"scenario:recovery_path\"][1]"
+  ],
+  "missing_fields": [
+    "$.changed_edges[id='edge:admission_support'].source_op_ids[value='op:003']",
+    "$.changed_edges[id='edge:retraction_support'].source_op_ids[value='op:001']",
+    "$.changed_events[id='event:retraction'].source_op_ids[value='op:002']",
+    "$.changed_states[id='state:penalty_triggered'].source_op_ids[value='op:001']",
+    "$.changed_states[id='state:penalty_triggered'].source_op_ids[value='op:003']",
+    "$.changed_states[id='state:recovery_recommended'].source_op_ids[value='op:004']",
+    "$.new_unknowns[id='unknown:penalty_enforceability'].source_op_ids[value='op:005']",
+    "$.supporting_evidence_map[\"edge:admission_support\"][value='evidence:retraction']",
+    "$.supporting_evidence_map[\"event:retraction\"][0]"
+  ],
+  "summary": {
+    "compared_fields": 148,
+    "matching_fields": 110,
+    "similarity_score_percent": 74.32
+  },
+  "type_mismatches": [],
+  "value_differences": [
+    {
+      "gold_value": "revised",
+      "model_value": "modified",
+      "path": "$.changed_states[id='state:penalty_triggered'].change_type"
+    },
+    {
+      "gold_value": "revised",
+      "model_value": "modified",
+      "path": "$.changed_states[id='state:recovery_recommended'].change_type"
+    },
+    {
+      "gold_value": "Preserve completed delivery and timely notice. POD-882 and NL-204 remain unchanged and still support those branches.",
+      "model_value": "state:delivery_complete and state:notice_timely remain fully supported by evidence:delivery and evidence:notice respectively. Neither the retraction event nor any new evidence touches these branches. edge:delivery_support and edge:notice_support are unchanged at strong strength. unknown:secondary_followup remains open and unaffected.",
+      "path": "$.preservation_notes"
+    },
+    {
+      "gold_value": "Revise the admitted penalty-trigger claim and the downstream recovery recommendation. The retraction does not erase the original record; it changes the status from admitted to contested.",
+      "model_value": "evidence:retraction (Retraction CL-0055-R) withdraws the provisional penalty admission, reducing confidence on state:penalty_triggered from medium/supported to low/contested and on state:recovery_recommended from medium/supported to low/under_review. edge:admission_support and edge:recovery_dependency are weakened from strong to medium. A new edge:retraction_support and event:retraction are added. A new unknown:penalty_enforceability is opened regarding clause interpretability. Scenario ranks swap: scenario:performance_record rises to rank 1 and scenario:recovery_path falls to rank 2.",
+      "path": "$.revision_notes"
+    },
+    {
+      "gold_value": "If the penalty-trigger claim becomes contested, the downstream recovery recommendation must also become qualified. Delivery and notice findings remain stable sibling branches and should not be rewritten.",
+      "model_value": "Under-revision failure: leaving state:penalty_triggered and state:recovery_recommended at their original supported/medium status despite the retraction evidence would ignore the material change introduced by evidence:retraction; over-revision failure: modifying state:delivery_complete or state:notice_timely, which have no contrary evidence, would incorrectly destabilize the preserved sibling branches.",
+      "path": "$.structural_invariant"
+    }
+  ]
+}

@@ -1,0 +1,22 @@
+{
+  "authoring_status": "draft_surface_v1",
+  "benchmark_version": "CUC.v4.candidate",
+  "case_id": "CUCV4-GROUNDING-04-SOURCE-RELIABILITY-COLLAPSE-LEGAL-CONTRACT",
+  "clean_pack_sha256": "ea4d8d121c50d95f5cf2f718ecf04d010ad8fcaba7fbf63a5af3c55bc72d69bd",
+  "difficulty_band": "B",
+  "expected_delta_sha256": "62fb53d024319635fe3478428bbc9369b2e2d42827a1e6acd3c2b95cfae33656",
+  "family_id": "source_reliability_collapse",
+  "family_version": "0.1.0",
+  "geometry_profile": "source_reliability_collapse_legal_contract_hop2_scaffold_v4",
+  "hop_depth": 2,
+  "judge_profile": "structured_json_v1",
+  "perturbed_pack_sha256": "abcde71919fbdfcb6b4b05789f6f040c06ff5bb3779b33f20c391b93f91b0cc0",
+  "public_split": "candidate_main",
+  "render_profile": "legal_formal_v1",
+  "scaffold_notes": "Draft source-reliability-collapse legal-contract case expanded into the v4 candidate pack.",
+  "schema_version": "1.0.0",
+  "scoring_manifest_sha256": "11a6b7cc6d65429a403434c94444fe837a905cf7b10072c479f62474cd099442",
+  "sector_skin": "legal_contract",
+  "seed": 40019,
+  "template_id": "tpl.v4.grounding.04.source.reliability.collapse.legal.contract"
+}

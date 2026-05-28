@@ -1,0 +1,259 @@
+{
+  "changed_edges": [
+    {
+      "after": {
+        "edge_id": "edge:hop3_dependency",
+        "evidence_ids": [
+          "evidence:hop3"
+        ],
+        "from_id": "state:hop3_dependency",
+        "relation": "creates_downstream_dependency",
+        "strength": "medium",
+        "to_id": "scenario:hop3_escalation"
+      },
+      "before": null,
+      "change_type": "added",
+      "id": "edge:hop3_dependency",
+      "source_op_ids": [
+        "op:hop3"
+      ]
+    }
+  ],
+  "changed_events": [
+    {
+      "after": {
+        "action": "new exception override approved",
+        "actor_ids": [
+          "entity:reviewer"
+        ],
+        "event_id": "event:exception",
+        "evidence_ids": [
+          "evidence:exception"
+        ],
+        "object_ids": [
+          "entity:asset"
+        ],
+        "time": {
+          "kind": "exact",
+          "value": "2026-04-08T12:00:00Z"
+        },
+        "type": "exception_approval",
+        "attributes": {}
+      },
+      "before": null,
+      "change_type": "added",
+      "id": "event:exception",
+      "source_op_ids": []
+    },
+    {
+      "after": {
+        "action": "third-hop dependency review opened",
+        "actor_ids": [
+          "entity:org"
+        ],
+        "attributes": {
+          "holdout": true,
+          "hop_depth": 3
+        },
+        "event_id": "event:hop3",
+        "evidence_ids": [
+          "evidence:hop3"
+        ],
+        "object_ids": [
+          "entity:asset"
+        ],
+        "time": {
+          "kind": "exact",
+          "value": "2026-04-08T14:00:00Z"
+        },
+        "type": "third_hop_dependency_event"
+      },
+      "before": null,
+      "change_type": "added",
+      "id": "event:hop3",
+      "source_op_ids": [
+        "op:hop3"
+      ]
+    }
+  ],
+  "changed_states": [
+    {
+      "after": {
+        "attributes": {
+          "exception_active": true,
+          "rule_version": "v1",
+          "scope": "global"
+        },
+        "confidence_band": "medium",
+        "evidence_ids": [
+          "evidence:primary"
+        ],
+        "object": "true",
+        "predicate": "exposure_window_open",
+        "state_id": "state:primary",
+        "status": "refuted",
+        "subject_id": "entity:asset",
+        "time": {
+          "kind": "exact",
+          "value": "2026-04-08T10:00:00Z"
+        }
+      },
+      "before": {
+        "attributes": {
+          "exception_active": false,
+          "rule_version": "v1",
+          "scope": "global"
+        },
+        "confidence_band": "medium",
+        "evidence_ids": [
+          "evidence:primary"
+        ],
+        "object": "true",
+        "predicate": "exposure_window_open",
+        "state_id": "state:primary",
+        "status": "supported",
+        "subject_id": "entity:asset",
+        "time": {
+          "kind": "exact",
+          "value": "2026-04-08T10:00:00Z"
+        }
+      },
+      "change_type": "modified",
+      "id": "state:primary",
+      "source_op_ids": [
+        "op:003",
+        "op:004"
+      ]
+    },
+    {
+      "after": {
+        "attributes": {
+          "holdout": true,
+          "hop_depth": 3
+        },
+        "confidence_band": "medium",
+        "evidence_ids": [
+          "evidence:hop3"
+        ],
+        "object": "requires_follow_up",
+        "predicate": "third_hop_dependency_active",
+        "state_id": "state:hop3_dependency",
+        "status": "supported",
+        "subject_id": "entity:asset",
+        "time": {
+          "kind": "exact",
+          "value": "2026-04-08T10:00:00Z"
+        }
+      },
+      "before": null,
+      "change_type": "added",
+      "id": "state:hop3_dependency",
+      "source_op_ids": [
+        "op:hop3"
+      ]
+    }
+  ],
+  "forbidden_revisions": [
+    "state:secondary",
+    "edge:secondary_support",
+    "unknown:secondary"
+  ],
+  "new_conflicts": [],
+  "new_unknowns": [
+    {
+      "after": {
+        "category": "scope",
+        "evidence_ids": [
+          "evidence:exception"
+        ],
+        "question": "How far does the documented exception extend beyond the recorded asset?",
+        "status": "open",
+        "target_id": "event:exception",
+        "unknown_id": "unknown:exception_scope"
+      },
+      "change_type": "added",
+      "id": "unknown:exception_scope",
+      "source_op_ids": []
+    },
+    {
+      "after": {
+        "category": "dependency",
+        "evidence_ids": [
+          "evidence:hop3"
+        ],
+        "question": "Does the third-hop dependency change the downstream resolution path?",
+        "status": "open",
+        "target_id": "state:hop3_dependency",
+        "unknown_id": "unknown:hop3_dependency"
+      },
+      "change_type": "added",
+      "id": "unknown:hop3_dependency",
+      "source_op_ids": [
+        "op:hop3"
+      ]
+    }
+  ],
+  "preserved_items": [
+    "state:secondary",
+    "edge:secondary_support",
+    "unknown:secondary"
+  ],
+  "pruned_conflicts": [],
+  "resolved_unknowns": [],
+  "scenario_rank_changes": [
+    {
+      "scenario_id": "scenario:primary",
+      "before_rank": 1,
+      "after_rank": 3
+    },
+    {
+      "scenario_id": "scenario:hop3_escalation",
+      "before_rank": null,
+      "after_rank": 1
+    }
+  ],
+  "schema_version": "1.0.0",
+  "supporting_evidence_map": {
+    "edge:hop3_dependency": [
+      "evidence:hop3"
+    ],
+    "event:exception": [
+      "evidence:exception"
+    ],
+    "event:hop3": [
+      "evidence:hop3"
+    ],
+    "state:hop3_dependency": [
+      "evidence:hop3"
+    ],
+    "state:primary": [
+      "evidence:primary"
+    ],
+    "unknown:exception_scope": [
+      "evidence:exception"
+    ],
+    "unknown:hop3_dependency": [
+      "evidence:hop3"
+    ],
+    "scenario:alternate": [
+      "evidence:secondary"
+    ],
+    "scenario:primary": [
+      "evidence:primary"
+    ],
+    "scenario:hop3_escalation": [
+      "evidence:hop3"
+    ]
+  },
+  "must_preserve_claims": [
+    "state:secondary"
+  ],
+  "must_revise_claims": [
+    "state:primary",
+    "state:hop3_dependency"
+  ],
+  "named_evidence_artifact": "evidence:exception",
+  "preservation_notes": "Preserve the independently supported sibling branch and the stable background context.",
+  "revision_notes": "Revise the exception-affected branch, track the new dependency, and preserve the independent sibling branch.",
+  "structural_invariant": "A model that notices the exception but misses the downstream dependency has stopped too early. A model that rewrites preserved sibling branches without contrary evidence has over-revised."
+}

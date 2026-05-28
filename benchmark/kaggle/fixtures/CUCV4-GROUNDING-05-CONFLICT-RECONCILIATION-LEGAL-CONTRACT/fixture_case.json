@@ -1,0 +1,22 @@
+{
+  "authoring_status": "draft_surface_v1",
+  "benchmark_version": "CUC.v4.candidate",
+  "case_id": "CUCV4-GROUNDING-05-CONFLICT-RECONCILIATION-LEGAL-CONTRACT",
+  "clean_pack_sha256": "76131420932224de94a7f9212b3c970240677ba6a66fce73b00a3518280ca296",
+  "difficulty_band": "C",
+  "expected_delta_sha256": "1cccd212e4f467bf944ea5f4dec666bbf7f72da175032942ac26efd2bd9c7e78",
+  "family_id": "conflict_reconciliation",
+  "family_version": "0.1.0",
+  "geometry_profile": "conflict_reconciliation_legal_contract_hop3_scaffold_v4",
+  "hop_depth": 3,
+  "judge_profile": "structured_json_v1",
+  "perturbed_pack_sha256": "6a96662f36194d6a1eb8145044410385896dbf4441d978b734da3b412ea84939",
+  "public_split": "candidate_main",
+  "render_profile": "legal_formal_v1",
+  "scaffold_notes": "Draft conflict-reconciliation legal-contract case expanded into the v4 candidate pack.",
+  "schema_version": "1.0.0",
+  "scoring_manifest_sha256": "98bc6fa56ea33182dc3ec2cfe2e114a204891a5dea88ec181d75278214b25a8a",
+  "sector_skin": "legal_contract",
+  "seed": 40020,
+  "template_id": "tpl.v4.grounding.05.conflict.reconciliation.legal.contract"
+}

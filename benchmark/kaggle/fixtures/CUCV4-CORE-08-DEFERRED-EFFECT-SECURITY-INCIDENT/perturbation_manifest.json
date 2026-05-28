@@ -1,0 +1,145 @@
+{
+  "family_id": "deferred_effect",
+  "family_version": "1.0.0",
+  "notes": "deferred_effect perturbation for security_incident",
+  "ops": [
+    {
+      "after": {
+        "action": "remediation delayed beyond checkpoint",
+        "time": {
+          "value": "2026-04-05T09:00:00Z"
+        }
+      },
+      "before": {
+        "action": "remediation scheduled",
+        "time": {
+          "value": "2026-04-04T14:00:00Z"
+        }
+      },
+      "op_id": "op:001",
+      "op_type": "shift_time_ref",
+      "postconditions": [
+        "event moved beyond checkpoint"
+      ],
+      "preconditions": [
+        "remediation landed later"
+      ],
+      "target_id": "event:primary"
+    },
+    {
+      "after": {
+        "status": "contested"
+      },
+      "before": {
+        "status": "supported"
+      },
+      "op_id": "op:002",
+      "op_type": "replace_state_status",
+      "postconditions": [
+        "state contested"
+      ],
+      "preconditions": [
+        "effect not yet operative"
+      ],
+      "target_id": "state:primary"
+    },
+    {
+      "after": {
+        "rank": 3
+      },
+      "before": {
+        "rank": 1
+      },
+      "op_id": "op:003",
+      "op_type": "change_scenario_rank",
+      "postconditions": [
+        "primary theory demoted"
+      ],
+      "preconditions": [
+        "exposure theory delayed"
+      ],
+      "target_id": "scenario:primary"
+    },
+    {
+      "after": {
+        "rank": 1
+      },
+      "before": {
+        "rank": 2
+      },
+      "op_id": "op:004",
+      "op_type": "change_scenario_rank",
+      "postconditions": [
+        "containment scenario promoted"
+      ],
+      "preconditions": [
+        "alternate immediate theory rises"
+      ],
+      "target_id": "scenario:alternate"
+    },
+    {
+      "after": {
+        "category": "time",
+        "evidence_ids": [
+          "evidence:primary"
+        ],
+        "question": "When did the corrective effect actually become operative?",
+        "status": "open",
+        "target_id": "event:primary",
+        "unknown_id": "unknown:effective_date"
+      },
+      "op_id": "op:005",
+      "op_type": "add_unknown",
+      "postconditions": [
+        "effective date unknown added"
+      ],
+      "preconditions": [
+        "effect deferred"
+      ],
+      "target_id": "unknown:effective_date"
+    },
+    {
+      "after": {
+        "action": "third-hop dependency review opened",
+        "attributes": {
+          "holdout": true,
+          "hop_depth": 3
+        }
+      },
+      "op_id": "op:hop3",
+      "op_type": "add_third_hop_dependency",
+      "postconditions": [
+        "hop-3 dependency branch added"
+      ],
+      "preconditions": [
+        "holdout escalation identified"
+      ],
+      "target_id": "event:hop3"
+    },
+    {
+      "after": {
+        "rank": 2
+      },
+      "before": {
+        "rank": null
+      },
+      "op_id": "op:006",
+      "op_type": "change_scenario_rank",
+      "postconditions": [
+        "third-hop escalation scenario becomes live"
+      ],
+      "preconditions": [
+        "delayed remediation creates a downstream holdout"
+      ],
+      "target_id": "scenario:hop3_escalation"
+    }
+  ],
+  "schema_version": "1.0.0",
+  "seed": 40017,
+  "template_id": "tpl.v4.core.08.deferred.effect.security.incident",
+  "world_id": "world:cucv4-core-08-deferred-effect-security-incident",
+  "metadata": {
+    "sector_skin": "security_incident",
+    "render_profile": "incident_digest_v1"
+  }
+}

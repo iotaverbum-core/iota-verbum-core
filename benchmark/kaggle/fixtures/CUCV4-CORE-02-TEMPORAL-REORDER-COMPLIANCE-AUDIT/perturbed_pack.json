@@ -1,0 +1,280 @@
+{
+  "pack_role": "perturbed",
+  "render_profile": "compliance_memo_v1",
+  "schema_version": "1.0.0",
+  "sections": {
+    "causal_edges": [
+      {
+        "edge_id": "edge:primary_support",
+        "evidence_ids": [
+          "evidence:primary"
+        ],
+        "from_id": "evidence:primary",
+        "relation": "supports",
+        "strength": "weak",
+        "to_id": "state:primary"
+      },
+      {
+        "edge_id": "edge:secondary_support",
+        "evidence_ids": [
+          "evidence:secondary"
+        ],
+        "from_id": "evidence:secondary",
+        "relation": "supports",
+        "strength": "strong",
+        "to_id": "state:secondary"
+      },
+      {
+        "edge_id": "edge:bg_1",
+        "evidence_ids": [
+          "evidence:bg_1"
+        ],
+        "from_id": "evidence:bg_1",
+        "relation": "supports_background_context",
+        "strength": "strong",
+        "to_id": "state:bg_1"
+      }
+    ],
+    "entities": [
+      {
+        "entity_id": "entity:org",
+        "label": "Meridian Bank",
+        "type": "organization",
+        "attributes": {}
+      },
+      {
+        "entity_id": "entity:asset",
+        "label": "approval control",
+        "type": "asset",
+        "attributes": {}
+      },
+      {
+        "entity_id": "entity:reviewer",
+        "label": "internal audit",
+        "type": "role",
+        "attributes": {}
+      },
+      {
+        "entity_id": "entity:bg_1",
+        "label": "control workbook b-1",
+        "type": "background_context",
+        "attributes": {}
+      }
+    ],
+    "events": [
+      {
+        "action": "checkpoint evaluation recorded",
+        "actor_ids": [
+          "entity:org"
+        ],
+        "event_id": "event:primary",
+        "evidence_ids": [
+          "evidence:primary"
+        ],
+        "object_ids": [
+          "entity:asset"
+        ],
+        "time": {
+          "kind": "exact",
+          "value": "2026-04-03T07:00:00Z"
+        },
+        "type": "checkpoint_event",
+        "attributes": {}
+      },
+      {
+        "action": "routine review completed",
+        "actor_ids": [
+          "entity:reviewer"
+        ],
+        "event_id": "event:secondary",
+        "evidence_ids": [
+          "evidence:secondary"
+        ],
+        "object_ids": [
+          "entity:org"
+        ],
+        "time": {
+          "kind": "exact",
+          "value": "2026-04-03T08:00:00Z"
+        },
+        "type": "review_event",
+        "attributes": {}
+      }
+    ],
+    "evidence": [
+      {
+        "content": "Meridian Bank records suggest approval control still satisfies the primary condition under temporal_reorder review.",
+        "evidence_id": "evidence:primary",
+        "reliability": "high",
+        "source_id": "src:primary",
+        "source_type": "control_exception",
+        "time": {
+          "kind": "exact",
+          "value": "2026-04-03T14:00:00Z"
+        },
+        "attributes": {}
+      },
+      {
+        "content": "Independent review shows Meridian Bank completed the routine control step for approval control.",
+        "evidence_id": "evidence:secondary",
+        "reliability": "high",
+        "source_id": "src:secondary",
+        "source_type": "review_log",
+        "time": {
+          "kind": "exact",
+          "value": "2026-04-03T08:00:00Z"
+        },
+        "attributes": {}
+      },
+      {
+        "content": "Supplementary control-administration record preserved outside the core audit finding. Case=CUCV4-CORE-02-TEMPORAL-REORDER-COMPLIANCE-AUDIT family=temporal reorder profile=anchor_light context=1.",
+        "evidence_id": "evidence:bg_1",
+        "reliability": "high",
+        "source_id": "src:bg_1",
+        "source_type": "control_note",
+        "time": {
+          "kind": "exact",
+          "value": "2026-04-03T14:00:00Z"
+        },
+        "attributes": {}
+      }
+    ],
+    "scenarios": [
+      {
+        "basis_ids": [
+          "state:primary",
+          "edge:primary_support"
+        ],
+        "label": "Primary theory remains most likely",
+        "rank": 2,
+        "scenario_id": "scenario:primary",
+        "status": "live"
+      },
+      {
+        "basis_ids": [
+          "state:secondary",
+          "edge:secondary_support"
+        ],
+        "label": "Alternate theory remains secondary",
+        "rank": 1,
+        "scenario_id": "scenario:alternate",
+        "status": "live"
+      }
+    ],
+    "states": [
+      {
+        "evidence_ids": [
+          "evidence:primary"
+        ],
+        "object": "true",
+        "predicate": "control_gap_material",
+        "state_id": "state:primary",
+        "status": "refuted",
+        "subject_id": "entity:asset",
+        "time": {
+          "kind": "exact",
+          "value": "2026-04-03T10:00:00Z"
+        },
+        "attributes": {
+          "authoring_role": "revise_branch"
+        },
+        "confidence_band": "low"
+      },
+      {
+        "evidence_ids": [
+          "evidence:secondary"
+        ],
+        "object": "true",
+        "predicate": "quarterly_review_logged",
+        "state_id": "state:secondary",
+        "status": "supported",
+        "subject_id": "entity:org",
+        "time": {
+          "kind": "exact",
+          "value": "2026-04-03T09:00:00Z"
+        },
+        "attributes": {
+          "authoring_role": "preserve_branch"
+        },
+        "confidence_band": "high"
+      },
+      {
+        "evidence_ids": [
+          "evidence:bg_1"
+        ],
+        "object": "true",
+        "predicate": "control_context_stable_1",
+        "state_id": "state:bg_1",
+        "status": "supported",
+        "subject_id": "entity:bg_1",
+        "time": {
+          "kind": "exact",
+          "value": "2026-04-03T10:00:00Z"
+        },
+        "attributes": {
+          "authoring_role": "background_branch"
+        },
+        "confidence_band": "medium"
+      }
+    ],
+    "unknowns": [
+      {
+        "category": "fact",
+        "evidence_ids": [
+          "evidence:primary"
+        ],
+        "question": "Is the primary conclusion about approval control still valid at the checkpoint?",
+        "resolution_value": "resolved_before_checkpoint",
+        "status": "resolved",
+        "target_id": "state:primary",
+        "unknown_id": "unknown:primary"
+      },
+      {
+        "category": "other",
+        "evidence_ids": [
+          "evidence:secondary"
+        ],
+        "question": "Does the preserved review evidence need any further follow-up?",
+        "status": "open",
+        "target_id": "event:secondary",
+        "unknown_id": "unknown:secondary"
+      },
+      {
+        "category": "scope",
+        "evidence_ids": [
+          "evidence:primary"
+        ],
+        "question": "Did the earlier fix cover the entire affected surface?",
+        "status": "open",
+        "target_id": "state:primary",
+        "unknown_id": "unknown:new_scope"
+      }
+    ],
+    "metadata": {
+      "authoring_status": "draft_surface_v1",
+      "design_intent": "Broaden timing-sensitive coverage into compliance with a second temporal-reorder case that still preserves an independent sibling branch.",
+      "named_evidence_artifact": "evidence:primary",
+      "preserve_focus": [
+        "state:secondary"
+      ],
+      "revise_focus": [
+        "state:primary"
+      ],
+      "sector_skin": "compliance_audit",
+      "surface_title": "COMPLIANCE MEMORANDUM - TIMELINE CORRECTION REVIEW [REVISED]"
+    }
+  },
+  "seed": 40011,
+  "summary": {
+    "edge_count": 3,
+    "entity_count": 4,
+    "event_count": 2,
+    "evidence_count": 3,
+    "scenario_count": 2,
+    "state_count": 3,
+    "unknown_count": 3
+  },
+  "template_id": "tpl.v4.core.02.temporal.reorder.compliance.audit",
+  "world_id": "world:cucv4-core-02-temporal-reorder-compliance-audit",
+  "notes": "Draft v4 candidate case for CUCV4-CORE-02-TEMPORAL-REORDER-COMPLIANCE-AUDIT. Broaden timing-sensitive coverage into compliance with a second temporal-reorder case that still preserves an independent sibling branch."
+}

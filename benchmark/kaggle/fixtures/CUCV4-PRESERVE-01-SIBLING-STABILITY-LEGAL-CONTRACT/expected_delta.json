@@ -1,0 +1,248 @@
+{
+  "changed_edges": [
+    {
+      "after": {
+        "edge_id": "edge:admission_support",
+        "evidence_ids": [
+          "evidence:admission"
+        ],
+        "from_id": "evidence:admission",
+        "relation": "supports",
+        "strength": "medium",
+        "to_id": "state:penalty_triggered"
+      },
+      "before": {
+        "edge_id": "edge:admission_support",
+        "evidence_ids": [
+          "evidence:admission"
+        ],
+        "from_id": "evidence:admission",
+        "relation": "supports",
+        "strength": "strong",
+        "to_id": "state:penalty_triggered"
+      },
+      "change_type": "weakened",
+      "id": "edge:admission_support",
+      "source_op_ids": [
+        "op:003"
+      ]
+    },
+    {
+      "after": {
+        "edge_id": "edge:retraction_support",
+        "evidence_ids": [
+          "evidence:retraction"
+        ],
+        "from_id": "evidence:retraction",
+        "relation": "supports_retraction",
+        "strength": "strong",
+        "to_id": "state:penalty_triggered"
+      },
+      "before": null,
+      "change_type": "added",
+      "id": "edge:retraction_support",
+      "source_op_ids": [
+        "op:001"
+      ]
+    }
+  ],
+  "changed_events": [
+    {
+      "after": {
+        "action": "admission retracted",
+        "actor_ids": [
+          "entity:vendor"
+        ],
+        "attributes": {},
+        "event_id": "event:retraction",
+        "evidence_ids": [
+          "evidence:retraction"
+        ],
+        "object_ids": [
+          "entity:shipment"
+        ],
+        "time": {
+          "kind": "exact",
+          "value": "2026-04-19T08:30:00Z"
+        },
+        "type": "retraction_event"
+      },
+      "before": null,
+      "change_type": "added",
+      "id": "event:retraction",
+      "source_op_ids": [
+        "op:002"
+      ]
+    }
+  ],
+  "changed_states": [
+    {
+      "after": {
+        "attributes": {
+          "authoring_role": "revise_branch"
+        },
+        "confidence_band": "low",
+        "evidence_ids": [
+          "evidence:admission",
+          "evidence:retraction"
+        ],
+        "object": "uncertain",
+        "predicate": "penalty_triggered",
+        "state_id": "state:penalty_triggered",
+        "status": "contested",
+        "subject_id": "entity:vendor",
+        "time": {
+          "kind": "exact",
+          "value": "2026-04-19T08:30:00Z"
+        }
+      },
+      "before": {
+        "attributes": {
+          "authoring_role": "revise_branch"
+        },
+        "confidence_band": "medium",
+        "evidence_ids": [
+          "evidence:admission"
+        ],
+        "object": "true",
+        "predicate": "penalty_triggered",
+        "state_id": "state:penalty_triggered",
+        "status": "supported",
+        "subject_id": "entity:vendor",
+        "time": {
+          "kind": "exact",
+          "value": "2026-04-18T09:00:00Z"
+        }
+      },
+      "change_type": "revised",
+      "id": "state:penalty_triggered",
+      "source_op_ids": [
+        "op:001",
+        "op:003"
+      ]
+    },
+    {
+      "after": {
+        "attributes": {
+          "authoring_role": "revise_branch"
+        },
+        "confidence_band": "low",
+        "evidence_ids": [
+          "evidence:retraction"
+        ],
+        "object": "qualified",
+        "predicate": "formal_recovery_recommended",
+        "state_id": "state:recovery_recommended",
+        "status": "under_review",
+        "subject_id": "entity:customer",
+        "time": {
+          "kind": "exact",
+          "value": "2026-04-19T09:00:00Z"
+        }
+      },
+      "before": {
+        "attributes": {
+          "authoring_role": "revise_branch"
+        },
+        "confidence_band": "medium",
+        "evidence_ids": [
+          "evidence:admission"
+        ],
+        "object": "true",
+        "predicate": "formal_recovery_recommended",
+        "state_id": "state:recovery_recommended",
+        "status": "supported",
+        "subject_id": "entity:customer",
+        "time": {
+          "kind": "exact",
+          "value": "2026-04-18T11:00:00Z"
+        }
+      },
+      "change_type": "revised",
+      "id": "state:recovery_recommended",
+      "source_op_ids": [
+        "op:004"
+      ]
+    }
+  ],
+  "forbidden_revisions": [
+    "state:delivery_complete",
+    "state:notice_timely"
+  ],
+  "must_preserve_claims": [
+    "state:delivery_complete",
+    "state:notice_timely"
+  ],
+  "must_revise_claims": [
+    "state:penalty_triggered",
+    "state:recovery_recommended"
+  ],
+  "named_evidence_artifact": "Retraction CL-0055-R",
+  "new_conflicts": [],
+  "new_unknowns": [
+    {
+      "after": {
+        "category": "legal",
+        "evidence_ids": [
+          "evidence:retraction"
+        ],
+        "question": "Does CL-0055-R leave the penalty clause unenforceable pending interpretation?",
+        "status": "open",
+        "target_id": "state:penalty_triggered",
+        "unknown_id": "unknown:penalty_enforceability"
+      },
+      "change_type": "added",
+      "id": "unknown:penalty_enforceability",
+      "source_op_ids": [
+        "op:005"
+      ]
+    }
+  ],
+  "preservation_notes": "Preserve completed delivery and timely notice. POD-882 and NL-204 remain unchanged and still support those branches.",
+  "preserved_items": [
+    "edge:delivery_support",
+    "edge:notice_support",
+    "state:delivery_complete",
+    "state:notice_timely",
+    "unknown:secondary_followup"
+  ],
+  "pruned_conflicts": [],
+  "resolved_unknowns": [],
+  "revision_notes": "Revise the admitted penalty-trigger claim and the downstream recovery recommendation. The retraction does not erase the original record; it changes the status from admitted to contested.",
+  "scenario_rank_changes": [
+    {
+      "after_rank": 1,
+      "before_rank": 2,
+      "scenario_id": "scenario:performance_record"
+    },
+    {
+      "after_rank": 2,
+      "before_rank": 1,
+      "scenario_id": "scenario:recovery_path"
+    }
+  ],
+  "schema_version": "1.0.0",
+  "structural_invariant": "If the penalty-trigger claim becomes contested, the downstream recovery recommendation must also become qualified. Delivery and notice findings remain stable sibling branches and should not be rewritten.",
+  "supporting_evidence_map": {
+    "edge:admission_support": [
+      "evidence:admission",
+      "evidence:retraction"
+    ],
+    "edge:retraction_support": [
+      "evidence:retraction"
+    ],
+    "event:retraction": [
+      "evidence:retraction"
+    ],
+    "state:penalty_triggered": [
+      "evidence:admission",
+      "evidence:retraction"
+    ],
+    "state:recovery_recommended": [
+      "evidence:retraction"
+    ],
+    "unknown:penalty_enforceability": [
+      "evidence:retraction"
+    ]
+  }
+}

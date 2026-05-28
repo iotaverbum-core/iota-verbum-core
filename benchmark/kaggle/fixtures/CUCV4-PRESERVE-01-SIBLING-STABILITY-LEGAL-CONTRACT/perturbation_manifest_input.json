@@ -1,0 +1,147 @@
+{
+  "family_id": "selective_preservation_sibling_stability",
+  "family_version": "0.1.0",
+  "notes": "Retraction CL-0055-R withdraws the earlier penalty admission in CL-0051. Delivery and notice records remain unchanged and should be preserved.",
+  "ops": [
+    {
+      "after": {
+        "attributes": {},
+        "content": "Retraction CL-0055-R states the earlier penalty admission was provisional and is withdrawn pending clause interpretation.",
+        "evidence_id": "evidence:retraction",
+        "reliability": "high",
+        "source_id": "src:retraction",
+        "source_type": "counterparty_retraction",
+        "time": {
+          "kind": "exact",
+          "value": "2026-04-19T08:30:00Z"
+        }
+      },
+      "op_id": "op:001",
+      "op_type": "add_evidence",
+      "postconditions": [
+        "retraction evidence added"
+      ],
+      "preconditions": [
+        "counterparty retraction received"
+      ],
+      "target_id": "evidence:admission"
+    },
+    {
+      "after": {
+        "action": "admission retracted",
+        "actor_ids": [
+          "entity:vendor"
+        ],
+        "attributes": {},
+        "event_id": "event:retraction",
+        "evidence_ids": [
+          "evidence:retraction"
+        ],
+        "object_ids": [
+          "entity:shipment"
+        ],
+        "time": {
+          "kind": "exact",
+          "value": "2026-04-19T08:30:00Z"
+        },
+        "type": "retraction_event"
+      },
+      "op_id": "op:002",
+      "op_type": "add_event",
+      "postconditions": [
+        "retraction event added"
+      ],
+      "preconditions": [
+        "retraction evidence exists"
+      ],
+      "target_id": "event:admission"
+    },
+    {
+      "after": {
+        "strength": "medium"
+      },
+      "before": {
+        "strength": "strong"
+      },
+      "op_id": "op:003",
+      "op_type": "change_threshold_relation",
+      "postconditions": [
+        "admission support weakened"
+      ],
+      "preconditions": [
+        "original admission is no longer final"
+      ],
+      "target_id": "edge:admission_support"
+    },
+    {
+      "after": {
+        "attributes": {
+          "authoring_role": "revise_branch"
+        },
+        "confidence_band": "low",
+        "evidence_ids": [
+          "evidence:retraction"
+        ],
+        "object": "qualified",
+        "predicate": "formal_recovery_recommended",
+        "state_id": "state:recovery_recommended",
+        "status": "under_review",
+        "subject_id": "entity:customer",
+        "time": {
+          "kind": "exact",
+          "value": "2026-04-19T09:00:00Z"
+        }
+      },
+      "before": {
+        "attributes": {
+          "authoring_role": "revise_branch"
+        },
+        "confidence_band": "medium",
+        "evidence_ids": [
+          "evidence:admission"
+        ],
+        "object": "true",
+        "predicate": "formal_recovery_recommended",
+        "state_id": "state:recovery_recommended",
+        "status": "supported",
+        "subject_id": "entity:customer",
+        "time": {
+          "kind": "exact",
+          "value": "2026-04-18T11:00:00Z"
+        }
+      },
+      "op_id": "op:004",
+      "op_type": "revise_downstream_state",
+      "postconditions": [
+        "recovery recommendation becomes qualified"
+      ],
+      "preconditions": [
+        "penalty state is contested"
+      ],
+      "target_id": "state:recovery_recommended"
+    },
+    {
+      "after": {
+        "category": "legal",
+        "evidence_ids": [
+          "evidence:retraction"
+        ],
+        "question": "Does CL-0055-R leave the penalty clause unenforceable pending interpretation?",
+        "status": "open",
+        "target_id": "state:penalty_triggered",
+        "unknown_id": "unknown:penalty_enforceability"
+      },
+      "op_id": "op:005",
+      "op_type": "add_unknown",
+      "postconditions": [
+        "penalty enforceability unknown added"
+      ],
+      "preconditions": [
+        "retraction leaves clause interpretation unresolved"
+      ],
+      "target_id": "unknown:penalty_enforceability"
+    }
+  ],
+  "schema_version": "1.0.0",
+  "seed": 40001
+}

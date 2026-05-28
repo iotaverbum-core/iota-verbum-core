@@ -1,0 +1,115 @@
+{
+  "authoring_status": "draft_surface_v1",
+  "axes": [
+    "delta_detection",
+    "selective_revision",
+    "causal_temporal_propagation",
+    "unknown_ledger_discipline",
+    "evidence_grounding"
+  ],
+  "axis_weights": {
+    "delta_detection": 0.2,
+    "evidence_grounding": 0.3,
+    "preservation_of_stable_claims": 0.25,
+    "structural_propagation": 0.25
+  },
+  "evidence_grounding_requirement": "Response must cite evidence:corroboration when strengthening the contested attribution branch.",
+  "hard_fail_conditions": [
+    "invalid_json",
+    "response_schema_violation",
+    "fabricated_ids",
+    "fabricated_evidence_ids",
+    "preserve_and_retract_same_id"
+  ],
+  "hard_fail_conditions_natural_language": [
+    "Response invents a revised branch that is not supported by evidence:corroboration or the preserved record.",
+    "Response fabricates canonical ids or evidence ids not present in the perturbed reference.",
+    "Response rewrites preserved sibling branches without new contradictory evidence."
+  ],
+  "metrics": [
+    {
+      "axis": "delta_detection",
+      "metric_id": "m.changed_states",
+      "target_field": "q1_delta_detection.changed_state_ids",
+      "type": "exact_match",
+      "weight": 1
+    },
+    {
+      "axis": "delta_detection",
+      "metric_id": "m.changed_events",
+      "target_field": "q1_delta_detection.changed_event_ids",
+      "type": "exact_match",
+      "weight": 1
+    },
+    {
+      "axis": "causal_temporal_propagation",
+      "metric_id": "m.changed_edges",
+      "target_field": "q1_delta_detection.changed_edge_ids",
+      "type": "set_f1",
+      "weight": 1
+    },
+    {
+      "axis": "causal_temporal_propagation",
+      "metric_id": "m.changed_scenarios",
+      "target_field": "q1_delta_detection.changed_scenario_ids",
+      "type": "exact_match",
+      "weight": 1
+    },
+    {
+      "axis": "selective_revision",
+      "metric_id": "m.new_unknowns_q2",
+      "target_field": "q2_revision.newly_relevant_unknown_ids",
+      "type": "set_f1",
+      "weight": 1
+    },
+    {
+      "axis": "unknown_ledger_discipline",
+      "metric_id": "m.new_unknowns_q3",
+      "target_field": "q3_unknown_ledger.new_unknown_ids",
+      "type": "set_f1",
+      "weight": 1
+    },
+    {
+      "axis": "unknown_ledger_discipline",
+      "metric_id": "m.resolved_unknowns_q3",
+      "target_field": "q3_unknown_ledger.resolved_unknown_ids",
+      "type": "set_f1",
+      "weight": 1
+    }
+  ],
+  "operational_pass_rule": {
+    "citation_coverage_min": 0.67,
+    "delta_detection_min": 0.5,
+    "overall_min": 0.78
+  },
+  "penalties": [
+    {
+      "penalty_id": "p.collateral_damage",
+      "trigger_field": "q2_revision.retract_ids",
+      "type": "forbidden_revision_penalty",
+      "weight": 1.0
+    },
+    {
+      "penalty_id": "p.missed_second_order",
+      "trigger_field": "q3_unknown_ledger.new_unknown_ids",
+      "type": "missed_delta_penalty",
+      "weight": 0.85
+    }
+  ],
+  "preservation_requirement": "Response must preserve the restoration-complete branch unless it cites new contradictory evidence against evidence:secondary.",
+  "preserve_branch_ids": [
+    "state:secondary"
+  ],
+  "revise_branch_ids": [
+    "state:primary"
+  ],
+  "schema_version": "1.0.0",
+  "structural_propagation_requirement": "If the stronger forensic log resolves the contested attribution branch, the primary attribution branch should move to supported while the restoration branch remains unchanged.",
+  "weights": {
+    "causal_temporal_propagation": 0.25,
+    "delta_detection": 0.2,
+    "evidence_grounding": 0.25,
+    "selective_revision": 0.2,
+    "unknown_ledger_discipline": 0.1
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "base_world_sha256": "f300db9a10b8cc374c7a8af655f4a0611fb685af503f61cc9e495d72af6db3ec",
+  "clean_pack_sha256": "001a5a50ce600df17b464ce8d12d4fff48d00669f60a3bec7511ce66010e7536",
+  "expected_delta_sha256": "1adf3ca46e42c69a1cf688dee9f646fc4c8314a8bbf5b4e07b4e102baf9f1795",
+  "manifest_sha256": "4edd28d8dcb34a67268da4ad7438a2a8f8cd63952ee47e817a13e8762f30ee4b",
+  "perturbed_pack_sha256": "084304a89d9d86e4ec8a3852f93106677350d33ea143ee4d37827dbc837ba3ac",
+  "perturbed_world_sha256": "b6933f4e795d2b555217bc3f4d4577c971b6be48bb8960286ffd7321877f6d88",
+  "scoring_manifest_sha256": "0c0ffc4fbb18b6a019e440287f282a3858390b8d89305fb00b101e20331dd35e"
+}

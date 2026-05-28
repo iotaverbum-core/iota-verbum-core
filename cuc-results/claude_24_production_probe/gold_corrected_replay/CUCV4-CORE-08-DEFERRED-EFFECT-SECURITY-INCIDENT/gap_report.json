@@ -1,0 +1,62 @@
+{
+  "extra_fields": [
+    "$.changed_states[id='state:hop3_dependency'].after.attributes.authoring_role",
+    "$.changed_states[id='state:primary'].after.attributes.authoring_role",
+    "$.changed_states[id='state:primary'].before.attributes.authoring_role",
+    "$.new_unknowns[id='unknown:effective_date'].before",
+    "$.new_unknowns[id='unknown:hop3_dependency'].before",
+    "$.scenario_rank_changes[scenario_id='scenario:bg_1'].after_rank",
+    "$.scenario_rank_changes[scenario_id='scenario:bg_1'].before_rank",
+    "$.scenario_rank_changes[scenario_id='scenario:bg_1'].scenario_id"
+  ],
+  "missing_fields": [
+    "$.changed_edges[id='edge:hop3_dependency'].source_op_ids[value='op:hop3']",
+    "$.changed_events[id='event:hop3'].source_op_ids[value='op:hop3']",
+    "$.changed_events[id='event:primary'].source_op_ids[value='op:001']",
+    "$.changed_states[id='state:hop3_dependency'].source_op_ids[value='op:hop3']",
+    "$.changed_states[id='state:primary'].after.attributes.exception_active",
+    "$.changed_states[id='state:primary'].after.attributes.rule_version",
+    "$.changed_states[id='state:primary'].after.attributes.scope",
+    "$.changed_states[id='state:primary'].before.attributes.exception_active",
+    "$.changed_states[id='state:primary'].before.attributes.rule_version",
+    "$.changed_states[id='state:primary'].before.attributes.scope",
+    "$.changed_states[id='state:primary'].source_op_ids[value='op:002']",
+    "$.new_unknowns[id='unknown:hop3_dependency'].source_op_ids[value='op:hop3']",
+    "$.supporting_evidence_map[\"event:hop3\"][0]",
+    "$.supporting_evidence_map[\"event:primary\"][0]"
+  ],
+  "summary": {
+    "compared_fields": 143,
+    "matching_fields": 116,
+    "similarity_score_percent": 81.12
+  },
+  "type_mismatches": [
+    {
+      "gold_type": "null",
+      "model_type": "int",
+      "path": "$.scenario_rank_changes[scenario_id='scenario:hop3_escalation'].before_rank"
+    }
+  ],
+  "value_differences": [
+    {
+      "gold_value": "medium",
+      "model_value": "low",
+      "path": "$.changed_states[id='state:primary'].after.confidence_band"
+    },
+    {
+      "gold_value": "Preserve the independently supported sibling branch and the stable background context.",
+      "model_value": "state:secondary, edge:secondary_support, and unknown:secondary are stable preserve_focus items and must not be revised. Background branches (state:bg_1, state:bg_2, edge:bg_1, edge:bg_2, unknown:bg_1) are context only and not touched by the revise_focus perturbation.",
+      "path": "$.preservation_notes"
+    },
+    {
+      "gold_value": "Revise the timing-sensitive branch and preserve the independent sibling branch while keeping the new timing unknown open.",
+      "model_value": "state:primary is downgraded from supported/medium to contested/low following the delayed-remediation perturbation in event:primary. A new hop-3 deferred-effect chain is introduced: state:hop3_dependency, edge:hop3_dependency, event:hop3, unknown:hop3_dependency, and scenario:hop3_escalation. Scenario ranks are reordered accordingly: scenario:alternate rises to rank 1, scenario:hop3_escalation enters at rank 2, scenario:primary drops to rank 3, and scenario:bg_1 shifts to rank 4. Two new unknowns are opened: unknown:effective_date (when did the corrective effect become operative) and unknown:hop3_dependency (does the third-hop dependency alter the resolution path).",
+      "path": "$.revision_notes"
+    },
+    {
+      "gold_value": "A model that notices the deferred effect but leaves the timing-sensitive branch untouched has stopped too early. A model that rewrites preserved sibling branches without contrary evidence has over-revised.",
+      "model_value": "Under-revision failure: failing to add state:hop3_dependency, edge:hop3_dependency, or the new scenario:hop3_escalation, or failing to downgrade state:primary from supported to contested, would leave the deferred-effect perturbation unrepresented. Over-revision failure: revising state:secondary, edge:secondary_support, or unknown:secondary would corrupt the stable preserve_focus branch that has no contrary evidence introduced against it.",
+      "path": "$.structural_invariant"
+    }
+  ]
+}

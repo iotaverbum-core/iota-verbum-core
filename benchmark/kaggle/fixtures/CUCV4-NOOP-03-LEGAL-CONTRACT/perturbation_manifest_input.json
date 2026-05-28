@@ -1,0 +1,104 @@
+{
+  "family_id": "threshold_crossing",
+  "family_version": "1.0.0",
+  "notes": "threshold_crossing perturbation for legal_contract",
+  "ops": [
+    {
+      "after": {
+        "object": "below_threshold"
+      },
+      "before": {
+        "object": "above_threshold"
+      },
+      "op_id": "op:001",
+      "op_type": "replace_state_value",
+      "postconditions": [
+        "state object updated"
+      ],
+      "preconditions": [
+        "measurement updated"
+      ],
+      "target_id": "state:primary"
+    },
+    {
+      "after": {
+        "status": "refuted"
+      },
+      "before": {
+        "status": "supported"
+      },
+      "op_id": "op:002",
+      "op_type": "replace_state_status",
+      "postconditions": [
+        "state refuted"
+      ],
+      "preconditions": [
+        "threshold crossed downward"
+      ],
+      "target_id": "state:primary"
+    },
+    {
+      "after": {
+        "rank": 2
+      },
+      "before": {
+        "rank": 1
+      },
+      "op_id": "op:003",
+      "op_type": "change_scenario_rank",
+      "postconditions": [
+        "scenario rank lowered"
+      ],
+      "preconditions": [
+        "primary theory falls"
+      ],
+      "target_id": "scenario:primary"
+    },
+    {
+      "after": {
+        "rank": 1
+      },
+      "before": {
+        "rank": 2
+      },
+      "op_id": "op:004",
+      "op_type": "change_scenario_rank",
+      "postconditions": [
+        "scenario rank raised"
+      ],
+      "preconditions": [
+        "alternate rises"
+      ],
+      "target_id": "scenario:alternate"
+    },
+    {
+      "after": {
+        "category": "threshold",
+        "evidence_ids": [
+          "evidence:primary"
+        ],
+        "question": "How stable is the revised measurement around the threshold boundary?",
+        "status": "open",
+        "target_id": "state:primary",
+        "unknown_id": "unknown:margin"
+      },
+      "op_id": "op:005",
+      "op_type": "add_unknown",
+      "postconditions": [
+        "margin unknown added"
+      ],
+      "preconditions": [
+        "boundary moved"
+      ],
+      "target_id": "unknown:primary"
+    }
+  ],
+  "schema_version": "1.0.0",
+  "seed": 40009,
+  "template_id": "tpl.v4.noop.03.legal.contract",
+  "world_id": "world:cucv4-noop-03-legal-contract",
+  "metadata": {
+    "sector_skin": "legal_contract",
+    "render_profile": "legal_formal_v1"
+  }
+}

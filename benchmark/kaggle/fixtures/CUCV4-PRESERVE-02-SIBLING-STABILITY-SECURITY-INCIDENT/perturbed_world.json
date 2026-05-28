@@ -1,0 +1,393 @@
+{
+  "causal_edges": [
+    {
+      "edge_id": "edge:initial_forensics_support",
+      "evidence_ids": [
+        "evidence:initial_forensics"
+      ],
+      "from_id": "evidence:initial_forensics",
+      "relation": "supports",
+      "strength": "low",
+      "to_id": "state:attack_origin_attribution"
+    },
+    {
+      "edge_id": "edge:backup_support",
+      "evidence_ids": [
+        "evidence:backup_report"
+      ],
+      "from_id": "evidence:backup_report",
+      "relation": "supports",
+      "strength": "strong",
+      "to_id": "state:backup_integrity_verified"
+    },
+    {
+      "edge_id": "edge:restore_support",
+      "evidence_ids": [
+        "evidence:restore_report"
+      ],
+      "from_id": "evidence:restore_report",
+      "relation": "supports",
+      "strength": "strong",
+      "to_id": "state:restoration_complete"
+    },
+    {
+      "edge_id": "edge:severity_dependency",
+      "evidence_ids": [
+        "evidence:initial_forensics"
+      ],
+      "from_id": "state:attack_origin_attribution",
+      "relation": "drives_severity_assessment",
+      "strength": "strong",
+      "to_id": "state:severity_level"
+    },
+    {
+      "edge_id": "edge:escalation_dependency",
+      "evidence_ids": [
+        "evidence:initial_forensics"
+      ],
+      "from_id": "state:severity_level",
+      "relation": "drives_escalation_requirement",
+      "strength": "strong",
+      "to_id": "state:external_escalation_required"
+    },
+    {
+      "edge_id": "edge:vendor_compromise_support",
+      "evidence_ids": [
+        "evidence:vendor_credential_alert"
+      ],
+      "from_id": "evidence:vendor_credential_alert",
+      "relation": "supports",
+      "strength": "strong",
+      "to_id": "state:attack_origin_attribution"
+    }
+  ],
+  "entities": [
+    {
+      "attributes": {},
+      "entity_id": "entity:vendor",
+      "label": "Silverline Managed Ops",
+      "type": "organization"
+    },
+    {
+      "attributes": {},
+      "entity_id": "entity:tenant",
+      "label": "Meridian Finance",
+      "type": "organization"
+    },
+    {
+      "attributes": {},
+      "entity_id": "entity:service",
+      "label": "identity gateway",
+      "type": "asset"
+    },
+    {
+      "attributes": {},
+      "entity_id": "entity:backup_cluster",
+      "label": "backup cluster",
+      "type": "asset"
+    },
+    {
+      "attributes": {},
+      "entity_id": "entity:lead",
+      "label": "security lead",
+      "type": "role"
+    }
+  ],
+  "events": [
+    {
+      "action": "incident triage opened",
+      "actor_ids": [
+        "entity:lead"
+      ],
+      "attributes": {},
+      "event_id": "event:triage",
+      "evidence_ids": [
+        "evidence:initial_forensics"
+      ],
+      "object_ids": [
+        "entity:service"
+      ],
+      "time": {
+        "kind": "exact",
+        "value": "2026-04-22T08:10:00Z"
+      },
+      "type": "incident_event"
+    },
+    {
+      "action": "backup integrity verified",
+      "actor_ids": [
+        "entity:lead"
+      ],
+      "attributes": {},
+      "event_id": "event:backup_verified",
+      "evidence_ids": [
+        "evidence:backup_report"
+      ],
+      "object_ids": [
+        "entity:backup_cluster"
+      ],
+      "time": {
+        "kind": "exact",
+        "value": "2026-04-22T09:00:00Z"
+      },
+      "type": "backup_event"
+    },
+    {
+      "action": "restoration completed",
+      "actor_ids": [
+        "entity:lead"
+      ],
+      "attributes": {},
+      "event_id": "event:restore_completed",
+      "evidence_ids": [
+        "evidence:restore_report"
+      ],
+      "object_ids": [
+        "entity:service"
+      ],
+      "time": {
+        "kind": "exact",
+        "value": "2026-04-22T11:30:00Z"
+      },
+      "type": "restoration_event"
+    },
+    {
+      "action": "vendor credential compromise confirmed",
+      "actor_ids": [
+        "entity:vendor",
+        "entity:lead"
+      ],
+      "attributes": {},
+      "event_id": "event:credential_compromise",
+      "evidence_ids": [
+        "evidence:vendor_credential_alert"
+      ],
+      "object_ids": [
+        "entity:service"
+      ],
+      "time": {
+        "kind": "exact",
+        "value": "2026-04-22T08:40:00Z"
+      },
+      "type": "credential_compromise_event"
+    }
+  ],
+  "evidence": [
+    {
+      "attributes": {},
+      "content": "Forensic note FN-440 states the identity gateway activity appears consistent with an internal administrator error.",
+      "evidence_id": "evidence:initial_forensics",
+      "reliability": "medium",
+      "source_id": "src:initial_forensics",
+      "source_type": "forensic_note",
+      "time": {
+        "kind": "exact",
+        "value": "2026-04-22T08:00:00Z"
+      }
+    },
+    {
+      "attributes": {},
+      "content": "Backup report BR-112 confirms snapshot integrity and no corruption in the protected backup cluster.",
+      "evidence_id": "evidence:backup_report",
+      "reliability": "high",
+      "source_id": "src:backup_report",
+      "source_type": "backup_report",
+      "time": {
+        "kind": "exact",
+        "value": "2026-04-22T09:00:00Z"
+      }
+    },
+    {
+      "attributes": {},
+      "content": "Restoration report RR-211 confirms service restoration completed without data loss.",
+      "evidence_id": "evidence:restore_report",
+      "reliability": "high",
+      "source_id": "src:restore_report",
+      "source_type": "restoration_report",
+      "time": {
+        "kind": "exact",
+        "value": "2026-04-22T11:30:00Z"
+      }
+    },
+    {
+      "attributes": {},
+      "content": "Alert AC-778 confirms a vendor support credential was used from an external IP with forged session metadata.",
+      "evidence_id": "evidence:vendor_credential_alert",
+      "reliability": "high",
+      "source_id": "src:vendor_alert",
+      "source_type": "credential_alert",
+      "time": {
+        "kind": "exact",
+        "value": "2026-04-22T08:40:00Z"
+      }
+    }
+  ],
+  "metadata": {
+    "authoring_status": "draft_surface_v1",
+    "design_intent": "Revise attribution, severity, and escalation while preserving backup-integrity and restoration-complete branches.",
+    "named_evidence_artifact": "Credential Alert AC-778",
+    "preserve_focus": [
+      "state:backup_integrity_verified",
+      "state:restoration_complete"
+    ],
+    "revise_focus": [
+      "state:attack_origin_attribution",
+      "state:severity_level",
+      "state:external_escalation_required"
+    ],
+    "sector_skin": "security_incident",
+    "surface_title": "BOARD UPDATE - IDENTITY GATEWAY INCIDENT"
+  },
+  "scenarios": [
+    {
+      "basis_ids": [
+        "state:attack_origin_attribution",
+        "state:severity_level"
+      ],
+      "label": "Internal misconfiguration remains the lead explanation",
+      "rank": 2,
+      "scenario_id": "scenario:internal_misconfig",
+      "status": "live"
+    },
+    {
+      "basis_ids": [
+        "state:backup_integrity_verified",
+        "state:restoration_complete"
+      ],
+      "label": "Service resilience findings remain stable",
+      "rank": 2,
+      "scenario_id": "scenario:service_resilience",
+      "status": "live"
+    },
+    {
+      "basis_ids": [
+        "state:attack_origin_attribution",
+        "state:severity_level",
+        "state:external_escalation_required"
+      ],
+      "label": "Vendor credential compromise is now the lead explanation",
+      "rank": 1,
+      "scenario_id": "scenario:vendor_compromise",
+      "status": "live"
+    }
+  ],
+  "schema_version": "1.0.0",
+  "seed": 40002,
+  "states": [
+    {
+      "attributes": {
+        "authoring_role": "revise_branch"
+      },
+      "confidence_band": "high",
+      "evidence_ids": [
+        "evidence:initial_forensics",
+        "evidence:vendor_credential_alert"
+      ],
+      "object": "vendor_credential_compromise",
+      "predicate": "attack_origin",
+      "state_id": "state:attack_origin_attribution",
+      "status": "supported",
+      "subject_id": "entity:service",
+      "time": {
+        "kind": "exact",
+        "value": "2026-04-22T08:40:00Z"
+      }
+    },
+    {
+      "attributes": {
+        "authoring_role": "preserve_branch"
+      },
+      "confidence_band": "high",
+      "evidence_ids": [
+        "evidence:backup_report"
+      ],
+      "object": "true",
+      "predicate": "backup_integrity_verified",
+      "state_id": "state:backup_integrity_verified",
+      "status": "supported",
+      "subject_id": "entity:backup_cluster",
+      "time": {
+        "kind": "exact",
+        "value": "2026-04-22T09:00:00Z"
+      }
+    },
+    {
+      "attributes": {
+        "authoring_role": "preserve_branch"
+      },
+      "confidence_band": "high",
+      "evidence_ids": [
+        "evidence:restore_report"
+      ],
+      "object": "true",
+      "predicate": "restoration_complete",
+      "state_id": "state:restoration_complete",
+      "status": "supported",
+      "subject_id": "entity:service",
+      "time": {
+        "kind": "exact",
+        "value": "2026-04-22T11:30:00Z"
+      }
+    },
+    {
+      "attributes": {
+        "authoring_role": "revise_branch"
+      },
+      "confidence_band": "high",
+      "evidence_ids": [
+        "evidence:vendor_credential_alert"
+      ],
+      "object": "high",
+      "predicate": "severity_level",
+      "state_id": "state:severity_level",
+      "status": "supported",
+      "subject_id": "entity:service",
+      "time": {
+        "kind": "exact",
+        "value": "2026-04-22T08:45:00Z"
+      }
+    },
+    {
+      "attributes": {
+        "authoring_role": "revise_branch"
+      },
+      "confidence_band": "high",
+      "evidence_ids": [
+        "evidence:vendor_credential_alert"
+      ],
+      "object": "true",
+      "predicate": "external_escalation_required",
+      "state_id": "state:external_escalation_required",
+      "status": "supported",
+      "subject_id": "entity:lead",
+      "time": {
+        "kind": "exact",
+        "value": "2026-04-22T08:50:00Z"
+      }
+    }
+  ],
+  "template_id": "tpl.v4.preserve.02.sibling.stability.security.incident",
+  "unknowns": [
+    {
+      "category": "follow_up",
+      "evidence_ids": [
+        "evidence:backup_report"
+      ],
+      "question": "Does the preserved backup-integrity finding need any additional remediation follow-up?",
+      "status": "open",
+      "target_id": "event:backup_verified",
+      "unknown_id": "unknown:secondary_backup_followup"
+    },
+    {
+      "category": "scope",
+      "evidence_ids": [
+        "evidence:vendor_credential_alert"
+      ],
+      "question": "What is the remaining scope of data exposure after the vendor credential compromise?",
+      "status": "open",
+      "target_id": "state:attack_origin_attribution",
+      "unknown_id": "unknown:data_exfiltration_scope"
+    }
+  ],
+  "world_id": "world:cucv4-preserve-02-sibling-stability-security-incident"
+}

@@ -1,0 +1,361 @@
+{
+  "notes": "Draft v4 preserve-heavy legal contract revision. Retraction evidence changes penalty and recovery conclusions but not delivery or notice findings.",
+  "pack_role": "perturbed",
+  "render_profile": "legal_formal_v1",
+  "schema_version": "1.0.0",
+  "sections": {
+    "causal_edges": [
+      {
+        "edge_id": "edge:admission_support",
+        "evidence_ids": [
+          "evidence:admission"
+        ],
+        "from_id": "evidence:admission",
+        "relation": "supports",
+        "strength": "medium",
+        "to_id": "state:penalty_triggered"
+      },
+      {
+        "edge_id": "edge:delivery_support",
+        "evidence_ids": [
+          "evidence:delivery"
+        ],
+        "from_id": "evidence:delivery",
+        "relation": "supports",
+        "strength": "strong",
+        "to_id": "state:delivery_complete"
+      },
+      {
+        "edge_id": "edge:notice_support",
+        "evidence_ids": [
+          "evidence:notice"
+        ],
+        "from_id": "evidence:notice",
+        "relation": "supports",
+        "strength": "strong",
+        "to_id": "state:notice_timely"
+      },
+      {
+        "edge_id": "edge:recovery_dependency",
+        "evidence_ids": [
+          "evidence:admission"
+        ],
+        "from_id": "state:penalty_triggered",
+        "relation": "supports_downstream_recovery",
+        "strength": "medium",
+        "to_id": "state:recovery_recommended"
+      },
+      {
+        "edge_id": "edge:retraction_support",
+        "evidence_ids": [
+          "evidence:retraction"
+        ],
+        "from_id": "evidence:retraction",
+        "relation": "supports_retraction",
+        "strength": "strong",
+        "to_id": "state:penalty_triggered"
+      }
+    ],
+    "entities": [
+      {
+        "attributes": {},
+        "entity_id": "entity:vendor",
+        "label": "Northwind Components",
+        "type": "organization"
+      },
+      {
+        "attributes": {},
+        "entity_id": "entity:customer",
+        "label": "Asteron Distribution",
+        "type": "organization"
+      },
+      {
+        "attributes": {},
+        "entity_id": "entity:shipment",
+        "label": "Batch R-17",
+        "type": "asset"
+      },
+      {
+        "attributes": {},
+        "entity_id": "entity:notice_desk",
+        "label": "claims notice desk",
+        "type": "role"
+      }
+    ],
+    "events": [
+      {
+        "action": "delivery confirmed",
+        "actor_ids": [
+          "entity:vendor"
+        ],
+        "attributes": {},
+        "event_id": "event:delivery",
+        "evidence_ids": [
+          "evidence:delivery"
+        ],
+        "object_ids": [
+          "entity:shipment"
+        ],
+        "time": {
+          "kind": "exact",
+          "value": "2026-04-12T16:00:00Z"
+        },
+        "type": "delivery_event"
+      },
+      {
+        "action": "contract notice sent",
+        "actor_ids": [
+          "entity:customer",
+          "entity:notice_desk"
+        ],
+        "attributes": {},
+        "event_id": "event:notice",
+        "evidence_ids": [
+          "evidence:notice"
+        ],
+        "object_ids": [
+          "entity:shipment"
+        ],
+        "time": {
+          "kind": "exact",
+          "value": "2026-04-13T10:00:00Z"
+        },
+        "type": "notice_event"
+      },
+      {
+        "action": "delay admission recorded",
+        "actor_ids": [
+          "entity:vendor"
+        ],
+        "attributes": {},
+        "event_id": "event:admission",
+        "evidence_ids": [
+          "evidence:admission"
+        ],
+        "object_ids": [
+          "entity:shipment"
+        ],
+        "time": {
+          "kind": "exact",
+          "value": "2026-04-18T09:00:00Z"
+        },
+        "type": "admission_event"
+      },
+      {
+        "action": "admission retracted",
+        "actor_ids": [
+          "entity:vendor"
+        ],
+        "attributes": {},
+        "event_id": "event:retraction",
+        "evidence_ids": [
+          "evidence:retraction"
+        ],
+        "object_ids": [
+          "entity:shipment"
+        ],
+        "time": {
+          "kind": "exact",
+          "value": "2026-04-19T08:30:00Z"
+        },
+        "type": "retraction_event"
+      }
+    ],
+    "evidence": [
+      {
+        "attributes": {},
+        "content": "Letter CL-0051 states Northwind accepted the delay penalty for Batch R-17 after missing the milestone date.",
+        "evidence_id": "evidence:admission",
+        "reliability": "high",
+        "source_id": "src:admission",
+        "source_type": "counterparty_letter",
+        "time": {
+          "kind": "exact",
+          "value": "2026-04-18T09:00:00Z"
+        }
+      },
+      {
+        "attributes": {},
+        "content": "Proof of delivery POD-882 shows Batch R-17 was delivered complete on 2026-04-12.",
+        "evidence_id": "evidence:delivery",
+        "reliability": "high",
+        "source_id": "src:delivery",
+        "source_type": "proof_of_delivery",
+        "time": {
+          "kind": "exact",
+          "value": "2026-04-12T16:00:00Z"
+        }
+      },
+      {
+        "attributes": {},
+        "content": "Notice log NL-204 shows Asteron sent contractual notice within the two-business-day window.",
+        "evidence_id": "evidence:notice",
+        "reliability": "high",
+        "source_id": "src:notice",
+        "source_type": "notice_log",
+        "time": {
+          "kind": "exact",
+          "value": "2026-04-13T10:00:00Z"
+        }
+      },
+      {
+        "attributes": {},
+        "content": "Retraction CL-0055-R states the earlier penalty admission was provisional and is withdrawn pending clause interpretation.",
+        "evidence_id": "evidence:retraction",
+        "reliability": "high",
+        "source_id": "src:retraction",
+        "source_type": "counterparty_retraction",
+        "time": {
+          "kind": "exact",
+          "value": "2026-04-19T08:30:00Z"
+        }
+      }
+    ],
+    "metadata": {
+      "authoring_status": "draft_surface_v1",
+      "design_intent": "Revise penalty and recovery conclusions while preserving completed-delivery and timely-notice branches.",
+      "named_evidence_artifact": "Retraction CL-0055-R",
+      "preserve_focus": [
+        "state:delivery_complete",
+        "state:notice_timely"
+      ],
+      "revise_focus": [
+        "state:penalty_triggered",
+        "state:recovery_recommended"
+      ],
+      "sector_skin": "legal_contract",
+      "surface_title": "LEGAL CONTRACT REVIEW - PENALTY RECOVERY STATUS"
+    },
+    "scenarios": [
+      {
+        "basis_ids": [
+          "state:penalty_triggered",
+          "state:recovery_recommended"
+        ],
+        "label": "Penalty recovery path is now secondary and contingent",
+        "rank": 2,
+        "scenario_id": "scenario:recovery_path",
+        "status": "live"
+      },
+      {
+        "basis_ids": [
+          "state:delivery_complete",
+          "state:notice_timely"
+        ],
+        "label": "Delivery and notice record is now the primary live scenario",
+        "rank": 1,
+        "scenario_id": "scenario:performance_record",
+        "status": "live"
+      }
+    ],
+    "states": [
+      {
+        "attributes": {
+          "authoring_role": "preserve_branch"
+        },
+        "confidence_band": "high",
+        "evidence_ids": [
+          "evidence:delivery"
+        ],
+        "object": "true",
+        "predicate": "delivery_complete",
+        "state_id": "state:delivery_complete",
+        "status": "supported",
+        "subject_id": "entity:shipment",
+        "time": {
+          "kind": "exact",
+          "value": "2026-04-12T16:00:00Z"
+        }
+      },
+      {
+        "attributes": {
+          "authoring_role": "preserve_branch"
+        },
+        "confidence_band": "high",
+        "evidence_ids": [
+          "evidence:notice"
+        ],
+        "object": "true",
+        "predicate": "notice_timely",
+        "state_id": "state:notice_timely",
+        "status": "supported",
+        "subject_id": "entity:customer",
+        "time": {
+          "kind": "exact",
+          "value": "2026-04-13T10:00:00Z"
+        }
+      },
+      {
+        "attributes": {
+          "authoring_role": "revise_branch"
+        },
+        "confidence_band": "low",
+        "evidence_ids": [
+          "evidence:admission",
+          "evidence:retraction"
+        ],
+        "object": "uncertain",
+        "predicate": "penalty_triggered",
+        "state_id": "state:penalty_triggered",
+        "status": "contested",
+        "subject_id": "entity:vendor",
+        "time": {
+          "kind": "exact",
+          "value": "2026-04-19T08:30:00Z"
+        }
+      },
+      {
+        "attributes": {
+          "authoring_role": "revise_branch"
+        },
+        "confidence_band": "low",
+        "evidence_ids": [
+          "evidence:retraction"
+        ],
+        "object": "qualified",
+        "predicate": "formal_recovery_recommended",
+        "state_id": "state:recovery_recommended",
+        "status": "under_review",
+        "subject_id": "entity:customer",
+        "time": {
+          "kind": "exact",
+          "value": "2026-04-19T09:00:00Z"
+        }
+      }
+    ],
+    "unknowns": [
+      {
+        "category": "follow_up",
+        "evidence_ids": [
+          "evidence:notice"
+        ],
+        "question": "Does the preserved notice record require any additional administrative follow-up?",
+        "status": "open",
+        "target_id": "event:notice",
+        "unknown_id": "unknown:secondary_followup"
+      },
+      {
+        "category": "legal",
+        "evidence_ids": [
+          "evidence:retraction"
+        ],
+        "question": "Does CL-0055-R leave the penalty clause unenforceable pending interpretation?",
+        "status": "open",
+        "target_id": "state:penalty_triggered",
+        "unknown_id": "unknown:penalty_enforceability"
+      }
+    ]
+  },
+  "seed": 40001,
+  "summary": {
+    "edge_count": 5,
+    "entity_count": 4,
+    "event_count": 4,
+    "evidence_count": 4,
+    "scenario_count": 2,
+    "state_count": 4,
+    "unknown_count": 2
+  },
+  "template_id": "tpl.v4.preserve.01.sibling.stability.legal.contract",
+  "world_id": "world:cucv4-preserve-01-sibling-stability-legal-contract"
+}

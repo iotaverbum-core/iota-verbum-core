@@ -1,0 +1,22 @@
+{
+  "authoring_status": "draft_surface_v1",
+  "benchmark_version": "CUC.v4.candidate",
+  "case_id": "CUCV4-GROUNDING-02-CONFLICT-RECONCILIATION-SECURITY-INCIDENT",
+  "clean_pack_sha256": "b7073936ceb5680e0368f9fc396757956329be23b5634b68b7442819ef59272c",
+  "difficulty_band": "B",
+  "expected_delta_sha256": "bde6ea21b84def116f974cc78bf895e8e4770754aaed86fae7c5fc4b330e1a49",
+  "family_id": "conflict_reconciliation",
+  "family_version": "0.1.0",
+  "geometry_profile": "grounding_review_medium_scaffold",
+  "hop_depth": 2,
+  "judge_profile": "structured_json_v1",
+  "perturbed_pack_sha256": "c90ec5f54d665845cc8dc4cf4796d6607e40c94fb17229d20e446694dadbc66a",
+  "public_split": "candidate_main",
+  "render_profile": "incident_digest_v1",
+  "scaffold_notes": "Draft conflict-reconciliation security case: strengthen the contested attribution branch, preserve restoration completeness.",
+  "schema_version": "1.0.0",
+  "scoring_manifest_sha256": "fdaef060bfb1e65e8e365acdb41b544949c5c5091b27711a06651156e14f0ed0",
+  "sector_skin": "security_incident",
+  "seed": 40007,
+  "template_id": "tpl.v4.grounding.02.conflict.reconciliation.security.incident"
+}

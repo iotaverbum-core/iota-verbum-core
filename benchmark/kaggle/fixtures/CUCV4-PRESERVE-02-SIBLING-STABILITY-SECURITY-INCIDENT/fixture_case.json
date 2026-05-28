@@ -1,0 +1,22 @@
+{
+  "authoring_status": "draft_surface_v1",
+  "benchmark_version": "CUC.v4.candidate",
+  "case_id": "CUCV4-PRESERVE-02-SIBLING-STABILITY-SECURITY-INCIDENT",
+  "clean_pack_sha256": "2fe02015341eb3a02720b9b6fb373baf1337fd001c799122b15b7fcfae92b7a7",
+  "difficulty_band": "C",
+  "expected_delta_sha256": "c0d5295279729f2e0e877b4631230b1bf01d9ecd37fe1bc20709238df352ca3c",
+  "family_id": "selective_preservation_sibling_stability",
+  "family_version": "0.1.0",
+  "geometry_profile": "preserve_sibling_hop3_scaffold",
+  "hop_depth": 3,
+  "judge_profile": "structured_json_v1",
+  "perturbed_pack_sha256": "f3166065acfb110e91a15c7c60196496c9360788069d042c9228a5667eb49acf",
+  "public_split": "candidate_main",
+  "render_profile": "board_update_v1",
+  "scaffold_notes": "Draft preserve-heavy security incident case: revise attribution/severity/escalation, preserve backup integrity and restoration.",
+  "schema_version": "1.0.0",
+  "scoring_manifest_sha256": "b64add157b43709eba7db0056de27c643fd70a32449f8679a02bfe06521a6a7c",
+  "sector_skin": "security_incident",
+  "seed": 40002,
+  "template_id": "tpl.v4.preserve.02.sibling.stability.security.incident"
+}

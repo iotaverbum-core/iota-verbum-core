@@ -1,0 +1,69 @@
+{
+  "extra_fields": [
+    "$.changed_states[id='state:hop3_dependency'].after.attributes.authoring_role",
+    "$.forbidden_revisions[value='edge:primary_support']",
+    "$.forbidden_revisions[value='state:primary']",
+    "$.forbidden_revisions[value='unknown:primary']",
+    "$.must_preserve_claims[value='state:primary']",
+    "$.new_unknowns[id='unknown:hop3_dependency'].before",
+    "$.new_unknowns[id='unknown:response_sufficiency'].before",
+    "$.preserved_items[value='edge:primary_support']",
+    "$.preserved_items[value='state:primary']",
+    "$.preserved_items[value='unknown:primary']",
+    "$.scenario_rank_changes[scenario_id='scenario:bg_1'].after_rank",
+    "$.scenario_rank_changes[scenario_id='scenario:bg_1'].before_rank",
+    "$.scenario_rank_changes[scenario_id='scenario:bg_1'].scenario_id",
+    "$.supporting_evidence_map[\"scenario:alternate\"][0]",
+    "$.supporting_evidence_map[\"scenario:alternate\"][1]",
+    "$.supporting_evidence_map[\"scenario:bg_1\"][0]",
+    "$.supporting_evidence_map[\"scenario:hop3_escalation\"][0]",
+    "$.supporting_evidence_map[\"scenario:primary\"][0]"
+  ],
+  "missing_fields": [
+    "$.changed_edges[id='edge:hop3_dependency'].source_op_ids[value='op:hop3']",
+    "$.changed_events[id='event:hop3'].source_op_ids[value='op:hop3']",
+    "$.changed_states[id='state:hop3_dependency'].source_op_ids[value='op:hop3']",
+    "$.new_unknowns[id='unknown:hop3_dependency'].source_op_ids[value='op:hop3']",
+    "$.supporting_evidence_map[\"event:hop3\"][0]",
+    "$.supporting_evidence_map[\"event:response\"][0]"
+  ],
+  "summary": {
+    "compared_fields": 123,
+    "matching_fields": 93,
+    "similarity_score_percent": 75.61
+  },
+  "type_mismatches": [
+    {
+      "gold_type": "null",
+      "model_type": "int",
+      "path": "$.scenario_rank_changes[scenario_id='scenario:hop3_escalation'].before_rank"
+    }
+  ],
+  "value_differences": [
+    {
+      "gold_value": "Preserve the independently supported sibling branch and the stable background context.",
+      "model_value": "state:secondary (preserve_branch, high confidence, committee_review_recorded) and state:primary (award_exception_justified) are explicitly protected under preserve_focus and forbidden_revisions. No contrary evidence targets either branch; both remain fully supported and unchanged.",
+      "path": "$.preservation_notes"
+    },
+    {
+      "gold_value": "Track the new counterparty-response branch and any downstream dependency while preserving independent sibling facts.",
+      "model_value": "The perturbed pack introduces three new elements under revise_focus: (1) state:hop3_dependency with authoring_role revise_branch and holdout=true, establishing a third-hop downstream dependency; (2) edge:hop3_dependency linking state:hop3_dependency to scenario:hop3_escalation; (3) evidence:response and edge:response_support providing partial mitigation support to state:secondary without modifying it. Two new unknowns arise: unknown:response_sufficiency (counterparty response scope) and unknown:hop3_dependency (downstream resolution path). scenario:hop3_escalation is newly introduced at rank 1, displacing scenario:primary to rank 3 and scenario:bg_1 to rank 4.",
+      "path": "$.revision_notes"
+    },
+    {
+      "gold_value": 1,
+      "model_value": 2,
+      "path": "$.scenario_rank_changes[scenario_id='scenario:alternate'].after_rank"
+    },
+    {
+      "gold_value": 2,
+      "model_value": 3,
+      "path": "$.scenario_rank_changes[scenario_id='scenario:primary'].after_rank"
+    },
+    {
+      "gold_value": "A model that notices the response but misses the downstream dependency or mitigation branch has stopped too early. A model that rewrites preserved sibling branches without contrary evidence has over-revised.",
+      "model_value": "Under-revision failure: failing to add state:hop3_dependency, edge:hop3_dependency, or scenario:hop3_escalation would miss the revise_focus branch entirely and omit the downstream dependency pressure introduced by the perturbed pack. Over-revision failure: modifying state:secondary or state:primary would violate preserve_focus and forbidden_revisions constraints, rewriting stable sibling branches that have no contrary evidence targeting them.",
+      "path": "$.structural_invariant"
+    }
+  ]
+}

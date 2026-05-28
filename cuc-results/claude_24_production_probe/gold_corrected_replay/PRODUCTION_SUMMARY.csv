@@ -1,0 +1,3 @@
+result_set,case_count,json_valid_count,verifier_accepted_count,ledger_committed_count,json_valid_rate,acceptance_rate,ledger_commit_rate,average_similarity_score_percent,summary_sha256,note
+live,24,24,23,23,1.0,0.958333,0.958333,76.86625,b2387ecd486b6cf0cc4825906c250e128b60f48b83f223876ec71b2878119fe6,Original live Claude API run.
+gold_corrected_replay,24,24,24,24,1.0,1.0,1.0,77.087083,bf5c53caf67c623156b9e04afd3a82894107b524a62605fb8965466a81c5f176,Offline replay using original live Claude outputs after correcting one stale fixture-gold scenario rank expectation.

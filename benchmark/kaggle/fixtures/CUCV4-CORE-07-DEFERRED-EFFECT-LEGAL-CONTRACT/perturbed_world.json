@@ -1,0 +1,200 @@
+{
+  "causal_edges": [
+    {
+      "edge_id": "edge:primary_support",
+      "evidence_ids": [
+        "evidence:primary"
+      ],
+      "from_id": "evidence:primary",
+      "relation": "supports",
+      "strength": "medium",
+      "to_id": "state:primary"
+    },
+    {
+      "edge_id": "edge:secondary_support",
+      "evidence_ids": [
+        "evidence:secondary"
+      ],
+      "from_id": "evidence:secondary",
+      "relation": "supports",
+      "strength": "strong",
+      "to_id": "state:secondary"
+    }
+  ],
+  "entities": [
+    {
+      "attributes": {},
+      "entity_id": "entity:org",
+      "label": "Portwell Distribution",
+      "type": "organization"
+    },
+    {
+      "attributes": {},
+      "entity_id": "entity:asset",
+      "label": "filing-date dispute",
+      "type": "asset"
+    },
+    {
+      "attributes": {},
+      "entity_id": "entity:reviewer",
+      "label": "plaintiff counsel",
+      "type": "role"
+    }
+  ],
+  "events": [
+    {
+      "action": "remediation scheduled",
+      "actor_ids": [
+        "entity:org"
+      ],
+      "attributes": {},
+      "event_id": "event:primary",
+      "evidence_ids": [
+        "evidence:primary"
+      ],
+      "object_ids": [
+        "entity:asset"
+      ],
+      "time": {
+        "kind": "exact",
+        "value": "2026-04-03T09:00:00Z"
+      },
+      "type": "checkpoint_event"
+    },
+    {
+      "action": "routine review completed",
+      "actor_ids": [
+        "entity:reviewer"
+      ],
+      "attributes": {},
+      "event_id": "event:secondary",
+      "evidence_ids": [
+        "evidence:secondary"
+      ],
+      "object_ids": [
+        "entity:org"
+      ],
+      "time": {
+        "kind": "exact",
+        "value": "2026-04-02T08:00:00Z"
+      },
+      "type": "review_event"
+    }
+  ],
+  "evidence": [
+    {
+      "attributes": {},
+      "content": "Portwell Distribution records suggest filing-date dispute still satisfies the primary condition under deferred_effect review.",
+      "evidence_id": "evidence:primary",
+      "reliability": "high",
+      "source_id": "src:primary",
+      "source_type": "filing_memo",
+      "time": {
+        "kind": "exact",
+        "value": "2026-04-02T14:00:00Z"
+      }
+    },
+    {
+      "attributes": {},
+      "content": "Independent review shows Portwell Distribution completed the routine filing review step for for filing-date dispute.",
+      "evidence_id": "evidence:secondary",
+      "reliability": "high",
+      "source_id": "src:secondary",
+      "source_type": "review_note",
+      "time": {
+        "kind": "exact",
+        "value": "2026-04-02T08:00:00Z"
+      }
+    }
+  ],
+  "metadata": {
+    "sector_skin": "legal_contract",
+    "render_profile": "legal_formal_v1"
+  },
+  "scenarios": [
+    {
+      "basis_ids": [
+        "state:primary",
+        "edge:primary_support"
+      ],
+      "label": "Filing-violation theory is now secondary pending operative-date clarification",
+      "rank": 2,
+      "scenario_id": "scenario:primary",
+      "status": "live"
+    },
+    {
+      "basis_ids": [
+        "state:secondary",
+        "edge:secondary_support"
+      ],
+      "label": "Review-completed theory is now primary until the operative date is clarified",
+      "rank": 1,
+      "scenario_id": "scenario:alternate",
+      "status": "live"
+    }
+  ],
+  "schema_version": "1.0.0",
+  "seed": 40016,
+  "states": [
+    {
+      "attributes": {
+        "exception_active": false,
+        "rule_version": "v1",
+        "scope": "global"
+      },
+      "confidence_band": "medium",
+      "evidence_ids": [
+        "evidence:primary"
+      ],
+      "object": "true",
+      "predicate": "filing_date_violation_live",
+      "state_id": "state:primary",
+      "status": "contested",
+      "subject_id": "entity:asset",
+      "time": {
+        "kind": "exact",
+        "value": "2026-04-02T10:00:00Z"
+      }
+    },
+    {
+      "attributes": {},
+      "confidence_band": "high",
+      "evidence_ids": [
+        "evidence:secondary"
+      ],
+      "object": "true",
+      "predicate": "review_completed",
+      "state_id": "state:secondary",
+      "status": "supported",
+      "subject_id": "entity:org",
+      "time": {
+        "kind": "exact",
+        "value": "2026-04-02T09:00:00Z"
+      }
+    }
+  ],
+  "template_id": "tpl.v4.core.07.deferred.effect.legal.contract",
+  "unknowns": [
+    {
+      "category": "other",
+      "evidence_ids": [
+        "evidence:secondary"
+      ],
+      "question": "Does the preserved filing-review record need any further follow-up?",
+      "status": "open",
+      "target_id": "event:secondary",
+      "unknown_id": "unknown:secondary"
+    },
+    {
+      "category": "time",
+      "evidence_ids": [
+        "evidence:primary"
+      ],
+      "question": "When did the corrective effect actually become operative?",
+      "status": "open",
+      "target_id": "event:primary",
+      "unknown_id": "unknown:effective_date"
+    }
+  ],
+  "world_id": "world:cucv4-core-07-deferred-effect-legal-contract"
+}

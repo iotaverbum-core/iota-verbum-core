@@ -1,0 +1,222 @@
+{
+  "changed_edges": [
+    {
+      "after": {
+        "edge_id": "edge:response_support",
+        "evidence_ids": [
+          "evidence:response"
+        ],
+        "from_id": "evidence:response",
+        "relation": "supports_mitigation",
+        "strength": "medium",
+        "to_id": "state:secondary"
+      },
+      "before": null,
+      "change_type": "added",
+      "id": "edge:response_support",
+      "source_op_ids": []
+    },
+    {
+      "after": {
+        "edge_id": "edge:hop3_dependency",
+        "evidence_ids": [
+          "evidence:hop3"
+        ],
+        "from_id": "state:hop3_dependency",
+        "relation": "creates_downstream_dependency",
+        "strength": "medium",
+        "to_id": "scenario:hop3_escalation"
+      },
+      "before": null,
+      "change_type": "added",
+      "id": "edge:hop3_dependency",
+      "source_op_ids": [
+        "op:hop3"
+      ]
+    }
+  ],
+  "changed_events": [
+    {
+      "after": {
+        "action": "response submitted",
+        "actor_ids": [
+          "entity:org"
+        ],
+        "attributes": {},
+        "event_id": "event:response",
+        "evidence_ids": [
+          "evidence:response"
+        ],
+        "object_ids": [
+          "entity:asset"
+        ],
+        "time": {
+          "kind": "exact",
+          "value": "2026-04-03T16:00:00Z"
+        },
+        "type": "counterparty_response"
+      },
+      "before": null,
+      "change_type": "added",
+      "id": "event:response",
+      "source_op_ids": []
+    },
+    {
+      "after": {
+        "action": "third-hop dependency review opened",
+        "actor_ids": [
+          "entity:org"
+        ],
+        "attributes": {
+          "holdout": true,
+          "hop_depth": 3
+        },
+        "event_id": "event:hop3",
+        "evidence_ids": [
+          "evidence:hop3"
+        ],
+        "object_ids": [
+          "entity:asset"
+        ],
+        "time": {
+          "kind": "exact",
+          "value": "2026-04-03T14:00:00Z"
+        },
+        "type": "third_hop_dependency_event"
+      },
+      "before": null,
+      "change_type": "added",
+      "id": "event:hop3",
+      "source_op_ids": [
+        "op:hop3"
+      ]
+    }
+  ],
+  "changed_states": [
+    {
+      "after": {
+        "attributes": {
+          "holdout": true,
+          "hop_depth": 3
+        },
+        "confidence_band": "medium",
+        "evidence_ids": [
+          "evidence:hop3"
+        ],
+        "object": "requires_follow_up",
+        "predicate": "third_hop_dependency_active",
+        "state_id": "state:hop3_dependency",
+        "status": "supported",
+        "subject_id": "entity:asset",
+        "time": {
+          "kind": "exact",
+          "value": "2026-04-03T10:00:00Z"
+        }
+      },
+      "before": null,
+      "change_type": "added",
+      "id": "state:hop3_dependency",
+      "source_op_ids": [
+        "op:hop3"
+      ]
+    }
+  ],
+  "forbidden_revisions": [
+    "state:secondary",
+    "edge:secondary_support",
+    "unknown:secondary"
+  ],
+  "new_conflicts": [],
+  "new_unknowns": [
+    {
+      "after": {
+        "category": "other",
+        "evidence_ids": [
+          "evidence:response"
+        ],
+        "question": "Is the counterparty response sufficient to close the issue rather than merely narrow it?",
+        "status": "open",
+        "target_id": "event:response",
+        "unknown_id": "unknown:response_sufficiency"
+      },
+      "change_type": "added",
+      "id": "unknown:response_sufficiency",
+      "source_op_ids": []
+    },
+    {
+      "after": {
+        "category": "dependency",
+        "evidence_ids": [
+          "evidence:hop3"
+        ],
+        "question": "Does the third-hop dependency change the downstream resolution path?",
+        "status": "open",
+        "target_id": "state:hop3_dependency",
+        "unknown_id": "unknown:hop3_dependency"
+      },
+      "change_type": "added",
+      "id": "unknown:hop3_dependency",
+      "source_op_ids": [
+        "op:hop3"
+      ]
+    }
+  ],
+  "preserved_items": [
+    "state:secondary",
+    "edge:secondary_support",
+    "unknown:secondary"
+  ],
+  "pruned_conflicts": [],
+  "resolved_unknowns": [],
+  "scenario_rank_changes": [
+    {
+      "after_rank": 1,
+      "before_rank": 2,
+      "scenario_id": "scenario:alternate"
+    },
+    {
+      "after_rank": 2,
+      "before_rank": 1,
+      "scenario_id": "scenario:primary"
+    },
+    {
+      "after_rank": 1,
+      "before_rank": null,
+      "scenario_id": "scenario:hop3_escalation"
+    }
+  ],
+  "schema_version": "1.0.0",
+  "supporting_evidence_map": {
+    "edge:hop3_dependency": [
+      "evidence:hop3"
+    ],
+    "edge:response_support": [
+      "evidence:response"
+    ],
+    "event:hop3": [
+      "evidence:hop3"
+    ],
+    "event:response": [
+      "evidence:response"
+    ],
+    "state:hop3_dependency": [
+      "evidence:hop3"
+    ],
+    "unknown:hop3_dependency": [
+      "evidence:hop3"
+    ],
+    "unknown:response_sufficiency": [
+      "evidence:response"
+    ]
+  },
+  "must_preserve_claims": [
+    "state:secondary"
+  ],
+  "must_revise_claims": [
+    "state:hop3_dependency"
+  ],
+  "named_evidence_artifact": "evidence:response",
+  "preservation_notes": "Preserve the independently supported sibling branch and the stable background context.",
+  "revision_notes": "Track the new counterparty-response branch and any downstream dependency while preserving independent sibling facts.",
+  "structural_invariant": "A model that notices the response but misses the downstream dependency or mitigation branch has stopped too early. A model that rewrites preserved sibling branches without contrary evidence has over-revised."
+}

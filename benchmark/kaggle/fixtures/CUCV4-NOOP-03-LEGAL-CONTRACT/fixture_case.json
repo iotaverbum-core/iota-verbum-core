@@ -1,0 +1,22 @@
+{
+  "authoring_status": "draft_surface_v1",
+  "benchmark_version": "CUC.v4.candidate",
+  "case_id": "CUCV4-NOOP-03-LEGAL-CONTRACT",
+  "clean_pack_sha256": "8a7c80f22c90679b7246b612a77c80d69a6199db45054cae47609310264c2b83",
+  "difficulty_band": "B",
+  "expected_delta_sha256": "23c13e79ce66ad7eca96fa2901afcaa27aac0ec733bb271192ab1c273e34bf89",
+  "family_id": "no_op_control",
+  "family_version": "0.1.0",
+  "geometry_profile": "no_op_control_legal_contract_hop1_scaffold_v4",
+  "hop_depth": 1,
+  "judge_profile": "structured_json_v1",
+  "perturbed_pack_sha256": "0b84971425fc742cf823de2f57423d9b429f034532aedace7587adb4347a7893",
+  "public_split": "control",
+  "render_profile": "legal_formal_v1",
+  "scaffold_notes": "Draft no-op-control legal-contract case expanded into the v4 candidate pack.",
+  "schema_version": "1.0.0",
+  "scoring_manifest_sha256": "fdd3f026fc7154e973d807af8c6f5af395cc24eca07a1938daf7ef1015df0171",
+  "sector_skin": "legal_contract",
+  "seed": 40009,
+  "template_id": "tpl.v4.noop.03.legal.contract"
+}

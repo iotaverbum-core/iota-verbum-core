@@ -1,0 +1,36 @@
+{
+  "extra_fields": [
+    "$.forbidden_revisions[value='edge:primary_support']",
+    "$.forbidden_revisions[value='edge:secondary_support']",
+    "$.forbidden_revisions[value='state:primary']",
+    "$.forbidden_revisions[value='unknown:primary']",
+    "$.preserved_items[value='edge:primary_support']",
+    "$.preserved_items[value='edge:secondary_support']",
+    "$.preserved_items[value='state:primary']",
+    "$.preserved_items[value='unknown:primary']"
+  ],
+  "missing_fields": [],
+  "summary": {
+    "compared_fields": 25,
+    "matching_fields": 14,
+    "similarity_score_percent": 56.0
+  },
+  "type_mismatches": [],
+  "value_differences": [
+    {
+      "gold_value": "Preserve the existing branch structure, including the independent sibling branch and stable background context.",
+      "model_value": "revise_focus is empty in both packs; no substantive claim, edge, event, state, unknown, or scenario changed between clean and perturbed versions. The only delta is the surface_title suffix '[REVISED]', which is a metadata label change only and does not affect any scored branch. All state, edge, and unknown IDs are preserved unchanged. preserve_focus branches state:bg_1 and state:secondary are fully stable.",
+      "path": "$.preservation_notes"
+    },
+    {
+      "gold_value": "No substantive revision is expected. Preserve the prior branch structure and avoid inventing a new escalation path.",
+      "model_value": "No revision required. This is a confirmed no-op case. The perturbed pack introduces no new evidence, no changed confidence bands, no altered edges, no resolved or new unknowns, and no scenario rank shifts. The surface_title cosmetic change does not trigger any analytical revision.",
+      "path": "$.revision_notes"
+    },
+    {
+      "gold_value": "A model that invents a substantive revision on this no-op control has failed restraint. The unchanged sibling branches should remain stable.",
+      "model_value": "Under-revision failure: treating the surface_title cosmetic edit as a substantive claim change and altering states or edges that have no evidentiary basis for revision. Over-revision failure: propagating a null evidence delta into spurious confidence-band downgrades, scenario reranks, or unknown resolutions across the primary, secondary, or background branches when no new contrary evidence was introduced.",
+      "path": "$.structural_invariant"
+    }
+  ]
+}

@@ -1,0 +1,22 @@
+{
+  "authoring_status": "draft_surface_v1",
+  "benchmark_version": "CUC.v4.candidate",
+  "case_id": "CUCV4-INVARIANT-01-COUNTERPARTY-RESPONSE-LEGAL-CONTRACT",
+  "clean_pack_sha256": "0e0509e515b7c25e7d94471660dcabff41d8e856e2ac92d07463eb5e83c449ba",
+  "difficulty_band": "B",
+  "expected_delta_sha256": "44a137add9503b263b8bb66ac0e36f5a24ced1d8ac75f9309e82e54417b16d70",
+  "family_id": "counterparty_response",
+  "family_version": "0.1.0",
+  "geometry_profile": "legal_counterparty_response_hop3_scaffold",
+  "hop_depth": 3,
+  "judge_profile": "structured_json_v1",
+  "perturbed_pack_sha256": "c236030bd60ae77649258a2a218d1fef699428af05c6a45105571aac964d834f",
+  "public_split": "candidate_main",
+  "render_profile": "legal_formal_v1",
+  "scaffold_notes": "Draft counterparty-response legal contract case: add a third-hop dependency after the exception response while preserving the delivery-record branch.",
+  "schema_version": "1.0.0",
+  "scoring_manifest_sha256": "5094e8e3bc6b99b880000c7dfd4ba59dea947dd208634b5848701a5c981a2adb",
+  "sector_skin": "legal_contract",
+  "seed": 40008,
+  "template_id": "tpl.v4.invariant.01.counterparty.response.legal.contract"
+}

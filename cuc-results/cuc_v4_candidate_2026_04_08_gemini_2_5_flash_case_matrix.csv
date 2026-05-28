@@ -1,0 +1,3 @@
+case_id,passed,overall_pass,overall_score,hard_fail_reasons,fabricated_ids_hard_fail,fabricated_evidence_ids_hard_fail,score_story_consistent,assertion_fail_count,axis_delta_detection,axis_causal_temporal_propagation,axis_selective_revision,axis_unknown_ledger_discipline,axis_evidence_grounding
+CUCV4-PRESERVE-01-SIBLING-STABILITY-LEGAL-CONTRACT,True,True,0.900000,[],False,False,True,0,1.000000,0.500000,1.000000,1.000000,1.000000
+CUCV4-PRESERVE-02-SIBLING-STABILITY-SECURITY-INCIDENT,False,False,0.892857,"[""fabricated_evidence_ids""]",False,True,True,2,1.000000,1.000000,1.000000,1.000000,0.571429

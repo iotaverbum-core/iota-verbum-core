@@ -1,0 +1,22 @@
+{
+  "authoring_status": "draft_surface_v1",
+  "benchmark_version": "CUC.v4.candidate",
+  "case_id": "CUCV4-NOOP-02-OPERATIONS-BRIEF",
+  "clean_pack_sha256": "2d4fba806abd7cfba285865bff2475b58f807d69279a5353d381586d9aa1c3a8",
+  "difficulty_band": "B",
+  "expected_delta_sha256": "327a350524ea6969f947013ceacddf0881af7e7ad8ec2c3117834b82a152c986",
+  "family_id": "no_op_control",
+  "family_version": "0.1.0",
+  "geometry_profile": "no_op_background_branch_v4",
+  "hop_depth": 1,
+  "judge_profile": "structured_json_v1",
+  "perturbed_pack_sha256": "035ad7db9a4dc161d2f1fc2d094f7ea3b20293a0e4db886eed1738ecdb501eda",
+  "public_split": "candidate_main",
+  "render_profile": "ops_brief_v1",
+  "scaffold_notes": "Draft no-op operations brief case: preserve arrival-window status and dispatch reschedule record.",
+  "schema_version": "1.0.0",
+  "scoring_manifest_sha256": "7ad9f16755ca0542a4a6167ac6ea7500ef163fd97472f07eb78deaa867cc2572",
+  "sector_skin": "operations_brief",
+  "seed": 40004,
+  "template_id": "tpl.v4.noop.02.operations.brief"
+}

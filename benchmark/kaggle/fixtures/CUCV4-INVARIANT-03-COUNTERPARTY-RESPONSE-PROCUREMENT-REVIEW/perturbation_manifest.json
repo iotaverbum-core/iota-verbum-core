@@ -1,0 +1,144 @@
+{
+  "family_id": "counterparty_response",
+  "family_version": "1.0.0",
+  "notes": "counterparty_response perturbation for procurement_review",
+  "ops": [
+    {
+      "after": {
+        "attributes": {},
+        "content": "The counterparty provides a mitigation response with partial support for the alternate interpretation.",
+        "evidence_id": "evidence:response",
+        "reliability": "medium",
+        "source_id": "src:response",
+        "source_type": "counterparty_response",
+        "time": {
+          "kind": "exact",
+          "value": "2026-04-05T16:00:00Z"
+        }
+      },
+      "op_id": "op:001",
+      "op_type": "add_evidence",
+      "postconditions": [
+        "response evidence added"
+      ],
+      "preconditions": [
+        "response received"
+      ],
+      "target_id": "evidence:primary"
+    },
+    {
+      "after": {
+        "action": "response submitted",
+        "actor_ids": [
+          "entity:org"
+        ],
+        "attributes": {},
+        "event_id": "event:response",
+        "evidence_ids": [
+          "evidence:response"
+        ],
+        "object_ids": [
+          "entity:asset"
+        ],
+        "time": {
+          "kind": "exact",
+          "value": "2026-04-05T16:00:00Z"
+        },
+        "type": "counterparty_response"
+      },
+      "op_id": "op:002",
+      "op_type": "add_event",
+      "postconditions": [
+        "response event added"
+      ],
+      "preconditions": [
+        "response event exists"
+      ],
+      "target_id": "event:primary"
+    },
+    {
+      "after": {
+        "edge_id": "edge:response_support",
+        "evidence_ids": [
+          "evidence:response"
+        ],
+        "from_id": "evidence:response",
+        "relation": "supports_mitigation",
+        "strength": "medium",
+        "to_id": "state:secondary"
+      },
+      "op_id": "op:003",
+      "op_type": "add_causal_edge",
+      "postconditions": [
+        "response edge added"
+      ],
+      "preconditions": [
+        "response links to mitigation"
+      ],
+      "target_id": "state:secondary"
+    },
+    {
+      "after": {
+        "rank": 2
+      },
+      "before": {
+        "rank": 1
+      },
+      "op_id": "op:004",
+      "op_type": "change_scenario_rank",
+      "postconditions": [
+        "primary rank lowered"
+      ],
+      "preconditions": [
+        "mitigation now more plausible"
+      ],
+      "target_id": "scenario:primary"
+    },
+    {
+      "after": {
+        "rank": 1
+      },
+      "before": {
+        "rank": 2
+      },
+      "op_id": "op:005",
+      "op_type": "change_scenario_rank",
+      "postconditions": [
+        "alternate rank raised"
+      ],
+      "preconditions": [
+        "alternate rank raised"
+      ],
+      "target_id": "scenario:alternate"
+    },
+    {
+      "after": {
+        "category": "other",
+        "evidence_ids": [
+          "evidence:response"
+        ],
+        "question": "Is the counterparty response sufficient to close the issue rather than merely narrow it?",
+        "status": "open",
+        "target_id": "event:response",
+        "unknown_id": "unknown:response_sufficiency"
+      },
+      "op_id": "op:006",
+      "op_type": "add_unknown",
+      "postconditions": [
+        "response sufficiency unknown added"
+      ],
+      "preconditions": [
+        "response exists"
+      ],
+      "target_id": "unknown:primary"
+    }
+  ],
+  "schema_version": "1.0.0",
+  "seed": 40023,
+  "template_id": "tpl.v4.invariant.03.counterparty.response.procurement.review",
+  "world_id": "world:cucv4-invariant-03-counterparty-response-procurement-review",
+  "metadata": {
+    "sector_skin": "procurement_review",
+    "render_profile": "procurement_memo_v1"
+  }
+}

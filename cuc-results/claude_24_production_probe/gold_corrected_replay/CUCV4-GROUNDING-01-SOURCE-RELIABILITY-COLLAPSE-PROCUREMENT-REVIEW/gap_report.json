@@ -1,0 +1,46 @@
+{
+  "extra_fields": [
+    "$.changed_states[id='state:primary'].after.attributes.authoring_role",
+    "$.changed_states[id='state:primary'].before.attributes.authoring_role",
+    "$.new_unknowns[id='unknown:corroboration'].before"
+  ],
+  "missing_fields": [
+    "$.changed_edges[id='edge:primary_support'].source_op_ids[value='op:002']",
+    "$.changed_events[id='event:primary'].source_op_ids[value='op:005']",
+    "$.changed_states[id='state:primary'].after.attributes.exception_active",
+    "$.changed_states[id='state:primary'].after.attributes.rule_version",
+    "$.changed_states[id='state:primary'].after.attributes.scope",
+    "$.changed_states[id='state:primary'].before.attributes.exception_active",
+    "$.changed_states[id='state:primary'].before.attributes.rule_version",
+    "$.changed_states[id='state:primary'].before.attributes.scope",
+    "$.changed_states[id='state:primary'].source_op_ids[value='op:003']"
+  ],
+  "summary": {
+    "compared_fields": 98,
+    "matching_fields": 82,
+    "similarity_score_percent": 83.67
+  },
+  "type_mismatches": [],
+  "value_differences": [
+    {
+      "gold_value": "medium",
+      "model_value": "low",
+      "path": "$.changed_states[id='state:primary'].after.confidence_band"
+    },
+    {
+      "gold_value": "Preserve the committee-review branch and the stable procurement context branch.",
+      "model_value": "state:secondary (committee_review_recorded, confidence_band:high, status:supported) and its associated edge:secondary_support and unknown:secondary are fully preserved. No changes were made to the independent committee-review branch. scenario:alternate rank rises to 1 as a direct consequence of the primary branch downgrade, not from any change to the secondary branch itself.",
+      "path": "$.preservation_notes"
+    },
+    {
+      "gold_value": "Revise the waiver-justification branch from supported to contested and track the new corroboration unknown.",
+      "model_value": "evidence:primary reliability collapsed from high to low. edge:primary_support weakened from strong to weak. state:primary downgraded from confidence_band:medium/status:supported to confidence_band:low/status:contested. event:primary action updated to reflect the source reliability downgrade. scenario:primary demoted from rank 1 to rank 2; scenario:alternate promoted from rank 2 to rank 1. New unknown:corroboration added to track the need for independent corroboration to replace the impaired source.",
+      "path": "$.revision_notes"
+    },
+    {
+      "gold_value": "A model that weakens the waiver memo without contesting the waiver-justification branch has stopped too early. A model that rewrites the committee-review branch without contrary evidence has over-revised.",
+      "model_value": "Under-revision failure: failing to downgrade state:primary confidence and status, failing to weaken edge:primary_support, or failing to demote scenario:primary when evidence:primary reliability collapses would leave an unsupported strong claim as rank-1; over-revision failure: extending the reliability collapse to state:secondary, edge:secondary_support, or scenario:alternate, which are grounded in independent evidence:secondary, would incorrectly contaminate the preserved committee-review branch.",
+      "path": "$.structural_invariant"
+    }
+  ]
+}

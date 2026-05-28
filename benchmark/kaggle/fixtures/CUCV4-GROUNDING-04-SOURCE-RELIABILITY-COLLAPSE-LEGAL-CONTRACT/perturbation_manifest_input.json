@@ -1,0 +1,87 @@
+{
+  "family_id": "source_reliability_collapse",
+  "family_version": "1.0.0",
+  "notes": "source_reliability_collapse perturbation for legal_contract",
+  "ops": [
+    {
+      "after": {
+        "reliability": "low"
+      },
+      "before": {
+        "reliability": "high"
+      },
+      "op_id": "op:001",
+      "op_type": "downgrade_source_reliability",
+      "postconditions": [
+        "source reliability low"
+      ],
+      "preconditions": [
+        "source recanted"
+      ],
+      "target_id": "evidence:primary"
+    },
+    {
+      "after": {
+        "strength": "weak"
+      },
+      "before": {
+        "strength": "strong"
+      },
+      "op_id": "op:002",
+      "op_type": "change_threshold_relation",
+      "postconditions": [
+        "edge weakened"
+      ],
+      "preconditions": [
+        "support weakened"
+      ],
+      "target_id": "edge:primary_support"
+    },
+    {
+      "after": {
+        "status": "contested"
+      },
+      "before": {
+        "status": "supported"
+      },
+      "op_id": "op:003",
+      "op_type": "replace_state_status",
+      "postconditions": [
+        "state contested"
+      ],
+      "preconditions": [
+        "evidence not enough"
+      ],
+      "target_id": "state:primary"
+    },
+    {
+      "after": {
+        "category": "credibility",
+        "evidence_ids": [
+          "evidence:primary"
+        ],
+        "question": "What independent corroboration can replace the impaired source?",
+        "status": "open",
+        "target_id": "state:primary",
+        "unknown_id": "unknown:corroboration"
+      },
+      "op_id": "op:004",
+      "op_type": "add_unknown",
+      "postconditions": [
+        "corroboration unknown added"
+      ],
+      "preconditions": [
+        "source collapse"
+      ],
+      "target_id": "unknown:primary"
+    }
+  ],
+  "schema_version": "1.0.0",
+  "seed": 40019,
+  "template_id": "tpl.v4.grounding.04.source.reliability.collapse.legal.contract",
+  "world_id": "world:cucv4-grounding-04-source-reliability-collapse-legal-contract",
+  "metadata": {
+    "sector_skin": "legal_contract",
+    "render_profile": "legal_formal_v1"
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "authoring_status": "draft_surface_v1",
+  "benchmark_version": "CUC.v4.candidate",
+  "case_id": "CUCV4-NOOP-04-PROCUREMENT-REVIEW",
+  "clean_pack_sha256": "95f8331d756dc654837609a23ff7283a88f4fd40009feb4bc1c5b5f37d370f0d",
+  "difficulty_band": "B",
+  "expected_delta_sha256": "7405166f574b71a1ef0fe64f26f5c0e6629f5a30e8cfc8a7721b2327ed0125ba",
+  "family_id": "no_op_control",
+  "family_version": "0.1.0",
+  "geometry_profile": "no_op_control_procurement_review_hop1_scaffold_v4",
+  "hop_depth": 1,
+  "judge_profile": "structured_json_v1",
+  "perturbed_pack_sha256": "10c8757bc15f0f09467af7a93573200067d8f1049ad261f58358349d210e2f10",
+  "public_split": "control",
+  "render_profile": "procurement_memo_v1",
+  "scaffold_notes": "Draft no-op-control procurement-review case expanded into the v4 candidate pack.",
+  "schema_version": "1.0.0",
+  "scoring_manifest_sha256": "a9d6c484133c1f8a980866e65e9299149552fe4b99f7aecf31b9fdc8278dc47a",
+  "sector_skin": "procurement_review",
+  "seed": 40010,
+  "template_id": "tpl.v4.noop.04.procurement.review"
+}

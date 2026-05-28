@@ -1,0 +1,22 @@
+{
+  "authoring_status": "draft_surface_v1",
+  "benchmark_version": "CUC.v4.candidate",
+  "case_id": "CUCV4-CORE-09-EXCEPTION-ACTIVATION-SECURITY-INCIDENT",
+  "clean_pack_sha256": "c8856ae4556d6a595f629d0ed719acf2793aff00475c31d1816924419807ca98",
+  "difficulty_band": "C",
+  "expected_delta_sha256": "a7e64061d21bcdc794155905a7e70fb65499830fd33a30b72f53a429843be5c2",
+  "family_id": "exception_activation",
+  "family_version": "0.1.0",
+  "geometry_profile": "exception_activation_security_incident_hop3_scaffold_v4",
+  "hop_depth": 3,
+  "judge_profile": "structured_json_v1",
+  "perturbed_pack_sha256": "0ad46071dde808af153a7c01afc33e5783f0049e72720929d1acf2ec890debe5",
+  "public_split": "candidate_main",
+  "render_profile": "incident_digest_v1",
+  "scaffold_notes": "Draft exception-activation security-incident case expanded into the v4 candidate pack.",
+  "schema_version": "1.0.0",
+  "scoring_manifest_sha256": "3f6dc50dcd21262a7b840eba8eb23b5fe1abdd7b4079cc622928c57dc5964f55",
+  "sector_skin": "security_incident",
+  "seed": 40024,
+  "template_id": "tpl.v4.core.09.exception.activation.security.incident"
+}

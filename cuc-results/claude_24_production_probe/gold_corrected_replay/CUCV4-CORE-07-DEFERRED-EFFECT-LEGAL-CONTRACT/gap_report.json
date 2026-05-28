@@ -1,0 +1,55 @@
+{
+  "extra_fields": [
+    "$.changed_states[id='state:primary'].after.attributes.authoring_role",
+    "$.changed_states[id='state:primary'].before.attributes.authoring_role",
+    "$.new_unknowns[id='unknown:effective_date'].before",
+    "$.supporting_evidence_map[\"scenario:alternate\"][0]",
+    "$.supporting_evidence_map[\"scenario:primary\"][0]"
+  ],
+  "missing_fields": [
+    "$.changed_edges[id='edge:primary_support'].source_op_ids[value='op:003']",
+    "$.changed_events[id='event:primary'].source_op_ids[value='op:001']",
+    "$.changed_states[id='state:primary'].after.attributes.exception_active",
+    "$.changed_states[id='state:primary'].after.attributes.rule_version",
+    "$.changed_states[id='state:primary'].after.attributes.scope",
+    "$.changed_states[id='state:primary'].before.attributes.exception_active",
+    "$.changed_states[id='state:primary'].before.attributes.rule_version",
+    "$.changed_states[id='state:primary'].before.attributes.scope",
+    "$.changed_states[id='state:primary'].source_op_ids[value='op:002']",
+    "$.resolved_unknowns[id='unknown:primary'].source_op_ids[value='op:004']",
+    "$.supporting_evidence_map[\"event:primary\"][0]"
+  ],
+  "summary": {
+    "compared_fields": 114,
+    "matching_fields": 93,
+    "similarity_score_percent": 81.58
+  },
+  "type_mismatches": [],
+  "value_differences": [
+    {
+      "gold_value": "medium",
+      "model_value": "low",
+      "path": "$.changed_states[id='state:primary'].after.confidence_band"
+    },
+    {
+      "gold_value": "Preserve the independently supported sibling branch and the stable background context.",
+      "model_value": "state:secondary, edge:secondary_support, and unknown:secondary are preserve_focus branch items and remain unchanged across both packs. Background branches state:bg_1, state:bg_2, edge:bg_1, edge:bg_2, unknown:bg_1, unknown:bg_2 are untouched as background context.",
+      "path": "$.preservation_notes"
+    },
+    {
+      "gold_value": "superseded_by_effective_date",
+      "model_value": "contested — operative date unclear, confidence downgraded to low",
+      "path": "$.resolved_unknowns[id='unknown:primary'].after.resolution_value"
+    },
+    {
+      "gold_value": "Revise the timing-sensitive branch and preserve the independent sibling branch while keeping the new timing unknown open.",
+      "model_value": "state:primary downgraded from confidence_band=medium/status=supported to confidence_band=low/status=contested. edge:primary_support weakened from strong to medium. event:primary timestamp shifted to 2026-04-03T09:00:00Z reflecting operative-date ambiguity. unknown:primary resolved as contested with operative date unclear. New unknown:effective_date added to capture the unresolved timing question. scenario:primary drops from rank 1 to rank 2; scenario:alternate rises from rank 2 to rank 1.",
+      "path": "$.revision_notes"
+    },
+    {
+      "gold_value": "A model that notices the deferred effect but leaves the timing-sensitive branch untouched has stopped too early. A model that rewrites preserved sibling branches without contrary evidence has over-revised.",
+      "model_value": "Under-revision failure: leaving state:primary as supported/medium when perturbed pack shows contested/low and edge weakened; over-revision failure: revising the preserved state:secondary branch or background branches that carry no changed evidence.",
+      "path": "$.structural_invariant"
+    }
+  ]
+}

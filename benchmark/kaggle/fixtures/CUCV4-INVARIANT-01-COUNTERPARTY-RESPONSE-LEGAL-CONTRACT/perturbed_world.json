@@ -1,0 +1,251 @@
+{
+  "causal_edges": [
+    {
+      "edge_id": "edge:primary_support",
+      "evidence_ids": [
+        "evidence:primary"
+      ],
+      "from_id": "evidence:primary",
+      "relation": "supports",
+      "strength": "strong",
+      "to_id": "state:primary"
+    },
+    {
+      "edge_id": "edge:secondary_support",
+      "evidence_ids": [
+        "evidence:secondary"
+      ],
+      "from_id": "evidence:secondary",
+      "relation": "supports",
+      "strength": "strong",
+      "to_id": "state:secondary"
+    },
+    {
+      "edge_id": "edge:response_support",
+      "evidence_ids": [
+        "evidence:response"
+      ],
+      "from_id": "evidence:response",
+      "relation": "supports_mitigation",
+      "strength": "medium",
+      "to_id": "state:secondary"
+    }
+  ],
+  "entities": [
+    {
+      "attributes": {},
+      "entity_id": "entity:org",
+      "label": "Portwell Distribution",
+      "type": "organization"
+    },
+    {
+      "attributes": {},
+      "entity_id": "entity:asset",
+      "label": "Shipment Lot M-44",
+      "type": "asset"
+    },
+    {
+      "attributes": {},
+      "entity_id": "entity:reviewer",
+      "label": "contract review desk",
+      "type": "role"
+    }
+  ],
+  "events": [
+    {
+      "action": "checkpoint evaluation recorded",
+      "actor_ids": [
+        "entity:org"
+      ],
+      "attributes": {},
+      "event_id": "event:primary",
+      "evidence_ids": [
+        "evidence:primary"
+      ],
+      "object_ids": [
+        "entity:asset"
+      ],
+      "time": {
+        "kind": "exact",
+        "value": "2026-04-02T14:00:00Z"
+      },
+      "type": "checkpoint_event"
+    },
+    {
+      "action": "routine review completed",
+      "actor_ids": [
+        "entity:reviewer"
+      ],
+      "attributes": {},
+      "event_id": "event:secondary",
+      "evidence_ids": [
+        "evidence:secondary"
+      ],
+      "object_ids": [
+        "entity:org"
+      ],
+      "time": {
+        "kind": "exact",
+        "value": "2026-04-02T08:00:00Z"
+      },
+      "type": "review_event"
+    },
+    {
+      "action": "exception response filed",
+      "actor_ids": [
+        "entity:org"
+      ],
+      "attributes": {},
+      "event_id": "event:response",
+      "evidence_ids": [
+        "evidence:response"
+      ],
+      "object_ids": [
+        "entity:asset"
+      ],
+      "time": {
+        "kind": "exact",
+        "value": "2026-04-02T16:00:00Z"
+      },
+      "type": "counterparty_response_event"
+    }
+  ],
+  "evidence": [
+    {
+      "attributes": {},
+      "content": "Portwell Distribution records suggest Shipment Lot M-44 still satisfies the primary condition under counterparty_response_event review.",
+      "evidence_id": "evidence:primary",
+      "reliability": "high",
+      "source_id": "src:primary",
+      "source_type": "breach_notice",
+      "time": {
+        "kind": "exact",
+        "value": "2026-04-02T14:00:00Z"
+      }
+    },
+    {
+      "attributes": {},
+      "content": "Independent review shows Portwell Distribution completed the routine control step for Shipment Lot M-44.",
+      "evidence_id": "evidence:secondary",
+      "reliability": "high",
+      "source_id": "src:secondary",
+      "source_type": "delivery_record",
+      "time": {
+        "kind": "exact",
+        "value": "2026-04-02T08:00:00Z"
+      }
+    },
+    {
+      "attributes": {},
+      "content": "The counterparty invokes an exception clause and provides partial support for the delivery-record interpretation.",
+      "evidence_id": "evidence:response",
+      "reliability": "medium",
+      "source_id": "src:response",
+      "source_type": "counterparty_response_event",
+      "time": {
+        "kind": "exact",
+        "value": "2026-04-02T16:00:00Z"
+      }
+    }
+  ],
+  "metadata": {
+    "sector_skin": "legal_contract",
+    "render_profile": "legal_formal_v1"
+  },
+  "scenarios": [
+    {
+      "basis_ids": [
+        "state:primary",
+        "edge:primary_support"
+      ],
+      "label": "Breach-claim theory remains most likely",
+      "rank": 2,
+      "scenario_id": "scenario:primary",
+      "status": "live"
+    },
+    {
+      "basis_ids": [
+        "state:secondary",
+        "edge:secondary_support"
+      ],
+      "label": "Delivery-record theory remains secondary",
+      "rank": 1,
+      "scenario_id": "scenario:alternate",
+      "status": "live"
+    }
+  ],
+  "schema_version": "1.0.0",
+  "seed": 40008,
+  "states": [
+    {
+      "attributes": {
+        "exception_active": false,
+        "rule_version": "v1",
+        "scope": "global"
+      },
+      "confidence_band": "medium",
+      "evidence_ids": [
+        "evidence:primary"
+      ],
+      "object": "true",
+      "predicate": "breach_notice_live",
+      "state_id": "state:primary",
+      "status": "supported",
+      "subject_id": "entity:asset",
+      "time": {
+        "kind": "exact",
+        "value": "2026-04-02T10:00:00Z"
+      }
+    },
+    {
+      "attributes": {},
+      "confidence_band": "high",
+      "evidence_ids": [
+        "evidence:secondary"
+      ],
+      "object": "true",
+      "predicate": "delivery_record_confirmed",
+      "state_id": "state:secondary",
+      "status": "supported",
+      "subject_id": "entity:org",
+      "time": {
+        "kind": "exact",
+        "value": "2026-04-02T09:00:00Z"
+      }
+    }
+  ],
+  "template_id": "tpl.v4.invariant.01.counterparty.response.legal.contract",
+  "unknowns": [
+    {
+      "category": "fact",
+      "evidence_ids": [
+        "evidence:primary"
+      ],
+      "question": "Is the primary conclusion about Shipment Lot M-44 still valid at the checkpoint?",
+      "status": "open",
+      "target_id": "state:primary",
+      "unknown_id": "unknown:primary"
+    },
+    {
+      "category": "other",
+      "evidence_ids": [
+        "evidence:secondary"
+      ],
+      "question": "Does the preserved delivery-record branch need any further follow-up?",
+      "status": "open",
+      "target_id": "event:secondary",
+      "unknown_id": "unknown:secondary"
+    },
+    {
+      "category": "other",
+      "evidence_ids": [
+        "evidence:response"
+      ],
+      "question": "Is the counterparty exception response sufficient to suspend recovery rather than merely narrow it?",
+      "status": "open",
+      "target_id": "event:response",
+      "unknown_id": "unknown:response_sufficiency"
+    }
+  ],
+  "world_id": "world:cucv4-invariant-01-counterparty-response-legal-contract"
+}

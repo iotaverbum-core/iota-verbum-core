@@ -1,0 +1,67 @@
+{
+  "extra_fields": [
+    "$.changed_states[id='state:hop3_dependency'].after.attributes.authoring_role",
+    "$.changed_states[id='state:primary'].after.attributes.authoring_role",
+    "$.changed_states[id='state:primary'].before.attributes.authoring_role",
+    "$.new_unknowns[id='unknown:exception_scope'].before",
+    "$.new_unknowns[id='unknown:hop3_dependency'].before",
+    "$.scenario_rank_changes[scenario_id='scenario:alternate'].after_rank",
+    "$.scenario_rank_changes[scenario_id='scenario:alternate'].before_rank",
+    "$.scenario_rank_changes[scenario_id='scenario:alternate'].scenario_id",
+    "$.scenario_rank_changes[scenario_id='scenario:bg_1'].after_rank",
+    "$.scenario_rank_changes[scenario_id='scenario:bg_1'].before_rank",
+    "$.scenario_rank_changes[scenario_id='scenario:bg_1'].scenario_id",
+    "$.supporting_evidence_map[\"scenario:hop3_escalation\"][value='evidence:exception']"
+  ],
+  "missing_fields": [
+    "$.changed_edges[id='edge:hop3_dependency'].source_op_ids[value='op:hop3']",
+    "$.changed_events[id='event:hop3'].source_op_ids[value='op:hop3']",
+    "$.changed_states[id='state:hop3_dependency'].source_op_ids[value='op:hop3']",
+    "$.changed_states[id='state:primary'].after.attributes.exception_active",
+    "$.changed_states[id='state:primary'].after.attributes.rule_version",
+    "$.changed_states[id='state:primary'].after.attributes.scope",
+    "$.changed_states[id='state:primary'].before.attributes.exception_active",
+    "$.changed_states[id='state:primary'].before.attributes.rule_version",
+    "$.changed_states[id='state:primary'].before.attributes.scope",
+    "$.changed_states[id='state:primary'].source_op_ids[value='op:003']",
+    "$.changed_states[id='state:primary'].source_op_ids[value='op:004']",
+    "$.new_unknowns[id='unknown:hop3_dependency'].source_op_ids[value='op:hop3']",
+    "$.supporting_evidence_map[\"event:exception\"][0]",
+    "$.supporting_evidence_map[\"event:hop3\"][0]",
+    "$.supporting_evidence_map[\"scenario:alternate\"][0]"
+  ],
+  "summary": {
+    "compared_fields": 137,
+    "matching_fields": 105,
+    "similarity_score_percent": 76.64
+  },
+  "type_mismatches": [
+    {
+      "gold_type": "null",
+      "model_type": "int",
+      "path": "$.scenario_rank_changes[scenario_id='scenario:hop3_escalation'].before_rank"
+    }
+  ],
+  "value_differences": [
+    {
+      "gold_value": "medium",
+      "model_value": "low",
+      "path": "$.changed_states[id='state:primary'].after.confidence_band"
+    },
+    {
+      "gold_value": "Preserve the independently supported sibling branch and the stable background context.",
+      "model_value": "state:secondary (containment_executed, high confidence, preserve_branch) is unchanged between clean and perturbed packs; edge:secondary_support and unknown:secondary are likewise stable and must not be revised.",
+      "path": "$.preservation_notes"
+    },
+    {
+      "gold_value": "Revise the exception-affected branch, track the new dependency, and preserve the independent sibling branch.",
+      "model_value": "state:primary transitions from status=supported/confidence=medium to status=refuted/confidence=low, driven by the documented exception (evidence:exception). state:hop3_dependency is newly introduced as a revise_branch holdout state with third-hop depth. edge:hop3_dependency and scenario:hop3_escalation are new, elevating hop3_escalation to rank 1 and demoting scenario:primary to rank 3. Two new unknowns (unknown:exception_scope, unknown:hop3_dependency) are opened by the perturbation.",
+      "path": "$.revision_notes"
+    },
+    {
+      "gold_value": "A model that notices the exception but misses the downstream dependency has stopped too early. A model that rewrites preserved sibling branches without contrary evidence has over-revised.",
+      "model_value": "Under-revision failure: leaving state:primary as supported/medium after the exception evidence refutes it, or omitting the new hop3 branch entirely. Over-revision failure: modifying state:secondary, edge:secondary_support, or unknown:secondary, which are explicitly preserved by preserve_focus and show no change between packs.",
+      "path": "$.structural_invariant"
+    }
+  ]
+}

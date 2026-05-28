@@ -1,0 +1,148 @@
+{
+  "family_id": "selective_preservation_sibling_stability",
+  "family_version": "0.1.0",
+  "notes": "Credential Alert AC-778 introduces external vendor-compromise evidence. Backup and restoration findings remain unchanged and should be preserved.",
+  "ops": [
+    {
+      "after": {
+        "attributes": {},
+        "content": "Alert AC-778 confirms a vendor support credential was used from an external IP with forged session metadata.",
+        "evidence_id": "evidence:vendor_credential_alert",
+        "reliability": "high",
+        "source_id": "src:vendor_alert",
+        "source_type": "credential_alert",
+        "time": {
+          "kind": "exact",
+          "value": "2026-04-22T08:40:00Z"
+        }
+      },
+      "op_id": "op:001",
+      "op_type": "add_evidence",
+      "postconditions": [
+        "vendor credential alert added"
+      ],
+      "preconditions": [
+        "supplemental credential evidence received"
+      ],
+      "target_id": "evidence:initial_forensics"
+    },
+    {
+      "after": {
+        "action": "vendor credential compromise confirmed",
+        "actor_ids": [
+          "entity:vendor",
+          "entity:lead"
+        ],
+        "attributes": {},
+        "event_id": "event:credential_compromise",
+        "evidence_ids": [
+          "evidence:vendor_credential_alert"
+        ],
+        "object_ids": [
+          "entity:service"
+        ],
+        "time": {
+          "kind": "exact",
+          "value": "2026-04-22T08:40:00Z"
+        },
+        "type": "credential_compromise_event"
+      },
+      "op_id": "op:002",
+      "op_type": "add_event",
+      "postconditions": [
+        "credential compromise event added"
+      ],
+      "preconditions": [
+        "vendor credential alert exists"
+      ],
+      "target_id": "event:triage"
+    },
+    {
+      "after": {
+        "strength": "low"
+      },
+      "before": {
+        "strength": "strong"
+      },
+      "op_id": "op:003",
+      "op_type": "change_threshold_relation",
+      "postconditions": [
+        "initial internal attribution weakened"
+      ],
+      "preconditions": [
+        "new external compromise evidence outranks the first note"
+      ],
+      "target_id": "edge:initial_forensics_support"
+    },
+    {
+      "after": {
+        "attributes": {
+          "authoring_role": "revise_branch"
+        },
+        "confidence_band": "high",
+        "evidence_ids": [
+          "evidence:vendor_credential_alert"
+        ],
+        "object": "true",
+        "predicate": "external_escalation_required",
+        "state_id": "state:external_escalation_required",
+        "status": "supported",
+        "subject_id": "entity:lead",
+        "time": {
+          "kind": "exact",
+          "value": "2026-04-22T08:50:00Z"
+        }
+      },
+      "before": {
+        "attributes": {
+          "authoring_role": "revise_branch"
+        },
+        "confidence_band": "medium",
+        "evidence_ids": [
+          "evidence:initial_forensics"
+        ],
+        "object": "false",
+        "predicate": "external_escalation_required",
+        "state_id": "state:external_escalation_required",
+        "status": "supported",
+        "subject_id": "entity:lead",
+        "time": {
+          "kind": "exact",
+          "value": "2026-04-22T08:25:00Z"
+        }
+      },
+      "op_id": "op:004",
+      "op_type": "revise_downstream_state",
+      "postconditions": [
+        "external escalation becomes required"
+      ],
+      "preconditions": [
+        "severity is upgraded"
+      ],
+      "target_id": "state:external_escalation_required"
+    },
+    {
+      "after": {
+        "category": "scope",
+        "evidence_ids": [
+          "evidence:vendor_credential_alert"
+        ],
+        "question": "What is the remaining scope of data exposure after the vendor credential compromise?",
+        "status": "open",
+        "target_id": "state:attack_origin_attribution",
+        "unknown_id": "unknown:data_exfiltration_scope"
+      },
+      "op_id": "op:005",
+      "op_type": "add_unknown",
+      "postconditions": [
+        "data exfiltration scope unknown added"
+      ],
+      "preconditions": [
+        "compromise scope remains unresolved"
+      ],
+      "target_id": "unknown:data_exfiltration_scope"
+    }
+  ],
+  "schema_version": "1.0.0",
+  "seed": 40002
+}

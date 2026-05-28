@@ -1,0 +1,22 @@
+{
+  "authoring_status": "draft_surface_v1",
+  "benchmark_version": "CUC.v4.candidate",
+  "case_id": "CUCV4-PRESERVE-01-SIBLING-STABILITY-LEGAL-CONTRACT",
+  "clean_pack_sha256": "896c070d5a8a589e14ab93c00a6dcb881d7a70495a338ac378d770b7dec4ad1e",
+  "difficulty_band": "B",
+  "expected_delta_sha256": "f5ac76262919c7f67bde4607d691460dcf33e34e2b0ddeca65cb2fe0226a3d2e",
+  "family_id": "selective_preservation_sibling_stability",
+  "family_version": "0.1.0",
+  "geometry_profile": "preserve_sibling_hop2_scaffold",
+  "hop_depth": 2,
+  "judge_profile": "structured_json_v1",
+  "perturbed_pack_sha256": "eef5bd52bb4eca65a369c972f4d1f788c242b5a4fef31b1b8b9d41ea8d8588cb",
+  "public_split": "candidate_main",
+  "render_profile": "legal_formal_v1",
+  "scaffold_notes": "Draft preserve-heavy legal contract case: revise penalty/recovery, preserve delivery and notice.",
+  "schema_version": "1.0.0",
+  "scoring_manifest_sha256": "7e476ef1824e58eba7854d69b02063561613180a56853c9b0213d42e9b1a4716",
+  "sector_skin": "legal_contract",
+  "seed": 40001,
+  "template_id": "tpl.v4.preserve.01.sibling.stability.legal.contract"
+}

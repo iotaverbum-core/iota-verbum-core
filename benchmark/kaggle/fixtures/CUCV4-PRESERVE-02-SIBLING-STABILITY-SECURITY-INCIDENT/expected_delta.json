@@ -1,0 +1,300 @@
+{
+  "changed_edges": [
+    {
+      "after": {
+        "edge_id": "edge:initial_forensics_support",
+        "evidence_ids": [
+          "evidence:initial_forensics"
+        ],
+        "from_id": "evidence:initial_forensics",
+        "relation": "supports",
+        "strength": "low",
+        "to_id": "state:attack_origin_attribution"
+      },
+      "before": {
+        "edge_id": "edge:initial_forensics_support",
+        "evidence_ids": [
+          "evidence:initial_forensics"
+        ],
+        "from_id": "evidence:initial_forensics",
+        "relation": "supports",
+        "strength": "strong",
+        "to_id": "state:attack_origin_attribution"
+      },
+      "change_type": "weakened",
+      "id": "edge:initial_forensics_support",
+      "source_op_ids": [
+        "op:003"
+      ]
+    },
+    {
+      "after": {
+        "edge_id": "edge:vendor_compromise_support",
+        "evidence_ids": [
+          "evidence:vendor_credential_alert"
+        ],
+        "from_id": "evidence:vendor_credential_alert",
+        "relation": "supports",
+        "strength": "strong",
+        "to_id": "state:attack_origin_attribution"
+      },
+      "before": null,
+      "change_type": "added",
+      "id": "edge:vendor_compromise_support",
+      "source_op_ids": [
+        "op:001"
+      ]
+    }
+  ],
+  "changed_events": [
+    {
+      "after": {
+        "action": "vendor credential compromise confirmed",
+        "actor_ids": [
+          "entity:vendor",
+          "entity:lead"
+        ],
+        "attributes": {},
+        "event_id": "event:credential_compromise",
+        "evidence_ids": [
+          "evidence:vendor_credential_alert"
+        ],
+        "object_ids": [
+          "entity:service"
+        ],
+        "time": {
+          "kind": "exact",
+          "value": "2026-04-22T08:40:00Z"
+        },
+        "type": "credential_compromise_event"
+      },
+      "before": null,
+      "change_type": "added",
+      "id": "event:credential_compromise",
+      "source_op_ids": [
+        "op:002"
+      ]
+    }
+  ],
+  "changed_states": [
+    {
+      "after": {
+        "attributes": {
+          "authoring_role": "revise_branch"
+        },
+        "confidence_band": "high",
+        "evidence_ids": [
+          "evidence:initial_forensics",
+          "evidence:vendor_credential_alert"
+        ],
+        "object": "vendor_credential_compromise",
+        "predicate": "attack_origin",
+        "state_id": "state:attack_origin_attribution",
+        "status": "supported",
+        "subject_id": "entity:service",
+        "time": {
+          "kind": "exact",
+          "value": "2026-04-22T08:40:00Z"
+        }
+      },
+      "before": {
+        "attributes": {
+          "authoring_role": "revise_branch"
+        },
+        "confidence_band": "medium",
+        "evidence_ids": [
+          "evidence:initial_forensics"
+        ],
+        "object": "internal_operator_error",
+        "predicate": "attack_origin",
+        "state_id": "state:attack_origin_attribution",
+        "status": "supported",
+        "subject_id": "entity:service",
+        "time": {
+          "kind": "exact",
+          "value": "2026-04-22T08:00:00Z"
+        }
+      },
+      "change_type": "revised",
+      "id": "state:attack_origin_attribution",
+      "source_op_ids": [
+        "op:001",
+        "op:003"
+      ]
+    },
+    {
+      "after": {
+        "attributes": {
+          "authoring_role": "revise_branch"
+        },
+        "confidence_band": "high",
+        "evidence_ids": [
+          "evidence:vendor_credential_alert"
+        ],
+        "object": "high",
+        "predicate": "severity_level",
+        "state_id": "state:severity_level",
+        "status": "supported",
+        "subject_id": "entity:service",
+        "time": {
+          "kind": "exact",
+          "value": "2026-04-22T08:45:00Z"
+        }
+      },
+      "before": {
+        "attributes": {
+          "authoring_role": "revise_branch"
+        },
+        "confidence_band": "medium",
+        "evidence_ids": [
+          "evidence:initial_forensics"
+        ],
+        "object": "moderate",
+        "predicate": "severity_level",
+        "state_id": "state:severity_level",
+        "status": "supported",
+        "subject_id": "entity:service",
+        "time": {
+          "kind": "exact",
+          "value": "2026-04-22T08:20:00Z"
+        }
+      },
+      "change_type": "revised",
+      "id": "state:severity_level",
+      "source_op_ids": [
+        "op:001",
+        "op:004"
+      ]
+    },
+    {
+      "after": {
+        "attributes": {
+          "authoring_role": "revise_branch"
+        },
+        "confidence_band": "high",
+        "evidence_ids": [
+          "evidence:vendor_credential_alert"
+        ],
+        "object": "true",
+        "predicate": "external_escalation_required",
+        "state_id": "state:external_escalation_required",
+        "status": "supported",
+        "subject_id": "entity:lead",
+        "time": {
+          "kind": "exact",
+          "value": "2026-04-22T08:50:00Z"
+        }
+      },
+      "before": {
+        "attributes": {
+          "authoring_role": "revise_branch"
+        },
+        "confidence_band": "medium",
+        "evidence_ids": [
+          "evidence:initial_forensics"
+        ],
+        "object": "false",
+        "predicate": "external_escalation_required",
+        "state_id": "state:external_escalation_required",
+        "status": "supported",
+        "subject_id": "entity:lead",
+        "time": {
+          "kind": "exact",
+          "value": "2026-04-22T08:25:00Z"
+        }
+      },
+      "change_type": "revised",
+      "id": "state:external_escalation_required",
+      "source_op_ids": [
+        "op:004"
+      ]
+    }
+  ],
+  "forbidden_revisions": [
+    "edge:backup_support",
+    "edge:restore_support",
+    "state:backup_integrity_verified",
+    "state:restoration_complete",
+    "unknown:secondary_backup_followup"
+  ],
+  "must_preserve_claims": [
+    "state:backup_integrity_verified",
+    "state:restoration_complete"
+  ],
+  "must_revise_claims": [
+    "state:attack_origin_attribution",
+    "state:severity_level",
+    "state:external_escalation_required"
+  ],
+  "named_evidence_artifact": "Credential Alert AC-778",
+  "new_conflicts": [],
+  "new_unknowns": [
+    {
+      "after": {
+        "category": "scope",
+        "evidence_ids": [
+          "evidence:vendor_credential_alert"
+        ],
+        "question": "What is the remaining scope of data exposure after the vendor credential compromise?",
+        "status": "open",
+        "target_id": "state:attack_origin_attribution",
+        "unknown_id": "unknown:data_exfiltration_scope"
+      },
+      "change_type": "added",
+      "id": "unknown:data_exfiltration_scope",
+      "source_op_ids": [
+        "op:005"
+      ]
+    }
+  ],
+  "preservation_notes": "Preserve backup integrity and restoration completeness. BR-112 and RR-211 remain unchanged and still support those branches.",
+  "preserved_items": [
+    "edge:backup_support",
+    "edge:restore_support",
+    "state:backup_integrity_verified",
+    "state:restoration_complete",
+    "unknown:secondary_backup_followup"
+  ],
+  "pruned_conflicts": [],
+  "resolved_unknowns": [],
+  "revision_notes": "Revise attack origin from internal error to vendor credential compromise. Upgrade severity and require external escalation.",
+  "scenario_rank_changes": [
+    {
+      "after_rank": 2,
+      "before_rank": 1,
+      "scenario_id": "scenario:internal_misconfig"
+    },
+    {
+      "after_rank": 1,
+      "before_rank": null,
+      "scenario_id": "scenario:vendor_compromise"
+    }
+  ],
+  "schema_version": "1.0.0",
+  "structural_invariant": "If attack origin changes to an external credential compromise, severity and escalation must also be revised. Backup and restoration findings remain stable sibling branches.",
+  "supporting_evidence_map": {
+    "edge:initial_forensics_support": [
+      "evidence:initial_forensics",
+      "evidence:vendor_credential_alert"
+    ],
+    "edge:vendor_compromise_support": [
+      "evidence:vendor_credential_alert"
+    ],
+    "event:credential_compromise": [
+      "evidence:vendor_credential_alert"
+    ],
+    "state:attack_origin_attribution": [
+      "evidence:initial_forensics",
+      "evidence:vendor_credential_alert"
+    ],
+    "state:external_escalation_required": [
+      "evidence:vendor_credential_alert"
+    ],
+    "state:severity_level": [
+      "evidence:vendor_credential_alert"
+    ],
+    "unknown:data_exfiltration_scope": [
+      "evidence:vendor_credential_alert"
+    ]
+  }
+}

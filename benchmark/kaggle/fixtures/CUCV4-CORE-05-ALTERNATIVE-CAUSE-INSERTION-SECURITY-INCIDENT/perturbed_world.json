@@ -1,0 +1,251 @@
+{
+  "causal_edges": [
+    {
+      "edge_id": "edge:primary_support",
+      "evidence_ids": [
+        "evidence:primary"
+      ],
+      "from_id": "evidence:primary",
+      "relation": "supports",
+      "strength": "medium",
+      "to_id": "state:primary"
+    },
+    {
+      "edge_id": "edge:secondary_support",
+      "evidence_ids": [
+        "evidence:secondary"
+      ],
+      "from_id": "evidence:secondary",
+      "relation": "supports",
+      "strength": "strong",
+      "to_id": "state:secondary"
+    },
+    {
+      "edge_id": "edge:alternate_support",
+      "evidence_ids": [
+        "evidence:alternate"
+      ],
+      "from_id": "evidence:alternate",
+      "relation": "supports_alternate_explanation",
+      "strength": "medium",
+      "to_id": "state:primary"
+    }
+  ],
+  "entities": [
+    {
+      "attributes": {},
+      "entity_id": "entity:org",
+      "label": "Blue Canyon Cloud",
+      "type": "organization"
+    },
+    {
+      "attributes": {},
+      "entity_id": "entity:asset",
+      "label": "admin console",
+      "type": "asset"
+    },
+    {
+      "attributes": {},
+      "entity_id": "entity:reviewer",
+      "label": "incident commander",
+      "type": "role"
+    }
+  ],
+  "events": [
+    {
+      "action": "checkpoint evaluation recorded",
+      "actor_ids": [
+        "entity:org"
+      ],
+      "attributes": {},
+      "event_id": "event:primary",
+      "evidence_ids": [
+        "evidence:primary"
+      ],
+      "object_ids": [
+        "entity:asset"
+      ],
+      "time": {
+        "kind": "exact",
+        "value": "2026-04-16T14:00:00Z"
+      },
+      "type": "checkpoint_event"
+    },
+    {
+      "action": "routine review completed",
+      "actor_ids": [
+        "entity:reviewer"
+      ],
+      "attributes": {},
+      "event_id": "event:secondary",
+      "evidence_ids": [
+        "evidence:secondary"
+      ],
+      "object_ids": [
+        "entity:org"
+      ],
+      "time": {
+        "kind": "exact",
+        "value": "2026-04-16T08:00:00Z"
+      },
+      "type": "review_event"
+    },
+    {
+      "action": "competing cause introduced",
+      "actor_ids": [
+        "entity:org"
+      ],
+      "attributes": {},
+      "event_id": "event:alternate",
+      "evidence_ids": [
+        "evidence:alternate"
+      ],
+      "object_ids": [
+        "entity:asset"
+      ],
+      "time": {
+        "kind": "exact",
+        "value": "2026-04-16T11:00:00Z"
+      },
+      "type": "alternate_cause"
+    }
+  ],
+  "evidence": [
+    {
+      "attributes": {},
+      "content": "Blue Canyon Cloud records suggest admin console still satisfies the primary condition under alternative_cause_insertion review.",
+      "evidence_id": "evidence:primary",
+      "reliability": "high",
+      "source_id": "src:primary",
+      "source_type": "incident_alert",
+      "time": {
+        "kind": "exact",
+        "value": "2026-04-16T14:00:00Z"
+      }
+    },
+    {
+      "attributes": {},
+      "content": "Independent review shows Blue Canyon Cloud completed the routine control step for admin console.",
+      "evidence_id": "evidence:secondary",
+      "reliability": "high",
+      "source_id": "src:secondary",
+      "source_type": "containment_log",
+      "time": {
+        "kind": "exact",
+        "value": "2026-04-16T08:00:00Z"
+      }
+    },
+    {
+      "attributes": {},
+      "content": "A newly surfaced event offers a competing explanation for the same observed condition.",
+      "evidence_id": "evidence:alternate",
+      "reliability": "medium",
+      "source_id": "src:alternate",
+      "source_type": "alternate_root_cause",
+      "time": {
+        "kind": "exact",
+        "value": "2026-04-16T11:00:00Z"
+      }
+    }
+  ],
+  "metadata": {
+    "sector_skin": "security_incident",
+    "render_profile": "incident_digest_v1"
+  },
+  "scenarios": [
+    {
+      "basis_ids": [
+        "state:primary",
+        "edge:primary_support"
+      ],
+      "label": "Primary theory remains most likely",
+      "rank": 1,
+      "scenario_id": "scenario:primary",
+      "status": "live"
+    },
+    {
+      "basis_ids": [
+        "state:secondary",
+        "edge:secondary_support"
+      ],
+      "label": "Alternate theory remains secondary",
+      "rank": 2,
+      "scenario_id": "scenario:alternate",
+      "status": "live"
+    }
+  ],
+  "schema_version": "1.0.0",
+  "seed": 40014,
+  "states": [
+    {
+      "attributes": {
+        "exception_active": false,
+        "rule_version": "v1",
+        "scope": "global"
+      },
+      "confidence_band": "medium",
+      "evidence_ids": [
+        "evidence:primary"
+      ],
+      "object": "true",
+      "predicate": "exposure_window_open",
+      "state_id": "state:primary",
+      "status": "supported",
+      "subject_id": "entity:asset",
+      "time": {
+        "kind": "exact",
+        "value": "2026-04-16T10:00:00Z"
+      }
+    },
+    {
+      "attributes": {},
+      "confidence_band": "high",
+      "evidence_ids": [
+        "evidence:secondary"
+      ],
+      "object": "true",
+      "predicate": "containment_executed",
+      "state_id": "state:secondary",
+      "status": "supported",
+      "subject_id": "entity:org",
+      "time": {
+        "kind": "exact",
+        "value": "2026-04-16T09:00:00Z"
+      }
+    }
+  ],
+  "template_id": "tpl.v4.core.05.alternative.cause.insertion.security.incident",
+  "unknowns": [
+    {
+      "category": "fact",
+      "evidence_ids": [
+        "evidence:primary"
+      ],
+      "question": "Is the primary conclusion about admin console still valid at the checkpoint?",
+      "status": "open",
+      "target_id": "state:primary",
+      "unknown_id": "unknown:primary"
+    },
+    {
+      "category": "other",
+      "evidence_ids": [
+        "evidence:secondary"
+      ],
+      "question": "Does the preserved review evidence need any further follow-up?",
+      "status": "open",
+      "target_id": "event:secondary",
+      "unknown_id": "unknown:secondary"
+    },
+    {
+      "category": "causal",
+      "evidence_ids": [
+        "evidence:alternate"
+      ],
+      "question": "Which cause is dominant after the new event is introduced?",
+      "status": "open",
+      "target_id": "state:primary",
+      "unknown_id": "unknown:dominant_cause"
+    }
+  ],
+  "world_id": "world:cucv4-core-05-alternative-cause-insertion-security-incident"
+}

@@ -1,0 +1,431 @@
+{
+  "pack_role": "perturbed",
+  "render_profile": "procurement_memo_v1",
+  "schema_version": "1.0.0",
+  "sections": {
+    "causal_edges": [
+      {
+        "edge_id": "edge:primary_support",
+        "evidence_ids": [
+          "evidence:primary"
+        ],
+        "from_id": "evidence:primary",
+        "relation": "supports",
+        "strength": "medium",
+        "to_id": "state:primary"
+      },
+      {
+        "edge_id": "edge:secondary_support",
+        "evidence_ids": [
+          "evidence:secondary"
+        ],
+        "from_id": "evidence:secondary",
+        "relation": "supports",
+        "strength": "strong",
+        "to_id": "state:secondary"
+      },
+      {
+        "edge_id": "edge:alternate_support",
+        "evidence_ids": [
+          "evidence:alternate"
+        ],
+        "from_id": "evidence:alternate",
+        "relation": "supports_alternate_explanation",
+        "strength": "medium",
+        "to_id": "state:primary"
+      },
+      {
+        "edge_id": "edge:bg_1",
+        "evidence_ids": [
+          "evidence:bg_1"
+        ],
+        "from_id": "evidence:bg_1",
+        "relation": "supports_background_context",
+        "strength": "strong",
+        "to_id": "state:bg_1"
+      },
+      {
+        "edge_id": "edge:hop3_dependency",
+        "evidence_ids": [
+          "evidence:hop3"
+        ],
+        "from_id": "state:hop3_dependency",
+        "relation": "creates_downstream_dependency",
+        "strength": "medium",
+        "to_id": "scenario:hop3_escalation"
+      }
+    ],
+    "entities": [
+      {
+        "entity_id": "entity:org",
+        "label": "Harbor Transit",
+        "type": "organization",
+        "attributes": {}
+      },
+      {
+        "entity_id": "entity:asset",
+        "label": "single-source award",
+        "type": "asset",
+        "attributes": {}
+      },
+      {
+        "entity_id": "entity:reviewer",
+        "label": "oversight unit",
+        "type": "role",
+        "attributes": {}
+      },
+      {
+        "entity_id": "entity:bg_1",
+        "label": "vendor diligence packet a-1",
+        "type": "background_context",
+        "attributes": {}
+      }
+    ],
+    "events": [
+      {
+        "action": "checkpoint evaluation recorded",
+        "actor_ids": [
+          "entity:org"
+        ],
+        "event_id": "event:primary",
+        "evidence_ids": [
+          "evidence:primary"
+        ],
+        "object_ids": [
+          "entity:asset"
+        ],
+        "time": {
+          "kind": "exact",
+          "value": "2026-04-17T14:00:00Z"
+        },
+        "type": "checkpoint_event",
+        "attributes": {}
+      },
+      {
+        "action": "routine review completed",
+        "actor_ids": [
+          "entity:reviewer"
+        ],
+        "event_id": "event:secondary",
+        "evidence_ids": [
+          "evidence:secondary"
+        ],
+        "object_ids": [
+          "entity:org"
+        ],
+        "time": {
+          "kind": "exact",
+          "value": "2026-04-17T08:00:00Z"
+        },
+        "type": "review_event",
+        "attributes": {}
+      },
+      {
+        "action": "competing cause introduced",
+        "actor_ids": [
+          "entity:org"
+        ],
+        "event_id": "event:alternate",
+        "evidence_ids": [
+          "evidence:alternate"
+        ],
+        "object_ids": [
+          "entity:asset"
+        ],
+        "time": {
+          "kind": "exact",
+          "value": "2026-04-17T11:00:00Z"
+        },
+        "type": "alternate_cause",
+        "attributes": {}
+      },
+      {
+        "action": "background procurement review checkpoint logged #1",
+        "actor_ids": [
+          "entity:bg_1"
+        ],
+        "event_id": "event:bg_1",
+        "evidence_ids": [
+          "evidence:bg_1"
+        ],
+        "object_ids": [
+          "entity:asset"
+        ],
+        "time": {
+          "kind": "exact",
+          "value": "2026-04-17T14:00:00Z"
+        },
+        "type": "procurement_admin_event",
+        "attributes": {}
+      },
+      {
+        "action": "third-hop dependency review opened",
+        "actor_ids": [
+          "entity:org"
+        ],
+        "attributes": {
+          "holdout": true,
+          "hop_depth": 3
+        },
+        "event_id": "event:hop3",
+        "evidence_ids": [
+          "evidence:hop3"
+        ],
+        "object_ids": [
+          "entity:asset"
+        ],
+        "time": {
+          "kind": "exact",
+          "value": "2026-04-17T14:00:00Z"
+        },
+        "type": "third_hop_dependency_event"
+      }
+    ],
+    "evidence": [
+      {
+        "content": "Harbor Transit records suggest single-source award still satisfies the primary condition under alternative_cause_insertion review.",
+        "evidence_id": "evidence:primary",
+        "reliability": "high",
+        "source_id": "src:primary",
+        "source_type": "award_memo",
+        "time": {
+          "kind": "exact",
+          "value": "2026-04-17T14:00:00Z"
+        },
+        "attributes": {}
+      },
+      {
+        "content": "Independent review shows Harbor Transit completed the routine control step for single-source award.",
+        "evidence_id": "evidence:secondary",
+        "reliability": "high",
+        "source_id": "src:secondary",
+        "source_type": "committee_minutes",
+        "time": {
+          "kind": "exact",
+          "value": "2026-04-17T08:00:00Z"
+        },
+        "attributes": {}
+      },
+      {
+        "content": "A newly surfaced event offers a competing explanation for the same observed condition.",
+        "evidence_id": "evidence:alternate",
+        "reliability": "medium",
+        "source_id": "src:alternate",
+        "source_type": "alternate_root_cause",
+        "time": {
+          "kind": "exact",
+          "value": "2026-04-17T11:00:00Z"
+        },
+        "attributes": {}
+      },
+      {
+        "content": "Supplementary procurement administration record preserved outside the core sourcing dispute. Case=CUCV4-CORE-06-ALTERNATIVE-CAUSE-INSERTION-PROCUREMENT-REVIEW family=alternative cause insertion profile=procurement_memo_v1 context=1.",
+        "evidence_id": "evidence:bg_1",
+        "reliability": "high",
+        "source_id": "src:bg_1",
+        "source_type": "procurement_note",
+        "time": {
+          "kind": "exact",
+          "value": "2026-04-17T14:00:00Z"
+        },
+        "attributes": {}
+      },
+      {
+        "content": "Holdout escalation record creates a third-hop dependency for CUCV4-CORE-06-ALTERNATIVE-CAUSE-INSERTION-PROCUREMENT-REVIEW after the alternative cause insertion perturbation.",
+        "evidence_id": "evidence:hop3",
+        "reliability": "medium",
+        "source_id": "src:hop3",
+        "source_type": "holdout_dependency_note",
+        "time": {
+          "kind": "exact",
+          "value": "2026-04-17T14:00:00Z"
+        },
+        "attributes": {}
+      }
+    ],
+    "scenarios": [
+      {
+        "basis_ids": [
+          "state:primary",
+          "edge:primary_support"
+        ],
+        "label": "Primary theory remains most likely",
+        "rank": 2,
+        "scenario_id": "scenario:primary",
+        "status": "live"
+      },
+      {
+        "basis_ids": [
+          "state:secondary",
+          "edge:secondary_support"
+        ],
+        "label": "Alternate theory remains secondary",
+        "rank": 3,
+        "scenario_id": "scenario:alternate",
+        "status": "live"
+      },
+      {
+        "basis_ids": [
+          "state:hop3_dependency",
+          "edge:hop3_dependency"
+        ],
+        "label": "Third-hop dependency becomes the lead holdout path",
+        "rank": 1,
+        "scenario_id": "scenario:hop3_escalation",
+        "status": "live"
+      }
+    ],
+    "states": [
+      {
+        "evidence_ids": [
+          "evidence:primary"
+        ],
+        "object": "true",
+        "predicate": "award_exception_justified",
+        "state_id": "state:primary",
+        "status": "supported",
+        "subject_id": "entity:asset",
+        "time": {
+          "kind": "exact",
+          "value": "2026-04-17T10:00:00Z"
+        },
+        "attributes": {},
+        "confidence_band": "medium"
+      },
+      {
+        "evidence_ids": [
+          "evidence:secondary"
+        ],
+        "object": "true",
+        "predicate": "committee_review_recorded",
+        "state_id": "state:secondary",
+        "status": "supported",
+        "subject_id": "entity:org",
+        "time": {
+          "kind": "exact",
+          "value": "2026-04-17T09:00:00Z"
+        },
+        "attributes": {
+          "authoring_role": "preserve_branch"
+        },
+        "confidence_band": "high"
+      },
+      {
+        "evidence_ids": [
+          "evidence:bg_1"
+        ],
+        "object": "true",
+        "predicate": "procurement_context_stable_1",
+        "state_id": "state:bg_1",
+        "status": "supported",
+        "subject_id": "entity:bg_1",
+        "time": {
+          "kind": "exact",
+          "value": "2026-04-17T10:00:00Z"
+        },
+        "attributes": {
+          "authoring_role": "background_branch"
+        },
+        "confidence_band": "medium"
+      },
+      {
+        "attributes": {
+          "holdout": true,
+          "hop_depth": 3,
+          "authoring_role": "revise_branch"
+        },
+        "confidence_band": "medium",
+        "evidence_ids": [
+          "evidence:hop3"
+        ],
+        "object": "requires_follow_up",
+        "predicate": "third_hop_dependency_active",
+        "state_id": "state:hop3_dependency",
+        "status": "supported",
+        "subject_id": "entity:asset",
+        "time": {
+          "kind": "exact",
+          "value": "2026-04-17T10:00:00Z"
+        }
+      }
+    ],
+    "unknowns": [
+      {
+        "category": "fact",
+        "evidence_ids": [
+          "evidence:primary"
+        ],
+        "question": "Is the primary conclusion about single-source award still valid at the checkpoint?",
+        "status": "open",
+        "target_id": "state:primary",
+        "unknown_id": "unknown:primary"
+      },
+      {
+        "category": "other",
+        "evidence_ids": [
+          "evidence:secondary"
+        ],
+        "question": "Does the preserved review evidence need any further follow-up?",
+        "status": "open",
+        "target_id": "event:secondary",
+        "unknown_id": "unknown:secondary"
+      },
+      {
+        "category": "causal",
+        "evidence_ids": [
+          "evidence:alternate"
+        ],
+        "question": "Which cause is dominant after the new event is introduced?",
+        "status": "open",
+        "target_id": "state:primary",
+        "unknown_id": "unknown:dominant_cause"
+      },
+      {
+        "category": "other",
+        "evidence_ids": [
+          "evidence:bg_1"
+        ],
+        "question": "Does the background procurement context require separate diligence for alternative cause insertion context 1 in alternative_cause_insertion_procurement_review?",
+        "status": "open",
+        "target_id": "state:bg_1",
+        "unknown_id": "unknown:bg_1"
+      },
+      {
+        "category": "dependency",
+        "evidence_ids": [
+          "evidence:hop3"
+        ],
+        "question": "Does the third-hop dependency change the downstream resolution path?",
+        "status": "open",
+        "target_id": "state:hop3_dependency",
+        "unknown_id": "unknown:hop3_dependency"
+      }
+    ],
+    "metadata": {
+      "authoring_status": "draft_surface_v1",
+      "design_intent": "Add procurement-side alternate-cause pressure with a third-hop dependency so the family is not single-sector in v4.",
+      "named_evidence_artifact": "evidence:alternate",
+      "preserve_focus": [
+        "state:secondary"
+      ],
+      "revise_focus": [
+        "state:hop3_dependency"
+      ],
+      "sector_skin": "procurement_review",
+      "surface_title": "PROCUREMENT REVIEW - ALTERNATIVE CAUSE REVIEW [REVISED]"
+    }
+  },
+  "seed": 40015,
+  "summary": {
+    "edge_count": 5,
+    "entity_count": 4,
+    "event_count": 5,
+    "evidence_count": 5,
+    "scenario_count": 3,
+    "state_count": 4,
+    "unknown_count": 5
+  },
+  "template_id": "tpl.v4.core.06.alternative.cause.insertion.procurement.review",
+  "world_id": "world:cucv4-core-06-alternative-cause-insertion-procurement-review",
+  "notes": "Draft v4 candidate case for CUCV4-CORE-06-ALTERNATIVE-CAUSE-INSERTION-PROCUREMENT-REVIEW. Add procurement-side alternate-cause pressure with a third-hop dependency so the family is not single-sector in v4."
+}

@@ -1,0 +1,22 @@
+{
+  "authoring_status": "draft_surface_v1",
+  "benchmark_version": "CUC.v4.candidate",
+  "case_id": "CUCV4-GROUNDING-01-SOURCE-RELIABILITY-COLLAPSE-PROCUREMENT-REVIEW",
+  "clean_pack_sha256": "db8ec3df1091cd82de2868718d413c6fbd03b675a003bf2f12f1c74532b26640",
+  "difficulty_band": "B",
+  "expected_delta_sha256": "931f55625c1f40ac7d5b51e3ade6e27972a335a5c682ce5e66b9b2b5571e37cf",
+  "family_id": "source_reliability_collapse",
+  "family_version": "0.1.0",
+  "geometry_profile": "grounding_background_branch_scaffold",
+  "hop_depth": 2,
+  "judge_profile": "structured_json_v1",
+  "perturbed_pack_sha256": "0788696c6825f7dd58f50aa32d0ff5526d607dc4b1484ac6e0e31c44eb8a1fcb",
+  "public_split": "candidate_main",
+  "render_profile": "procurement_memo_v1",
+  "scaffold_notes": "Draft source-reliability-collapse procurement case: weaken the waiver branch, preserve committee review.",
+  "schema_version": "1.0.0",
+  "scoring_manifest_sha256": "c71931bdf1d4e8650d80aefe999067ff29291c5844755301454f7b5b4561f615",
+  "sector_skin": "procurement_review",
+  "seed": 40006,
+  "template_id": "tpl.v4.grounding.01.source.reliability.collapse.procurement.review"
+}

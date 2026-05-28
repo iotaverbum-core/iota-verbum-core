@@ -1,0 +1,51 @@
+{
+  "extra_fields": [
+    "$.changed_states[id='state:primary'].after.attributes.authoring_role",
+    "$.changed_states[id='state:primary'].before.attributes.authoring_role",
+    "$.new_unknowns[id='unknown:new_scope'].before",
+    "$.supporting_evidence_map[\"scenario:alternate\"][0]",
+    "$.supporting_evidence_map[\"scenario:primary\"][0]"
+  ],
+  "missing_fields": [
+    "$.changed_edges[id='edge:primary_support'].source_op_ids[value='op:003']",
+    "$.changed_events[id='event:primary'].source_op_ids[value='op:001']",
+    "$.changed_states[id='state:primary'].after.attributes.exception_active",
+    "$.changed_states[id='state:primary'].after.attributes.rule_version",
+    "$.changed_states[id='state:primary'].after.attributes.scope",
+    "$.changed_states[id='state:primary'].before.attributes.exception_active",
+    "$.changed_states[id='state:primary'].before.attributes.rule_version",
+    "$.changed_states[id='state:primary'].before.attributes.scope",
+    "$.changed_states[id='state:primary'].source_op_ids[value='op:002']",
+    "$.resolved_unknowns[id='unknown:primary'].source_op_ids[value='op:004']",
+    "$.resolved_unknowns[id='unknown:primary'].source_op_ids[value='op:007']",
+    "$.supporting_evidence_map[\"event:primary\"][0]"
+  ],
+  "summary": {
+    "compared_fields": 115,
+    "matching_fields": 94,
+    "similarity_score_percent": 81.74
+  },
+  "type_mismatches": [],
+  "value_differences": [
+    {
+      "gold_value": "medium",
+      "model_value": "low",
+      "path": "$.changed_states[id='state:primary'].after.confidence_band"
+    },
+    {
+      "gold_value": "Preserve the independently supported sibling branch and the stable background context.",
+      "model_value": "state:secondary (preserve_branch, review_completed, high confidence, supported) and its associated edge:secondary_support and unknown:secondary remain unchanged. The temporal reorder of event:primary to 07:00Z precedes the preserved review event at 08:00Z, which does not affect the secondary branch. Background branches state:bg_1, state:bg_2, edge:bg_1, edge:bg_2 are context only and not revised.",
+      "path": "$.preservation_notes"
+    },
+    {
+      "gold_value": "Revise the timing-sensitive branch and preserve the unaffected sibling branch.",
+      "model_value": "The temporal reorder moves event:primary from 14:00Z to 07:00Z, placing it before the secondary review event. This undermines the primary filing-date-violation theory: edge:primary_support is weakened from strong to weak, state:primary status changes from supported to refuted with confidence_band dropping from medium to low, and unknown:primary resolves to resolved_before_checkpoint. A new scope unknown (unknown:new_scope) is introduced reflecting residual uncertainty about surface coverage. Scenario ranks flip: scenario:alternate rises to rank 1, scenario:primary drops to rank 2.",
+      "path": "$.revision_notes"
+    },
+    {
+      "gold_value": "A model that updates the ordering root without revising the timing-sensitive branch has stopped too early. A model that rewrites the preserved sibling branch without contrary evidence has over-revised.",
+      "model_value": "Under-revision risk: failing to demote state:primary status and scenario rank when event:primary timestamp is reordered earlier undermines the temporal violation theory; over-revision risk: revising the preserved state:secondary branch or background branches in response to changes scoped only to the primary revise_focus branch.",
+      "path": "$.structural_invariant"
+    }
+  ]
+}

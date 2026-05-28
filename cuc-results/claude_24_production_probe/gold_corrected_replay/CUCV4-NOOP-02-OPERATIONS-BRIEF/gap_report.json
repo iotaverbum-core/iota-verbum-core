@@ -1,0 +1,30 @@
+{
+  "extra_fields": [
+    "$.supporting_evidence_map[\"state:primary\"][0]",
+    "$.supporting_evidence_map[\"state:secondary\"][0]"
+  ],
+  "missing_fields": [],
+  "summary": {
+    "compared_fields": 31,
+    "matching_fields": 26,
+    "similarity_score_percent": 83.87
+  },
+  "type_mismatches": [],
+  "value_differences": [
+    {
+      "gold_value": "Preserve the arrival-window status, the dispatch reschedule record, and the unchanged operations background branches.",
+      "model_value": "The only difference between clean and perturbed packs is a cosmetic surface_title change (appended '[REVISED]'). All states, edges, unknowns, events, evidence, and scenario ranks are identical. revise_focus is empty; preserve_focus names state:primary and state:secondary. No substantive claim changed; full preservation applies to all branches including background.",
+      "path": "$.preservation_notes"
+    },
+    {
+      "gold_value": "No substantive revision is expected. The formatting addendum only normalizes schedule wording and timezone notation.",
+      "model_value": "No-op case: formatting-only surface_title update does not affect any causal claim, scenario rank, or unknown status. Zero items require revision.",
+      "path": "$.revision_notes"
+    },
+    {
+      "gold_value": "A model that revises the dispatch assessment on this no-op control has overreacted to wording-only noise.",
+      "model_value": "Under-revision risk is not present here since nothing changed; over-revision risk is the primary failure mode — any modification to state:primary, state:secondary, their supporting edges or unknowns, or background branches would constitute an unwarranted revision driven by a surface-level metadata string change rather than substantive evidential content.",
+      "path": "$.structural_invariant"
+    }
+  ]
+}

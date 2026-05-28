@@ -1,0 +1,43 @@
+{
+  "changed_edges": [],
+  "changed_events": [],
+  "changed_states": [],
+  "forbidden_revisions": [
+    "edge:primary_support",
+    "edge:secondary_support",
+    "edge:bg_1",
+    "state:primary",
+    "state:secondary",
+    "state:bg_1",
+    "unknown:primary",
+    "unknown:secondary",
+    "unknown:bg_1"
+  ],
+  "new_conflicts": [],
+  "new_unknowns": [],
+  "preserved_items": [
+    "edge:primary_support",
+    "edge:secondary_support",
+    "edge:bg_1",
+    "state:primary",
+    "state:secondary",
+    "state:bg_1",
+    "unknown:primary",
+    "unknown:secondary",
+    "unknown:bg_1"
+  ],
+  "pruned_conflicts": [],
+  "resolved_unknowns": [],
+  "scenario_rank_changes": [],
+  "schema_version": "1.0.0",
+  "supporting_evidence_map": {},
+  "must_preserve_claims": [
+    "state:primary",
+    "state:secondary"
+  ],
+  "must_revise_claims": [],
+  "named_evidence_artifact": "Clarification Addendum CA-411A",
+  "preservation_notes": "Preserve the approval-control finding, the quarterly-review record, and the stable background branch.",
+  "revision_notes": "No substantive revision is expected. The clarification addendum only normalizes wording around the checkpoint.",
+  "structural_invariant": "A model that invents a substantive revision on this no-op control has failed restraint. The unchanged audit branches should remain stable."
+}

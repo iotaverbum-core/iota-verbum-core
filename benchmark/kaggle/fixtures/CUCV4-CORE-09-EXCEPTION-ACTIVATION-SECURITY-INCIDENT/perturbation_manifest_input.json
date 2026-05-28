@@ -1,0 +1,147 @@
+{
+  "family_id": "exception_activation",
+  "family_version": "1.0.0",
+  "notes": "exception_activation perturbation for security_incident",
+  "ops": [
+    {
+      "after": {
+        "action": "new exception override approved",
+        "time": {
+          "value": "2026-04-08T12:00:00Z"
+        }
+      },
+      "before": null,
+      "op_id": "op:001",
+      "op_type": "add_exception_event",
+      "postconditions": [
+        "exception event becomes newly live"
+      ],
+      "preconditions": [
+        "documented exception received"
+      ],
+      "target_id": "event:exception"
+    },
+    {
+      "after": {
+        "status": "refuted"
+      },
+      "before": {
+        "status": "supported"
+      },
+      "op_id": "op:002",
+      "op_type": "replace_state_status",
+      "postconditions": [
+        "primary exposure branch refuted"
+      ],
+      "preconditions": [
+        "exception narrows the live path"
+      ],
+      "target_id": "state:primary"
+    },
+    {
+      "after": {
+        "category": "scope",
+        "evidence_ids": [
+          "evidence:exception"
+        ],
+        "question": "How far does the documented exception extend beyond the recorded asset?",
+        "status": "open",
+        "target_id": "event:exception",
+        "unknown_id": "unknown:exception_scope"
+      },
+      "before": null,
+      "op_id": "op:003",
+      "op_type": "add_unknown",
+      "postconditions": [
+        "exception-scope question added"
+      ],
+      "preconditions": [
+        "exception applies narrowly"
+      ],
+      "target_id": "unknown:exception_scope"
+    },
+    {
+      "after": {
+        "action": "third-hop dependency review opened",
+        "attributes": {
+          "holdout": true,
+          "hop_depth": 3
+        }
+      },
+      "before": null,
+      "op_id": "op:hop3",
+      "op_type": "add_third_hop_dependency",
+      "postconditions": [
+        "hop-3 dependency branch added"
+      ],
+      "preconditions": [
+        "holdout escalation identified"
+      ],
+      "target_id": "event:hop3"
+    },
+    {
+      "after": {
+        "rank": 3
+      },
+      "before": {
+        "rank": 1
+      },
+      "op_id": "op:004",
+      "op_type": "change_scenario_rank",
+      "postconditions": [
+        "primary theory demoted to tertiary"
+      ],
+      "preconditions": [
+        "exception overrides the earlier live path"
+      ],
+      "target_id": "scenario:primary"
+    },
+    {
+      "after": {
+        "rank": 1
+      },
+      "before": {
+        "rank": null
+      },
+      "op_id": "op:005",
+      "op_type": "change_scenario_rank",
+      "postconditions": [
+        "third-hop escalation scenario becomes primary"
+      ],
+      "preconditions": [
+        "exception creates a downstream holdout path"
+      ],
+      "target_id": "scenario:hop3_escalation"
+    },
+    {
+      "after": {
+        "category": "dependency",
+        "evidence_ids": [
+          "evidence:hop3"
+        ],
+        "question": "Does the third-hop dependency change the downstream resolution path?",
+        "status": "open",
+        "target_id": "state:hop3_dependency",
+        "unknown_id": "unknown:hop3_dependency"
+      },
+      "before": null,
+      "op_id": "op:006",
+      "op_type": "add_unknown",
+      "postconditions": [
+        "third-hop dependency question added"
+      ],
+      "preconditions": [
+        "dependency branch becomes live"
+      ],
+      "target_id": "unknown:hop3_dependency"
+    }
+  ],
+  "schema_version": "1.0.0",
+  "seed": 40024,
+  "template_id": "tpl.v4.core.09.exception.activation.security.incident",
+  "world_id": "world:cucv4-core-09-exception-activation-security-incident",
+  "metadata": {
+    "sector_skin": "security_incident",
+    "render_profile": "incident_digest_v1"
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "authoring_status": "draft_surface_v1",
+  "benchmark_version": "CUC.v4.candidate",
+  "case_id": "CUCV4-CORE-03-TEMPORAL-REORDER-LEGAL-CONTRACT",
+  "clean_pack_sha256": "ae2a86c2eade3fa4d4eaf024ba171a76a38387bfb2032a6bc74516b03d4b141e",
+  "difficulty_band": "B",
+  "expected_delta_sha256": "88add11c81ea4d07393d841cee7d5beb2bd1a8622f2920d590e72410ca98fec9",
+  "family_id": "temporal_reorder",
+  "family_version": "0.1.0",
+  "geometry_profile": "temporal_reorder_legal_contract_hop2_scaffold_v4",
+  "hop_depth": 2,
+  "judge_profile": "structured_json_v1",
+  "perturbed_pack_sha256": "7697bbbfabbf5e599a7d4ab8cbdbeb6b8e08f48cb8d53a535b312ec6c60ad667",
+  "public_split": "candidate_main",
+  "render_profile": "legal_formal_v1",
+  "scaffold_notes": "Draft temporal-reorder legal-contract case expanded into the v4 candidate pack.",
+  "schema_version": "1.0.0",
+  "scoring_manifest_sha256": "3f28b404076d5ab4e958bdec65a29fd47049fd6b0ef348819c9c025f31da6206",
+  "sector_skin": "legal_contract",
+  "seed": 40012,
+  "template_id": "tpl.v4.core.03.temporal.reorder.legal.contract"
+}

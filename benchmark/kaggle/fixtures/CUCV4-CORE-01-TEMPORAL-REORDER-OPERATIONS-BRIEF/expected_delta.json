@@ -1,0 +1,227 @@
+{
+  "changed_edges": [
+    {
+      "after": {
+        "edge_id": "edge:primary_support",
+        "evidence_ids": [
+          "evidence:primary"
+        ],
+        "from_id": "evidence:primary",
+        "relation": "supports",
+        "strength": "weak",
+        "to_id": "state:primary"
+      },
+      "before": {
+        "edge_id": "edge:primary_support",
+        "evidence_ids": [
+          "evidence:primary"
+        ],
+        "from_id": "evidence:primary",
+        "relation": "supports",
+        "strength": "strong",
+        "to_id": "state:primary"
+      },
+      "change_type": "weakened",
+      "id": "edge:primary_support",
+      "source_op_ids": [
+        "op:003"
+      ]
+    }
+  ],
+  "changed_events": [
+    {
+      "after": {
+        "action": "loading checkpoint logged",
+        "actor_ids": [
+          "entity:org"
+        ],
+        "attributes": {},
+        "event_id": "event:primary",
+        "evidence_ids": [
+          "evidence:primary"
+        ],
+        "object_ids": [
+          "entity:asset"
+        ],
+        "time": {
+          "kind": "exact",
+          "value": "2026-04-04T07:00:00Z"
+        },
+        "type": "checkpoint_event"
+      },
+      "before": {
+        "action": "loading checkpoint logged",
+        "actor_ids": [
+          "entity:org"
+        ],
+        "attributes": {},
+        "event_id": "event:primary",
+        "evidence_ids": [
+          "evidence:primary"
+        ],
+        "object_ids": [
+          "entity:asset"
+        ],
+        "time": {
+          "kind": "exact",
+          "value": "2026-04-04T14:00:00Z"
+        },
+        "type": "checkpoint_event"
+      },
+      "change_type": "modified",
+      "id": "event:primary",
+      "source_op_ids": [
+        "op:001"
+      ]
+    }
+  ],
+  "changed_states": [
+    {
+      "after": {
+        "attributes": {
+          "exception_active": false,
+          "rule_version": "v1",
+          "scope": "global"
+        },
+        "confidence_band": "medium",
+        "evidence_ids": [
+          "evidence:primary"
+        ],
+        "object": "true",
+        "predicate": "loading_window_open",
+        "state_id": "state:primary",
+        "status": "refuted",
+        "subject_id": "entity:asset",
+        "time": {
+          "kind": "exact",
+          "value": "2026-04-04T10:00:00Z"
+        }
+      },
+      "before": {
+        "attributes": {
+          "exception_active": false,
+          "rule_version": "v1",
+          "scope": "global"
+        },
+        "confidence_band": "medium",
+        "evidence_ids": [
+          "evidence:primary"
+        ],
+        "object": "true",
+        "predicate": "loading_window_open",
+        "state_id": "state:primary",
+        "status": "supported",
+        "subject_id": "entity:asset",
+        "time": {
+          "kind": "exact",
+          "value": "2026-04-04T10:00:00Z"
+        }
+      },
+      "change_type": "modified",
+      "id": "state:primary",
+      "source_op_ids": [
+        "op:002"
+      ]
+    }
+  ],
+  "forbidden_revisions": [
+    "state:secondary",
+    "edge:secondary_support",
+    "unknown:secondary"
+  ],
+  "new_conflicts": [],
+  "new_unknowns": [
+    {
+      "after": {
+        "category": "scope",
+        "evidence_ids": [
+          "evidence:primary"
+        ],
+        "question": "Did the earlier timing correction cover the entire handoff surface?",
+        "status": "open",
+        "target_id": "state:primary",
+        "unknown_id": "unknown:new_scope"
+      },
+      "change_type": "added",
+      "id": "unknown:new_scope",
+      "source_op_ids": []
+    }
+  ],
+  "preserved_items": [
+    "state:secondary",
+    "edge:secondary_support",
+    "unknown:secondary"
+  ],
+  "pruned_conflicts": [],
+  "resolved_unknowns": [
+    {
+      "after": {
+        "category": "fact",
+        "evidence_ids": [
+          "evidence:primary"
+        ],
+        "question": "Is the primary conclusion about Line 7 loading bay still valid at the checkpoint?",
+        "resolution_value": "resolved_before_checkpoint",
+        "status": "resolved",
+        "target_id": "state:primary",
+        "unknown_id": "unknown:primary"
+      },
+      "before": {
+        "category": "fact",
+        "evidence_ids": [
+          "evidence:primary"
+        ],
+        "question": "Is the primary conclusion about Line 7 loading bay still valid at the checkpoint?",
+        "status": "open",
+        "target_id": "state:primary",
+        "unknown_id": "unknown:primary"
+      },
+      "change_type": "resolved",
+      "id": "unknown:primary",
+      "source_op_ids": [
+        "op:004",
+        "op:007"
+      ]
+    }
+  ],
+  "scenario_rank_changes": [
+    {
+      "after_rank": 1,
+      "before_rank": 2,
+      "scenario_id": "scenario:alternate"
+    },
+    {
+      "after_rank": 2,
+      "before_rank": 1,
+      "scenario_id": "scenario:primary"
+    }
+  ],
+  "schema_version": "1.0.0",
+  "supporting_evidence_map": {
+    "edge:primary_support": [
+      "evidence:primary"
+    ],
+    "event:primary": [
+      "evidence:primary"
+    ],
+    "state:primary": [
+      "evidence:primary"
+    ],
+    "unknown:new_scope": [
+      "evidence:primary"
+    ],
+    "unknown:primary": [
+      "evidence:primary"
+    ]
+  },
+  "must_preserve_claims": [
+    "state:secondary"
+  ],
+  "must_revise_claims": [
+    "state:primary"
+  ],
+  "named_evidence_artifact": "Timestamp Correction TC-227",
+  "preservation_notes": "Preserve the quota-commitment branch and the stable operations background record.",
+  "revision_notes": "Revise the loading-window branch after the timestamp correction. Preserve the downstream quota-commitment branch and track the new open scope question.",
+  "structural_invariant": "A model that updates the timing root without revising the loading-window branch has stopped too early. A model that rewrites the preserved quota-commitment branch without contrary evidence has over-revised."
+}

@@ -1,0 +1,22 @@
+{
+  "authoring_status": "draft_surface_v1",
+  "benchmark_version": "CUC.v4.candidate",
+  "case_id": "CUCV4-CORE-08-DEFERRED-EFFECT-SECURITY-INCIDENT",
+  "clean_pack_sha256": "15e12e246525eead706041bb6d8311f1c5e66060747b81a1a80794612c01c0c7",
+  "difficulty_band": "C",
+  "expected_delta_sha256": "e470f7af7bc62f7ba4eba488e04a47cb66cb4125d47fbcaf96549d412de86baa",
+  "family_id": "deferred_effect",
+  "family_version": "0.1.0",
+  "geometry_profile": "deferred_effect_security_incident_hop3_scaffold_v4",
+  "hop_depth": 3,
+  "judge_profile": "structured_json_v1",
+  "perturbed_pack_sha256": "c7c2f767b21e8159ff7b042f57100267943a29c91b4e72d7087172acb7927848",
+  "public_split": "candidate_main",
+  "render_profile": "incident_digest_v1",
+  "scaffold_notes": "Draft deferred-effect security-incident case expanded into the v4 candidate pack.",
+  "schema_version": "1.0.0",
+  "scoring_manifest_sha256": "a5046949dbadf8e615b66e21eecbe11d7279e86b1ed3ae964509c5aedcafe5cd",
+  "sector_skin": "security_incident",
+  "seed": 40017,
+  "template_id": "tpl.v4.core.08.deferred.effect.security.incident"
+}

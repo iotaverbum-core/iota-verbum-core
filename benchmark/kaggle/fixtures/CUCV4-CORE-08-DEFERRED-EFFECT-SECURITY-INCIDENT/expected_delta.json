@@ -1,0 +1,283 @@
+{
+  "changed_edges": [
+    {
+      "after": {
+        "edge_id": "edge:hop3_dependency",
+        "evidence_ids": [
+          "evidence:hop3"
+        ],
+        "from_id": "state:hop3_dependency",
+        "relation": "creates_downstream_dependency",
+        "strength": "medium",
+        "to_id": "scenario:hop3_escalation"
+      },
+      "before": null,
+      "change_type": "added",
+      "id": "edge:hop3_dependency",
+      "source_op_ids": [
+        "op:hop3"
+      ]
+    }
+  ],
+  "changed_events": [
+    {
+      "after": {
+        "action": "remediation delayed beyond checkpoint",
+        "actor_ids": [
+          "entity:org"
+        ],
+        "event_id": "event:primary",
+        "evidence_ids": [
+          "evidence:primary"
+        ],
+        "object_ids": [
+          "entity:asset"
+        ],
+        "time": {
+          "kind": "exact",
+          "value": "2026-04-05T09:00:00Z"
+        },
+        "type": "checkpoint_event",
+        "attributes": {}
+      },
+      "before": {
+        "action": "remediation scheduled",
+        "actor_ids": [
+          "entity:org"
+        ],
+        "event_id": "event:primary",
+        "evidence_ids": [
+          "evidence:primary"
+        ],
+        "object_ids": [
+          "entity:asset"
+        ],
+        "time": {
+          "kind": "exact",
+          "value": "2026-04-04T14:00:00Z"
+        },
+        "type": "checkpoint_event",
+        "attributes": {}
+      },
+      "change_type": "modified",
+      "id": "event:primary",
+      "source_op_ids": [
+        "op:001"
+      ]
+    },
+    {
+      "after": {
+        "action": "third-hop dependency review opened",
+        "actor_ids": [
+          "entity:org"
+        ],
+        "attributes": {
+          "holdout": true,
+          "hop_depth": 3
+        },
+        "event_id": "event:hop3",
+        "evidence_ids": [
+          "evidence:hop3"
+        ],
+        "object_ids": [
+          "entity:asset"
+        ],
+        "time": {
+          "kind": "exact",
+          "value": "2026-04-04T14:00:00Z"
+        },
+        "type": "third_hop_dependency_event"
+      },
+      "before": null,
+      "change_type": "added",
+      "id": "event:hop3",
+      "source_op_ids": [
+        "op:hop3"
+      ]
+    }
+  ],
+  "changed_states": [
+    {
+      "after": {
+        "attributes": {
+          "exception_active": false,
+          "rule_version": "v1",
+          "scope": "global"
+        },
+        "confidence_band": "medium",
+        "evidence_ids": [
+          "evidence:primary"
+        ],
+        "object": "true",
+        "predicate": "exposure_window_open",
+        "state_id": "state:primary",
+        "status": "contested",
+        "subject_id": "entity:asset",
+        "time": {
+          "kind": "exact",
+          "value": "2026-04-04T10:00:00Z"
+        }
+      },
+      "before": {
+        "attributes": {
+          "exception_active": false,
+          "rule_version": "v1",
+          "scope": "global"
+        },
+        "confidence_band": "medium",
+        "evidence_ids": [
+          "evidence:primary"
+        ],
+        "object": "true",
+        "predicate": "exposure_window_open",
+        "state_id": "state:primary",
+        "status": "supported",
+        "subject_id": "entity:asset",
+        "time": {
+          "kind": "exact",
+          "value": "2026-04-04T10:00:00Z"
+        }
+      },
+      "change_type": "modified",
+      "id": "state:primary",
+      "source_op_ids": [
+        "op:002"
+      ]
+    },
+    {
+      "after": {
+        "attributes": {
+          "holdout": true,
+          "hop_depth": 3
+        },
+        "confidence_band": "medium",
+        "evidence_ids": [
+          "evidence:hop3"
+        ],
+        "object": "requires_follow_up",
+        "predicate": "third_hop_dependency_active",
+        "state_id": "state:hop3_dependency",
+        "status": "supported",
+        "subject_id": "entity:asset",
+        "time": {
+          "kind": "exact",
+          "value": "2026-04-04T10:00:00Z"
+        }
+      },
+      "before": null,
+      "change_type": "added",
+      "id": "state:hop3_dependency",
+      "source_op_ids": [
+        "op:hop3"
+      ]
+    }
+  ],
+  "forbidden_revisions": [
+    "state:secondary",
+    "edge:secondary_support",
+    "unknown:secondary"
+  ],
+  "new_conflicts": [],
+  "new_unknowns": [
+    {
+      "after": {
+        "category": "time",
+        "evidence_ids": [
+          "evidence:primary"
+        ],
+        "question": "When did the corrective effect actually become operative?",
+        "status": "open",
+        "target_id": "event:primary",
+        "unknown_id": "unknown:effective_date"
+      },
+      "change_type": "added",
+      "id": "unknown:effective_date",
+      "source_op_ids": []
+    },
+    {
+      "after": {
+        "category": "dependency",
+        "evidence_ids": [
+          "evidence:hop3"
+        ],
+        "question": "Does the third-hop dependency change the downstream resolution path?",
+        "status": "open",
+        "target_id": "state:hop3_dependency",
+        "unknown_id": "unknown:hop3_dependency"
+      },
+      "change_type": "added",
+      "id": "unknown:hop3_dependency",
+      "source_op_ids": [
+        "op:hop3"
+      ]
+    }
+  ],
+  "preserved_items": [
+    "state:secondary",
+    "edge:secondary_support",
+    "unknown:secondary"
+  ],
+  "pruned_conflicts": [],
+  "resolved_unknowns": [],
+  "scenario_rank_changes": [
+    {
+      "scenario_id": "scenario:alternate",
+      "before_rank": 2,
+      "after_rank": 1
+    },
+    {
+      "scenario_id": "scenario:primary",
+      "before_rank": 1,
+      "after_rank": 3
+    },
+    {
+      "scenario_id": "scenario:hop3_escalation",
+      "before_rank": null,
+      "after_rank": 2
+    }
+  ],
+  "schema_version": "1.0.0",
+  "supporting_evidence_map": {
+    "edge:hop3_dependency": [
+      "evidence:hop3"
+    ],
+    "event:hop3": [
+      "evidence:hop3"
+    ],
+    "event:primary": [
+      "evidence:primary"
+    ],
+    "state:hop3_dependency": [
+      "evidence:hop3"
+    ],
+    "state:primary": [
+      "evidence:primary"
+    ],
+    "unknown:effective_date": [
+      "evidence:primary"
+    ],
+    "unknown:hop3_dependency": [
+      "evidence:hop3"
+    ],
+    "scenario:alternate": [
+      "evidence:secondary"
+    ],
+    "scenario:primary": [
+      "evidence:primary"
+    ],
+    "scenario:hop3_escalation": [
+      "evidence:hop3"
+    ]
+  },
+  "must_preserve_claims": [
+    "state:secondary"
+  ],
+  "must_revise_claims": [
+    "state:primary",
+    "state:hop3_dependency"
+  ],
+  "named_evidence_artifact": "evidence:hop3",
+  "preservation_notes": "Preserve the independently supported sibling branch and the stable background context.",
+  "revision_notes": "Revise the timing-sensitive branch and preserve the independent sibling branch while keeping the new timing unknown open.",
+  "structural_invariant": "A model that notices the deferred effect but leaves the timing-sensitive branch untouched has stopped too early. A model that rewrites preserved sibling branches without contrary evidence has over-revised."
+}

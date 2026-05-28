@@ -1,0 +1,22 @@
+{
+  "authoring_status": "draft_surface_v1",
+  "benchmark_version": "CUC.v4.candidate",
+  "case_id": "CUCV4-NOOP-01-COMPLIANCE-AUDIT",
+  "clean_pack_sha256": "4e27ebd2d36b9b110fe518466a5b802b1372a4860652929fdc7c9590b50868f8",
+  "difficulty_band": "B",
+  "expected_delta_sha256": "d2aed9489f4b9781b9efdf1cc69d921cf065844cbe19e87d1b66485a9e4256d9",
+  "family_id": "no_op_control",
+  "family_version": "0.1.0",
+  "geometry_profile": "no_op_watch_light_v4",
+  "hop_depth": 1,
+  "judge_profile": "structured_json_v1",
+  "perturbed_pack_sha256": "49f3481e94489a1b818eaeae346cf6a6e55510968cf76943a1e5aa70c01fd1b5",
+  "public_split": "candidate_main",
+  "render_profile": "compliance_memo_v1",
+  "scaffold_notes": "Draft no-op compliance audit case: preserve the material control-gap conclusion and quarterly review record.",
+  "schema_version": "1.0.0",
+  "scoring_manifest_sha256": "fade80fd4f37d1973f5cb89e4c1f5f65ad89937b0b9b2696c436f58f165447f8",
+  "sector_skin": "compliance_audit",
+  "seed": 40003,
+  "template_id": "tpl.v4.noop.01.compliance.audit"
+}

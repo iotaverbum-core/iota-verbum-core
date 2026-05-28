@@ -1,0 +1,200 @@
+{
+  "causal_edges": [
+    {
+      "edge_id": "edge:primary_support",
+      "evidence_ids": [
+        "evidence:primary"
+      ],
+      "from_id": "evidence:primary",
+      "relation": "supports",
+      "strength": "strong",
+      "to_id": "state:primary"
+    },
+    {
+      "edge_id": "edge:secondary_support",
+      "evidence_ids": [
+        "evidence:secondary"
+      ],
+      "from_id": "evidence:secondary",
+      "relation": "supports",
+      "strength": "strong",
+      "to_id": "state:secondary"
+    }
+  ],
+  "entities": [
+    {
+      "attributes": {},
+      "entity_id": "entity:org",
+      "label": "Northshore Retail",
+      "type": "organization"
+    },
+    {
+      "attributes": {},
+      "entity_id": "entity:asset",
+      "label": "checkout pathway",
+      "type": "asset"
+    },
+    {
+      "attributes": {},
+      "entity_id": "entity:reviewer",
+      "label": "plaintiff counsel",
+      "type": "role"
+    }
+  ],
+  "events": [
+    {
+      "action": "checkpoint evaluation recorded",
+      "actor_ids": [
+        "entity:org"
+      ],
+      "attributes": {},
+      "event_id": "event:primary",
+      "evidence_ids": [
+        "evidence:primary"
+      ],
+      "object_ids": [
+        "entity:asset"
+      ],
+      "time": {
+        "kind": "exact",
+        "value": "2026-04-10T14:00:00Z"
+      },
+      "type": "checkpoint_event"
+    },
+    {
+      "action": "routine review completed",
+      "actor_ids": [
+        "entity:reviewer"
+      ],
+      "attributes": {},
+      "event_id": "event:secondary",
+      "evidence_ids": [
+        "evidence:secondary"
+      ],
+      "object_ids": [
+        "entity:org"
+      ],
+      "time": {
+        "kind": "exact",
+        "value": "2026-04-10T08:00:00Z"
+      },
+      "type": "review_event"
+    }
+  ],
+  "evidence": [
+    {
+      "attributes": {},
+      "content": "Northshore Retail records suggest checkout pathway still satisfies the primary condition under clarification control review.",
+      "evidence_id": "evidence:primary",
+      "reliability": "high",
+      "source_id": "src:primary",
+      "source_type": "complaint",
+      "time": {
+        "kind": "exact",
+        "value": "2026-04-10T14:00:00Z"
+      }
+    },
+    {
+      "attributes": {},
+      "content": "Independent review shows Northshore Retail completed the routine control step for checkout pathway.",
+      "evidence_id": "evidence:secondary",
+      "reliability": "high",
+      "source_id": "src:secondary",
+      "source_type": "audit_note",
+      "time": {
+        "kind": "exact",
+        "value": "2026-04-10T08:00:00Z"
+      }
+    }
+  ],
+  "metadata": {
+    "sector_skin": "legal_contract",
+    "render_profile": "legal_formal_v1"
+  },
+  "scenarios": [
+    {
+      "basis_ids": [
+        "state:primary",
+        "edge:primary_support"
+      ],
+      "label": "Primary theory remains most likely",
+      "rank": 1,
+      "scenario_id": "scenario:primary",
+      "status": "live"
+    },
+    {
+      "basis_ids": [
+        "state:secondary",
+        "edge:secondary_support"
+      ],
+      "label": "Alternate theory remains secondary",
+      "rank": 2,
+      "scenario_id": "scenario:alternate",
+      "status": "live"
+    }
+  ],
+  "schema_version": "1.0.0",
+  "seed": 40009,
+  "states": [
+    {
+      "attributes": {
+        "exception_active": false,
+        "rule_version": "v1",
+        "scope": "global"
+      },
+      "confidence_band": "medium",
+      "evidence_ids": [
+        "evidence:primary"
+      ],
+      "object": "above_threshold",
+      "predicate": "filing_date_violation_live",
+      "state_id": "state:primary",
+      "status": "supported",
+      "subject_id": "entity:asset",
+      "time": {
+        "kind": "exact",
+        "value": "2026-04-10T10:00:00Z"
+      }
+    },
+    {
+      "attributes": {},
+      "confidence_band": "high",
+      "evidence_ids": [
+        "evidence:secondary"
+      ],
+      "object": "true",
+      "predicate": "review_completed",
+      "state_id": "state:secondary",
+      "status": "supported",
+      "subject_id": "entity:org",
+      "time": {
+        "kind": "exact",
+        "value": "2026-04-10T09:00:00Z"
+      }
+    }
+  ],
+  "template_id": "tpl.v4.noop.03.legal.contract",
+  "unknowns": [
+    {
+      "category": "fact",
+      "evidence_ids": [
+        "evidence:primary"
+      ],
+      "question": "Is the primary conclusion about checkout pathway still valid at the checkpoint?",
+      "status": "open",
+      "target_id": "state:primary",
+      "unknown_id": "unknown:primary"
+    },
+    {
+      "category": "other",
+      "evidence_ids": [
+        "evidence:secondary"
+      ],
+      "question": "Does the preserved review evidence need any further follow-up?",
+      "status": "open",
+      "target_id": "event:secondary",
+      "unknown_id": "unknown:secondary"
+    }
+  ],
+  "world_id": "world:cucv4-noop-03-legal-contract"
+}

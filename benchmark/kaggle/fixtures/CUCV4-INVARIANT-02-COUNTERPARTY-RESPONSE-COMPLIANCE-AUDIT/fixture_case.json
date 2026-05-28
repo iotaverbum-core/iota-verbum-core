@@ -1,0 +1,22 @@
+{
+  "authoring_status": "draft_surface_v1",
+  "benchmark_version": "CUC.v4.candidate",
+  "case_id": "CUCV4-INVARIANT-02-COUNTERPARTY-RESPONSE-COMPLIANCE-AUDIT",
+  "clean_pack_sha256": "382394d374ccdface2b03b74121a47abc1c1afb1ca14252fed46dabcce5c1a2a",
+  "difficulty_band": "C",
+  "expected_delta_sha256": "de3cf3469eb3f38b65f326650f11ad263c2b7cd95bc76ba8855b4258d2513823",
+  "family_id": "counterparty_response",
+  "family_version": "0.1.0",
+  "geometry_profile": "counterparty_response_compliance_audit_hop3_scaffold_v4",
+  "hop_depth": 3,
+  "judge_profile": "structured_json_v1",
+  "perturbed_pack_sha256": "7f86a8f0ed6d8b169d303a7de31c4692ade4dcafc6396ad45bd8d898768f5fe5",
+  "public_split": "candidate_main",
+  "render_profile": "compliance_memo_v1",
+  "scaffold_notes": "Draft counterparty-response compliance-audit case expanded into the v4 candidate pack.",
+  "schema_version": "1.0.0",
+  "scoring_manifest_sha256": "0c0ffc4fbb18b6a019e440287f282a3858390b8d89305fb00b101e20331dd35e",
+  "sector_skin": "compliance_audit",
+  "seed": 40022,
+  "template_id": "tpl.v4.invariant.02.counterparty.response.compliance.audit"
+}

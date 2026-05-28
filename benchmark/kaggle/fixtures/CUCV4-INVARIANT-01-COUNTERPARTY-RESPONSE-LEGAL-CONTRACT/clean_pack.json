@@ -1,0 +1,381 @@
+{
+  "pack_role": "clean",
+  "render_profile": "legal_formal_v1",
+  "schema_version": "1.0.0",
+  "sections": {
+    "causal_edges": [
+      {
+        "edge_id": "edge:primary_support",
+        "evidence_ids": [
+          "evidence:primary"
+        ],
+        "from_id": "evidence:primary",
+        "relation": "supports",
+        "strength": "strong",
+        "to_id": "state:primary"
+      },
+      {
+        "edge_id": "edge:secondary_support",
+        "evidence_ids": [
+          "evidence:secondary"
+        ],
+        "from_id": "evidence:secondary",
+        "relation": "supports",
+        "strength": "strong",
+        "to_id": "state:secondary"
+      },
+      {
+        "edge_id": "edge:bg_1",
+        "evidence_ids": [
+          "evidence:bg_1"
+        ],
+        "from_id": "evidence:bg_1",
+        "relation": "supports_background_context",
+        "strength": "strong",
+        "to_id": "state:bg_1"
+      },
+      {
+        "edge_id": "edge:bg_2",
+        "evidence_ids": [
+          "evidence:bg_2"
+        ],
+        "from_id": "evidence:bg_2",
+        "relation": "supports_background_context",
+        "strength": "medium",
+        "to_id": "state:bg_2"
+      }
+    ],
+    "entities": [
+      {
+        "entity_id": "entity:org",
+        "label": "Portwell Distribution",
+        "type": "organization",
+        "attributes": {}
+      },
+      {
+        "entity_id": "entity:asset",
+        "label": "Shipment Lot M-44",
+        "type": "asset",
+        "attributes": {}
+      },
+      {
+        "entity_id": "entity:reviewer",
+        "label": "contract review desk",
+        "type": "role",
+        "attributes": {}
+      },
+      {
+        "entity_id": "entity:bg_1",
+        "label": "shipment ledger b-1",
+        "type": "background_context",
+        "attributes": {}
+      },
+      {
+        "entity_id": "entity:bg_2",
+        "label": "exception desk b-2",
+        "type": "background_context",
+        "attributes": {}
+      }
+    ],
+    "events": [
+      {
+        "action": "checkpoint evaluation recorded",
+        "actor_ids": [
+          "entity:org"
+        ],
+        "event_id": "event:primary",
+        "evidence_ids": [
+          "evidence:primary"
+        ],
+        "object_ids": [
+          "entity:asset"
+        ],
+        "time": {
+          "kind": "exact",
+          "value": "2026-04-02T14:00:00Z"
+        },
+        "type": "checkpoint_event",
+        "attributes": {}
+      },
+      {
+        "action": "routine review completed",
+        "actor_ids": [
+          "entity:reviewer"
+        ],
+        "event_id": "event:secondary",
+        "evidence_ids": [
+          "evidence:secondary"
+        ],
+        "object_ids": [
+          "entity:org"
+        ],
+        "time": {
+          "kind": "exact",
+          "value": "2026-04-02T08:00:00Z"
+        },
+        "type": "review_event",
+        "attributes": {}
+      },
+      {
+        "action": "background contract administration checkpoint logged #1",
+        "actor_ids": [
+          "entity:bg_1"
+        ],
+        "event_id": "event:bg_1",
+        "evidence_ids": [
+          "evidence:bg_1"
+        ],
+        "object_ids": [
+          "entity:asset"
+        ],
+        "time": {
+          "kind": "exact",
+          "value": "2026-04-02T14:00:00Z"
+        },
+        "type": "contract_admin_event",
+        "attributes": {}
+      },
+      {
+        "action": "background contract administration checkpoint logged #2",
+        "actor_ids": [
+          "entity:bg_2"
+        ],
+        "event_id": "event:bg_2",
+        "evidence_ids": [
+          "evidence:bg_2"
+        ],
+        "object_ids": [
+          "entity:asset"
+        ],
+        "time": {
+          "kind": "exact",
+          "value": "2026-04-02T14:00:00Z"
+        },
+        "type": "contract_admin_event",
+        "attributes": {}
+      }
+    ],
+    "evidence": [
+      {
+        "content": "Portwell Distribution records suggest Shipment Lot M-44 still satisfies the primary condition under counterparty_response_event review.",
+        "evidence_id": "evidence:primary",
+        "reliability": "high",
+        "source_id": "src:primary",
+        "source_type": "breach_notice",
+        "time": {
+          "kind": "exact",
+          "value": "2026-04-02T14:00:00Z"
+        },
+        "attributes": {}
+      },
+      {
+        "content": "Independent review shows Portwell Distribution completed the routine control step for Shipment Lot M-44.",
+        "evidence_id": "evidence:secondary",
+        "reliability": "high",
+        "source_id": "src:secondary",
+        "source_type": "delivery_record",
+        "time": {
+          "kind": "exact",
+          "value": "2026-04-02T08:00:00Z"
+        },
+        "attributes": {}
+      },
+      {
+        "content": "Supplementary contract administration record preserved outside the core dispute theory. Case=CUCV4-INVARIANT-01-COUNTERPARTY-RESPONSE-LEGAL-CONTRACT family=counterparty response profile=legal_formal_v1 context=1.",
+        "evidence_id": "evidence:bg_1",
+        "reliability": "high",
+        "source_id": "src:bg_1",
+        "source_type": "contract_memo",
+        "time": {
+          "kind": "exact",
+          "value": "2026-04-02T14:00:00Z"
+        },
+        "attributes": {}
+      },
+      {
+        "content": "Supplementary contract administration record preserved outside the core dispute theory. Case=CUCV4-INVARIANT-01-COUNTERPARTY-RESPONSE-LEGAL-CONTRACT family=counterparty response profile=legal_formal_v1 context=2.",
+        "evidence_id": "evidence:bg_2",
+        "reliability": "medium",
+        "source_id": "src:bg_2",
+        "source_type": "contract_memo",
+        "time": {
+          "kind": "exact",
+          "value": "2026-04-02T14:00:00Z"
+        },
+        "attributes": {}
+      }
+    ],
+    "scenarios": [
+      {
+        "basis_ids": [
+          "state:primary",
+          "edge:primary_support"
+        ],
+        "label": "Breach-claim theory remains most likely",
+        "rank": 1,
+        "scenario_id": "scenario:primary",
+        "status": "live"
+      },
+      {
+        "basis_ids": [
+          "state:secondary",
+          "edge:secondary_support"
+        ],
+        "label": "Delivery-record theory remains secondary",
+        "rank": 2,
+        "scenario_id": "scenario:alternate",
+        "status": "live"
+      },
+      {
+        "basis_ids": [
+          "state:bg_1",
+          "edge:bg_1"
+        ],
+        "label": "Administrative legal context remains tertiary (legal_formal_v1)",
+        "rank": 3,
+        "scenario_id": "scenario:bg_1",
+        "status": "live"
+      }
+    ],
+    "states": [
+      {
+        "evidence_ids": [
+          "evidence:primary"
+        ],
+        "object": "true",
+        "predicate": "breach_notice_live",
+        "state_id": "state:primary",
+        "status": "supported",
+        "subject_id": "entity:asset",
+        "time": {
+          "kind": "exact",
+          "value": "2026-04-02T10:00:00Z"
+        },
+        "attributes": {},
+        "confidence_band": "medium"
+      },
+      {
+        "evidence_ids": [
+          "evidence:secondary"
+        ],
+        "object": "true",
+        "predicate": "delivery_record_confirmed",
+        "state_id": "state:secondary",
+        "status": "supported",
+        "subject_id": "entity:org",
+        "time": {
+          "kind": "exact",
+          "value": "2026-04-02T09:00:00Z"
+        },
+        "attributes": {
+          "authoring_role": "preserve_branch"
+        },
+        "confidence_band": "high"
+      },
+      {
+        "evidence_ids": [
+          "evidence:bg_1"
+        ],
+        "object": "true",
+        "predicate": "contract_context_stable_1",
+        "state_id": "state:bg_1",
+        "status": "supported",
+        "subject_id": "entity:bg_1",
+        "time": {
+          "kind": "exact",
+          "value": "2026-04-02T10:00:00Z"
+        },
+        "attributes": {
+          "authoring_role": "background_branch"
+        },
+        "confidence_band": "medium"
+      },
+      {
+        "evidence_ids": [
+          "evidence:bg_2"
+        ],
+        "object": "true",
+        "predicate": "contract_context_stable_2",
+        "state_id": "state:bg_2",
+        "status": "supported",
+        "subject_id": "entity:bg_2",
+        "time": {
+          "kind": "exact",
+          "value": "2026-04-02T10:00:00Z"
+        },
+        "attributes": {
+          "authoring_role": "background_branch"
+        },
+        "confidence_band": "medium"
+      }
+    ],
+    "unknowns": [
+      {
+        "category": "fact",
+        "evidence_ids": [
+          "evidence:primary"
+        ],
+        "question": "Is the primary conclusion about Shipment Lot M-44 still valid at the checkpoint?",
+        "status": "open",
+        "target_id": "state:primary",
+        "unknown_id": "unknown:primary"
+      },
+      {
+        "category": "other",
+        "evidence_ids": [
+          "evidence:secondary"
+        ],
+        "question": "Does the preserved delivery-record branch need any further follow-up?",
+        "status": "open",
+        "target_id": "event:secondary",
+        "unknown_id": "unknown:secondary"
+      },
+      {
+        "category": "other",
+        "evidence_ids": [
+          "evidence:bg_1"
+        ],
+        "question": "Does the background contract administration context need separate follow-up for counterparty response context 1 in counterparty_response_event_legal_contract?",
+        "status": "open",
+        "target_id": "state:bg_1",
+        "unknown_id": "unknown:bg_1"
+      },
+      {
+        "category": "other",
+        "evidence_ids": [
+          "evidence:bg_2"
+        ],
+        "question": "Does the background contract administration context need separate follow-up for counterparty response context 2 in counterparty_response_event_legal_contract?",
+        "status": "open",
+        "target_id": "state:bg_2",
+        "unknown_id": "unknown:bg_2"
+      }
+    ],
+    "metadata": {
+      "authoring_status": "draft_surface_v1",
+      "design_intent": "Introduce a counterparty response and downstream dependency while preserving the separate delivery-record branch.",
+      "named_evidence_artifact": "Exception Response ER-610 / Dependency Note ED-611",
+      "preserve_focus": [
+        "state:secondary"
+      ],
+      "revise_focus": [
+        "state:hop3_dependency"
+      ],
+      "sector_skin": "legal_contract",
+      "surface_title": "LEGAL CONTRACT REVIEW - COUNTERPARTY EXCEPTION RESPONSE"
+    }
+  },
+  "seed": 40008,
+  "summary": {
+    "edge_count": 4,
+    "entity_count": 5,
+    "event_count": 4,
+    "evidence_count": 4,
+    "scenario_count": 3,
+    "state_count": 4,
+    "unknown_count": 4
+  },
+  "template_id": "tpl.v4.invariant.01.counterparty.response.legal.contract",
+  "world_id": "world:cucv4-invariant-01-counterparty-response-legal-contract",
+  "notes": "Draft v4 candidate case for CUCV4-INVARIANT-01-COUNTERPARTY-RESPONSE-LEGAL-CONTRACT. Introduce a counterparty response and downstream dependency while preserving the separate delivery-record branch."
+}

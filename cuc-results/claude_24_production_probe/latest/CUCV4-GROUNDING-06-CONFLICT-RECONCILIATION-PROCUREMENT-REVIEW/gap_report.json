@@ -1,0 +1,75 @@
+{
+  "extra_fields": [
+    "$.changed_states[id='state:hop3_dependency'].after.attributes.authoring_role",
+    "$.changed_states[id='state:primary'].after.attributes.authoring_role",
+    "$.changed_states[id='state:primary'].before.attributes.authoring_role",
+    "$.new_unknowns[id='unknown:hop3_dependency'].before",
+    "$.resolved_unknowns[id='unknown:primary'].after.evidence_ids[value='evidence:corroboration']",
+    "$.scenario_rank_changes[scenario_id='scenario:alternate'].after_rank",
+    "$.scenario_rank_changes[scenario_id='scenario:alternate'].before_rank",
+    "$.scenario_rank_changes[scenario_id='scenario:alternate'].scenario_id",
+    "$.scenario_rank_changes[scenario_id='scenario:bg_1'].after_rank",
+    "$.scenario_rank_changes[scenario_id='scenario:bg_1'].before_rank",
+    "$.scenario_rank_changes[scenario_id='scenario:bg_1'].scenario_id",
+    "$.scenario_rank_changes[scenario_id='scenario:primary'].after_rank",
+    "$.scenario_rank_changes[scenario_id='scenario:primary'].before_rank",
+    "$.scenario_rank_changes[scenario_id='scenario:primary'].scenario_id",
+    "$.supporting_evidence_map[\"scenario:hop3_escalation\"][0]",
+    "$.supporting_evidence_map[\"scenario:primary\"][0]",
+    "$.supporting_evidence_map[\"scenario:primary\"][1]",
+    "$.supporting_evidence_map[\"state:primary\"][value='evidence:corroboration']",
+    "$.supporting_evidence_map[\"unknown:primary\"][value='evidence:corroboration']"
+  ],
+  "missing_fields": [
+    "$.changed_edges[id='edge:hop3_dependency'].source_op_ids[value='op:hop3']",
+    "$.changed_edges[id='edge:primary_support'].source_op_ids[value='op:003']",
+    "$.changed_events[id='event:hop3'].source_op_ids[value='op:hop3']",
+    "$.changed_states[id='state:hop3_dependency'].source_op_ids[value='op:hop3']",
+    "$.changed_states[id='state:primary'].after.attributes.exception_active",
+    "$.changed_states[id='state:primary'].after.attributes.rule_version",
+    "$.changed_states[id='state:primary'].after.attributes.scope",
+    "$.changed_states[id='state:primary'].before.attributes.exception_active",
+    "$.changed_states[id='state:primary'].before.attributes.rule_version",
+    "$.changed_states[id='state:primary'].before.attributes.scope",
+    "$.changed_states[id='state:primary'].source_op_ids[value='op:002']",
+    "$.changed_states[id='state:primary'].source_op_ids[value='op:004']",
+    "$.new_unknowns[id='unknown:hop3_dependency'].source_op_ids[value='op:hop3']",
+    "$.resolved_unknowns[id='unknown:primary'].source_op_ids[value='op:005']",
+    "$.supporting_evidence_map[\"event:hop3\"][0]",
+    "$.supporting_evidence_map[\"unknown:hop3_dependency\"][0]"
+  ],
+  "summary": {
+    "compared_fields": 160,
+    "matching_fields": 120,
+    "similarity_score_percent": 75.0
+  },
+  "type_mismatches": [
+    {
+      "gold_type": "null",
+      "model_type": "int",
+      "path": "$.scenario_rank_changes[scenario_id='scenario:hop3_escalation'].before_rank"
+    }
+  ],
+  "value_differences": [
+    {
+      "gold_value": "medium",
+      "model_value": "low",
+      "path": "$.changed_states[id='state:primary'].before.confidence_band"
+    },
+    {
+      "gold_value": "Preserve the unaffected sibling branch and the stable background context.",
+      "model_value": "state:secondary, edge:secondary_support, and unknown:secondary are preserve_focus items and must not be revised. Background branches state:bg_1, state:bg_2, edge:bg_1, edge:bg_2, unknown:bg_1, and unknown:bg_2 are unchanged context nodes and are not included in forbidden_revisions per background-branch precision rules.",
+      "path": "$.preservation_notes"
+    },
+    {
+      "gold_value": "Track the stronger reconciliation evidence and preserve sibling branches that still rest on independent support.",
+      "model_value": "state:primary is revised from status=contested/confidence_band=low to status=supported/confidence_band=medium, supported by new corroborating evidence:corroboration. edge:primary_support is strengthened from weak to strong. A new edge:corroboration_support is added connecting evidence:corroboration to state:primary. unknown:primary is resolved with resolution_value=confirmed, citing both evidence:primary and evidence:corroboration. state:hop3_dependency and edge:hop3_dependency are newly introduced per revise_focus. scenario:hop3_escalation is introduced at rank 1, displacing all existing scenarios down by one rank.",
+      "path": "$.revision_notes"
+    },
+    {
+      "gold_value": "A model that notices the conflicting record but misses the reconciliation shift has stopped too early. A model that rewrites preserved sibling branches without contrary evidence has over-revised.",
+      "model_value": "Under-revision failure occurs if state:primary remains contested or evidence:corroboration is not linked as a corroborating edge; over-revision failure occurs if state:secondary or its supporting edge and unknown are modified despite being explicitly named in preserve_focus.",
+      "path": "$.structural_invariant"
+    }
+  ]
+}

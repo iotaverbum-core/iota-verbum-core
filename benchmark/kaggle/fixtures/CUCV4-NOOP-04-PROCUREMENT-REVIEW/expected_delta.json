@@ -1,0 +1,35 @@
+{
+  "changed_edges": [],
+  "changed_events": [],
+  "changed_states": [],
+  "forbidden_revisions": [
+    "edge:bg_1",
+    "state:bg_1",
+    "state:secondary",
+    "unknown:bg_1",
+    "unknown:secondary"
+  ],
+  "new_conflicts": [],
+  "new_unknowns": [],
+  "preserved_items": [
+    "edge:bg_1",
+    "state:bg_1",
+    "state:secondary",
+    "unknown:bg_1",
+    "unknown:secondary"
+  ],
+  "pruned_conflicts": [],
+  "resolved_unknowns": [],
+  "scenario_rank_changes": [],
+  "schema_version": "1.0.0",
+  "supporting_evidence_map": {},
+  "must_preserve_claims": [
+    "state:bg_1",
+    "state:secondary"
+  ],
+  "must_revise_claims": [],
+  "named_evidence_artifact": "Clarification Addendum CA-504",
+  "preservation_notes": "Preserve the existing branch structure, including the independent sibling branch and stable background context.",
+  "revision_notes": "No substantive revision is expected. Preserve the prior branch structure and avoid inventing a new escalation path.",
+  "structural_invariant": "A model that invents a substantive revision on this no-op control has failed restraint. The unchanged sibling branches should remain stable."
+}

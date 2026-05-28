@@ -1,0 +1,46 @@
+{
+  "extra_fields": [
+    "$.forbidden_revisions[value='edge:bg_2']",
+    "$.forbidden_revisions[value='edge:bg_3']",
+    "$.forbidden_revisions[value='edge:primary_support']",
+    "$.forbidden_revisions[value='edge:secondary_support']",
+    "$.forbidden_revisions[value='state:bg_2']",
+    "$.forbidden_revisions[value='state:bg_3']",
+    "$.forbidden_revisions[value='state:primary']",
+    "$.forbidden_revisions[value='unknown:bg_2']",
+    "$.forbidden_revisions[value='unknown:primary']",
+    "$.preserved_items[value='edge:bg_2']",
+    "$.preserved_items[value='edge:bg_3']",
+    "$.preserved_items[value='edge:primary_support']",
+    "$.preserved_items[value='edge:secondary_support']",
+    "$.preserved_items[value='state:bg_2']",
+    "$.preserved_items[value='state:bg_3']",
+    "$.preserved_items[value='state:primary']",
+    "$.preserved_items[value='unknown:bg_2']",
+    "$.preserved_items[value='unknown:primary']"
+  ],
+  "missing_fields": [],
+  "summary": {
+    "compared_fields": 35,
+    "matching_fields": 14,
+    "similarity_score_percent": 40.0
+  },
+  "type_mismatches": [],
+  "value_differences": [
+    {
+      "gold_value": "Preserve the existing branch structure, including the independent sibling branch and stable background context.",
+      "model_value": "revise_focus is empty in both packs. All states, edges, unknowns, and scenarios are identical between clean and perturbed packs. The only difference is a surface_title string suffix '[REVISED]' in the perturbed metadata, which carries no substantive claim change. All items are preserved and forbidden from revision.",
+      "path": "$.preservation_notes"
+    },
+    {
+      "gold_value": "No substantive revision is expected. Preserve the prior branch structure and avoid inventing a new escalation path.",
+      "model_value": "No substantive claim, edge, event, state, unknown, or scenario rank changed between the clean and perturbed packs. This is a confirmed no-op. The surface_title annotation change does not constitute a revisable claim.",
+      "path": "$.revision_notes"
+    },
+    {
+      "gold_value": "A model that invents a substantive revision on this no-op control has failed restraint. The unchanged sibling branches should remain stable.",
+      "model_value": "Under-revision failure: treating the surface_title metadata change as requiring claim or scenario updates when no evidentiary or logical content changed. Over-revision failure: modifying any state, edge, unknown, or scenario record in response to the cosmetic title suffix, which would fabricate unsupported changes not grounded in any evidence delta.",
+      "path": "$.structural_invariant"
+    }
+  ]
+}

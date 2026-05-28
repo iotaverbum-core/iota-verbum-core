@@ -1,0 +1,22 @@
+{
+  "authoring_status": "draft_surface_v1",
+  "benchmark_version": "CUC.v4.candidate",
+  "case_id": "CUCV4-CORE-01-TEMPORAL-REORDER-OPERATIONS-BRIEF",
+  "clean_pack_sha256": "0a584d61b8b790cacd71e9507a3a7b4d422214175abe318c25a8f0284d17d7f6",
+  "difficulty_band": "B",
+  "expected_delta_sha256": "948c8ae39153fcca624226a59d2132bc5e5e126165c73ba1af5055c9af6cf604",
+  "family_id": "temporal_reorder",
+  "family_version": "0.1.0",
+  "geometry_profile": "temporal_reorder_ops_hop2_scaffold",
+  "hop_depth": 2,
+  "judge_profile": "structured_json_v1",
+  "perturbed_pack_sha256": "f0d33cd107573a33e8d680fe791a49189f0fe74dfaa94464cc2d594f041f0a0d",
+  "public_split": "candidate_main",
+  "render_profile": "ops_brief_v1",
+  "scaffold_notes": "Draft temporal-reorder operations brief case: revise the loading-window conclusion, preserve the quota-commitment branch.",
+  "schema_version": "1.0.0",
+  "scoring_manifest_sha256": "48a52fba7941a40501ebd22663b63cf28ff135986e9f1ee9af334b39eb4cf9ae",
+  "sector_skin": "operations_brief",
+  "seed": 40005,
+  "template_id": "tpl.v4.core.01.temporal.reorder.operations.brief"
+}

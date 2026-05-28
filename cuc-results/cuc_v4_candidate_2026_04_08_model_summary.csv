@@ -1,0 +1,6 @@
+model,model_slug,zip_path,folder_name,fallback_used,completed_runs,total_runs,passed_runs,pass_rate,task_wiring_errors,score_story_inconsistencies,fabricated_id_regressions,fabricated_evidence_regressions,hard_fail_reasons
+GPT-5.4,openai/gpt-5.4-2026-03-05,C:\Users\chris\Downloads\cuc_v4_candidate_2026_04_08\gpt_5_4\results.zip,gpt_5_4,False,2,2,2,100.0%,0,0,0,0,none
+Claude Sonnet 4.6,anthropic/claude-sonnet-4-6@default,C:\Users\chris\Downloads\cuc_v4_candidate_2026_04_08\claude_sonnet_4_6\results.zip,claude_sonnet_4_6,False,2,2,2,100.0%,0,0,0,0,none
+Gemini 2.5 Pro,google/gemini-2.5-pro,C:\Users\chris\Downloads\cuc_v4_candidate_2026_04_08\gemini_2_5_pro\results.zip,gemini_2_5_pro,False,2,2,0,0.0%,0,0,0,0,none
+Gemini 2.5 Flash,google/gemini-2.5-flash,C:\Users\chris\Downloads\cuc_v4_candidate_2026_04_08\gemini_2_5_flash\results.zip,gemini_2_5_flash,False,2,2,1,50.0%,0,0,0,1,fabricated_evidence_ids
+Qwen 3 Next 80B Thinking,qwen/qwen3-next-80b-a3b-thinking,C:\Users\chris\Downloads\cuc_v4_candidate_2026_04_08\qwen3_next_80b\results.zip,qwen3_next_80b,False,2,2,2,100.0%,0,0,0,0,none

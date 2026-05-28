@@ -1,0 +1,144 @@
+{
+  "family_id": "temporal_reorder",
+  "family_version": "1.0.0",
+  "notes": "temporal_reorder perturbation for compliance_audit",
+  "ops": [
+    {
+      "after": {
+        "time": {
+          "value": "2026-04-03T07:00:00Z"
+        }
+      },
+      "before": {
+        "time": {
+          "value": "2026-04-03T14:00:00Z"
+        }
+      },
+      "op_id": "op:001",
+      "op_type": "shift_time_ref",
+      "postconditions": [
+        "event moved earlier"
+      ],
+      "preconditions": [
+        "checkpoint exists"
+      ],
+      "target_id": "event:primary"
+    },
+    {
+      "after": {
+        "status": "refuted"
+      },
+      "before": {
+        "status": "supported"
+      },
+      "op_id": "op:002",
+      "op_type": "replace_state_status",
+      "postconditions": [
+        "primary state refuted"
+      ],
+      "preconditions": [
+        "earlier event undermines live condition"
+      ],
+      "target_id": "state:primary"
+    },
+    {
+      "after": {
+        "strength": "weak"
+      },
+      "before": {
+        "strength": "strong"
+      },
+      "op_id": "op:003",
+      "op_type": "change_threshold_relation",
+      "postconditions": [
+        "edge weakened"
+      ],
+      "preconditions": [
+        "support is weakened"
+      ],
+      "target_id": "edge:primary_support"
+    },
+    {
+      "after": {
+        "resolution_value": "resolved_before_checkpoint",
+        "status": "resolved"
+      },
+      "before": {
+        "status": "open"
+      },
+      "op_id": "op:004",
+      "op_type": "resolve_unknown",
+      "postconditions": [
+        "unknown resolved"
+      ],
+      "preconditions": [
+        "timeline now anchored"
+      ],
+      "target_id": "unknown:primary"
+    },
+    {
+      "after": {
+        "rank": 2
+      },
+      "before": {
+        "rank": 1
+      },
+      "op_id": "op:005",
+      "op_type": "change_scenario_rank",
+      "postconditions": [
+        "primary scenario rank 2"
+      ],
+      "preconditions": [
+        "primary theory drops"
+      ],
+      "target_id": "scenario:primary"
+    },
+    {
+      "after": {
+        "rank": 1
+      },
+      "before": {
+        "rank": 2
+      },
+      "op_id": "op:006",
+      "op_type": "change_scenario_rank",
+      "postconditions": [
+        "alternate scenario rank 1"
+      ],
+      "preconditions": [
+        "alternate theory rises"
+      ],
+      "target_id": "scenario:alternate"
+    },
+    {
+      "after": {
+        "category": "scope",
+        "evidence_ids": [
+          "evidence:primary"
+        ],
+        "question": "Did the earlier fix cover the entire affected surface?",
+        "status": "open",
+        "target_id": "state:primary",
+        "unknown_id": "unknown:new_scope"
+      },
+      "args": {},
+      "op_id": "op:007",
+      "op_type": "add_unknown",
+      "postconditions": [
+        "new scope unknown exists"
+      ],
+      "preconditions": [
+        "fix timing changes"
+      ],
+      "target_id": "unknown:primary"
+    }
+  ],
+  "schema_version": "1.0.0",
+  "seed": 40011,
+  "template_id": "tpl.v4.core.02.temporal.reorder.compliance.audit",
+  "world_id": "world:cucv4-core-02-temporal-reorder-compliance-audit",
+  "metadata": {
+    "sector_skin": "compliance_audit",
+    "render_profile": "compliance_memo_v1"
+  }
+}

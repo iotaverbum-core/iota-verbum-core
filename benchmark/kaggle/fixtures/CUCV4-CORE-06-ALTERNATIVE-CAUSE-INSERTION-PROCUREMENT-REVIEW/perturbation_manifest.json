@@ -1,0 +1,127 @@
+{
+  "family_id": "alternative_cause_insertion",
+  "family_version": "1.0.0",
+  "notes": "alternative_cause_insertion perturbation for procurement_review",
+  "ops": [
+    {
+      "after": {
+        "attributes": {},
+        "content": "A newly surfaced event offers a competing explanation for the same observed condition.",
+        "evidence_id": "evidence:alternate",
+        "reliability": "medium",
+        "source_id": "src:alternate",
+        "source_type": "alternate_root_cause",
+        "time": {
+          "kind": "exact",
+          "value": "2026-04-17T11:00:00Z"
+        }
+      },
+      "op_id": "op:001",
+      "op_type": "add_evidence",
+      "postconditions": [
+        "alternate evidence added"
+      ],
+      "preconditions": [
+        "alternate evidence found"
+      ],
+      "target_id": "evidence:primary"
+    },
+    {
+      "after": {
+        "action": "competing cause introduced",
+        "actor_ids": [
+          "entity:org"
+        ],
+        "attributes": {},
+        "event_id": "event:alternate",
+        "evidence_ids": [
+          "evidence:alternate"
+        ],
+        "object_ids": [
+          "entity:asset"
+        ],
+        "time": {
+          "kind": "exact",
+          "value": "2026-04-17T11:00:00Z"
+        },
+        "type": "alternate_cause"
+      },
+      "op_id": "op:002",
+      "op_type": "add_event",
+      "postconditions": [
+        "alternate event added"
+      ],
+      "preconditions": [
+        "alternate cause exists"
+      ],
+      "target_id": "event:primary"
+    },
+    {
+      "after": {
+        "edge_id": "edge:alternate_support",
+        "evidence_ids": [
+          "evidence:alternate"
+        ],
+        "from_id": "evidence:alternate",
+        "relation": "supports_alternate_explanation",
+        "strength": "medium",
+        "to_id": "state:primary"
+      },
+      "op_id": "op:003",
+      "op_type": "add_causal_edge",
+      "postconditions": [
+        "alternate edge added"
+      ],
+      "preconditions": [
+        "alternate cause linked"
+      ],
+      "target_id": "state:primary"
+    },
+    {
+      "after": {
+        "strength": "medium"
+      },
+      "before": {
+        "strength": "strong"
+      },
+      "op_id": "op:004",
+      "op_type": "change_threshold_relation",
+      "postconditions": [
+        "edge weakened"
+      ],
+      "preconditions": [
+        "original explanation less exclusive"
+      ],
+      "target_id": "edge:primary_support"
+    },
+    {
+      "after": {
+        "category": "causal",
+        "evidence_ids": [
+          "evidence:alternate"
+        ],
+        "question": "Which cause is dominant after the new event is introduced?",
+        "status": "open",
+        "target_id": "state:primary",
+        "unknown_id": "unknown:dominant_cause"
+      },
+      "op_id": "op:005",
+      "op_type": "add_unknown",
+      "postconditions": [
+        "dominant cause unknown added"
+      ],
+      "preconditions": [
+        "competing cause exists"
+      ],
+      "target_id": "unknown:primary"
+    }
+  ],
+  "schema_version": "1.0.0",
+  "seed": 40015,
+  "template_id": "tpl.v4.core.06.alternative.cause.insertion.procurement.review",
+  "world_id": "world:cucv4-core-06-alternative-cause-insertion-procurement-review",
+  "metadata": {
+    "sector_skin": "procurement_review",
+    "render_profile": "procurement_memo_v1"
+  }
+}

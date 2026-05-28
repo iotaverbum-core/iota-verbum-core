@@ -184,11 +184,11 @@ def test_v4_candidate_notebook_stub_executes_with_fake_kbench(
         (export_root / "results_export.json").read_text(encoding="utf-8")
     )
     assert export_payload["task_name"] == "cuc_metacognition_v4_candidate"
-    assert export_payload["case_count"] == 2
-    assert export_payload["run_count"] == 2
-    assert export_payload["pass_count"] == 2
+    assert export_payload["case_count"] == 24
+    assert export_payload["run_count"] == 24
+    assert export_payload["pass_count"] == 24
     assert export_payload["fail_count"] == 0
-    assert len(export_payload["runs"]) == 2
+    assert len(export_payload["runs"]) == 24
     assert all(run["result"] for run in export_payload["runs"])
     assert all(run["passed"] for run in export_payload["runs"])
 

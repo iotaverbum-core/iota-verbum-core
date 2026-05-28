@@ -4,7 +4,7 @@ import json
 from pathlib import Path
 
 from scripts.claude_cuc_smoke_matrix import parse_args, run_smoke_matrix
-from scripts.deepseek_cuc_smoke_matrix import DEFAULT_CASE_IDS, load_case_specs
+from scripts.deepseek_cuc_smoke_matrix import load_case_specs
 
 from core.cuc_harness.deepseek_proposer import RevisionDelta, SealedFailureArtifact
 

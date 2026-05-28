@@ -100,7 +100,9 @@ def test_smoke_matrix_with_gold_proposer_accepts_all_cases(tmp_path: Path) -> No
     assert payload["summary"]["ledger_committed_count"] == 5
     assert payload["summary"]["acceptance_rate"] == 1.0
     assert payload["summary"]["ledger_commit_rate"] == 1.0
-    assert all(result["verifier_reason_families"] == [] for result in payload["results"])
+    assert all(
+        result["verifier_reason_families"] == [] for result in payload["results"]
+    )
     assert all(result["ledger_committed"] for result in payload["results"])
     assert (tmp_path / "summary.json").is_file()
 

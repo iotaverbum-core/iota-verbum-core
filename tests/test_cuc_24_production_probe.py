@@ -87,7 +87,9 @@ def test_load_case_specs_defaults_to_v4_24_fixture_set() -> None:
     )
 
 
-def test_dry_run_payload_lists_cases_without_instantiating_proposer(tmp_path: Path) -> None:
+def test_dry_run_payload_lists_cases_without_instantiating_proposer(
+    tmp_path: Path,
+) -> None:
     specs = load_case_specs(limit=2)
     output_dir = tmp_path / "out"
 

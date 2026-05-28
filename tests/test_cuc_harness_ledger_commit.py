@@ -11,7 +11,6 @@ from core.cuc_harness.ledger_commit import (
 )
 from core.cuc_harness.verifier import verify_revision_delta
 
-
 FIXTURE_DIR = Path(
     "benchmark/kaggle/fixtures/"
     "CUCV4-GROUNDING-02-CONFLICT-RECONCILIATION-SECURITY-INCIDENT"

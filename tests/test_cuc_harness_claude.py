@@ -12,8 +12,8 @@ from core.cuc_harness.claude_proposer import (
     DEFAULT_CLAUDE_MODEL,
     REVISION_DELTA_JSON_SCHEMA,
     ClaudeProposer,
-    hydrate_revision_delta_json_fields,
     _extract_claude_json_content,
+    hydrate_revision_delta_json_fields,
 )
 from core.cuc_harness.deepseek_proposer import RevisionDelta, SealedFailureArtifact
 from core.determinism.canonical_json import dumps_canonical
@@ -28,7 +28,10 @@ EVIDENCE_BUNDLE_PATH = Path("tests/fixtures/evidence_bundle_example.json")
 
 @pytest.mark.skipif(
     not (os.getenv("ANTHROPIC_API_KEY") or os.getenv("CLAUDE_API_KEY")),
-    reason="ANTHROPIC_API_KEY or CLAUDE_API_KEY is required for the live Claude proposer test.",
+    reason=(
+        "ANTHROPIC_API_KEY or CLAUDE_API_KEY is required for the live "
+        "Claude proposer test."
+    ),
 )
 def test_claude_proposer_on_simple_cuc_case(tmp_path: Path) -> None:
     clean_pack = _read_json(FIXTURE_DIR / "clean_pack.json")

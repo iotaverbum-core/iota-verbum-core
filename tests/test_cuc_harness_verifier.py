@@ -6,7 +6,6 @@ from pathlib import Path
 from core.cuc_harness.deepseek_proposer import RevisionDelta
 from core.cuc_harness.verifier import verify_revision_delta
 
-
 FIXTURE_DIR = Path(
     "benchmark/kaggle/fixtures/"
     "CUCV4-GROUNDING-02-CONFLICT-RECONCILIATION-SECURITY-INCIDENT"

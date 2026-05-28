@@ -15,7 +15,6 @@ if str(SRC_ROOT) not in sys.path:
     sys.path.insert(0, str(SRC_ROOT))
 
 from scripts.deepseek_cuc_smoke_matrix import (  # noqa: E402
-    DEFAULT_CASE_IDS,
     DEFAULT_PARAMS_PATH,
     CaseSpec,
     load_case_specs,

@@ -179,7 +179,10 @@ def parse_args(argv: list[str]) -> argparse.Namespace:
     )
     parser.add_argument("--case-id", action="append", default=None)
     parser.add_argument("--limit", type=int, default=None)
-    parser.add_argument("--model", default=os.getenv("CLAUDE_MODEL", DEFAULT_CLAUDE_MODEL))
+    parser.add_argument(
+        "--model",
+        default=os.getenv("CLAUDE_MODEL", DEFAULT_CLAUDE_MODEL),
+    )
     parser.add_argument(
         "--fallback-model",
         nargs="?",

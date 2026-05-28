@@ -28,8 +28,14 @@ dependencies = [
 [project.optional-dependencies]
 dev = [
   "httpx>=0.28.1",
+  "pandas>=3.0.2",
   "pytest==8.3.4",
   "ruff==0.6.8",
+]
+benchmark = [
+  "anthropic>=0.49.0",
+  "google-generativeai>=0.8.4",
+  "openai>=1.68.2",
 ]
 
 [project.scripts]
@@ -70,6 +76,7 @@ target-version = "py311"
 select = ["E", "F", "I"]
 
 [tool.ruff.lint.per-file-ignores]
+"benchmark/cuc_metacognition_shared.py" = ["E501", "I001"]
 "scripts/build_cuc_v5a_candidate_task.py" = ["E402", "E501"]
 "scripts/cuc_metacognition_v4_candidate_runner_export_stub.ipynb" = ["E501", "F401", "F821", "I001"]
 "scripts/cuc_metacognition_v5a_candidate_runner_export_stub.ipynb" = ["E501", "F821", "I001"]

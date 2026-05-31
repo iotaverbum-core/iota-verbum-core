@@ -1,0 +1,1407 @@
+{
+  "schema_version": "iv.phase3.diagnostic_matrix.v1",
+  "matrix_id": "phase3.diagnostic_self_healing.matrix.v1",
+  "phase_gate": "diagnostic_matrix_before_doctrine_digest",
+  "implementation_status": "pre_implementation_no_runtime_code",
+  "scope": {
+    "applies_to": "retry_attempts_after_verifier_rejection",
+    "initial_proposer_call_requires_repair_instruction": false,
+    "repair_instruction_effect": "append_only_feedback_entry",
+    "repair_instruction_candidate_kind": "repair_instruction",
+    "runtime_integration_target": "src/core/phase5_agent_loop/runtime.py"
+  },
+  "families": [
+    "SCHEMA_VIOLATION",
+    "LAW_FAMILY_MISMATCH",
+    "GROUNDING_GAP",
+    "PRESERVATION_BREACH"
+  ],
+  "adversarial_types": [
+    "correct_symptom_wrong_family_classification",
+    "correct_family_wrong_dependency_trace",
+    "repair_targets_wrong_operation",
+    "repair_violates_preservation_constraint"
+  ],
+  "row_contract": {
+    "symptom": "sealed verifier rejection symptom supplied to the classifier",
+    "operation": "candidate operation context visible to the diagnostic layer",
+    "graph": "closed id universe available to deterministic tracing",
+    "expected": "classification, trace, and repair instruction that must be emitted",
+    "reject_conditions": "conditions that make the row fail during proof testing"
+  },
+  "rows": [
+    {
+      "row_id": "SCHEMA-01-POS-MISSING-REQUIRED-FIELD",
+      "family": "SCHEMA_VIOLATION",
+      "case_type": "positive",
+      "adversarial_type": "none",
+      "symptom": {
+        "code": "invalid_structure",
+        "candidate_id": "candidate:schema:001",
+        "path": "/operations/0/grounding_evidence_ids",
+        "message": "required field grounding_evidence_ids is missing"
+      },
+      "operation": {
+        "target_operation_id": "op:schema:001",
+        "operation_kind": "NewClaim",
+        "target_claim_id": "claim:new-customs-delay",
+        "claimed_law_family_id": "phase3.law.narrower_novel_essence.v1"
+      },
+      "graph": {
+        "prior_claim_ids": [
+          "claim:arrival-original",
+          "claim:notice-stable"
+        ],
+        "trigger_claim_ids": [
+          "claim:new-customs-delay"
+        ],
+        "evidence_ids": [
+          "evidence:carrier-bulletin"
+        ],
+        "preserved_claim_ids": [
+          "claim:notice-stable"
+        ],
+        "support_edges": [
+          [
+            "evidence:carrier-bulletin",
+            "claim:new-customs-delay",
+            "grounds"
+          ]
+        ]
+      },
+      "expected": {
+        "classification": "SCHEMA_VIOLATION",
+        "trace": {
+          "target_claim_id": null,
+          "grounding_evidence_ids": [],
+          "preserve_claim_ids": [
+            "claim:notice-stable"
+          ],
+          "halt_reason": null
+        },
+        "repair": {
+          "target_operation_id": "op:schema:001",
+          "required_fields": [
+            "/operations/0/grounding_evidence_ids:array<string>"
+          ],
+          "grounding_evidence_ids": [],
+          "preservation_constraints": [
+            "claim:notice-stable"
+          ]
+        },
+        "result": "repair_instruction"
+      },
+      "reject_conditions": [
+        "classification != SCHEMA_VIOLATION",
+        "repair target_operation_id != op:schema:001",
+        "repair mutates claim:notice-stable"
+      ]
+    },
+    {
+      "row_id": "SCHEMA-02-POS-INVALID-ENUM",
+      "family": "SCHEMA_VIOLATION",
+      "case_type": "positive",
+      "adversarial_type": "none",
+      "symptom": {
+        "code": "invalid_json",
+        "candidate_id": "candidate:schema:002",
+        "path": "/operations/0/operation_kind",
+        "message": "operation_kind must be one of NewClaim, Retract, Revise, Preserve"
+      },
+      "operation": {
+        "target_operation_id": "op:schema:002",
+        "operation_kind": "UnknownOp",
+        "target_claim_id": "claim:invoice-due",
+        "claimed_law_family_id": "phase3.law.narrower_novel_essence.v1"
+      },
+      "graph": {
+        "prior_claim_ids": [
+          "claim:invoice-due",
+          "claim:payment-window-stable"
+        ],
+        "trigger_claim_ids": [
+          "claim:invoice-extended"
+        ],
+        "evidence_ids": [
+          "evidence:amendment-17"
+        ],
+        "preserved_claim_ids": [
+          "claim:payment-window-stable"
+        ],
+        "support_edges": [
+          [
+            "evidence:amendment-17",
+            "claim:invoice-extended",
+            "grounds"
+          ]
+        ]
+      },
+      "expected": {
+        "classification": "SCHEMA_VIOLATION",
+        "trace": {
+          "target_claim_id": null,
+          "grounding_evidence_ids": [],
+          "preserve_claim_ids": [
+            "claim:payment-window-stable"
+          ],
+          "halt_reason": null
+        },
+        "repair": {
+          "target_operation_id": "op:schema:002",
+          "required_fields": [
+            "/operations/0/operation_kind:enum"
+          ],
+          "grounding_evidence_ids": [],
+          "preservation_constraints": [
+            "claim:payment-window-stable"
+          ]
+        },
+        "result": "repair_instruction"
+      },
+      "reject_conditions": [
+        "classification != SCHEMA_VIOLATION",
+        "repair proposes an operation_kind outside the sealed enum"
+      ]
+    },
+    {
+      "row_id": "SCHEMA-03-ADV-WRONG-FAMILY",
+      "family": "SCHEMA_VIOLATION",
+      "case_type": "adversarial",
+      "adversarial_type": "correct_symptom_wrong_family_classification",
+      "symptom": {
+        "code": "invalid_structure",
+        "candidate_id": "candidate:schema:003",
+        "path": "/operations/1/target_operation_id",
+        "message": "target_operation_id is required"
+      },
+      "operation": {
+        "target_operation_id": "",
+        "operation_kind": "Revise",
+        "target_claim_id": "claim:service-credit",
+        "claimed_law_family_id": "phase3.law.revision_by_new_support.v1"
+      },
+      "graph": {
+        "prior_claim_ids": [
+          "claim:service-credit",
+          "claim:billing-cycle-stable"
+        ],
+        "trigger_claim_ids": [
+          "claim:service-credit-reduced"
+        ],
+        "evidence_ids": [
+          "evidence:billing-addendum"
+        ],
+        "preserved_claim_ids": [
+          "claim:billing-cycle-stable"
+        ],
+        "support_edges": [
+          [
+            "evidence:billing-addendum",
+            "claim:service-credit-reduced",
+            "grounds"
+          ]
+        ]
+      },
+      "expected": {
+        "classification": "SCHEMA_VIOLATION",
+        "trace": {
+          "target_claim_id": null,
+          "grounding_evidence_ids": [],
+          "preserve_claim_ids": [
+            "claim:billing-cycle-stable"
+          ],
+          "halt_reason": null
+        },
+        "repair": {
+          "target_operation_id": "op:schema:003",
+          "required_fields": [
+            "/operations/1/target_operation_id:string"
+          ],
+          "grounding_evidence_ids": [],
+          "preservation_constraints": [
+            "claim:billing-cycle-stable"
+          ]
+        },
+        "result": "repair_instruction"
+      },
+      "reject_conditions": [
+        "classification == GROUNDING_GAP",
+        "classification == LAW_FAMILY_MISMATCH",
+        "classification == PRESERVATION_BREACH"
+      ]
+    },
+    {
+      "row_id": "SCHEMA-04-ADV-WRONG-TRACE",
+      "family": "SCHEMA_VIOLATION",
+      "case_type": "adversarial",
+      "adversarial_type": "correct_family_wrong_dependency_trace",
+      "symptom": {
+        "code": "invalid_json",
+        "candidate_id": "candidate:schema:004",
+        "path": "/operations/0/required_fields",
+        "message": "required_fields must be an array of strings"
+      },
+      "operation": {
+        "target_operation_id": "op:schema:004",
+        "operation_kind": "Preserve",
+        "target_claim_id": "claim:unchanged-notice",
+        "claimed_law_family_id": "phase3.law.preservation_ack.v1"
+      },
+      "graph": {
+        "prior_claim_ids": [
+          "claim:unchanged-notice",
+          "claim:unchanged-delivery"
+        ],
+        "trigger_claim_ids": [
+          "claim:unchanged-notice"
+        ],
+        "evidence_ids": [
+          "evidence:notice-ledger"
+        ],
+        "preserved_claim_ids": [
+          "claim:unchanged-delivery"
+        ],
+        "support_edges": [
+          [
+            "evidence:notice-ledger",
+            "claim:unchanged-notice",
+            "grounds"
+          ]
+        ]
+      },
+      "expected": {
+        "classification": "SCHEMA_VIOLATION",
+        "trace": {
+          "target_claim_id": null,
+          "grounding_evidence_ids": [],
+          "preserve_claim_ids": [
+            "claim:unchanged-delivery"
+          ],
+          "halt_reason": null
+        },
+        "repair": {
+          "target_operation_id": "op:schema:004",
+          "required_fields": [
+            "/operations/0/required_fields:array<string>"
+          ],
+          "grounding_evidence_ids": [],
+          "preservation_constraints": [
+            "claim:unchanged-delivery"
+          ]
+        },
+        "result": "repair_instruction"
+      },
+      "reject_conditions": [
+        "trace emits claim ids for a schema-only violation",
+        "trace emits evidence ids for a schema-only violation",
+        "trace emits any id outside graph"
+      ]
+    },
+    {
+      "row_id": "SCHEMA-05-ADV-PRESERVATION-CONFLICT",
+      "family": "SCHEMA_VIOLATION",
+      "case_type": "adversarial",
+      "adversarial_type": "repair_violates_preservation_constraint",
+      "symptom": {
+        "code": "invalid_structure",
+        "candidate_id": "candidate:schema:005",
+        "path": "/operations/0/status",
+        "message": "status field is missing"
+      },
+      "operation": {
+        "target_operation_id": "op:schema:005",
+        "operation_kind": "Revise",
+        "target_claim_id": "claim:penalty-amount",
+        "claimed_law_family_id": "phase3.law.revision_by_new_support.v1"
+      },
+      "graph": {
+        "prior_claim_ids": [
+          "claim:penalty-amount",
+          "claim:notice-complete"
+        ],
+        "trigger_claim_ids": [
+          "claim:penalty-qualified"
+        ],
+        "evidence_ids": [
+          "evidence:counterparty-retraction"
+        ],
+        "preserved_claim_ids": [
+          "claim:notice-complete"
+        ],
+        "support_edges": [
+          [
+            "evidence:counterparty-retraction",
+            "claim:penalty-qualified",
+            "grounds"
+          ]
+        ]
+      },
+      "expected": {
+        "classification": "SCHEMA_VIOLATION",
+        "trace": {
+          "target_claim_id": null,
+          "grounding_evidence_ids": [],
+          "preserve_claim_ids": [
+            "claim:notice-complete"
+          ],
+          "halt_reason": null
+        },
+        "repair": {
+          "target_operation_id": "op:schema:005",
+          "required_fields": [
+            "/operations/0/status:enum"
+          ],
+          "grounding_evidence_ids": [],
+          "preservation_constraints": [
+            "claim:notice-complete"
+          ]
+        },
+        "result": "repair_instruction"
+      },
+      "reject_conditions": [
+        "repair targets claim:notice-complete",
+        "repair removes claim:notice-complete from preserved_items"
+      ]
+    },
+    {
+      "row_id": "LAW-01-POS-CLAIMED-FAMILY-NOT-ALLOWED",
+      "family": "LAW_FAMILY_MISMATCH",
+      "case_type": "positive",
+      "adversarial_type": "none",
+      "symptom": {
+        "code": "law_family_mismatch",
+        "candidate_id": "candidate:law:001",
+        "path": "/operations/0/claimed_law_family_id",
+        "message": "law family is not allowed for operation kind Retract"
+      },
+      "operation": {
+        "target_operation_id": "op:law:001",
+        "operation_kind": "Retract",
+        "target_claim_id": "claim:arrival-before-deadline",
+        "claimed_law_family_id": "phase3.law.narrower_novel_essence.v1"
+      },
+      "graph": {
+        "prior_claim_ids": [
+          "claim:arrival-before-deadline",
+          "claim:carrier-identity-stable"
+        ],
+        "trigger_claim_ids": [
+          "claim:arrival-after-deadline"
+        ],
+        "evidence_ids": [
+          "evidence:tracking-log"
+        ],
+        "preserved_claim_ids": [
+          "claim:carrier-identity-stable"
+        ],
+        "support_edges": [
+          [
+            "evidence:tracking-log",
+            "claim:arrival-after-deadline",
+            "grounds"
+          ]
+        ]
+      },
+      "expected": {
+        "classification": "LAW_FAMILY_MISMATCH",
+        "trace": {
+          "target_claim_id": "claim:arrival-before-deadline",
+          "grounding_evidence_ids": [],
+          "preserve_claim_ids": [
+            "claim:carrier-identity-stable"
+          ],
+          "halt_reason": null
+        },
+        "repair": {
+          "target_operation_id": "op:law:001",
+          "required_fields": [
+            "/operations/0/claimed_law_family_id:phase3.law.completed_incompatible_outcome.v1"
+          ],
+          "grounding_evidence_ids": [],
+          "preservation_constraints": [
+            "claim:carrier-identity-stable"
+          ]
+        },
+        "result": "repair_instruction"
+      },
+      "reject_conditions": [
+        "classification != LAW_FAMILY_MISMATCH",
+        "repair keeps phase3.law.narrower_novel_essence.v1"
+      ]
+    },
+    {
+      "row_id": "LAW-02-POS-COMPANION-LAW-VIOLATION",
+      "family": "LAW_FAMILY_MISMATCH",
+      "case_type": "positive",
+      "adversarial_type": "none",
+      "symptom": {
+        "code": "companion_law_violation",
+        "candidate_id": "candidate:law:002",
+        "path": "/claimed_companion_law_ids",
+        "message": "retraction companion law is required when retracting and adding replacement"
+      },
+      "operation": {
+        "target_operation_id": "op:law:002",
+        "operation_kind": "Retract",
+        "target_claim_id": "claim:old-effective-date",
+        "claimed_law_family_id": "phase3.law.completed_incompatible_outcome.v1"
+      },
+      "graph": {
+        "prior_claim_ids": [
+          "claim:old-effective-date",
+          "claim:party-authority-stable"
+        ],
+        "trigger_claim_ids": [
+          "claim:new-effective-date"
+        ],
+        "evidence_ids": [
+          "evidence:contract-amendment"
+        ],
+        "preserved_claim_ids": [
+          "claim:party-authority-stable"
+        ],
+        "support_edges": [
+          [
+            "evidence:contract-amendment",
+            "claim:new-effective-date",
+            "grounds"
+          ]
+        ]
+      },
+      "expected": {
+        "classification": "LAW_FAMILY_MISMATCH",
+        "trace": {
+          "target_claim_id": "claim:old-effective-date",
+          "grounding_evidence_ids": [],
+          "preserve_claim_ids": [
+            "claim:party-authority-stable"
+          ],
+          "halt_reason": null
+        },
+        "repair": {
+          "target_operation_id": "op:law:002",
+          "required_fields": [
+            "/claimed_companion_law_ids:phase3.law.retraction_companion_newclaim.v1"
+          ],
+          "grounding_evidence_ids": [],
+          "preservation_constraints": [
+            "claim:party-authority-stable"
+          ]
+        },
+        "result": "repair_instruction"
+      },
+      "reject_conditions": [
+        "classification != LAW_FAMILY_MISMATCH",
+        "repair omits companion law"
+      ]
+    },
+    {
+      "row_id": "LAW-03-ADV-WRONG-FAMILY",
+      "family": "LAW_FAMILY_MISMATCH",
+      "case_type": "adversarial",
+      "adversarial_type": "correct_symptom_wrong_family_classification",
+      "symptom": {
+        "code": "law_family_mismatch",
+        "candidate_id": "candidate:law:003",
+        "path": "/operations/0/claimed_law_family_id",
+        "message": "Preserve operation cannot claim retraction law"
+      },
+      "operation": {
+        "target_operation_id": "op:law:003",
+        "operation_kind": "Preserve",
+        "target_claim_id": "claim:audit-window",
+        "claimed_law_family_id": "phase3.law.completed_incompatible_outcome.v1"
+      },
+      "graph": {
+        "prior_claim_ids": [
+          "claim:audit-window",
+          "claim:audit-scope"
+        ],
+        "trigger_claim_ids": [
+          "claim:audit-window"
+        ],
+        "evidence_ids": [
+          "evidence:audit-brief"
+        ],
+        "preserved_claim_ids": [
+          "claim:audit-scope"
+        ],
+        "support_edges": [
+          [
+            "evidence:audit-brief",
+            "claim:audit-window",
+            "grounds"
+          ]
+        ]
+      },
+      "expected": {
+        "classification": "LAW_FAMILY_MISMATCH",
+        "trace": {
+          "target_claim_id": "claim:audit-window",
+          "grounding_evidence_ids": [],
+          "preserve_claim_ids": [
+            "claim:audit-scope"
+          ],
+          "halt_reason": null
+        },
+        "repair": {
+          "target_operation_id": "op:law:003",
+          "required_fields": [
+            "/operations/0/claimed_law_family_id:phase3.law.preservation_ack.v1"
+          ],
+          "grounding_evidence_ids": [],
+          "preservation_constraints": [
+            "claim:audit-scope"
+          ]
+        },
+        "result": "repair_instruction"
+      },
+      "reject_conditions": [
+        "classification == SCHEMA_VIOLATION",
+        "classification == GROUNDING_GAP",
+        "classification == PRESERVATION_BREACH"
+      ]
+    },
+    {
+      "row_id": "LAW-04-ADV-WRONG-TRACE",
+      "family": "LAW_FAMILY_MISMATCH",
+      "case_type": "adversarial",
+      "adversarial_type": "correct_family_wrong_dependency_trace",
+      "symptom": {
+        "code": "companion_law_violation",
+        "candidate_id": "candidate:law:004",
+        "path": "/operations/0",
+        "message": "NewClaim operation used retraction companion without a retract operation"
+      },
+      "operation": {
+        "target_operation_id": "op:law:004",
+        "operation_kind": "NewClaim",
+        "target_claim_id": "claim:new-exception",
+        "claimed_law_family_id": "phase3.law.narrower_novel_essence.v1"
+      },
+      "graph": {
+        "prior_claim_ids": [
+          "claim:base-exception",
+          "claim:notice-stable-law04"
+        ],
+        "trigger_claim_ids": [
+          "claim:new-exception"
+        ],
+        "evidence_ids": [
+          "evidence:exception-notice"
+        ],
+        "preserved_claim_ids": [
+          "claim:notice-stable-law04"
+        ],
+        "support_edges": [
+          [
+            "evidence:exception-notice",
+            "claim:new-exception",
+            "grounds"
+          ]
+        ]
+      },
+      "expected": {
+        "classification": "LAW_FAMILY_MISMATCH",
+        "trace": {
+          "target_claim_id": "claim:new-exception",
+          "grounding_evidence_ids": [],
+          "preserve_claim_ids": [
+            "claim:notice-stable-law04"
+          ],
+          "halt_reason": null
+        },
+        "repair": {
+          "target_operation_id": "op:law:004",
+          "required_fields": [
+            "/claimed_companion_law_ids:remove:phase3.law.retraction_companion_newclaim.v1"
+          ],
+          "grounding_evidence_ids": [],
+          "preservation_constraints": [
+            "claim:notice-stable-law04"
+          ]
+        },
+        "result": "repair_instruction"
+      },
+      "reject_conditions": [
+        "trace targets claim:base-exception instead of claim:new-exception",
+        "trace emits any id outside graph"
+      ]
+    },
+    {
+      "row_id": "LAW-05-ADV-WRONG-OPERATION",
+      "family": "LAW_FAMILY_MISMATCH",
+      "case_type": "adversarial",
+      "adversarial_type": "repair_targets_wrong_operation",
+      "symptom": {
+        "code": "law_family_mismatch",
+        "candidate_id": "candidate:law:005",
+        "path": "/operations/1/claimed_law_family_id",
+        "message": "operation 1 has incompatible law family"
+      },
+      "operation": {
+        "target_operation_id": "op:law:005b",
+        "operation_kind": "Revise",
+        "target_claim_id": "claim:procurement-risk",
+        "claimed_law_family_id": "phase3.law.completed_incompatible_outcome.v1"
+      },
+      "graph": {
+        "prior_claim_ids": [
+          "claim:procurement-risk",
+          "claim:vendor-identity-stable"
+        ],
+        "trigger_claim_ids": [
+          "claim:procurement-risk-qualified"
+        ],
+        "evidence_ids": [
+          "evidence:vendor-response"
+        ],
+        "preserved_claim_ids": [
+          "claim:vendor-identity-stable"
+        ],
+        "support_edges": [
+          [
+            "evidence:vendor-response",
+            "claim:procurement-risk-qualified",
+            "grounds"
+          ]
+        ]
+      },
+      "expected": {
+        "classification": "LAW_FAMILY_MISMATCH",
+        "trace": {
+          "target_claim_id": "claim:procurement-risk",
+          "grounding_evidence_ids": [],
+          "preserve_claim_ids": [
+            "claim:vendor-identity-stable"
+          ],
+          "halt_reason": null
+        },
+        "repair": {
+          "target_operation_id": "op:law:005b",
+          "required_fields": [
+            "/operations/1/claimed_law_family_id:phase3.law.revision_by_new_support.v1"
+          ],
+          "grounding_evidence_ids": [],
+          "preservation_constraints": [
+            "claim:vendor-identity-stable"
+          ]
+        },
+        "result": "repair_instruction"
+      },
+      "reject_conditions": [
+        "repair target_operation_id == op:law:005a",
+        "repair target_operation_id != op:law:005b"
+      ]
+    },
+    {
+      "row_id": "GROUNDING-01-POS-MISSING-EVIDENCE",
+      "family": "GROUNDING_GAP",
+      "case_type": "positive",
+      "adversarial_type": "none",
+      "symptom": {
+        "code": "grounding_absent",
+        "candidate_id": "candidate:grounding:001",
+        "path": "/operations/0/grounding_evidence_ids",
+        "message": "operation lacks grounding evidence for target claim"
+      },
+      "operation": {
+        "target_operation_id": "op:grounding:001",
+        "operation_kind": "Revise",
+        "target_claim_id": "claim:source-reliability",
+        "claimed_law_family_id": "phase3.law.revision_by_new_support.v1"
+      },
+      "graph": {
+        "prior_claim_ids": [
+          "claim:source-reliability",
+          "claim:scope-stable"
+        ],
+        "trigger_claim_ids": [
+          "claim:source-reliability-collapsed"
+        ],
+        "evidence_ids": [
+          "evidence:recantation-email"
+        ],
+        "preserved_claim_ids": [
+          "claim:scope-stable"
+        ],
+        "support_edges": [
+          [
+            "evidence:recantation-email",
+            "claim:source-reliability-collapsed",
+            "grounds"
+          ]
+        ]
+      },
+      "expected": {
+        "classification": "GROUNDING_GAP",
+        "trace": {
+          "target_claim_id": "claim:source-reliability-collapsed",
+          "grounding_evidence_ids": [
+            "evidence:recantation-email"
+          ],
+          "preserve_claim_ids": [
+            "claim:scope-stable"
+          ],
+          "halt_reason": null
+        },
+        "repair": {
+          "target_operation_id": "op:grounding:001",
+          "required_fields": [
+            "/operations/0/grounding_evidence_ids"
+          ],
+          "grounding_evidence_ids": [
+            "evidence:recantation-email"
+          ],
+          "preservation_constraints": [
+            "claim:scope-stable"
+          ]
+        },
+        "result": "repair_instruction"
+      },
+      "reject_conditions": [
+        "classification != GROUNDING_GAP",
+        "repair omits evidence:recantation-email"
+      ]
+    },
+    {
+      "row_id": "GROUNDING-02-POS-EVIDENCE-MISSING",
+      "family": "GROUNDING_GAP",
+      "case_type": "positive",
+      "adversarial_type": "none",
+      "symptom": {
+        "code": "evidence_missing",
+        "candidate_id": "candidate:grounding:002",
+        "path": "/operations/0/citations",
+        "message": "target claim is revised without citing trigger evidence"
+      },
+      "operation": {
+        "target_operation_id": "op:grounding:002",
+        "operation_kind": "NewClaim",
+        "target_claim_id": "claim:alternative-cause",
+        "claimed_law_family_id": "phase3.law.narrower_novel_essence.v1"
+      },
+      "graph": {
+        "prior_claim_ids": [
+          "claim:primary-cause",
+          "claim:loss-amount-stable"
+        ],
+        "trigger_claim_ids": [
+          "claim:alternative-cause"
+        ],
+        "evidence_ids": [
+          "evidence:root-cause-report"
+        ],
+        "preserved_claim_ids": [
+          "claim:loss-amount-stable"
+        ],
+        "support_edges": [
+          [
+            "evidence:root-cause-report",
+            "claim:alternative-cause",
+            "grounds"
+          ]
+        ]
+      },
+      "expected": {
+        "classification": "GROUNDING_GAP",
+        "trace": {
+          "target_claim_id": "claim:alternative-cause",
+          "grounding_evidence_ids": [
+            "evidence:root-cause-report"
+          ],
+          "preserve_claim_ids": [
+            "claim:loss-amount-stable"
+          ],
+          "halt_reason": null
+        },
+        "repair": {
+          "target_operation_id": "op:grounding:002",
+          "required_fields": [
+            "/operations/0/grounding_evidence_ids"
+          ],
+          "grounding_evidence_ids": [
+            "evidence:root-cause-report"
+          ],
+          "preservation_constraints": [
+            "claim:loss-amount-stable"
+          ]
+        },
+        "result": "repair_instruction"
+      },
+      "reject_conditions": [
+        "classification != GROUNDING_GAP",
+        "repair cites evidence not in graph"
+      ]
+    },
+    {
+      "row_id": "GROUNDING-03-ADV-WRONG-FAMILY",
+      "family": "GROUNDING_GAP",
+      "case_type": "adversarial",
+      "adversarial_type": "correct_symptom_wrong_family_classification",
+      "symptom": {
+        "code": "grounding_absent",
+        "candidate_id": "candidate:grounding:003",
+        "path": "/operations/0/basis_trigger_claim_ids",
+        "message": "basis trigger claim does not cite supporting evidence"
+      },
+      "operation": {
+        "target_operation_id": "op:grounding:003",
+        "operation_kind": "Revise",
+        "target_claim_id": "claim:access-window",
+        "claimed_law_family_id": "phase3.law.revision_by_new_support.v1"
+      },
+      "graph": {
+        "prior_claim_ids": [
+          "claim:access-window",
+          "claim:asset-owner-stable"
+        ],
+        "trigger_claim_ids": [
+          "claim:access-window-shortened"
+        ],
+        "evidence_ids": [
+          "evidence:access-log"
+        ],
+        "preserved_claim_ids": [
+          "claim:asset-owner-stable"
+        ],
+        "support_edges": [
+          [
+            "evidence:access-log",
+            "claim:access-window-shortened",
+            "grounds"
+          ]
+        ]
+      },
+      "expected": {
+        "classification": "GROUNDING_GAP",
+        "trace": {
+          "target_claim_id": "claim:access-window-shortened",
+          "grounding_evidence_ids": [
+            "evidence:access-log"
+          ],
+          "preserve_claim_ids": [
+            "claim:asset-owner-stable"
+          ],
+          "halt_reason": null
+        },
+        "repair": {
+          "target_operation_id": "op:grounding:003",
+          "required_fields": [
+            "/operations/0/basis_trigger_claim_ids",
+            "/operations/0/grounding_evidence_ids"
+          ],
+          "grounding_evidence_ids": [
+            "evidence:access-log"
+          ],
+          "preservation_constraints": [
+            "claim:asset-owner-stable"
+          ]
+        },
+        "result": "repair_instruction"
+      },
+      "reject_conditions": [
+        "classification == SCHEMA_VIOLATION",
+        "classification == LAW_FAMILY_MISMATCH",
+        "classification == PRESERVATION_BREACH"
+      ]
+    },
+    {
+      "row_id": "GROUNDING-04-ADV-WRONG-TRACE",
+      "family": "GROUNDING_GAP",
+      "case_type": "adversarial",
+      "adversarial_type": "correct_family_wrong_dependency_trace",
+      "symptom": {
+        "code": "evidence_missing",
+        "candidate_id": "candidate:grounding:004",
+        "path": "/operations/0/grounding_evidence_ids",
+        "message": "cited evidence does not support target claim"
+      },
+      "operation": {
+        "target_operation_id": "op:grounding:004",
+        "operation_kind": "Revise",
+        "target_claim_id": "claim:vendor-qualification",
+        "claimed_law_family_id": "phase3.law.revision_by_new_support.v1"
+      },
+      "graph": {
+        "prior_claim_ids": [
+          "claim:vendor-qualification",
+          "claim:contract-term-stable"
+        ],
+        "trigger_claim_ids": [
+          "claim:vendor-qualification-weakened"
+        ],
+        "evidence_ids": [
+          "evidence:license-expiry"
+        ],
+        "preserved_claim_ids": [
+          "claim:contract-term-stable"
+        ],
+        "support_edges": [
+          [
+            "evidence:license-expiry",
+            "claim:vendor-qualification-weakened",
+            "grounds"
+          ]
+        ]
+      },
+      "expected": {
+        "classification": "GROUNDING_GAP",
+        "trace": {
+          "target_claim_id": "claim:vendor-qualification-weakened",
+          "grounding_evidence_ids": [
+            "evidence:license-expiry"
+          ],
+          "preserve_claim_ids": [
+            "claim:contract-term-stable"
+          ],
+          "halt_reason": null
+        },
+        "repair": {
+          "target_operation_id": "op:grounding:004",
+          "required_fields": [
+            "/operations/0/grounding_evidence_ids"
+          ],
+          "grounding_evidence_ids": [
+            "evidence:license-expiry"
+          ],
+          "preservation_constraints": [
+            "claim:contract-term-stable"
+          ]
+        },
+        "result": "repair_instruction"
+      },
+      "reject_conditions": [
+        "trace emits evidence:unlisted-source",
+        "trace targets claim:vendor-qualification instead of trigger claim",
+        "repair cites any evidence outside graph"
+      ]
+    },
+    {
+      "row_id": "GROUNDING-05-ADV-UNGROUNDABLE-HALT",
+      "family": "GROUNDING_GAP",
+      "case_type": "adversarial",
+      "adversarial_type": "repair_targets_wrong_operation",
+      "symptom": {
+        "code": "grounding_absent",
+        "candidate_id": "candidate:grounding:005",
+        "path": "/operations/2/grounding_evidence_ids",
+        "message": "no grounding evidence exists for operation 2"
+      },
+      "operation": {
+        "target_operation_id": "op:grounding:005c",
+        "operation_kind": "NewClaim",
+        "target_claim_id": "claim:unsupported-escalation",
+        "claimed_law_family_id": "phase3.law.narrower_novel_essence.v1"
+      },
+      "graph": {
+        "prior_claim_ids": [
+          "claim:baseline-risk",
+          "claim:unchanged-owner"
+        ],
+        "trigger_claim_ids": [
+          "claim:unsupported-escalation"
+        ],
+        "evidence_ids": [],
+        "preserved_claim_ids": [
+          "claim:unchanged-owner"
+        ],
+        "support_edges": []
+      },
+      "expected": {
+        "classification": "GROUNDING_GAP",
+        "trace": {
+          "target_claim_id": "claim:unsupported-escalation",
+          "grounding_evidence_ids": [],
+          "preserve_claim_ids": [
+            "claim:unchanged-owner"
+          ],
+          "halt_reason": "ungroundable_repair"
+        },
+        "repair": null,
+        "result": "halt"
+      },
+      "reject_conditions": [
+        "repair instruction is emitted",
+        "fabricated evidence id is emitted",
+        "repair target_operation_id != op:grounding:005c when reporting halt context"
+      ]
+    },
+    {
+      "row_id": "PRESERVATION-01-POS-MISSING-PRESERVED-ITEM",
+      "family": "PRESERVATION_BREACH",
+      "case_type": "positive",
+      "adversarial_type": "none",
+      "symptom": {
+        "code": "missing_preserved_items",
+        "candidate_id": "candidate:preservation:001",
+        "path": "/preserved_items",
+        "message": "required preserved sibling claim is absent"
+      },
+      "operation": {
+        "target_operation_id": "op:preservation:001",
+        "operation_kind": "Revise",
+        "target_claim_id": "claim:penalty-enforceability",
+        "claimed_law_family_id": "phase3.law.revision_by_new_support.v1"
+      },
+      "graph": {
+        "prior_claim_ids": [
+          "claim:penalty-enforceability",
+          "claim:notice-delivered",
+          "claim:service-completed"
+        ],
+        "trigger_claim_ids": [
+          "claim:penalty-enforceability-qualified"
+        ],
+        "evidence_ids": [
+          "evidence:counterparty-letter"
+        ],
+        "preserved_claim_ids": [
+          "claim:notice-delivered",
+          "claim:service-completed"
+        ],
+        "support_edges": [
+          [
+            "evidence:counterparty-letter",
+            "claim:penalty-enforceability-qualified",
+            "grounds"
+          ]
+        ]
+      },
+      "expected": {
+        "classification": "PRESERVATION_BREACH",
+        "trace": {
+          "target_claim_id": "claim:penalty-enforceability",
+          "grounding_evidence_ids": [],
+          "preserve_claim_ids": [
+            "claim:notice-delivered",
+            "claim:service-completed"
+          ],
+          "halt_reason": null
+        },
+        "repair": {
+          "target_operation_id": "op:preservation:001",
+          "required_fields": [
+            "/preserved_items"
+          ],
+          "grounding_evidence_ids": [],
+          "preservation_constraints": [
+            "claim:notice-delivered",
+            "claim:service-completed"
+          ]
+        },
+        "result": "repair_instruction"
+      },
+      "reject_conditions": [
+        "classification != PRESERVATION_BREACH",
+        "repair omits any preserved claim id"
+      ]
+    },
+    {
+      "row_id": "PRESERVATION-02-POS-FORBIDDEN-REVISION-TOUCHED",
+      "family": "PRESERVATION_BREACH",
+      "case_type": "positive",
+      "adversarial_type": "none",
+      "symptom": {
+        "code": "forbidden_revision_touched",
+        "candidate_id": "candidate:preservation:002",
+        "path": "/operations/1/target_claim_id",
+        "message": "operation touches forbidden preserved sibling"
+      },
+      "operation": {
+        "target_operation_id": "op:preservation:002b",
+        "operation_kind": "Revise",
+        "target_claim_id": "claim:sla-exclusion-stable",
+        "claimed_law_family_id": "phase3.law.revision_by_new_support.v1"
+      },
+      "graph": {
+        "prior_claim_ids": [
+          "claim:outage-duration",
+          "claim:sla-exclusion-stable"
+        ],
+        "trigger_claim_ids": [
+          "claim:outage-duration-revised"
+        ],
+        "evidence_ids": [
+          "evidence:incident-timeline"
+        ],
+        "preserved_claim_ids": [
+          "claim:sla-exclusion-stable"
+        ],
+        "support_edges": [
+          [
+            "evidence:incident-timeline",
+            "claim:outage-duration-revised",
+            "grounds"
+          ]
+        ]
+      },
+      "expected": {
+        "classification": "PRESERVATION_BREACH",
+        "trace": {
+          "target_claim_id": "claim:sla-exclusion-stable",
+          "grounding_evidence_ids": [],
+          "preserve_claim_ids": [
+            "claim:sla-exclusion-stable"
+          ],
+          "halt_reason": null
+        },
+        "repair": {
+          "target_operation_id": "op:preservation:002b",
+          "required_fields": [
+            "/operations/1:remove_or_replace",
+            "/preserved_items"
+          ],
+          "grounding_evidence_ids": [],
+          "preservation_constraints": [
+            "claim:sla-exclusion-stable"
+          ]
+        },
+        "result": "repair_instruction"
+      },
+      "reject_conditions": [
+        "repair keeps operation targeting claim:sla-exclusion-stable",
+        "repair omits claim:sla-exclusion-stable from preserved_items"
+      ]
+    },
+    {
+      "row_id": "PRESERVATION-03-ADV-WRONG-FAMILY",
+      "family": "PRESERVATION_BREACH",
+      "case_type": "adversarial",
+      "adversarial_type": "correct_symptom_wrong_family_classification",
+      "symptom": {
+        "code": "missing_preserved_items",
+        "candidate_id": "candidate:preservation:003",
+        "path": "/preserved_items",
+        "message": "stable sibling claim missing from preserved_items"
+      },
+      "operation": {
+        "target_operation_id": "op:preservation:003",
+        "operation_kind": "NewClaim",
+        "target_claim_id": "claim:new-procurement-risk",
+        "claimed_law_family_id": "phase3.law.narrower_novel_essence.v1"
+      },
+      "graph": {
+        "prior_claim_ids": [
+          "claim:vendor-approval-stable",
+          "claim:budget-approved-stable"
+        ],
+        "trigger_claim_ids": [
+          "claim:new-procurement-risk"
+        ],
+        "evidence_ids": [
+          "evidence:procurement-review"
+        ],
+        "preserved_claim_ids": [
+          "claim:vendor-approval-stable",
+          "claim:budget-approved-stable"
+        ],
+        "support_edges": [
+          [
+            "evidence:procurement-review",
+            "claim:new-procurement-risk",
+            "grounds"
+          ]
+        ]
+      },
+      "expected": {
+        "classification": "PRESERVATION_BREACH",
+        "trace": {
+          "target_claim_id": "claim:new-procurement-risk",
+          "grounding_evidence_ids": [],
+          "preserve_claim_ids": [
+            "claim:budget-approved-stable",
+            "claim:vendor-approval-stable"
+          ],
+          "halt_reason": null
+        },
+        "repair": {
+          "target_operation_id": "op:preservation:003",
+          "required_fields": [
+            "/preserved_items"
+          ],
+          "grounding_evidence_ids": [],
+          "preservation_constraints": [
+            "claim:budget-approved-stable",
+            "claim:vendor-approval-stable"
+          ]
+        },
+        "result": "repair_instruction"
+      },
+      "reject_conditions": [
+        "classification == SCHEMA_VIOLATION",
+        "classification == LAW_FAMILY_MISMATCH",
+        "classification == GROUNDING_GAP"
+      ]
+    },
+    {
+      "row_id": "PRESERVATION-04-ADV-WRONG-TRACE",
+      "family": "PRESERVATION_BREACH",
+      "case_type": "adversarial",
+      "adversarial_type": "correct_family_wrong_dependency_trace",
+      "symptom": {
+        "code": "forbidden_revision_touched",
+        "candidate_id": "candidate:preservation:004",
+        "path": "/operations/0/target_claim_id",
+        "message": "operation incorrectly mutates stable sibling"
+      },
+      "operation": {
+        "target_operation_id": "op:preservation:004",
+        "operation_kind": "Revise",
+        "target_claim_id": "claim:counterparty-authority-stable",
+        "claimed_law_family_id": "phase3.law.revision_by_new_support.v1"
+      },
+      "graph": {
+        "prior_claim_ids": [
+          "claim:counterparty-authority-stable",
+          "claim:delivery-date"
+        ],
+        "trigger_claim_ids": [
+          "claim:delivery-date-qualified"
+        ],
+        "evidence_ids": [
+          "evidence:delivery-update"
+        ],
+        "preserved_claim_ids": [
+          "claim:counterparty-authority-stable"
+        ],
+        "support_edges": [
+          [
+            "evidence:delivery-update",
+            "claim:delivery-date-qualified",
+            "grounds"
+          ]
+        ]
+      },
+      "expected": {
+        "classification": "PRESERVATION_BREACH",
+        "trace": {
+          "target_claim_id": "claim:counterparty-authority-stable",
+          "grounding_evidence_ids": [],
+          "preserve_claim_ids": [
+            "claim:counterparty-authority-stable"
+          ],
+          "halt_reason": null
+        },
+        "repair": {
+          "target_operation_id": "op:preservation:004",
+          "required_fields": [
+            "/operations/0:remove_or_replace",
+            "/preserved_items"
+          ],
+          "grounding_evidence_ids": [],
+          "preservation_constraints": [
+            "claim:counterparty-authority-stable"
+          ]
+        },
+        "result": "repair_instruction"
+      },
+      "reject_conditions": [
+        "trace preserve_claim_ids omits claim:counterparty-authority-stable",
+        "trace emits claim ids outside graph"
+      ]
+    },
+    {
+      "row_id": "PRESERVATION-05-ADV-PRESERVATION-CONFLICT",
+      "family": "PRESERVATION_BREACH",
+      "case_type": "adversarial",
+      "adversarial_type": "repair_violates_preservation_constraint",
+      "symptom": {
+        "code": "missing_preserved_items",
+        "candidate_id": "candidate:preservation:005",
+        "path": "/preserved_items",
+        "message": "preserved_items omits stable legal-notice branch"
+      },
+      "operation": {
+        "target_operation_id": "op:preservation:005",
+        "operation_kind": "Revise",
+        "target_claim_id": "claim:remedy-availability",
+        "claimed_law_family_id": "phase3.law.revision_by_new_support.v1"
+      },
+      "graph": {
+        "prior_claim_ids": [
+          "claim:remedy-availability",
+          "claim:legal-notice-stable"
+        ],
+        "trigger_claim_ids": [
+          "claim:remedy-availability-qualified"
+        ],
+        "evidence_ids": [
+          "evidence:retraction-letter"
+        ],
+        "preserved_claim_ids": [
+          "claim:legal-notice-stable"
+        ],
+        "support_edges": [
+          [
+            "evidence:retraction-letter",
+            "claim:remedy-availability-qualified",
+            "grounds"
+          ]
+        ]
+      },
+      "expected": {
+        "classification": "PRESERVATION_BREACH",
+        "trace": {
+          "target_claim_id": "claim:remedy-availability",
+          "grounding_evidence_ids": [],
+          "preserve_claim_ids": [
+            "claim:legal-notice-stable"
+          ],
+          "halt_reason": null
+        },
+        "repair": {
+          "target_operation_id": "op:preservation:005",
+          "required_fields": [
+            "/preserved_items"
+          ],
+          "grounding_evidence_ids": [],
+          "preservation_constraints": [
+            "claim:legal-notice-stable"
+          ]
+        },
+        "result": "repair_instruction"
+      },
+      "reject_conditions": [
+        "repair revises claim:legal-notice-stable",
+        "repair removes claim:legal-notice-stable from preservation_constraints"
+      ]
+    }
+  ],
+  "coverage": {
+    "row_count": 20,
+    "rows_per_family": {
+      "SCHEMA_VIOLATION": 5,
+      "LAW_FAMILY_MISMATCH": 5,
+      "GROUNDING_GAP": 5,
+      "PRESERVATION_BREACH": 5
+    },
+    "positive_rows": 8,
+    "adversarial_rows": 12,
+    "adversarial_type_rows": {
+      "correct_symptom_wrong_family_classification": [
+        "SCHEMA-03-ADV-WRONG-FAMILY",
+        "LAW-03-ADV-WRONG-FAMILY",
+        "GROUNDING-03-ADV-WRONG-FAMILY",
+        "PRESERVATION-03-ADV-WRONG-FAMILY"
+      ],
+      "correct_family_wrong_dependency_trace": [
+        "SCHEMA-04-ADV-WRONG-TRACE",
+        "LAW-04-ADV-WRONG-TRACE",
+        "GROUNDING-04-ADV-WRONG-TRACE",
+        "PRESERVATION-04-ADV-WRONG-TRACE"
+      ],
+      "repair_targets_wrong_operation": [
+        "LAW-05-ADV-WRONG-OPERATION",
+        "GROUNDING-05-ADV-UNGROUNDABLE-HALT"
+      ],
+      "repair_violates_preservation_constraint": [
+        "SCHEMA-05-ADV-PRESERVATION-CONFLICT",
+        "PRESERVATION-05-ADV-PRESERVATION-CONFLICT"
+      ]
+    },
+    "halt_rows": [
+      "GROUNDING-05-ADV-UNGROUNDABLE-HALT"
+    ]
+  }
+}

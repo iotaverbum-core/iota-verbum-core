@@ -1,0 +1,371 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/schemas/phase3_diagnostic_loop.schema.json",
+  "title": "Phase3DiagnosticLoopContract",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "contract_id",
+    "surface"
+  ],
+  "$defs": {
+    "FailureFamily": {
+      "type": "string",
+      "enum": [
+        "SCHEMA_VIOLATION",
+        "LAW_FAMILY_MISMATCH",
+        "GROUNDING_GAP",
+        "PRESERVATION_BREACH"
+      ]
+    },
+    "HaltReason": {
+      "type": "string",
+      "enum": [
+        "ambiguous_dependency_trace",
+        "budget_exhausted",
+        "preservation_constraint_conflict",
+        "ungroundable_repair",
+        "unsupported_failure_code"
+      ]
+    },
+    "FailureSymptom": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "source_rejection_id",
+        "code",
+        "candidate_id",
+        "candidate_kind",
+        "path",
+        "message",
+        "attempt_index"
+      ],
+      "properties": {
+        "source_rejection_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "code": {
+          "type": "string",
+          "minLength": 1
+        },
+        "candidate_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "candidate_kind": {
+          "type": "string",
+          "minLength": 1
+        },
+        "path": {
+          "type": "string",
+          "minLength": 1
+        },
+        "message": {
+          "type": "string",
+          "minLength": 1
+        },
+        "attempt_index": {
+          "type": "integer",
+          "minimum": 0
+        }
+      }
+    },
+    "DependencyTrace": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "trace_id",
+        "family",
+        "source_rejection_id",
+        "target_operation_id",
+        "target_claim_id",
+        "grounding_evidence_ids",
+        "preservation_constraints",
+        "halt_reason",
+        "checked_prior_claim_ids",
+        "checked_trigger_claim_ids",
+        "checked_evidence_ids"
+      ],
+      "properties": {
+        "trace_id": {
+          "type": "string",
+          "pattern": "^phase3-diagnostic-trace:[0-9a-f]{64}$"
+        },
+        "family": {
+          "$ref": "#/$defs/FailureFamily"
+        },
+        "source_rejection_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "target_operation_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "target_claim_id": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "minLength": 1
+        },
+        "grounding_evidence_ids": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "uniqueItems": true
+        },
+        "preservation_constraints": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "uniqueItems": true
+        },
+        "halt_reason": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/HaltReason"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "checked_prior_claim_ids": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "uniqueItems": true
+        },
+        "checked_trigger_claim_ids": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "uniqueItems": true
+        },
+        "checked_evidence_ids": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "uniqueItems": true
+        }
+      }
+    },
+    "RepairInstruction": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "candidate_kind",
+        "source_rejection_id",
+        "target_operation_id",
+        "required_fields",
+        "grounding_evidence_ids",
+        "preservation_constraints",
+        "doctrine_family_id",
+        "companion_law_ids"
+      ],
+      "properties": {
+        "candidate_kind": {
+          "type": "string",
+          "const": "repair_instruction"
+        },
+        "source_rejection_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "target_operation_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "required_fields": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "uniqueItems": true
+        },
+        "grounding_evidence_ids": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "uniqueItems": true
+        },
+        "preservation_constraints": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "uniqueItems": true
+        },
+        "doctrine_family_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "companion_law_ids": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "uniqueItems": true
+        }
+      }
+    },
+    "DiagnosticLoopResult": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "result_id",
+        "status",
+        "failure_symptom",
+        "dependency_trace",
+        "repair_instruction",
+        "proposer_call_permitted",
+        "budget_consumed",
+        "ledger_advanced"
+      ],
+      "properties": {
+        "result_id": {
+          "type": "string",
+          "pattern": "^phase3-diagnostic-result:[0-9a-f]{64}$"
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "accepted",
+            "repaired",
+            "halt"
+          ]
+        },
+        "failure_symptom": {
+          "$ref": "#/$defs/FailureSymptom"
+        },
+        "dependency_trace": {
+          "$ref": "#/$defs/DependencyTrace"
+        },
+        "repair_instruction": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/RepairInstruction"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "proposer_call_permitted": {
+          "type": "boolean"
+        },
+        "budget_consumed": {
+          "type": "boolean"
+        },
+        "ledger_advanced": {
+          "type": "boolean"
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "status": {
+                "const": "repaired"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "repair_instruction": {
+                "$ref": "#/$defs/RepairInstruction"
+              },
+              "proposer_call_permitted": {
+                "const": true
+              },
+              "budget_consumed": {
+                "const": false
+              },
+              "ledger_advanced": {
+                "const": false
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "status": {
+                "const": "halt"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "repair_instruction": {
+                "type": "null"
+              },
+              "proposer_call_permitted": {
+                "const": false
+              },
+              "ledger_advanced": {
+                "const": false
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "const": "iv.phase3.diagnostic_loop.contract.v1"
+    },
+    "contract_id": {
+      "type": "string",
+      "const": "phase3.diagnostic_self_healing.contract.v1"
+    },
+    "surface": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "FailureSymptom",
+        "FailureFamily",
+        "DependencyTrace",
+        "RepairInstruction",
+        "DiagnosticLoopResult"
+      ],
+      "properties": {
+        "FailureSymptom": {
+          "$ref": "#/$defs/FailureSymptom"
+        },
+        "FailureFamily": {
+          "$ref": "#/$defs/FailureFamily"
+        },
+        "DependencyTrace": {
+          "$ref": "#/$defs/DependencyTrace"
+        },
+        "RepairInstruction": {
+          "$ref": "#/$defs/RepairInstruction"
+        },
+        "DiagnosticLoopResult": {
+          "$ref": "#/$defs/DiagnosticLoopResult"
+        }
+      }
+    }
+  }
+}

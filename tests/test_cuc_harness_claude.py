@@ -9,6 +9,7 @@ import httpx
 import pytest
 
 from core.cuc_harness.claude_proposer import (
+    CLAUDE_REVISION_DELTA_TOOL_NAME,
     DEFAULT_CLAUDE_MODEL,
     REVISION_DELTA_JSON_SCHEMA,
     ClaudeProposer,
@@ -114,6 +115,26 @@ def test_claude_proposer_uses_structured_output_schema() -> None:
     assert client.headers["anthropic-version"] == "2023-06-01"
 
 
+def test_claude_proposer_falls_back_to_tool_schema_if_json_output_rejected() -> None:
+    gold_delta = _read_json(FIXTURE_DIR / "expected_delta.json")
+    client = _FallbackClaudeClient(gold_delta)
+    proposer = ClaudeProposer(api_key="test-key", client=client)
+
+    proposal = proposer.propose({}, {}, case_id=CASE_ID)
+
+    assert isinstance(proposal, RevisionDelta)
+    assert len(client.payloads) == 2
+    assert "output_config" in client.payloads[0]
+    assert "output_config" not in client.payloads[1]
+    assert client.payloads[1]["tools"][0]["name"] == CLAUDE_REVISION_DELTA_TOOL_NAME
+    assert client.payloads[1]["tools"][0]["strict"] is True
+    assert client.payloads[1]["tools"][0]["input_schema"] == REVISION_DELTA_JSON_SCHEMA
+    assert client.payloads[1]["tool_choice"] == {
+        "type": "tool",
+        "name": CLAUDE_REVISION_DELTA_TOOL_NAME,
+    }
+
+
 def test_claude_prompt_includes_revision_precision_rules() -> None:
     proposer = ClaudeProposer(api_key="test-key")
 
@@ -197,6 +218,24 @@ def test_extracts_claude_text_json_content() -> None:
     assert parsed == payload
 
 
+def test_extracts_claude_tool_use_json_content() -> None:
+    payload = {"schema_version": "1.0.0"}
+
+    parsed = _extract_claude_json_content(
+        {
+            "content": [
+                {
+                    "type": "tool_use",
+                    "name": CLAUDE_REVISION_DELTA_TOOL_NAME,
+                    "input": payload,
+                }
+            ]
+        }
+    )
+
+    assert parsed == payload
+
+
 def test_hydrate_revision_delta_json_fields_parses_null_and_objects() -> None:
     payload = {
         "changed_edges": [
@@ -261,6 +300,46 @@ class _FakeClaudeClient:
                 "stop_reason": "end_turn",
             },
             request=httpx.Request("POST", url),
+        )
+
+
+class _FallbackClaudeClient:
+    def __init__(self, delta_payload: dict[str, Any]) -> None:
+        self.delta_payload = delta_payload
+        self.payloads: list[dict[str, Any]] = []
+
+    def post(
+        self,
+        url: str,
+        *,
+        headers: dict[str, str],
+        json: dict[str, Any],
+    ) -> httpx.Response:
+        self.payloads.append(json)
+        request = httpx.Request("POST", url)
+        if len(self.payloads) == 1:
+            return httpx.Response(
+                400,
+                json={"error": {"message": "Unknown parameter: output_config"}},
+                request=request,
+            )
+        return httpx.Response(
+            200,
+            json={
+                "id": "msg_test",
+                "type": "message",
+                "role": "assistant",
+                "model": json["model"],
+                "content": [
+                    {
+                        "type": "tool_use",
+                        "name": CLAUDE_REVISION_DELTA_TOOL_NAME,
+                        "input": self.delta_payload,
+                    }
+                ],
+                "stop_reason": "tool_use",
+            },
+            request=request,
         )
 
 

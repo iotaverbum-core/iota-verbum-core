@@ -10,6 +10,8 @@ INCLUDE_GLOBS = [
     "pyproject.toml",
     "requirements.lock",
     "src/**/*.py",
+    "src/core/cuc_harness/phase5_orchestration.py",
+    "src/core/phase3_revision_engine/*.py",
     "schemas/**/*",
     "data/credit/**/*",
     "data/clinical/**/*",
@@ -28,6 +30,7 @@ INCLUDE_GLOBS = [
     "docs/**/*.md",
     "docs/**/*.html",
     "benchmark/**/*",
+    "rulesets/**/*",
     ".pre-commit-config.yaml",
 ]
 

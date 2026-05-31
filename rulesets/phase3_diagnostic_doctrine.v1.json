@@ -1,0 +1,335 @@
+{
+  "schema_version": "iv.phase3.diagnostic_doctrine.v1",
+  "digest_id": "phase3.diagnostic_self_healing.doctrine.v1",
+  "phase_gate": "doctrine_digest_before_invariants",
+  "implementation_status": "pre_implementation_no_runtime_code",
+  "source_matrix": {
+    "matrix_id": "phase3.diagnostic_self_healing.matrix.v1",
+    "path": "rulesets/phase3_diagnostic_matrix.v1.json",
+    "sha256": "5c2e02bf214cb6b1380aaea10e0dea006086a4558759d8b8e2a609b4d9c93d20"
+  },
+  "scope": {
+    "applies_to": "retry_attempts_after_verifier_rejection",
+    "initial_proposer_call_requires_repair_instruction": false,
+    "diagnostic_layer_kind": "deterministic_non_llm",
+    "repair_instruction_effect": "append_only_feedback_entry",
+    "repair_instruction_candidate_kind": "repair_instruction",
+    "runtime_integration_target": "src/core/phase5_agent_loop/runtime.py",
+    "direct_delta_mutation_allowed": false,
+    "ledger_advance_allowed_before_acceptance": false
+  },
+  "determinism_policy": {
+    "classifier_precedence": [
+      "SCHEMA_VIOLATION",
+      "PRESERVATION_BREACH",
+      "LAW_FAMILY_MISMATCH",
+      "GROUNDING_GAP"
+    ],
+    "precedence_rationale": [
+      "Schema defects are handled before graph analysis because malformed input cannot be safely traced.",
+      "Preservation breaches are handled before ordinary semantic repair because they constrain every legal fix.",
+      "Law family mismatches are resolved before grounding gaps when both appear on the same operation.",
+      "Grounding gaps are traced only after the target operation and law surface are structurally coherent."
+    ],
+    "id_ordering": "lexicographic_ascending",
+    "multi_match_tiebreak": "choose the smallest target_operation_id, then smallest claim id, then smallest evidence id",
+    "array_output_ordering": "lexicographic_ascending",
+    "timestamps_allowed": false,
+    "external_io_allowed": false,
+    "llm_calls_allowed": false
+  },
+  "failure_families": [
+    {
+      "family": "SCHEMA_VIOLATION",
+      "family_id": "phase3.diagnostic.family.schema_violation.v1",
+      "description": "The rejection arises from malformed proposal structure rather than semantic state reasoning.",
+      "classifier": {
+        "canonical_codes": [
+          "invalid_json",
+          "invalid_structure"
+        ],
+        "path_hints": [
+          "/operations",
+          "/claimed_companion_law_ids",
+          "/preserved_items"
+        ],
+        "message_hints": [
+          "invalid enum",
+          "missing required field",
+          "must be an array",
+          "must be one of",
+          "required field",
+          "wrong type"
+        ],
+        "negative_conditions": [
+          "Do not classify as schema when the candidate is well-formed and only semantically incomplete.",
+          "Do not traverse claim evidence for this family unless preservation constraints must be copied."
+        ]
+      },
+      "dependency_trace": {
+        "claim_graph_traversal_required": false,
+        "allowed_claim_id_sources": [
+          "prior_graph.preserved_claim_ids",
+          "prior_graph.claims[*].claim_id"
+        ],
+        "allowed_evidence_id_sources": [],
+        "target_claim_id": null,
+        "halt_if_untraceable": false
+      },
+      "repair_pattern": {
+        "action": "emit_repair_instruction",
+        "target_selection": "operation identified by rejection path or candidate_id context",
+        "required_fields": "exact schema path and required type or enum surface from sealed schema",
+        "grounding_evidence_ids": [],
+        "preservation_constraints": "copy visible preserved sibling claim ids without mutation",
+        "direct_example_value_policy": "allowed only for structural empty containers or sealed enum ids"
+      },
+      "law_bindings": [
+        "phase3.diagnostic.law.repair_scope_minimality.v1"
+      ]
+    },
+    {
+      "family": "LAW_FAMILY_MISMATCH",
+      "family_id": "phase3.diagnostic.family.law_family_mismatch.v1",
+      "description": "The rejected operation is structurally valid but uses an unlawful doctrine family or companion law for the operation kind.",
+      "classifier": {
+        "canonical_codes": [
+          "companion_law_violation",
+          "law_family_mismatch"
+        ],
+        "path_hints": [
+          "/claimed_companion_law_ids",
+          "/operations/*/claimed_law_family_id",
+          "/operations/*/operation_kind"
+        ],
+        "message_hints": [
+          "companion law",
+          "incompatible law family",
+          "law family is not allowed",
+          "required companion law"
+        ],
+        "negative_conditions": [
+          "Do not classify as law mismatch when the only issue is absent evidence support.",
+          "Do not classify as law mismatch when the proposal cannot be parsed into operations."
+        ]
+      },
+      "dependency_trace": {
+        "claim_graph_traversal_required": "operation_target_only",
+        "allowed_claim_id_sources": [
+          "operation.target_claim_id",
+          "operation.target_prior_claim_id",
+          "operation.source_trigger_claim_id",
+          "prior_graph.claims[*].claim_id",
+          "trigger_graph.claims[*].claim_id"
+        ],
+        "allowed_evidence_id_sources": [],
+        "target_claim_id": "target operation claim id when present",
+        "halt_if_untraceable": true,
+        "halt_reason": "ambiguous_dependency_trace"
+      },
+      "repair_pattern": {
+        "action": "emit_repair_instruction",
+        "target_selection": "operation identified by rejection path, never a sibling operation",
+        "required_fields": "replace or remove the unlawful law id using the sealed operation-kind doctrine table",
+        "grounding_evidence_ids": [],
+        "preservation_constraints": "copy visible preserved sibling claim ids without mutation",
+        "direct_example_value_policy": "law ids must come from the doctrine digest, not from proposer text"
+      },
+      "operation_law_table": {
+        "NewClaim": [
+          "phase3.law.narrower_novel_essence.v1"
+        ],
+        "Preserve": [
+          "phase3.law.preservation_ack.v1"
+        ],
+        "Retract": [
+          "phase3.law.completed_incompatible_outcome.v1"
+        ],
+        "Revise": [
+          "phase3.law.revision_by_new_support.v1"
+        ]
+      },
+      "companion_law_table": {
+        "Retract+NewClaim": [
+          "phase3.law.retraction_companion_newclaim.v1"
+        ]
+      },
+      "law_bindings": [
+        "phase3.diagnostic.law.repair_scope_minimality.v1"
+      ]
+    },
+    {
+      "family": "GROUNDING_GAP",
+      "family_id": "phase3.diagnostic.family.grounding_gap.v1",
+      "description": "The rejected operation lacks a lawful evidence or support edge binding to the trigger graph.",
+      "classifier": {
+        "canonical_codes": [
+          "evidence_missing",
+          "grounding_absent"
+        ],
+        "compatibility_aliases": [
+          "named_evidence_artifact_mismatch"
+        ],
+        "path_hints": [
+          "/operations/*/basis_trigger_claim_ids",
+          "/operations/*/citations",
+          "/operations/*/grounding_evidence_ids"
+        ],
+        "message_hints": [
+          "cited evidence does not support",
+          "does not cite supporting evidence",
+          "grounding evidence",
+          "lacks grounding evidence",
+          "without citing trigger evidence"
+        ],
+        "negative_conditions": [
+          "Do not fabricate an evidence id when no supporting edge exists.",
+          "Do not use prior-only evidence to ground a trigger-only revision unless the operation kind permits it."
+        ]
+      },
+      "dependency_trace": {
+        "claim_graph_traversal_required": true,
+        "allowed_claim_id_sources": [
+          "operation.target_claim_id",
+          "operation.source_trigger_claim_id",
+          "trigger_graph.claims[*].claim_id"
+        ],
+        "allowed_evidence_id_sources": [
+          "trigger_graph.claims[*].groundings[*].grounding_id",
+          "trigger_graph.claims[*].evidence[*].source_id",
+          "trigger_graph.support_edges[*].from_id",
+          "trigger_graph.evidence_ids[*]"
+        ],
+        "target_claim_id": "trigger claim reached by the rejected operation",
+        "support_edge_types": [
+          "grounds",
+          "supports"
+        ],
+        "halt_if_untraceable": true,
+        "halt_reason": "ungroundable_repair"
+      },
+      "repair_pattern": {
+        "action": "emit_repair_instruction_or_halt",
+        "target_selection": "operation identified by rejection path",
+        "required_fields": "grounding evidence path and basis trigger path when required",
+        "grounding_evidence_ids": "ids reachable from trigger graph support edges for the target claim",
+        "preservation_constraints": "copy visible preserved sibling claim ids without mutation",
+        "direct_example_value_policy": "forbidden; evidence ids must already exist in sealed graph inputs"
+      },
+      "law_bindings": [
+        "phase3.diagnostic.law.halt_on_ungroundable_repair.v1",
+        "phase3.diagnostic.law.repair_scope_minimality.v1"
+      ]
+    },
+    {
+      "family": "PRESERVATION_BREACH",
+      "family_id": "phase3.diagnostic.family.preservation_breach.v1",
+      "description": "The rejected proposal mutates, drops, or fails to acknowledge a sibling claim that must remain stable.",
+      "classifier": {
+        "canonical_codes": [
+          "forbidden_revision_touched",
+          "missing_preserved_items"
+        ],
+        "path_hints": [
+          "/operations/*/target_claim_id",
+          "/preserved_items"
+        ],
+        "message_hints": [
+          "forbidden preserved sibling",
+          "forbidden revision",
+          "missing from preserved_items",
+          "required preserved sibling",
+          "stable sibling"
+        ],
+        "negative_conditions": [
+          "Do not convert a preservation breach into a broad rewrite instruction.",
+          "Do not emit a repair that changes a preserved claim's assertion, confidence, law family, or evidence."
+        ]
+      },
+      "dependency_trace": {
+        "claim_graph_traversal_required": true,
+        "allowed_claim_id_sources": [
+          "prior_graph.claims[*].claim_id",
+          "prior_graph.preserved_claim_ids[*]",
+          "verifier.forbidden_revision_ids[*]",
+          "verifier.missing_preserved_ids[*]"
+        ],
+        "allowed_evidence_id_sources": [],
+        "target_claim_id": "the touched or omitted preserved sibling claim",
+        "halt_if_untraceable": true,
+        "halt_reason": "ambiguous_dependency_trace"
+      },
+      "repair_pattern": {
+        "action": "emit_repair_instruction",
+        "target_selection": "operation touching the preserved claim, or the preserved_items aggregate when no operation path is present",
+        "required_fields": "preserved_items and remove_or_replace for the unlawful operation when applicable",
+        "grounding_evidence_ids": [],
+        "preservation_constraints": "all visible preserved sibling claim ids from prior graph and verifier ids",
+        "direct_example_value_policy": "preserved ids must come from sealed graph or verifier feedback"
+      },
+      "law_bindings": [
+        "phase3.diagnostic.law.repair_scope_minimality.v1"
+      ]
+    }
+  ],
+  "companion_laws": [
+    {
+      "law_id": "phase3.diagnostic.law.halt_on_ungroundable_repair.v1",
+      "name": "halt_on_ungroundable_repair",
+      "applies_to_families": [
+        "GROUNDING_GAP"
+      ],
+      "rule": "If no grounding evidence id or support edge exists in the sealed trigger graph for the target claim, the diagnostic loop must halt instead of emitting a repair instruction.",
+      "required_halt_reason": "ungroundable_repair",
+      "forbidden_outputs": [
+        "fabricated evidence ids",
+        "fallback to prior-only evidence without doctrine permission",
+        "repair instructions with empty grounding_evidence_ids for a grounding-required operation"
+      ],
+      "audit_fields": [
+        "target_operation_id",
+        "target_claim_id",
+        "checked_graph_ids",
+        "halt_reason"
+      ]
+    },
+    {
+      "law_id": "phase3.diagnostic.law.repair_scope_minimality.v1",
+      "name": "repair_scope_minimality",
+      "applies_to_families": [
+        "SCHEMA_VIOLATION",
+        "LAW_FAMILY_MISMATCH",
+        "GROUNDING_GAP",
+        "PRESERVATION_BREACH"
+      ],
+      "rule": "A repair instruction must target the smallest operation, field, evidence id set, or preservation id set sufficient to close the verifier violation.",
+      "forbidden_outputs": [
+        "whole-delta rewrite instruction",
+        "multiple operation targets when one operation is identified",
+        "preservation constraint removal",
+        "claim ids or evidence ids outside the sealed graph id universe",
+        "new proposer budget consumption before repair instruction emission"
+      ],
+      "audit_fields": [
+        "source_rejection_id",
+        "target_operation_id",
+        "required_fields",
+        "grounding_evidence_ids",
+        "preservation_constraints"
+      ]
+    }
+  ],
+  "halt_reasons": [
+    "ambiguous_dependency_trace",
+    "budget_exhausted",
+    "preservation_constraint_conflict",
+    "ungroundable_repair",
+    "unsupported_failure_code"
+  ],
+  "gate_requirements_for_next_phase": [
+    "Invariant tests must prove classifier determinism against these canonical codes and precedence rules.",
+    "Invariant tests must prove tracer outputs ids only from the allowed sources declared here.",
+    "Invariant tests must prove repair generation obeys both companion laws.",
+    "Invariant tests must prove retry proposer calls occur only after repair instruction emission."
+  ]
+}

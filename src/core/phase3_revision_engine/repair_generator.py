@@ -38,6 +38,8 @@ def _sorted_tuple(values: list[str] | tuple[str, ...]) -> tuple[str, ...]:
 
 
 def _schema_field_type_hint(symptom: FailureSymptom) -> str:
+    if symptom.code in {"operation_conflict", "conflicting_operations"}:
+        return "remove_or_merge_conflict"
     path_tail = symptom.path.rsplit("/", 1)[-1]
     message = symptom.message.lower()
     if "array" in message or path_tail.endswith("_ids"):
@@ -94,6 +96,7 @@ def generate_repair_instruction(
     symptom: FailureSymptom,
     trace: DependencyTrace,
     operation: Mapping[str, Any],
+    guidance: str = "",
 ) -> RepairInstruction | None:
     if trace.halt_reason is not None:
         return None
@@ -123,6 +126,7 @@ def generate_repair_instruction(
         preservation_constraints=trace.preservation_constraints,
         doctrine_family_id=_DOCTRINE_FAMILY_IDS[trace.family],
         companion_law_ids=tuple(sorted(companion_law_ids)),
+        guidance=guidance,
     )
 
 

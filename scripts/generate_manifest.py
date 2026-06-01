@@ -27,6 +27,7 @@ INCLUDE_GLOBS = [
     ".github/workflows/*.yml",
     "README.md",
     "LICENSE",
+    "demo/**/*.html",
     "docs/**/*.md",
     "docs/**/*.html",
     "benchmark/**/*",

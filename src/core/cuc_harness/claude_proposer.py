@@ -143,7 +143,7 @@ REVISION_DELTA_JSON_SCHEMA: dict[str, Any] = {
             "type": "object",
             "properties": {
                 "scenario_id": {"type": "string"},
-                "before_rank": {"type": "integer"},
+                "before_rank": {"type": ["integer", "null"]},
                 "after_rank": {"type": "integer"},
             },
             "required": ["scenario_id", "before_rank", "after_rank"],

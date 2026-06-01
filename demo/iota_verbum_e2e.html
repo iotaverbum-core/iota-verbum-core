@@ -1,0 +1,937 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>IOTA VERBUM Training Room</title>
+  <style>
+    :root {
+      --bg-base: #0e0d0a;
+      --bg-card: #17140e;
+      --bg-panel: #211d14;
+      --bg-void: #090806;
+      --bdr-dim: #4b4434;
+      --txt-hi: #f5efdf;
+      --txt-md: #c9bea7;
+      --txt-lo: #8f8777;
+      --gold: #d8b76e;
+      --orange: #c9824b;
+      --green: #22d47a;
+      --red: #e8445c;
+      --cyan: #65c7d3;
+      --mono: "JetBrains Mono", "Cascadia Code", monospace;
+      --display: "Baskerville", "Georgia", serif;
+      --body: "Bahnschrift", "Aptos", "Segoe UI", sans-serif;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      min-height: 100vh;
+      margin: 0;
+      color: var(--txt-hi);
+      font-family: var(--body);
+      letter-spacing: 0;
+      background:
+        linear-gradient(rgba(255,255,255,.026) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,.023) 1px, transparent 1px),
+        radial-gradient(circle at 16% 10%, rgba(216,183,110,.16), transparent 28rem),
+        linear-gradient(135deg, #0d0c09, #19150e 58%, #0a0907);
+      background-size: 34px 34px, 34px 34px, auto, auto;
+    }
+
+    .shell {
+      display: grid;
+      grid-template-columns: 280px minmax(0, 1fr);
+      min-height: 100vh;
+    }
+
+    aside {
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      padding: 26px 21px;
+      border-right: 1px solid var(--bdr-dim);
+      background: rgba(18,16,11,.94);
+    }
+
+    .mark {
+      width: 54px;
+      height: 54px;
+      display: grid;
+      place-items: center;
+      margin-bottom: 20px;
+      border: 1px solid var(--gold);
+      color: var(--gold);
+      font: 24px var(--display);
+      transform: rotate(-8deg);
+    }
+
+    h1 {
+      margin: 0;
+      font: 500 clamp(42px, 7vw, 92px)/.88 var(--display);
+    }
+
+    aside h1 {
+      font-size: 31px;
+    }
+
+    .eyebrow,
+    .hash,
+    button,
+    select,
+    .rail,
+    .edv-claim-id,
+    .edv-bar-val,
+    .edv-delta-val,
+    .edv-verdict,
+    .edv-trigger-k {
+      font-family: var(--mono);
+    }
+
+    .eyebrow {
+      margin: 0 0 10px;
+      color: var(--gold);
+      font-size: 10px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+
+    .copy {
+      color: var(--txt-lo);
+      font-size: 12px;
+      line-height: 1.55;
+    }
+
+    label {
+      display: grid;
+      gap: 7px;
+      margin-top: 26px;
+      color: var(--txt-lo);
+      font-size: 11px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+
+    select,
+    button {
+      min-height: 42px;
+      border: 1px solid var(--bdr-dim);
+      border-radius: 0;
+      background: var(--bg-void);
+      color: var(--txt-hi);
+    }
+
+    select {
+      padding: 0 10px;
+    }
+
+    button {
+      width: 100%;
+      margin-top: 10px;
+      cursor: pointer;
+      color: var(--gold);
+    }
+
+    main {
+      padding: 26px;
+      overflow: hidden;
+    }
+
+    .top {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 270px;
+      gap: 22px;
+      align-items: end;
+      margin-bottom: 18px;
+    }
+
+    .scorecard {
+      border: 1px solid var(--bdr-dim);
+      background: rgba(33,29,20,.9);
+      padding: 14px;
+    }
+
+    .scorecard b {
+      display: block;
+      color: var(--green);
+      font-family: var(--mono);
+      font-size: 22px;
+      font-weight: 500;
+    }
+
+    .console {
+      border: 1px solid var(--bdr-dim);
+      background: rgba(14,13,10,.78);
+      padding: 12px;
+    }
+
+    .rail {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 7px;
+      margin-bottom: 9px;
+      color: var(--txt-lo);
+      font-size: 9px;
+      text-transform: uppercase;
+    }
+
+    .rail span {
+      border: 1px solid var(--bdr-dim);
+      padding: 7px;
+      text-align: center;
+    }
+
+    .rail .on { color: var(--gold); border-color: var(--gold); }
+    .rail .ok { color: var(--green); border-color: rgba(34,212,122,.38); }
+    .rail .bad { color: var(--red); border-color: rgba(232,68,92,.38); }
+
+    .edv {
+      border: 1px solid var(--bdr-dim);
+      background: var(--bg-base);
+      margin-bottom: 9px;
+      overflow-x: auto;
+    }
+
+    .edv-panels {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      min-width: 800px;
+    }
+
+    .edv-panel {
+      padding: 11px 12px;
+      border-right: 1px solid var(--bdr-dim);
+      min-width: 0;
+    }
+
+    .edv-panel:last-child { border-right: none; }
+
+    .edv-panel-title {
+      font-size: 8px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--txt-lo);
+      margin-bottom: 9px;
+    }
+
+    .edv-claim {
+      border: 1px solid var(--bdr-dim);
+      background: var(--bg-card);
+      padding: 8px 9px;
+      margin-bottom: 4px;
+    }
+
+    .edv-claim-id {
+      font-size: 9px;
+      color: var(--gold);
+      margin-bottom: 3px;
+    }
+
+    .edv-claim-content {
+      font-size: 10px;
+      color: var(--txt-md);
+      margin-bottom: 5px;
+      line-height: 1.4;
+    }
+
+    .edv-bar-row {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      margin-bottom: 2px;
+    }
+
+    .edv-bar-track {
+      flex: 1;
+      height: 4px;
+      background: var(--bg-void);
+      border: 1px solid var(--bdr-dim);
+      position: relative;
+    }
+
+    .edv-bar-fill {
+      height: 100%;
+      transition: width .35s ease;
+    }
+
+    .edv-bar-fill.before { background: var(--gold); }
+    .edv-bar-fill.after-weaken { background: var(--orange); }
+    .edv-bar-fill.after-strengthen { background: var(--green); }
+    .edv-bar-fill.after-retract { background: var(--red); width: 0 !important; }
+    .edv-bar-fill.after-new { background: var(--cyan); }
+
+    .edv-bar-val {
+      font-size: 9px;
+      color: var(--txt-lo);
+      min-width: 28px;
+      text-align: right;
+    }
+
+    .edv-delta-val {
+      font-size: 9px;
+    }
+
+    .edv-delta-val.neg { color: var(--orange); }
+    .edv-delta-val.pos { color: var(--green); }
+
+    .edv-verdict {
+      font-size: 9px;
+      margin-top: 3px;
+      padding: 1px 6px;
+      border: 1px solid;
+      display: inline-block;
+    }
+
+    .edv-verdict.ok { color: var(--green); border-color: rgba(34,212,122,.3); }
+    .edv-verdict.fail { color: var(--red); border-color: rgba(232,68,92,.3); }
+    .edv-verdict.neutral { color: var(--txt-lo); border-color: var(--bdr-dim); }
+
+    .edv-invalidated {
+      text-decoration: line-through;
+      color: var(--red);
+    }
+
+    .edv-evidence {
+      font-size: 9px;
+      color: var(--txt-lo);
+      margin-top: 3px;
+    }
+
+    .edv-trigger-field {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 2px 9px;
+      font-size: 10px;
+      margin-bottom: 4px;
+    }
+
+    .edv-trigger-k {
+      font-size: 9px;
+      color: var(--txt-lo);
+    }
+
+    .edv-collapse-banner {
+      background: rgba(232,68,92,.06);
+      border: 1px solid rgba(232,68,92,.3);
+      padding: 4px 8px;
+      font-size: 9px;
+      color: var(--red);
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      margin: 5px 0;
+    }
+
+    .badge {
+      display: inline-block;
+      margin: 2px 3px 2px 0;
+      padding: 1px 5px;
+      border: 1px solid var(--bdr-dim);
+      color: var(--txt-lo);
+      font: 9px var(--mono);
+    }
+
+    .badge.red { color: var(--red); border-color: rgba(232,68,92,.35); }
+    .badge.orange { color: var(--orange); border-color: rgba(201,130,75,.45); }
+    .badge.green { color: var(--green); border-color: rgba(34,212,122,.35); }
+    .edv-committed { background: rgba(34,212,122,.02); }
+    .hidden { display: none; }
+
+    pre {
+      min-height: 180px;
+      margin: 0;
+      padding: 13px;
+      border: 1px solid var(--bdr-dim);
+      background: var(--bg-void);
+      color: var(--txt-md);
+      font: 11px/1.55 var(--mono);
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+
+    @media (max-width: 900px) {
+      .shell,
+      .top,
+      .rail,
+      .edv-panels {
+        grid-template-columns: 1fr;
+      }
+
+      aside {
+        position: static;
+        height: auto;
+      }
+
+      .edv-panels {
+        min-width: 0;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <aside>
+      <div class="mark">IV</div>
+      <p class="eyebrow">Metacognitive Training Room</p>
+      <h1>IOTA<br>VERBUM</h1>
+      <p class="copy">
+        The model proposes. The outer verifier judges. The proposer never becomes
+        the verifier.
+      </p>
+      <label>
+        Training case
+        <select id="caseSelect">
+          <option value="collapse">Support collapse</option>
+          <option value="residual">Residual support</option>
+        </select>
+      </label>
+      <button id="runButton" type="button">Run Discipline Loop</button>
+    </aside>
+
+    <main>
+      <header class="top">
+        <div>
+          <p class="eyebrow">Benchmark first. Training second. Ledger always.</p>
+          <h1>Turn a noisy proposer into a candidate proposer.</h1>
+        </div>
+        <div class="scorecard">
+          <span class="hash">baseline -> disciplined</span>
+          <b id="scoreReadout">41 -> --</b>
+          <p class="copy" id="stateReadout">Awaiting sealed benchmark attempt.</p>
+        </div>
+      </header>
+
+      <section class="console">
+        <div class="rail" id="rail">
+          <span>connect</span>
+          <span>baseline</span>
+          <span>propose</span>
+          <span>verify</span>
+          <span>seal</span>
+        </div>
+        <div class="edv">
+          <div class="edv-panels">
+            <div class="edv-panel" id="edv-prior"></div>
+            <div class="edv-panel" id="edv-trigger"></div>
+            <div class="edv-panel" id="edv-delta"></div>
+            <div class="edv-panel edv-committed hidden" id="edv-committed"></div>
+          </div>
+        </div>
+        <pre id="eventLog">{ "status": "ready" }</pre>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    const SEALED_DOCTRINE = Object.freeze({
+      doctrine_version: "phase3.diagnostic_self_healing.doctrine.v1",
+      doctrine_digest: "matrix:a6d67df8",
+      operation_types: new Set([
+        "Preserve",
+        "Weaken",
+        "Retract",
+        "Strengthen",
+        "NewlyUnknown",
+        "NewClaim"
+      ]),
+      doctrine_families: new Set([
+        "Residual_Support",
+        "Support_Collapse_Without_Replacement",
+        "Positive_Contrary_Fact",
+        "Weaken_Direction",
+        "Strengthen_Direction",
+        "Preserve_Invariant",
+        "Orthogonal_Trigger"
+      ]),
+      retract_threshold: 0.30,
+      max_non_preserve_ops_per_claim: 1,
+      collapse_residual_max: 0.05,
+      sealed_at: "2026-05-01T00:00:00Z"
+    });
+
+    const REPAIR_GUIDANCE = Object.freeze({
+      Residual_Support:
+        `Residual support remains (support_level > ${SEALED_DOCTRINE.retract_threshold}, invalidates_support=False). Use Weaken not Retract. Set 'before' to the EXACT support_level from the prior graph claim. Set 'after' to a strictly smaller value (after < before).`,
+      Support_Collapse_Without_Replacement:
+        `invalidates_support=True means all evidential support has been eliminated. Use Retract, not Weaken. Weaken is only valid when residual support remains above ${SEALED_DOCTRINE.collapse_residual_max}. If this claim has a natural successor, pair Retract with a NewClaim operation for the replacement assertion.`,
+      Weaken_Direction:
+        "Weaken requires after < before (strict inequality — equal values are invalid). Set 'before' to the EXACT support_level from the prior graph claim — do not estimate or approximate. Set 'after' to a value strictly less than that number.",
+      Strengthen_Direction:
+        "Strengthen requires after > before (strict inequality). Set 'before' to the EXACT support_level from the prior graph claim. Set 'after' to a value strictly greater than that number.",
+      Positive_Contrary_Fact:
+        "The trigger contains contrary evidence that must be addressed before Strengthen is valid. Add contrary_evidence_addressed: true and a 'rationale' field explaining why the strengthening survives the contrary evidence. If the contrary evidence is decisive, use Weaken instead.",
+      Preserve_Invariant:
+        "Preserve confirms a claim is unchanged by the trigger. The 'before' and 'after' fields, if both present, must be identical. Simplest correct form: omit 'after' entirely.",
+      Orthogonal_Trigger:
+        "The trigger is orthogonal to this claim — it does not provide evidence for or against it. Use Preserve. Do not apply Weaken, Strengthen, or any other operation to claims the trigger does not reach.",
+      __SCHEMA__:
+        "Schema violation. Ensure every operation has: (1) 'id' — unique string; (2) 'operation_type' — one of: Preserve, Weaken, Retract, Strengthen, NewlyUnknown, NewClaim; (3) 'claim_id' for all types except NewClaim; (4) 'claim_content' for NewClaim (no claim_id). No other operation_type values are valid.",
+      __CONFLICT__:
+        "Operation conflict: only one non-Preserve operation is permitted per claim_id within a single delta. Remove or merge the conflicting operations. Preserve operations do not conflict with each other.",
+      __FALLBACK__:
+        `Unknown doctrine family. Review all operations against the six lawful operation types and the sealed boundary law constraints. Doctrine: ${SEALED_DOCTRINE.doctrine_version}.`
+    });
+
+    const scenarios = {
+      collapse: {
+        scoreAfter: 88,
+        priorGraph: {
+          graph_id: "graph:prior:collapse",
+          claims: [
+            {
+              claim_id: "claim:cc_efficiency",
+              content: "Vendor carbon-capture efficiency claim remains commercially viable.",
+              support_level: 0.76,
+              status: "active",
+              evidence_ids: ["ev:pilot_2022", "ev:icef_2023"]
+            },
+            {
+              claim_id: "claim:sibling_notice",
+              content: "Notice obligations are independent of the technical efficiency claim.",
+              support_level: 0.82,
+              status: "active",
+              evidence_ids: ["ev:contract_2021"]
+            }
+          ]
+        },
+        triggerGraph: {
+          trigger_id: "trigger:support-collapse",
+          content: "Lab replication invalidated both cited efficiency studies.",
+          invalidates_evidence_ids: ["ev:pilot_2022", "ev:icef_2023"],
+          invalidates_support: true,
+          contrary_evidence_count: 0
+        },
+        attempts: [
+          {
+            operations: [
+              {
+                id: "op:001",
+                operation_type: "Weaken",
+                claim_id: "claim:cc_efficiency",
+                before: 0.76,
+                after: 0.44,
+                invalidates_support: true
+              },
+              {
+                id: "op:002",
+                operation_type: "Preserve",
+                claim_id: "claim:sibling_notice",
+                before: 0.82
+              }
+            ]
+          },
+          {
+            operations: [
+              {
+                id: "op:001",
+                operation_type: "Retract",
+                claim_id: "claim:cc_efficiency",
+                before: 0.76,
+                after: 0,
+                invalidates_support: true
+              },
+              {
+                id: "op:002",
+                operation_type: "Preserve",
+                claim_id: "claim:sibling_notice",
+                before: 0.82
+              },
+              {
+                id: "op:003",
+                operation_type: "NewClaim",
+                claim_content: "The efficiency claim is unfit for procurement reliance.",
+                after: 0.66
+              }
+            ]
+          }
+        ]
+      },
+      residual: {
+        scoreAfter: 81,
+        priorGraph: {
+          graph_id: "graph:prior:residual",
+          claims: [
+            {
+              claim_id: "claim:delivery_risk",
+              content: "Delivery risk is elevated but still mitigable by vendor controls.",
+              support_level: 0.64,
+              status: "active",
+              evidence_ids: ["ev:delay_log", "ev:mitigation_plan"]
+            }
+          ]
+        },
+        triggerGraph: {
+          trigger_id: "trigger:residual-support",
+          content: "New delay log weakens confidence but leaves mitigation evidence intact.",
+          invalidates_evidence_ids: ["ev:delay_log"],
+          invalidates_support: false,
+          contrary_evidence_count: 1
+        },
+        attempts: [
+          {
+            operations: [
+              {
+                id: "op:101",
+                operation_type: "Retract",
+                claim_id: "claim:delivery_risk",
+                before: 0.64,
+                after: 0,
+                invalidates_support: false
+              }
+            ]
+          },
+          {
+            operations: [
+              {
+                id: "op:101",
+                operation_type: "Weaken",
+                claim_id: "claim:delivery_risk",
+                before: 0.64,
+                after: 0.38,
+                invalidates_support: false
+              }
+            ]
+          }
+        ]
+      }
+    };
+
+    class IotaVerifier {
+      constructor(doctrine = SEALED_DOCTRINE) {
+        this.doctrine = doctrine;
+      }
+
+      verify(delta) {
+        const issues = [];
+        const nonPreserve = new Set();
+        delta.operations.forEach((op) => {
+          if (!this.doctrine.operation_types.has(op.operation_type)) {
+            issues.push({
+              operation_id: op.id,
+              doctrine_family: "__SCHEMA__",
+              message: REPAIR_GUIDANCE.__SCHEMA__
+            });
+            return;
+          }
+          if (op.operation_type !== "Preserve" && op.claim_id) {
+            if (nonPreserve.has(op.claim_id)) {
+              issues.push({
+                operation_id: op.id,
+                doctrine_family: "__CONFLICT__",
+                message: REPAIR_GUIDANCE.__CONFLICT__
+              });
+            }
+            nonPreserve.add(op.claim_id);
+          }
+          if (op.operation_type === "Retract" && op.before > this.doctrine.retract_threshold && op.invalidates_support === false) {
+            issues.push({
+              operation_id: op.id,
+              doctrine_family: "Residual_Support",
+              message: REPAIR_GUIDANCE.Residual_Support
+            });
+          }
+          if (op.operation_type === "Weaken" && op.invalidates_support === true && op.after <= this.doctrine.collapse_residual_max) {
+            issues.push({
+              operation_id: op.id,
+              doctrine_family: "Support_Collapse_Without_Replacement",
+              message: REPAIR_GUIDANCE.Support_Collapse_Without_Replacement
+            });
+          }
+          if (op.operation_type === "Weaken" && op.invalidates_support === true && op.after > this.doctrine.collapse_residual_max) {
+            issues.push({
+              operation_id: op.id,
+              doctrine_family: "Support_Collapse_Without_Replacement",
+              message: REPAIR_GUIDANCE.Support_Collapse_Without_Replacement
+            });
+          }
+          if (op.operation_type === "Weaken" && op.after >= op.before) {
+            issues.push({
+              operation_id: op.id,
+              doctrine_family: "Weaken_Direction",
+              message: REPAIR_GUIDANCE.Weaken_Direction
+            });
+          }
+          if (op.operation_type === "Strengthen" && op.after <= op.before) {
+            issues.push({
+              operation_id: op.id,
+              doctrine_family: "Strengthen_Direction",
+              message: REPAIR_GUIDANCE.Strengthen_Direction
+            });
+          }
+          if (op.operation_type === "Preserve" && op.after !== undefined && op.after !== op.before) {
+            issues.push({
+              operation_id: op.id,
+              doctrine_family: "Preserve_Invariant",
+              message: REPAIR_GUIDANCE.Preserve_Invariant
+            });
+          }
+        });
+        return { accepted: issues.length === 0, issues };
+      }
+    }
+
+    class DiagnosticLoop {
+      constructor(doctrine = SEALED_DOCTRINE) {
+        this.doctrine = doctrine;
+        this.guidance = REPAIR_GUIDANCE;
+      }
+
+      repair(rejection) {
+        const first = rejection.issues[0];
+        return {
+          candidate_kind: "repair_instruction",
+          target_operation_id: first.operation_id,
+          doctrine_family: first.doctrine_family,
+          guidance: this.guidance[first.doctrine_family] || this.guidance.__FALLBACK__
+        };
+      }
+    }
+
+    const verifier = new IotaVerifier();
+    const diagnosticLoop = new DiagnosticLoop();
+    const eventLog = document.getElementById("eventLog");
+    const rail = Array.from(document.querySelectorAll("#rail span"));
+    const scoreReadout = document.getElementById("scoreReadout");
+    const stateReadout = document.getElementById("stateReadout");
+    const caseSelect = document.getElementById("caseSelect");
+    const runButton = document.getElementById("runButton");
+    let currentScenario = scenarios[caseSelect.value];
+    let currentDelta = null;
+
+    function escapeHtml(value) {
+      return String(value).replace(/[&<>"']/g, (char) => ({
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        "\"": "&quot;",
+        "'": "&#39;"
+      })[char]);
+    }
+
+    function trunc(value, max = 80) {
+      const text = String(value);
+      return text.length > max ? `${text.slice(0, max - 1)}...` : text;
+    }
+
+    function bar(value, cls = "before") {
+      const safe = Math.max(0, Math.min(1, Number(value || 0)));
+      return `
+        <div class="edv-bar-row">
+          <div class="edv-bar-track">
+            <div class="edv-bar-fill ${cls}" style="width:${safe * 100}%"></div>
+          </div>
+          <span class="edv-bar-val">${safe.toFixed(2)}</span>
+        </div>`;
+    }
+
+    function renderClaim(claim, triggerGraph, extra = "") {
+      const invalidated = new Set(triggerGraph.invalidates_evidence_ids || []);
+      const evidence = (claim.evidence_ids || []).map((id) => {
+        if (invalidated.has(id)) {
+          return `<span class="edv-invalidated">${escapeHtml(id)}</span> <span class="badge red">INVALIDATED</span>`;
+        }
+        return escapeHtml(id);
+      }).join(" · ");
+      return `
+        <div class="edv-claim">
+          <div class="edv-claim-id">${escapeHtml(claim.claim_id)} ${extra}</div>
+          <div class="edv-claim-content">${escapeHtml(trunc(claim.content))}</div>
+          ${bar(claim.support_level, "before")}
+          <span class="badge ${claim.status === "active" ? "green" : "red"}">${escapeHtml(claim.status)}</span>
+          <div class="edv-evidence">evidence: ${evidence || "none"}</div>
+        </div>`;
+    }
+
+    function renderEpistemicDiff(priorGraph, triggerGraph, proposedDelta, attemptN) {
+      currentDelta = proposedDelta;
+      document.getElementById("edv-committed").classList.add("hidden");
+      document.getElementById("edv-prior").innerHTML = `
+        <div class="edv-panel-title">PRIOR GRAPH · ${escapeHtml(priorGraph.graph_id)}</div>
+        ${priorGraph.claims.map((claim) => renderClaim(claim, triggerGraph)).join("")}`;
+      const invalidated = (triggerGraph.invalidates_evidence_ids || [])
+        .map((id) => `<span class="badge red">⚡ INVALIDATED ${escapeHtml(id)}</span>`)
+        .join("");
+      document.getElementById("edv-trigger").innerHTML = `
+        <div class="edv-panel-title">TRIGGER · ${escapeHtml(triggerGraph.trigger_id)}</div>
+        <div class="edv-trigger-field"><span class="edv-trigger-k">content</span><span>${escapeHtml(triggerGraph.content)}</span></div>
+        <div class="edv-trigger-field"><span class="edv-trigger-k">invalidates</span><span>${invalidated || "none"}</span></div>
+        <div class="edv-trigger-field"><span class="edv-trigger-k">collapse</span><span>invalidates_support: ${triggerGraph.invalidates_support}</span></div>
+        <div class="edv-trigger-field"><span class="edv-trigger-k">contrary</span><span>contrary_evidence_count: ${triggerGraph.contrary_evidence_count}</span></div>
+        ${triggerGraph.invalidates_support ? '<div class="edv-collapse-banner">ALL SUPPORT COLLAPSED</div>' : ""}
+        ${triggerGraph.contrary_evidence_count > 0 ? `<span class="badge orange">⚠ ${triggerGraph.contrary_evidence_count} CONTRARY</span>` : ""}`;
+      document.getElementById("edv-delta").innerHTML = `
+        <div class="edv-panel-title">PROPOSED DELTA · attempt ${attemptN}</div>
+        ${proposedDelta.operations.map((op) => renderOperation(op)).join("")}`;
+    }
+
+    function renderOperation(op) {
+      const before = op.before !== undefined ? bar(op.before, "before") : "";
+      let after = "";
+      let delta = "";
+      let badge = "";
+      if (op.operation_type === "Weaken") {
+        after = bar(op.after, "after-weaken");
+        delta = `<span class="edv-delta-val neg">change: ${(op.after - op.before).toFixed(2)}</span>`;
+      } else if (op.operation_type === "Strengthen") {
+        after = bar(op.after, "after-strengthen");
+        delta = `<span class="edv-delta-val pos">change: +${(op.after - op.before).toFixed(2)}</span>`;
+      } else if (op.operation_type === "Retract") {
+        after = bar(0, "after-retract");
+        badge = '<span class="badge red">→ RETRACTED</span>';
+      } else if (op.operation_type === "Preserve") {
+        badge = '<span class="badge green">→ UNCHANGED</span>';
+      } else if (op.operation_type === "NewlyUnknown") {
+        badge = '<span class="badge orange">→ UNCERTAIN</span>';
+      } else if (op.operation_type === "NewClaim") {
+        after = bar(op.after ?? 0.5, "after-new");
+        badge = '<span class="badge green">+ NEW CLAIM</span>';
+      }
+      return `
+        <div class="edv-claim" data-op-id="${escapeHtml(op.id)}">
+          <div class="edv-claim-id">[${escapeHtml(op.operation_type)}] ${escapeHtml(op.id)}</div>
+          <div class="edv-claim-content">${escapeHtml(op.claim_id || op.claim_content || "")}</div>
+          ${before}
+          ${after}
+          ${delta}
+          ${badge}
+          <div class="verdict-slot"></div>
+        </div>`;
+    }
+
+    function overlayVerifierRejection(rejection) {
+      const issuesByOp = new Map(rejection.issues.map((issue) => [issue.operation_id, issue]));
+      document.querySelectorAll("#edv-delta [data-op-id]").forEach((row) => {
+        const issue = issuesByOp.get(row.dataset.opId);
+        const slot = row.querySelector(".verdict-slot");
+        if (issue) {
+          slot.innerHTML = `<span class="edv-verdict fail">✗ ${escapeHtml(issue.doctrine_family)}</span>`;
+        } else {
+          slot.innerHTML = '<span class="edv-verdict neutral">—</span>';
+        }
+      });
+    }
+
+    function overlayVerifierAccepted() {
+      document.querySelectorAll("#edv-delta [data-op-id]").forEach((row) => {
+        row.querySelector(".verdict-slot").innerHTML = '<span class="edv-verdict ok">✓</span>';
+      });
+    }
+
+    function renderCommittedGraph(priorGraph, acceptedDelta) {
+      const postGraph = applyDelta(priorGraph, acceptedDelta);
+      const panel = document.getElementById("edv-committed");
+      panel.innerHTML = `
+        <div class="edv-panel-title">COMMITTED GRAPH · ${escapeHtml(postGraph.graph_id)}</div>
+        ${postGraph.claims.map((claim) => renderClaim(claim, { invalidates_evidence_ids: [] }, claim.is_new ? '<span class="badge green">NEW</span>' : "")).join("")}`;
+      panel.classList.remove("hidden");
+    }
+
+    function applyDelta(priorGraph, delta) {
+      const postGraph = {
+        ...priorGraph,
+        graph_id: `${priorGraph.graph_id}:committed`,
+        claims: priorGraph.claims.map((claim) => ({ ...claim, evidence_ids: [...(claim.evidence_ids || [])] }))
+      };
+      delta.operations.forEach((op) => {
+        if (op.operation_type === "NewClaim") {
+          postGraph.claims.push({
+            claim_id: op.id,
+            content: op.claim_content,
+            support_level: op.after ?? 0.5,
+            status: "active",
+            evidence_ids: [],
+            is_new: true
+          });
+          return;
+        }
+        const claim = postGraph.claims.find((item) => item.claim_id === op.claim_id);
+        if (!claim) return;
+        if (op.operation_type === "Weaken" || op.operation_type === "Strengthen") {
+          claim.support_level = op.after;
+        } else if (op.operation_type === "Retract") {
+          claim.status = "inactive";
+          claim.support_level = 0;
+        } else if (op.operation_type === "NewlyUnknown") {
+          claim.status = "uncertain";
+        }
+      });
+      return postGraph;
+    }
+
+    function setRail(index, cls) {
+      rail.forEach((item, itemIndex) => {
+        item.className = itemIndex < index ? "ok" : "";
+        if (itemIndex === index) item.className = cls;
+      });
+    }
+
+    function emitEvent(type, payload) {
+      eventLog.textContent = JSON.stringify({ event: type, payload }, null, 2);
+      if (type === "PROPOSED_DELTA") {
+        renderEpistemicDiff(
+          currentScenario.priorGraph,
+          currentScenario.triggerGraph,
+          payload.delta,
+          payload.attempt
+        );
+      } else if (type === "VERIFIER_RESULT" && payload.accepted === false) {
+        overlayVerifierRejection(payload);
+      } else if (type === "VERIFIER_RESULT" && payload.accepted === true) {
+        overlayVerifierAccepted();
+      } else if (type === "ACCEPTED") {
+        renderCommittedGraph(currentScenario.priorGraph, currentDelta);
+      }
+    }
+
+    function runScenario() {
+      currentScenario = scenarios[caseSelect.value];
+      scoreReadout.textContent = "41 -> --";
+      stateReadout.textContent = "Baseline sealed. Entering verifier discipline.";
+      setRail(1, "on");
+      let attemptIndex = 0;
+      const next = () => {
+        const delta = currentScenario.attempts[attemptIndex];
+        setRail(2, "on");
+        emitEvent("PROPOSED_DELTA", { attempt: attemptIndex + 1, delta });
+        const result = verifier.verify(delta);
+        setTimeout(() => {
+          setRail(3, result.accepted ? "ok" : "bad");
+          emitEvent("VERIFIER_RESULT", result);
+          if (result.accepted) {
+            setTimeout(() => {
+              setRail(4, "ok");
+              emitEvent("ACCEPTED", { attempt: attemptIndex + 1 });
+              scoreReadout.textContent = `41 -> ${currentScenario.scoreAfter}`;
+              stateReadout.textContent = "Candidate proposer package ready.";
+            }, 800);
+          } else {
+            const repair = diagnosticLoop.repair(result);
+            stateReadout.textContent = repair.guidance;
+            attemptIndex += 1;
+            setTimeout(next, 1200);
+          }
+        }, 800);
+      };
+      setTimeout(next, 400);
+    }
+
+    runButton.addEventListener("click", runScenario);
+    caseSelect.addEventListener("change", () => {
+      currentScenario = scenarios[caseSelect.value];
+      renderEpistemicDiff(
+        currentScenario.priorGraph,
+        currentScenario.triggerGraph,
+        currentScenario.attempts[0],
+        1
+      );
+    });
+
+    renderEpistemicDiff(
+      currentScenario.priorGraph,
+      currentScenario.triggerGraph,
+      currentScenario.attempts[0],
+      1
+    );
+  </script>
+</body>
+</html>

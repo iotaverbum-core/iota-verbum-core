@@ -12,6 +12,7 @@ from core.phase3_revision_engine.failure_classifier import (
 )
 from core.phase3_revision_engine.repair_generator import generate_repair_instruction
 from core.phase3_revision_engine.types import (
+    SEALED_DOCTRINE,
     DependencyTrace,
     DiagnosticLoopResult,
     DiagnosticLoopStatus,
@@ -19,9 +20,119 @@ from core.phase3_revision_engine.types import (
     FailureSymptom,
 )
 
+REPAIR_GUIDANCE: dict[str, str] = {
+    "Residual_Support": (
+        "Residual support remains (support_level > {retract_threshold}, "
+        "invalidates_support=False). Use Weaken not Retract. "
+        "Set 'before' to the EXACT support_level from the prior graph claim. "
+        "Set 'after' to a strictly smaller value (after < before)."
+    ),
+    "Support_Collapse_Without_Replacement": (
+        "invalidates_support=True means all evidential support has been eliminated. "
+        "Use Retract, not Weaken. Weaken is only valid when residual support "
+        "remains above {collapse_residual_max}. If this claim has a natural "
+        "successor, pair Retract with a NewClaim operation for the replacement "
+        "assertion."
+    ),
+    "Weaken_Direction": (
+        "Weaken requires after < before (strict inequality — equal values are "
+        "invalid). Set 'before' to the EXACT support_level from the prior graph "
+        "claim — do not estimate or approximate. Set 'after' to a value strictly "
+        "less than that number."
+    ),
+    "Strengthen_Direction": (
+        "Strengthen requires after > before (strict inequality). "
+        "Set 'before' to the EXACT support_level from the prior graph claim. "
+        "Set 'after' to a value strictly greater than that number."
+    ),
+    "Positive_Contrary_Fact": (
+        "The trigger contains contrary evidence that must be addressed before "
+        "Strengthen is valid. Add contrary_evidence_addressed: true and a "
+        "'rationale' field explaining why the strengthening survives the contrary "
+        "evidence. If the contrary evidence is decisive, use Weaken instead."
+    ),
+    "Preserve_Invariant": (
+        "Preserve confirms a claim is unchanged by the trigger. "
+        "The 'before' and 'after' fields, if both present, must be identical. "
+        "Simplest correct form: omit 'after' entirely."
+    ),
+    "Orthogonal_Trigger": (
+        "The trigger is orthogonal to this claim — it does not provide evidence "
+        "for or against it. Use Preserve. Do not apply Weaken, Strengthen, or "
+        "any other operation to claims the trigger does not reach."
+    ),
+    "__SCHEMA__": (
+        "Schema violation. Ensure every operation has: "
+        "(1) 'id' — unique string; "
+        "(2) 'operation_type' — one of: Preserve, Weaken, Retract, Strengthen, "
+        "NewlyUnknown, NewClaim; "
+        "(3) 'claim_id' for all types except NewClaim; "
+        "(4) 'claim_content' for NewClaim (no claim_id). "
+        "No other operation_type values are valid."
+    ),
+    "__CONFLICT__": (
+        "Operation conflict: only one non-Preserve operation is permitted per "
+        "claim_id within a single delta. Remove or merge the conflicting "
+        "operations. Preserve operations do not conflict with each other."
+    ),
+    "__FALLBACK__": (
+        "Unknown doctrine family. Review all operations against the six lawful "
+        "operation types and the sealed boundary law constraints. "
+        "Doctrine: {doctrine_version}."
+    ),
+}
+
 
 def _hash_obj(payload: dict[str, Any]) -> str:
     return sha256_bytes(dumps_canonical(payload))
+
+
+def _guidance_key(
+    *,
+    symptom: FailureSymptom,
+    trace: DependencyTrace,
+    operation: Mapping[str, Any],
+) -> str:
+    if symptom.code in {"operation_conflict", "conflicting_operations"}:
+        return "__CONFLICT__"
+    if trace.family is FailureFamily.SCHEMA_VIOLATION:
+        return "__SCHEMA__"
+
+    candidates = [
+        operation.get("doctrine_family"),
+        operation.get("doctrine_family_id"),
+        operation.get("claimed_doctrine_family"),
+        operation.get("claimed_law_family_id"),
+        symptom.message,
+        symptom.path,
+    ]
+    joined = " ".join(str(candidate) for candidate in candidates if candidate)
+    for doctrine_family in sorted(SEALED_DOCTRINE.doctrine_families):
+        if doctrine_family in joined:
+            return doctrine_family
+    return "__FALLBACK__"
+
+
+def format_repair_guidance(
+    *,
+    symptom: FailureSymptom,
+    trace: DependencyTrace,
+    operation: Mapping[str, Any],
+) -> str:
+    doctrine_family = _guidance_key(
+        symptom=symptom,
+        trace=trace,
+        operation=operation,
+    )
+    raw_guidance = REPAIR_GUIDANCE.get(
+        doctrine_family,
+        REPAIR_GUIDANCE["__FALLBACK__"],
+    )
+    return raw_guidance.format(
+        retract_threshold=SEALED_DOCTRINE.retract_threshold,
+        collapse_residual_max=SEALED_DOCTRINE.collapse_residual_max,
+        doctrine_version=SEALED_DOCTRINE.doctrine_version,
+    )
 
 
 def _halt_trace(
@@ -145,10 +256,16 @@ def diagnose_rejection(
         operation=operation,
         verifier_context=verifier_context,
     )
+    guidance = format_repair_guidance(
+        symptom=symptom,
+        trace=trace,
+        operation=operation,
+    )
     repair_instruction = generate_repair_instruction(
         symptom=symptom,
         trace=trace,
         operation=operation,
+        guidance=guidance,
     )
     if repair_instruction is None:
         return _result(
@@ -170,4 +287,4 @@ def diagnose_rejection(
     )
 
 
-__all__ = ["diagnose_rejection"]
+__all__ = ["REPAIR_GUIDANCE", "diagnose_rejection", "format_repair_guidance"]

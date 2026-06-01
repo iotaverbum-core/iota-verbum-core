@@ -7,6 +7,8 @@ _CODES_BY_FAMILY: dict[FailureFamily, frozenset[str]] = {
         {
             "invalid_json",
             "invalid_structure",
+            "conflicting_operations",
+            "operation_conflict",
         }
     ),
     FailureFamily.PRESERVATION_BREACH: frozenset(

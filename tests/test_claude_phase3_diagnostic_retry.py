@@ -4,8 +4,10 @@ import json
 from pathlib import Path
 
 from scripts.claude_phase3_diagnostic_retry import (
+    RetryDeltaResult,
     build_repair_instruction,
     build_retry_prompt,
+    request_retry_delta,
 )
 from scripts.delta_gap_diagnostic import compare_deltas
 
@@ -102,6 +104,40 @@ def test_retry_prompt_appends_verifier_feedback_and_repair_instruction() -> None
     assert '"target_operation_id": "op:hop3"' in prompt
     assert '"before_rank": null' in prompt
     assert "Preserve every ID in preservation_constraints." in prompt
+
+
+def test_request_retry_delta_preserves_successful_fallback_model(
+    monkeypatch,
+) -> None:
+    proposer = ClaudeProposer(
+        api_key="test-key",
+        model="claude-primary",
+        fallback_model="claude-fallback",
+    )
+    expected_delta = RevisionDelta.model_validate(
+        _read_json(FIXTURE_DIR / "expected_delta.json")
+    )
+    requested_models: list[str] = []
+
+    def fake_request_delta(*, model: str, user_prompt: str):
+        requested_models.append(model)
+        assert user_prompt == "retry prompt"
+        if model == "claude-primary":
+            return proposer._failure(  # noqa: SLF001
+                model=model,
+                error_type="rate_limit",
+                message="primary unavailable",
+            )
+        return expected_delta
+
+    monkeypatch.setattr(proposer, "_request_delta", fake_request_delta)
+
+    result = request_retry_delta(proposer, "retry prompt")
+
+    assert isinstance(result, RetryDeltaResult)
+    assert result.delta == expected_delta
+    assert result.model == "claude-fallback"
+    assert requested_models == ["claude-primary", "claude-fallback"]
 
 
 def _build_rejected_hop3_delta(gold_delta: dict) -> dict:

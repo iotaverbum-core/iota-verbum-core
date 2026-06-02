@@ -6,6 +6,7 @@ import os
 import re
 import sys
 from collections.abc import Mapping
+from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
 
@@ -56,6 +57,12 @@ _SUPPORT_PATH_RE = re.compile(
 _SCENARIO_PATH_RE = re.compile(
     r"^\$\.scenario_rank_changes\[scenario_id='(?P<scenario_id>[^']+)'\]"
 )
+
+
+@dataclass(frozen=True)
+class RetryDeltaResult:
+    delta: RevisionDelta
+    model: str
 
 
 def run_diagnostic_retry(
@@ -141,21 +148,23 @@ def run_diagnostic_retry(
         baseline_gap=baseline_gap,
         repair_instruction=repair_instruction,
     )
-    retry_proposal = request_retry_delta(proposer, retry_prompt)
-    if isinstance(retry_proposal, SealedFailureArtifact):
+    retry_result = request_retry_delta(proposer, retry_prompt)
+    if isinstance(retry_result, SealedFailureArtifact):
         failure_path = case_output_dir / "retry_failure.json"
-        _write_json(failure_path, retry_proposal.model_dump(mode="json"))
+        _write_json(failure_path, retry_result.model_dump(mode="json"))
         result["retry"] = {
             "called": True,
             "json_valid": False,
             "accepted": False,
             "failure_path": failure_path.as_posix(),
-            "failure": retry_proposal.model_dump(mode="json"),
+            "failure": retry_result.model_dump(mode="json"),
         }
         _write_json(case_output_dir / "training_summary.json", result)
         print(json.dumps(result, indent=2, sort_keys=True, ensure_ascii=False))
         return result
 
+    retry_proposal = retry_result.delta
+    retry_model = retry_result.model
     retry_delta = retry_proposal.model_dump(mode="json")
     retry_delta_path = case_output_dir / "retry_model_delta.json"
     retry_delta_path.write_bytes(dumps_canonical(retry_delta))
@@ -168,7 +177,7 @@ def run_diagnostic_retry(
     if retry_verification.accepted:
         ledger_commit = commit_verified_revision_delta(
             case_id=case_id,
-            model=proposer.model,
+            model=retry_model,
             clean_pack=clean_pack,
             perturbed_pack=perturbed_pack,
             expected_delta=gold_delta,
@@ -179,6 +188,7 @@ def run_diagnostic_retry(
 
     result["retry"] = {
         "called": True,
+        "model": retry_model,
         "json_valid": True,
         "accepted": retry_verification.accepted,
         "reasons": retry_verification.reasons,
@@ -306,7 +316,7 @@ def build_retry_prompt(
 def request_retry_delta(
     proposer: ClaudeProposer,
     retry_prompt: str,
-) -> RevisionDelta | SealedFailureArtifact:
+) -> RetryDeltaResult | SealedFailureArtifact:
     if not proposer.api_key:
         return proposer._failure(  # noqa: SLF001
             model=proposer.model,
@@ -321,7 +331,7 @@ def request_retry_delta(
     for model in models:
         result = proposer._request_delta(model=model, user_prompt=retry_prompt)  # noqa: SLF001
         if isinstance(result, RevisionDelta):
-            return result
+            return RetryDeltaResult(delta=result, model=model)
         last_failure = result
     if last_failure is not None:
         return last_failure

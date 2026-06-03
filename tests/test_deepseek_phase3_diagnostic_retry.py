@@ -5,6 +5,7 @@ from pathlib import Path
 from unittest.mock import patch
 
 import pytest
+import scripts.deepseek_phase3_diagnostic_retry as deepseek_retry
 from scripts.deepseek_phase3_diagnostic_retry import (
     RetryDeltaResult,
     build_retry_messages,
@@ -143,6 +144,71 @@ def test_dry_run_writes_repair_instruction_without_live_api(tmp_path: Path) -> N
     assert "scenario:primary" in (
         repair_instruction["required_fields"]["supporting_evidence_map_required"]
     )
+    assert result["no_regression_guard"]["selected_candidate"] == "baseline"
+    assert (tmp_path / "out" / CASE_ID / "model_delta.json").is_file()
+
+
+def test_no_regression_guard_keeps_baseline_when_retry_gets_worse(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    gold_delta = _read_json(FIXTURE_DIR / "expected_delta.json")
+    rejected_delta = _build_rejected_delta(gold_delta)
+    regressed_delta = json.loads(json.dumps(rejected_delta))
+    regressed_delta["changed_edges"] = [
+        item
+        for item in regressed_delta["changed_edges"]
+        if item["id"] != "edge:primary_support"
+    ]
+    regressed_delta["resolved_unknowns"] = [
+        item
+        for item in regressed_delta["resolved_unknowns"]
+        if item["id"] != "unknown:primary"
+    ]
+
+    baseline_case_dir = tmp_path / "baseline" / CASE_ID
+    baseline_case_dir.mkdir(parents=True)
+    _write_json(baseline_case_dir / "model_delta.json", rejected_delta)
+    _write_json(
+        baseline_case_dir / "gap_report.json",
+        compare_deltas(rejected_delta, gold_delta).to_dict(),
+    )
+
+    def fake_request_retry_delta(
+        proposer: DeepSeekProposer,
+        retry_messages: list[dict[str, str]],
+    ) -> RetryDeltaResult:
+        assert proposer.model == "deepseek-v4-pro"
+        assert retry_messages
+        return RetryDeltaResult(
+            delta=RevisionDelta.model_validate(regressed_delta),
+            model=proposer.model,
+        )
+
+    monkeypatch.setattr(
+        deepseek_retry,
+        "request_retry_delta",
+        fake_request_retry_delta,
+    )
+
+    result = run_diagnostic_retry(
+        case_id=CASE_ID,
+        params_json=PARAMS_PATH,
+        baseline_dir=tmp_path / "baseline",
+        output_dir=tmp_path / "out",
+        ledger_root=tmp_path / "ledger",
+        proposer=DeepSeekProposer(api_key="test-key", model="deepseek-v4-pro"),
+        strict_copy=False,
+        dry_run=False,
+    )
+
+    guard = result["no_regression_guard"]
+    best_delta = _read_json(Path(guard["best_model_delta_path"]))
+    assert result["training_effect"]["improved"] is False
+    assert guard["selected_candidate"] == "baseline"
+    assert guard["retry_regressed"] is True
+    assert guard["next_baseline_dir"] == (tmp_path / "out" / CASE_ID).as_posix()
+    assert best_delta == rejected_delta
 
 
 def _build_rejected_delta(gold_delta: dict) -> dict:

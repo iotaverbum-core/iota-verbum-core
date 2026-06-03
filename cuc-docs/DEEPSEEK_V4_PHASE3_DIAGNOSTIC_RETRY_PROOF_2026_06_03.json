@@ -1,0 +1,80 @@
+{
+  "case_id": "CUCV5A-GROUNDING-02-CONFLICT-RECONCILIATION-SECURITY-INCIDENT",
+  "created_at_utc": "2026-06-03T00:00:00Z",
+  "evidence_claim": "DeepSeek v4 Pro failed the CUC v5a grounding case on first attempt, improved under deterministic Phase 3 diagnostic repair, and accepted after exact-fragment repair with a sealed ledger commit.",
+  "model": "deepseek-v4-pro",
+  "proof_boundary": "Single live API case. This proves the diagnostic retry path can convert one failed, verifier-rejected proposal into an accepted sealed artifact. It is not a multi-case model-quality claim.",
+  "schema_version": "iv.cuc_docs.deepseek_v4_phase3_diagnostic_retry_proof.v1",
+  "source_case_id": "CUCV4-GROUNDING-02-CONFLICT-RECONCILIATION-SECURITY-INCIDENT",
+  "stages": [
+    {
+      "accepted": false,
+      "artifact_summary_sha256": "b6688fcea8a714dd1347a17e65a139fb154f4c63b7fc92c6e6f645bc9870311a",
+      "ledger_committed": false,
+      "name": "baseline_live_probe",
+      "output_dir": "cuc-results/deepseek_v4_live_single_case",
+      "reason_count": 4,
+      "reason_families": [
+        "mismatched_changed_states",
+        "mismatched_changed_edges",
+        "mismatched_resolved_unknowns",
+        "missing_supporting_evidence"
+      ],
+      "similarity_score_percent": 71.84
+    },
+    {
+      "accepted": false,
+      "artifact_summary_sha256": "5914b3f35f53c1242df4a11a5bdac9a5714c97ac300c0bf466f4c316ec4dbc1b",
+      "ledger_committed": false,
+      "name": "diagnostic_retry_pass1",
+      "output_dir": "cuc-results/deepseek_v4_diagnostic_retry",
+      "reason_count": 1,
+      "reason_families": [
+        "mismatched_changed_states"
+      ],
+      "similarity_delta_from_previous": 20.47,
+      "similarity_score_percent": 92.31
+    },
+    {
+      "accepted": false,
+      "artifact_summary_sha256": "547db64f5b0b34a211bad35b5455b60a346a72ec573c7d0ff7243d2fda5cdb18",
+      "ledger_committed": false,
+      "name": "diagnostic_retry_pass2_regression",
+      "output_dir": "cuc-results/deepseek_v4_diagnostic_retry_pass2",
+      "reason_count": 3,
+      "reason_families": [
+        "mismatched_changed_states",
+        "mismatched_changed_edges",
+        "mismatched_resolved_unknowns"
+      ],
+      "similarity_delta_from_previous": -6.29,
+      "similarity_score_percent": 86.02
+    },
+    {
+      "accepted": true,
+      "artifact_summary_sha256": "1d8cced3357994040e12f87a24078d8a9f0e82315252df8803920e89937c17c5",
+      "ledger_commit": {
+        "attestation_sha256": "7cd8c5b8212ae35fce6c75843b20b84e85d6a88fdcb3971fde4cb1b94e992c96",
+        "bundle_sha256": "16381b3a8f42d2d0ac6743c1fb29748ed2ce6884575785f4c9cfce87071360a9",
+        "output_sha256": "2c873500c3341121c92e4aa40e0909f1f63f8beb2a3a8e77879afbbbb2f5bf84",
+        "run_dir": "cuc-results/deepseek_v4_diagnostic_retry_pass3_exact/ledger/16381b3a8f42d2d0ac6743c1fb29748ed2ce6884575785f4c9cfce87071360a9"
+      },
+      "ledger_committed": true,
+      "name": "diagnostic_retry_pass3_exact_fragment",
+      "output_dir": "cuc-results/deepseek_v4_diagnostic_retry_pass3_exact",
+      "reason_count": 0,
+      "reason_families": [],
+      "similarity_delta_from_previous": 7.69,
+      "similarity_score_percent": 100.0
+    }
+  ],
+  "training_effect_total": {
+    "accepted_after": true,
+    "accepted_before": false,
+    "reason_count_after": 0,
+    "reason_count_before": 4,
+    "similarity_after": 100.0,
+    "similarity_before": 71.84,
+    "similarity_delta": 28.16
+  }
+}

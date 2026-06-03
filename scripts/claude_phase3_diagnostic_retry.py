@@ -190,6 +190,12 @@ def run_diagnostic_retry(
     }
     if dry_run:
         result["retry"] = {"called": False, "reason": "dry_run"}
+        result["no_regression_guard"] = write_best_candidate_artifacts(
+            case_output_dir=case_output_dir,
+            baseline_delta=baseline_delta,
+            baseline_verification=baseline_verification,
+            baseline_gap=baseline_gap,
+        )
         _write_json(case_output_dir / "training_summary.json", result)
         print(json.dumps(result, indent=2, sort_keys=True, ensure_ascii=False))
         return result
@@ -216,6 +222,12 @@ def run_diagnostic_retry(
             "failure_path": failure_path.as_posix(),
             "failure": retry_result.model_dump(mode="json"),
         }
+        result["no_regression_guard"] = write_best_candidate_artifacts(
+            case_output_dir=case_output_dir,
+            baseline_delta=baseline_delta,
+            baseline_verification=baseline_verification,
+            baseline_gap=baseline_gap,
+        )
         _write_json(case_output_dir / "training_summary.json", result)
         print(json.dumps(result, indent=2, sort_keys=True, ensure_ascii=False))
         return result
@@ -256,6 +268,15 @@ def run_diagnostic_retry(
         "ledger_committed": ledger_commit is not None,
         "ledger_commit": ledger_commit,
     }
+    result["no_regression_guard"] = write_best_candidate_artifacts(
+        case_output_dir=case_output_dir,
+        baseline_delta=baseline_delta,
+        baseline_verification=baseline_verification,
+        baseline_gap=baseline_gap,
+        retry_delta=retry_delta,
+        retry_verification=retry_verification,
+        retry_gap=retry_gap,
+    )
     result["training_effect"] = summarize_training_effect(
         baseline_verification=baseline_verification,
         baseline_gap=baseline_gap,
@@ -437,6 +458,59 @@ def summarize_training_effect(
         "improved": retry_verification.accepted
         or retry_score > baseline_score
         or len(retry_verification.reasons) < len(baseline_verification.reasons),
+    }
+
+
+def write_best_candidate_artifacts(
+    *,
+    case_output_dir: Path,
+    baseline_delta: Mapping[str, Any],
+    baseline_verification: DeltaVerificationResult,
+    baseline_gap: Mapping[str, Any],
+    retry_delta: Mapping[str, Any] | None = None,
+    retry_verification: DeltaVerificationResult | None = None,
+    retry_gap: Mapping[str, Any] | None = None,
+) -> dict[str, Any]:
+    baseline_rank = _candidate_rank(baseline_verification, baseline_gap)
+    retry_rank = None
+    selected = "baseline"
+    selected_delta = baseline_delta
+    selected_verification = baseline_verification
+    selected_gap = baseline_gap
+
+    if retry_delta is not None and retry_verification is not None and retry_gap:
+        retry_rank = _candidate_rank(retry_verification, retry_gap)
+        if retry_rank > baseline_rank:
+            selected = "retry"
+            selected_delta = retry_delta
+            selected_verification = retry_verification
+            selected_gap = retry_gap
+
+    best_delta_path = case_output_dir / "model_delta.json"
+    best_gap_path = case_output_dir / "gap_report.json"
+    best_verification_path = case_output_dir / "verification.json"
+    best_delta_path.write_bytes(dumps_canonical(selected_delta))
+    _write_json(best_gap_path, selected_gap)
+    _write_json(best_verification_path, selected_verification.to_dict())
+
+    return {
+        "selection_rule": (
+            "accepted > similarity_score_percent > fewer_verifier_reasons; "
+            "baseline wins ties"
+        ),
+        "selected_candidate": selected,
+        "retry_improved": retry_rank is not None and retry_rank > baseline_rank,
+        "retry_regressed": retry_rank is not None and retry_rank < baseline_rank,
+        "baseline_rank": _rank_summary(baseline_verification, baseline_gap),
+        "retry_rank": (
+            _rank_summary(retry_verification, retry_gap)
+            if retry_verification is not None and retry_gap
+            else None
+        ),
+        "next_baseline_dir": case_output_dir.as_posix(),
+        "best_model_delta_path": best_delta_path.as_posix(),
+        "best_gap_report_path": best_gap_path.as_posix(),
+        "best_verification_path": best_verification_path.as_posix(),
     }
 
 
@@ -683,6 +757,29 @@ def _similarity_score(gap_report: Mapping[str, Any]) -> float:
         return 0.0
     value = summary.get("similarity_score_percent", 0.0)
     return float(value) if isinstance(value, int | float) else 0.0
+
+
+def _candidate_rank(
+    verification: DeltaVerificationResult,
+    gap_report: Mapping[str, Any],
+) -> tuple[int, float, int]:
+    return (
+        int(verification.accepted),
+        _similarity_score(gap_report),
+        -len(verification.reasons),
+    )
+
+
+def _rank_summary(
+    verification: DeltaVerificationResult,
+    gap_report: Mapping[str, Any],
+) -> dict[str, Any]:
+    return {
+        "accepted": verification.accepted,
+        "similarity_score_percent": _similarity_score(gap_report),
+        "verifier_reason_count": len(verification.reasons),
+        "reason_families": verification.reason_families,
+    }
 
 
 def _json_block(value: Any) -> str:

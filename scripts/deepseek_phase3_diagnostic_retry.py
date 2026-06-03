@@ -25,6 +25,7 @@ from scripts.claude_phase3_diagnostic_retry import (  # noqa: E402
     build_repair_instruction,
     resolve_baseline_case_dir,
     summarize_training_effect,
+    write_best_candidate_artifacts,
 )
 from scripts.deepseek_cuc_smoke_matrix import (  # noqa: E402
     DEFAULT_PARAMS_PATH,
@@ -122,6 +123,12 @@ def run_diagnostic_retry(
     }
     if dry_run:
         result["retry"] = {"called": False, "reason": "dry_run"}
+        result["no_regression_guard"] = write_best_candidate_artifacts(
+            case_output_dir=case_output_dir,
+            baseline_delta=baseline_delta,
+            baseline_verification=baseline_verification,
+            baseline_gap=baseline_gap,
+        )
         _write_json(case_output_dir / "training_summary.json", result)
         print(json.dumps(result, indent=2, sort_keys=True, ensure_ascii=False))
         return result
@@ -148,6 +155,12 @@ def run_diagnostic_retry(
             "failure_path": failure_path.as_posix(),
             "failure": retry_result.model_dump(mode="json"),
         }
+        result["no_regression_guard"] = write_best_candidate_artifacts(
+            case_output_dir=case_output_dir,
+            baseline_delta=baseline_delta,
+            baseline_verification=baseline_verification,
+            baseline_gap=baseline_gap,
+        )
         _write_json(case_output_dir / "training_summary.json", result)
         print(json.dumps(result, indent=2, sort_keys=True, ensure_ascii=False))
         return result
@@ -188,6 +201,15 @@ def run_diagnostic_retry(
         "ledger_committed": ledger_commit is not None,
         "ledger_commit": ledger_commit,
     }
+    result["no_regression_guard"] = write_best_candidate_artifacts(
+        case_output_dir=case_output_dir,
+        baseline_delta=baseline_delta,
+        baseline_verification=baseline_verification,
+        baseline_gap=baseline_gap,
+        retry_delta=retry_delta,
+        retry_verification=retry_verification,
+        retry_gap=retry_gap,
+    )
     result["training_effect"] = summarize_training_effect(
         baseline_verification=baseline_verification,
         baseline_gap=baseline_gap,

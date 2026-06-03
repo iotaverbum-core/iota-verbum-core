@@ -32,6 +32,8 @@ INCLUDE_GLOBS = [
     "docs/**/*.html",
     "cuc-docs/IOTA_VERBUM_ARCHITECTURAL_JOURNAL.md",
     "cuc-docs/CLAUDE_PHASE3_BATCH_RETRY_PROOF_*.json",
+    "cuc-docs/DEEPSEEK_V4_PHASE3_DIAGNOSTIC_RETRY_PROOF_*.json",
+    "cuc-docs/DEEPSEEK_V4_PHASE3_DIAGNOSTIC_RETRY_PROOF_*.md",
     "cuc-docs/batch_retry_results/*.json",
     "benchmark/**/*",
     "rulesets/**/*",

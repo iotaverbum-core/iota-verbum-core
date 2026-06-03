@@ -1,0 +1,20 @@
+{
+  "baseline_accepted": true,
+  "baseline_reason_families": [],
+  "baseline_reasons": [],
+  "baseline_similarity": 100.0,
+  "case_id": "CUCV5-SRC-RELIABILITY-27-PROCUREMENT-REVIEW",
+  "diagnostic_class": "ACCEPTED",
+  "dry_run_source": "gold_expected_delta",
+  "fixture_dir": "C:/tmp/claude-diagnostic-retry-proof/benchmark/kaggle/fixtures/CUCV4-GROUNDING-SRC-27-PROCUREMENT-REVIEW",
+  "ledger_commit": null,
+  "ledger_committed": false,
+  "retry_accepted": null,
+  "retry_called": false,
+  "retry_similarity": null,
+  "schema_version": "iv.cuc_harness.claude_phase3_batch_retry.v1.case_result",
+  "similarity_delta": null,
+  "source_case_id": "CUCV4-GROUNDING-SRC-27-PROCUREMENT-REVIEW",
+  "terminal_diagnostic_class": null,
+  "terminal_failure_reasons": []
+}

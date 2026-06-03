@@ -1,8 +1,12 @@
 from __future__ import annotations
 
+import importlib.util
 import json
+from contextlib import ExitStack
 from pathlib import Path
+from unittest.mock import patch
 
+import pytest
 from scripts.claude_phase3_diagnostic_retry import (
     RetryDeltaResult,
     build_repair_instruction,
@@ -18,11 +22,34 @@ from core.cuc_harness.claude_proposer import (
 from core.cuc_harness.deepseek_proposer import RevisionDelta
 from core.cuc_harness.verifier import verify_revision_delta
 
+pytestmark = pytest.mark.timeout(30)
+
 FIXTURE_DIR = Path(
     "benchmark/kaggle/fixtures/"
     "CUCV4-INVARIANT-01-COUNTERPARTY-RESPONSE-LEGAL-CONTRACT"
 )
 CASE_ID = "CUCV4-INVARIANT-01-COUNTERPARTY-RESPONSE-LEGAL-CONTRACT"
+
+
+@pytest.fixture(autouse=True)
+def _block_live_network_clients():
+    with ExitStack() as stack:
+        stack.enter_context(
+            patch(
+                "core.cuc_harness.claude_proposer.httpx.Client",
+                side_effect=AssertionError("tests must not open live HTTP clients"),
+            )
+        )
+        if importlib.util.find_spec("anthropic") is not None:
+            stack.enter_context(
+                patch(
+                    "anthropic.Anthropic",
+                    side_effect=AssertionError(
+                        "tests must not instantiate Anthropic clients"
+                    ),
+                )
+            )
+        yield
 
 
 def test_claude_schema_allows_null_before_rank_for_new_scenarios() -> None:

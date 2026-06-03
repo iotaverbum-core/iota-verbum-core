@@ -46,6 +46,63 @@ DEFAULT_BASELINE_DIR = (
 )
 DEFAULT_OUTPUT_DIR = REPO_ROOT / "cuc-results" / "claude_diagnostic_retry_probe"
 SCHEMA_VERSION = "iv.cuc_harness.claude_phase3_diagnostic_retry.v1"
+DIAGNOSTIC_CLASSES = (
+    "ACCEPTED",
+    "SCHEMA_VIOLATION",
+    "GROUNDING_GAP",
+    "PRESERVATION_BREACH",
+    "LAW_FAMILY_MISMATCH",
+    "UNCLASSIFIED",
+)
+REPAIR_INSTRUCTION_TEMPLATES = {
+    "SCHEMA_VIOLATION": (
+        "Rebuild the RevisionDelta so every required top-level field and typed "
+        "operation payload matches the sealed schema."
+    ),
+    "GROUNDING_GAP": (
+        "Patch only the cited grounding gap: add the missing source_op_ids and "
+        "supporting_evidence_map entries, and remove any unsupported evidence "
+        "references."
+    ),
+    "PRESERVATION_BREACH": (
+        "Restore every preserved or forbidden sibling item and keep those IDs "
+        "out of changed state, edge, event, unknown, and scenario buckets."
+    ),
+    "LAW_FAMILY_MISMATCH": (
+        "Align the changed IDs, scenario ranks, and named evidence artifact "
+        "with the sealed expected delta without widening the revision scope."
+    ),
+}
+
+_CHANGE_FIELDS = (
+    "changed_states",
+    "changed_edges",
+    "changed_events",
+    "new_unknowns",
+    "resolved_unknowns",
+)
+_EXPLICIT_REASON_FAMILY_CLASS: dict[str, str] = {
+    "invalid_json": "SCHEMA_VIOLATION",
+    "invalid_structure": "SCHEMA_VIOLATION",
+    "response_schema_violation": "SCHEMA_VIOLATION",
+    "missing_scenario_rank_changes": "LAW_FAMILY_MISMATCH",
+    "unexpected_scenario_rank_changes": "LAW_FAMILY_MISMATCH",
+    "mismatched_scenario_rank_changes": "LAW_FAMILY_MISMATCH",
+    "missing_supporting_evidence": "GROUNDING_GAP",
+    "unexpected_supporting_evidence": "GROUNDING_GAP",
+    "mismatched_supporting_evidence": "GROUNDING_GAP",
+    "forbidden_revision_touched": "PRESERVATION_BREACH",
+    "missing_preserved_items": "PRESERVATION_BREACH",
+    "named_evidence_artifact_mismatch": "GROUNDING_GAP",
+}
+for _field_name in _CHANGE_FIELDS:
+    _EXPLICIT_REASON_FAMILY_CLASS[f"missing_{_field_name}"] = "LAW_FAMILY_MISMATCH"
+    _EXPLICIT_REASON_FAMILY_CLASS[f"unexpected_{_field_name}"] = (
+        "LAW_FAMILY_MISMATCH"
+    )
+    _EXPLICIT_REASON_FAMILY_CLASS[f"mismatched_{_field_name}"] = (
+        "LAW_FAMILY_MISMATCH"
+    )
 
 _SOURCE_OP_PATH_RE = re.compile(
     r"^\$\.(?P<section>[^\[]+)\[id='(?P<item_id>[^']+)'\]"
@@ -217,6 +274,7 @@ def build_repair_instruction(
     gap_report: Mapping[str, Any],
     expected_delta: Mapping[str, Any],
 ) -> dict[str, Any]:
+    failure_family = classify_failure_family(verification, gap_report)
     source_op_requirements = _source_op_requirements(gap_report)
     support_map = _string_list_map(expected_delta.get("supporting_evidence_map", {}))
     required_fields: dict[str, Any] = {
@@ -242,8 +300,9 @@ def build_repair_instruction(
     return {
         "candidate_kind": "repair_instruction",
         "case_id": case_id,
-        "failure_family": classify_failure_family(verification, gap_report),
+        "failure_family": failure_family,
         "target_operation_id": op_ids[0] if len(op_ids) == 1 else "multiple",
+        "repair_template": REPAIR_INSTRUCTION_TEMPLATES.get(failure_family, ""),
         "required_fields": required_fields,
         "grounding_evidence_ids": _evidence_ids_from_support_map(support_map),
         "preservation_constraints": expected_delta.get("preserved_items", []),
@@ -256,16 +315,26 @@ def classify_failure_family(
     verification: DeltaVerificationResult,
     gap_report: Mapping[str, Any],
 ) -> str:
+    if verification.accepted and not verification.reason_families:
+        return "ACCEPTED"
     families = set(verification.reason_families)
-    if families & {"invalid_json", "invalid_structure", "response_schema_violation"}:
-        return "SCHEMA_VIOLATION"
-    if _source_op_requirements(gap_report) or any(
-        "supporting_evidence" in family for family in families
-    ):
+    unknown = sorted(families - set(_EXPLICIT_REASON_FAMILY_CLASS))
+    if unknown:
+        raise ValueError(
+            "unclassified verifier reason families: " + ", ".join(unknown)
+        )
+    classes = {_EXPLICIT_REASON_FAMILY_CLASS[family] for family in families}
+    if _source_op_requirements(gap_report):
         return "GROUNDING_GAP"
-    if families & {"forbidden_revision_touched", "missing_preserved_items"}:
+    if "SCHEMA_VIOLATION" in classes:
+        return "SCHEMA_VIOLATION"
+    if "PRESERVATION_BREACH" in classes:
         return "PRESERVATION_BREACH"
-    return "LAW_FAMILY_MISMATCH"
+    if "GROUNDING_GAP" in classes:
+        return "GROUNDING_GAP"
+    if "LAW_FAMILY_MISMATCH" in classes:
+        return "LAW_FAMILY_MISMATCH"
+    raise ValueError("cannot classify verifier rejection with no reason families")
 
 
 def build_retry_prompt(

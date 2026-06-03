@@ -4,6 +4,7 @@ import json
 import os
 from pathlib import Path
 from typing import Any
+from unittest.mock import patch
 
 import pytest
 
@@ -23,22 +24,35 @@ FIXTURE_DIR = Path("benchmark/kaggle/fixtures") / SOURCE_CASE_ID
 EVIDENCE_BUNDLE_PATH = Path("tests/fixtures/evidence_bundle_example.json")
 
 
-@pytest.mark.skipif(
-    not os.getenv("DEEPSEEK_API_KEY"),
-    reason="DEEPSEEK_API_KEY is required for the live DeepSeek proposer test.",
-)
+@pytest.mark.timeout(30)
 def test_deepseek_proposer_on_simple_cuc_case(tmp_path: Path) -> None:
     clean_pack = _read_json(FIXTURE_DIR / "clean_pack.json")
     perturbed_pack = _read_json(FIXTURE_DIR / "perturbed_pack.json")
     gold_delta = _read_json(FIXTURE_DIR / "expected_delta.json")
 
-    proposer = DeepSeekProposer()
-    proposal = proposer.propose(
-        clean_pack,
-        perturbed_pack,
-        case_id=CASE_ID,
-        strict_copy=os.getenv("DEEPSEEK_STRICT_COPY") == "1",
+    fake_client = _FakeDeepSeekClient(
+        {
+            "choices": [
+                {
+                    "message": {
+                        "content": json.dumps(gold_delta, sort_keys=True),
+                    }
+                }
+            ]
+        }
     )
+
+    with patch(
+        "core.cuc_harness.deepseek_proposer.httpx.Client",
+        side_effect=AssertionError("tests must not open live HTTP clients"),
+    ):
+        proposer = DeepSeekProposer(api_key="test-key", client=fake_client)
+        proposal = proposer.propose(
+            clean_pack,
+            perturbed_pack,
+            case_id=CASE_ID,
+            strict_copy=False,
+        )
 
     json_valid = isinstance(proposal, RevisionDelta)
     proposal_payload = proposal.model_dump(mode="json")
@@ -83,6 +97,7 @@ def test_deepseek_proposer_on_simple_cuc_case(tmp_path: Path) -> None:
         f"ledger_committed={ledger_committed}"
     )
     assert json_valid, "DeepSeek proposer did not return a valid RevisionDelta."
+    assert len(fake_client.requests) == 1
 
 
 def test_normalizes_bare_unknown_ids_from_model_output() -> None:
@@ -320,3 +335,36 @@ def _save_delta_if_requested(proposal: RevisionDelta) -> None:
     path = Path(output_path)
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_bytes(dumps_canonical(proposal.model_dump(mode="json")))
+
+
+class _FakeDeepSeekResponse:
+    status_code = 200
+    text = ""
+
+    def __init__(self, payload: dict[str, Any]) -> None:
+        self._payload = payload
+
+    def json(self) -> dict[str, Any]:
+        return self._payload
+
+
+class _FakeDeepSeekClient:
+    def __init__(self, response_payload: dict[str, Any]) -> None:
+        self.response_payload = response_payload
+        self.requests: list[dict[str, Any]] = []
+
+    def post(
+        self,
+        endpoint: str,
+        *,
+        headers: dict[str, str],
+        json: dict[str, Any],
+    ) -> _FakeDeepSeekResponse:
+        self.requests.append(
+            {
+                "endpoint": endpoint,
+                "headers": dict(headers),
+                "json": dict(json),
+            }
+        )
+        return _FakeDeepSeekResponse(self.response_payload)

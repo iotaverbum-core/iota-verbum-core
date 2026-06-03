@@ -62,6 +62,26 @@ def verify_revision_delta(
             f"missing_{field_name}",
             required_ids - proposed_ids,
         )
+        expected_items = _items_by_id(
+            gold_delta.get(field_name, []),
+            id_key="id",
+            change_item=True,
+        )
+        proposed_items = _items_by_id(
+            payload.get(field_name, []),
+            id_key="id",
+            change_item=True,
+        )
+        _append_missing_issue(
+            issues,
+            f"unexpected_{field_name}",
+            set(proposed_items) - set(expected_items),
+        )
+        _append_missing_issue(
+            issues,
+            f"mismatched_{field_name}",
+            _mismatched_item_ids(expected_items, proposed_items),
+        )
 
     required_scenarios = _gold_scenario_ids(gold_delta)
     proposed_scenarios = _scenario_ids(payload.get("scenario_rank_changes", []))
@@ -69,6 +89,42 @@ def verify_revision_delta(
         issues,
         "missing_scenario_rank_changes",
         required_scenarios - proposed_scenarios,
+    )
+    expected_scenarios = _items_by_id(
+        gold_delta.get("scenario_rank_changes", []),
+        id_key="scenario_id",
+    )
+    proposed_scenario_items = _items_by_id(
+        payload.get("scenario_rank_changes", []),
+        id_key="scenario_id",
+    )
+    _append_missing_issue(
+        issues,
+        "unexpected_scenario_rank_changes",
+        set(proposed_scenario_items) - set(expected_scenarios),
+    )
+    _append_missing_issue(
+        issues,
+        "mismatched_scenario_rank_changes",
+        _mismatched_item_ids(expected_scenarios, proposed_scenario_items),
+    )
+
+    expected_support = _string_list_map(gold_delta.get("supporting_evidence_map", {}))
+    proposed_support = _string_list_map(payload.get("supporting_evidence_map", {}))
+    _append_missing_issue(
+        issues,
+        "missing_supporting_evidence",
+        set(expected_support) - set(proposed_support),
+    )
+    _append_missing_issue(
+        issues,
+        "unexpected_supporting_evidence",
+        set(proposed_support) - set(expected_support),
+    )
+    _append_missing_issue(
+        issues,
+        "mismatched_supporting_evidence",
+        _mismatched_support_ids(expected_support, proposed_support),
     )
 
     touched_ids = set().union(
@@ -122,6 +178,83 @@ def _gold_item_ids(gold_delta: Mapping[str, Any], field_name: str) -> set[str]:
 
 def _gold_scenario_ids(gold_delta: Mapping[str, Any]) -> set[str]:
     return _scenario_ids(gold_delta.get("scenario_rank_changes", []))
+
+
+def _items_by_id(
+    items: Any,
+    *,
+    id_key: str,
+    change_item: bool = False,
+) -> dict[str, Mapping[str, Any]]:
+    if not isinstance(items, list):
+        return {}
+    indexed: dict[str, Mapping[str, Any]] = {}
+    for item in items:
+        if not isinstance(item, Mapping):
+            continue
+        item_id = item.get(id_key)
+        if not isinstance(item_id, str):
+            continue
+        indexed.setdefault(
+            str(item_id),
+            _normalized_change_item(item) if change_item else dict(item),
+        )
+    return indexed
+
+
+def _normalized_change_item(item: Mapping[str, Any]) -> dict[str, Any]:
+    normalized = dict(item)
+    normalized.setdefault("before", None)
+    normalized.setdefault("after", None)
+    normalized.setdefault("source_op_ids", [])
+    return normalized
+
+
+def _mismatched_item_ids(
+    expected_items: Mapping[str, Mapping[str, Any]],
+    proposed_items: Mapping[str, Mapping[str, Any]],
+) -> set[str]:
+    return {
+        item_id
+        for item_id in set(expected_items) & set(proposed_items)
+        if not _canonical_equal(proposed_items[item_id], expected_items[item_id])
+    }
+
+
+def _string_list_map(value: Any) -> dict[str, tuple[str, ...]]:
+    if not isinstance(value, Mapping):
+        return {}
+    normalized: dict[str, tuple[str, ...]] = {}
+    for key, raw_items in value.items():
+        if not isinstance(key, str) or not isinstance(raw_items, list):
+            continue
+        normalized[key] = tuple(
+            sorted(str(item) for item in raw_items if isinstance(item, str))
+        )
+    return normalized
+
+
+def _mismatched_support_ids(
+    expected_support: Mapping[str, tuple[str, ...]],
+    proposed_support: Mapping[str, tuple[str, ...]],
+) -> set[str]:
+    return {
+        item_id
+        for item_id in set(expected_support) & set(proposed_support)
+        if proposed_support[item_id] != expected_support[item_id]
+    }
+
+
+def _canonical_equal(first: Any, second: Any) -> bool:
+    return _canonical_value(first) == _canonical_value(second)
+
+
+def _canonical_value(value: Any) -> Any:
+    if isinstance(value, Mapping):
+        return {key: _canonical_value(value[key]) for key in sorted(value)}
+    if isinstance(value, list):
+        return [_canonical_value(item) for item in value]
+    return value
 
 
 def _change_ids(items: Any) -> set[str]:

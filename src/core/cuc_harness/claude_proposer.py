@@ -29,6 +29,7 @@ DEFAULT_CLAUDE_FALLBACK_MODEL = ""
 DEFAULT_CLAUDE_MAX_TOKENS = 8192
 DEFAULT_CLAUDE_RATE_LIMIT_RETRIES = 5
 DEFAULT_CLAUDE_RATE_LIMIT_SLEEP_SECONDS = 70.0
+CLAUDE_REVISION_DELTA_TOOL_NAME = "emit_revision_delta"
 
 CLAUDE_SCHEMA_COMPATIBILITY_INSTRUCTIONS = """\
 Claude structured-output compatibility rules:
@@ -142,7 +143,7 @@ REVISION_DELTA_JSON_SCHEMA: dict[str, Any] = {
             "type": "object",
             "properties": {
                 "scenario_id": {"type": "string"},
-                "before_rank": {"type": "integer"},
+                "before_rank": {"type": ["integer", "null"]},
                 "after_rank": {"type": "integer"},
             },
             "required": ["scenario_id", "before_rank", "after_rank"],
@@ -277,20 +278,7 @@ class ClaudeProposer:
         model: str,
         user_prompt: str,
     ) -> RevisionDelta | SealedFailureArtifact:
-        payload = {
-            "model": model,
-            "max_tokens": self.max_tokens,
-            "system": SYSTEM_PROMPT,
-            "messages": [{"role": "user", "content": user_prompt}],
-            "output_config": {
-                "format": {
-                    "type": "json_schema",
-                    "schema": REVISION_DELTA_JSON_SCHEMA,
-                }
-            },
-        }
-        if self.effort:
-            payload["output_config"]["effort"] = self.effort
+        payload = self._structured_output_payload(model=model, user_prompt=user_prompt)
         headers = {
             "x-api-key": self.api_key,
             "anthropic-version": CLAUDE_API_VERSION,
@@ -310,6 +298,29 @@ class ClaudeProposer:
             response_body: Any = response.json()
         except ValueError:
             response_body = response.text
+
+        if status_code >= 400:
+            if _should_retry_with_tool_schema(response_body, status_code):
+                tool_payload = self._tool_schema_payload(
+                    model=model,
+                    user_prompt=user_prompt,
+                )
+                try:
+                    response = self._post_with_rate_limit_retry(
+                        tool_payload,
+                        headers,
+                    )
+                except httpx.HTTPError as exc:
+                    return self._failure(
+                        model=model,
+                        error_type=exc.__class__.__name__,
+                        message=str(exc),
+                    )
+                status_code = response.status_code
+                try:
+                    response_body = response.json()
+                except ValueError:
+                    response_body = response.text
 
         if status_code >= 400:
             return self._failure(
@@ -333,6 +344,52 @@ class ClaudeProposer:
                 status_code=status_code,
                 response_body=response_body,
             )
+
+    def _base_payload(self, *, model: str, user_prompt: str) -> dict[str, Any]:
+        return {
+            "model": model,
+            "max_tokens": self.max_tokens,
+            "system": SYSTEM_PROMPT,
+            "messages": [{"role": "user", "content": user_prompt}],
+        }
+
+    def _structured_output_payload(
+        self,
+        *,
+        model: str,
+        user_prompt: str,
+    ) -> dict[str, Any]:
+        payload = self._base_payload(model=model, user_prompt=user_prompt)
+        payload["output_config"] = {
+            "format": {
+                "type": "json_schema",
+                "schema": REVISION_DELTA_JSON_SCHEMA,
+            }
+        }
+        if self.effort:
+            payload["output_config"]["effort"] = self.effort
+        return payload
+
+    def _tool_schema_payload(
+        self,
+        *,
+        model: str,
+        user_prompt: str,
+    ) -> dict[str, Any]:
+        payload = self._base_payload(model=model, user_prompt=user_prompt)
+        payload["tools"] = [
+            {
+                "name": CLAUDE_REVISION_DELTA_TOOL_NAME,
+                "description": "Emit exactly one structured RevisionDelta object.",
+                "strict": True,
+                "input_schema": REVISION_DELTA_JSON_SCHEMA,
+            }
+        ]
+        payload["tool_choice"] = {
+            "type": "tool",
+            "name": CLAUDE_REVISION_DELTA_TOOL_NAME,
+        }
+        return payload
 
     def _post(
         self,
@@ -401,6 +458,12 @@ def _extract_claude_json_content(response_body: Any) -> dict[str, Any]:
     for block in content:
         if not isinstance(block, Mapping):
             continue
+        if (
+            block.get("type") == "tool_use"
+            and block.get("name") == CLAUDE_REVISION_DELTA_TOOL_NAME
+            and isinstance(block.get("input"), Mapping)
+        ):
+            return dict(block["input"])
         if block.get("type") != "text":
             continue
         text = block.get("text")
@@ -423,6 +486,28 @@ def _retry_after_seconds(response: httpx.Response, *, default_seconds: float) ->
             return default_seconds
         return max(0.0, parsed)
     return default_seconds
+
+
+def _should_retry_with_tool_schema(response_body: Any, status_code: int) -> bool:
+    if status_code not in {400, 422}:
+        return False
+    if isinstance(response_body, str):
+        serialized = response_body
+    else:
+        try:
+            serialized = _canonical_json(response_body)
+        except (TypeError, ValueError):
+            serialized = str(response_body)
+    lowered = serialized.lower()
+    return any(
+        marker in lowered
+        for marker in (
+            "output_config",
+            "output_format",
+            "json_schema",
+            "format",
+        )
+    )
 
 
 def hydrate_revision_delta_json_fields(payload: dict[str, Any]) -> dict[str, Any]:
@@ -474,6 +559,7 @@ def _hydrate_json_string(value: Any) -> Any:
 __all__ = [
     "CLAUDE_API_VERSION",
     "CLAUDE_BASE_URL",
+    "CLAUDE_REVISION_DELTA_TOOL_NAME",
     "ClaudeProposer",
     "DEFAULT_CLAUDE_MODEL",
     "REVISION_DELTA_JSON_SCHEMA",

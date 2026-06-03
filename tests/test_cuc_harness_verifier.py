@@ -57,5 +57,62 @@ def test_verify_revision_delta_reports_stable_reason_families() -> None:
     ) in verification.reasons
 
 
+def test_verify_revision_delta_rejects_mismatched_change_payload() -> None:
+    gold_delta = _read_json(FIXTURE_DIR / "expected_delta.json")
+    proposal_payload = json.loads(json.dumps(gold_delta))
+    proposal_payload["changed_states"][0]["after"]["status"] = "contested"
+
+    verification = verify_revision_delta(proposal_payload, gold_delta)
+
+    assert not verification.accepted
+    assert "mismatched_changed_states" in verification.reason_families
+    assert "mismatched_changed_states:state:primary" in verification.reasons
+
+
+def test_verify_revision_delta_rejects_supporting_evidence_mismatch() -> None:
+    gold_delta = _read_json(FIXTURE_DIR / "expected_delta.json")
+    proposal_payload = json.loads(json.dumps(gold_delta))
+    proposal_payload["supporting_evidence_map"]["state:primary"] = [
+        "evidence:primary"
+    ]
+
+    verification = verify_revision_delta(proposal_payload, gold_delta)
+
+    assert not verification.accepted
+    assert "mismatched_supporting_evidence" in verification.reason_families
+    assert "mismatched_supporting_evidence:state:primary" in verification.reasons
+
+
+def test_verify_revision_delta_rejects_mismatched_scenario_rank() -> None:
+    gold_delta = {
+        "changed_edges": [],
+        "changed_events": [],
+        "changed_states": [],
+        "forbidden_revisions": [],
+        "new_unknowns": [],
+        "preserved_items": [],
+        "resolved_unknowns": [],
+        "scenario_rank_changes": [
+            {
+                "scenario_id": "scenario:primary",
+                "before_rank": 2,
+                "after_rank": 1,
+            }
+        ],
+        "supporting_evidence_map": {},
+    }
+    proposal_payload = json.loads(json.dumps(gold_delta))
+    proposal_payload["scenario_rank_changes"][0]["after_rank"] = 3
+
+    verification = verify_revision_delta(proposal_payload, gold_delta)
+
+    assert not verification.accepted
+    assert "mismatched_scenario_rank_changes" in verification.reason_families
+    assert (
+        "mismatched_scenario_rank_changes:scenario:primary"
+        in verification.reasons
+    )
+
+
 def _read_json(path: Path) -> dict:
     return json.loads(path.read_text(encoding="utf-8"))

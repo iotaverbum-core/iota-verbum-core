@@ -65,6 +65,7 @@ def test_build_retry_messages_appends_diagnostic_repair_payload() -> None:
     assert "BASELINE_REJECTED_DELTA:" in user_prompt
     assert '"failure_family": "GROUNDING_GAP"' in user_prompt
     assert "Apply only the repair_instruction target changes." in user_prompt
+    assert "Copy every object in exact_expected_fragments exactly." in user_prompt
 
 
 def test_request_retry_delta_preserves_successful_fallback_model(monkeypatch) -> None:
@@ -126,9 +127,19 @@ def test_dry_run_writes_repair_instruction_without_live_api(tmp_path: Path) -> N
 
     repair_path = Path(result["repair_instruction_path"])
     repair_instruction = _read_json(repair_path)
+    exact_state = repair_instruction["required_fields"]["exact_expected_fragments"][
+        "changed_states"
+    ][0]
     assert result["retry"] == {"called": False, "reason": "dry_run"}
     assert result["baseline"]["accepted"] is False
     assert repair_instruction["failure_family"] == "GROUNDING_GAP"
+    assert exact_state["id"] == "state:primary"
+    assert exact_state["before"]["attributes"] == {
+        "exception_active": False,
+        "rule_version": "v1",
+        "scope": "global",
+    }
+    assert exact_state["before"]["confidence_band"] == "medium"
     assert "scenario:primary" in (
         repair_instruction["required_fields"]["supporting_evidence_map_required"]
     )

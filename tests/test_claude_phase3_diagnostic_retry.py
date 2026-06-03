@@ -86,6 +86,11 @@ def test_build_repair_instruction_targets_hop3_grounding_gap() -> None:
     assert required["supporting_evidence_map_required"]["event:response"] == [
         "evidence:response"
     ]
+    exact = required["exact_expected_fragments"]
+    assert exact["changed_states"][0]["id"] == "state:hop3_dependency"
+    assert exact["changed_edges"][0]["id"] == "edge:hop3_dependency"
+    assert exact["changed_events"][0]["id"] == "event:hop3"
+    assert exact["new_unknowns"][0]["id"] == "unknown:hop3_dependency"
     assert "scenario:alternate" in required["remove_unexpected_items"]
     assert "supporting_evidence_map.scenario:alternate" in (
         required["remove_unexpected_items"]
@@ -131,6 +136,7 @@ def test_retry_prompt_appends_verifier_feedback_and_repair_instruction() -> None
     assert '"target_operation_id": "op:hop3"' in prompt
     assert '"before_rank": null' in prompt
     assert "Preserve every ID in preservation_constraints." in prompt
+    assert "Copy every object in exact_expected_fragments exactly." in prompt
 
 
 def test_request_retry_delta_preserves_successful_fallback_model(

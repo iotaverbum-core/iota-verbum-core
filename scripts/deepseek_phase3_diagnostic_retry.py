@@ -245,6 +245,8 @@ def build_retry_prompt_addendum(
         "Return one complete corrected RevisionDelta JSON object.",
         "Do not return commentary, markdown, or a patch.",
         "Apply only the repair_instruction target changes.",
+        "Copy every object in exact_expected_fragments exactly.",
+        "Do not alter baseline objects that are already verifier-clean.",
         "Remove unexpected items named in remove_unexpected_items.",
         "Preserve every ID in preservation_constraints.",
         "Use before_rank: null for newly introduced scenarios.",

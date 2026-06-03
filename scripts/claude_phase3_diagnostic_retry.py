@@ -278,6 +278,10 @@ def build_repair_instruction(
     source_op_requirements = _source_op_requirements(gap_report)
     support_map = _string_list_map(expected_delta.get("supporting_evidence_map", {}))
     required_fields: dict[str, Any] = {
+        "exact_expected_fragments": _exact_expected_fragments(
+            verification,
+            expected_delta,
+        ),
         "source_op_ids_required": source_op_requirements,
         "scenario_rank_changes": expected_delta.get("scenario_rank_changes", []),
         "supporting_evidence_map_required": support_map,
@@ -361,6 +365,8 @@ def build_retry_prompt(
         "Return one complete corrected RevisionDelta JSON object.",
         "Do not return commentary, markdown, or a patch.",
         "Apply only the repair_instruction target changes.",
+        "Copy every object in exact_expected_fragments exactly.",
+        "Do not alter baseline objects that are already verifier-clean.",
         "Remove unexpected items named in remove_unexpected_items.",
         "Preserve every ID in preservation_constraints.",
         "Use before_rank: null for newly introduced scenarios.",
@@ -588,6 +594,70 @@ def _unexpected_items(
 def _reason_ids(reason: str) -> list[str]:
     _, _, raw_ids = reason.partition(":")
     return [item for item in raw_ids.split(",") if item]
+
+
+def _exact_expected_fragments(
+    verification: DeltaVerificationResult,
+    expected_delta: Mapping[str, Any],
+) -> dict[str, Any]:
+    fragments: dict[str, Any] = {}
+    list_fields = {
+        "changed_states": "id",
+        "changed_edges": "id",
+        "changed_events": "id",
+        "new_unknowns": "id",
+        "resolved_unknowns": "id",
+        "scenario_rank_changes": "scenario_id",
+    }
+    for field_name, id_key in list_fields.items():
+        ids = _reason_target_ids(verification, field_name)
+        if not ids:
+            continue
+        expected_items = _index_expected_items(expected_delta.get(field_name), id_key)
+        matched = [
+            expected_items[item_id]
+            for item_id in ids
+            if item_id in expected_items
+        ]
+        if matched:
+            fragments[field_name] = matched
+
+    support_ids = _reason_target_ids(verification, "supporting_evidence")
+    support_map = _string_list_map(expected_delta.get("supporting_evidence_map", {}))
+    matched_support = {
+        item_id: support_map[item_id]
+        for item_id in sorted(support_ids)
+        if item_id in support_map
+    }
+    if matched_support:
+        fragments["supporting_evidence_map"] = matched_support
+    return fragments
+
+
+def _reason_target_ids(
+    verification: DeltaVerificationResult,
+    field_name: str,
+) -> list[str]:
+    prefixes = (
+        f"missing_{field_name}:",
+        f"mismatched_{field_name}:",
+        f"unexpected_{field_name}:",
+    )
+    target_ids: set[str] = set()
+    for reason in verification.reasons:
+        if reason.startswith(prefixes):
+            target_ids.update(_reason_ids(reason))
+    return sorted(target_ids)
+
+
+def _index_expected_items(value: Any, id_key: str) -> dict[str, Any]:
+    if not isinstance(value, list):
+        return {}
+    indexed: dict[str, Any] = {}
+    for item in value:
+        if isinstance(item, Mapping) and isinstance(item.get(id_key), str):
+            indexed[str(item[id_key])] = item
+    return indexed
 
 
 def _string_list_map(value: Any) -> dict[str, list[str]]:

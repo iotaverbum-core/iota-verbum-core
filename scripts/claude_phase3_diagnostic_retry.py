@@ -46,6 +46,63 @@ DEFAULT_BASELINE_DIR = (
 )
 DEFAULT_OUTPUT_DIR = REPO_ROOT / "cuc-results" / "claude_diagnostic_retry_probe"
 SCHEMA_VERSION = "iv.cuc_harness.claude_phase3_diagnostic_retry.v1"
+DIAGNOSTIC_CLASSES = (
+    "ACCEPTED",
+    "SCHEMA_VIOLATION",
+    "GROUNDING_GAP",
+    "PRESERVATION_BREACH",
+    "LAW_FAMILY_MISMATCH",
+    "UNCLASSIFIED",
+)
+REPAIR_INSTRUCTION_TEMPLATES = {
+    "SCHEMA_VIOLATION": (
+        "Rebuild the RevisionDelta so every required top-level field and typed "
+        "operation payload matches the sealed schema."
+    ),
+    "GROUNDING_GAP": (
+        "Patch only the cited grounding gap: add the missing source_op_ids and "
+        "supporting_evidence_map entries, and remove any unsupported evidence "
+        "references."
+    ),
+    "PRESERVATION_BREACH": (
+        "Restore every preserved or forbidden sibling item and keep those IDs "
+        "out of changed state, edge, event, unknown, and scenario buckets."
+    ),
+    "LAW_FAMILY_MISMATCH": (
+        "Align the changed IDs, scenario ranks, and named evidence artifact "
+        "with the sealed expected delta without widening the revision scope."
+    ),
+}
+
+_CHANGE_FIELDS = (
+    "changed_states",
+    "changed_edges",
+    "changed_events",
+    "new_unknowns",
+    "resolved_unknowns",
+)
+_EXPLICIT_REASON_FAMILY_CLASS: dict[str, str] = {
+    "invalid_json": "SCHEMA_VIOLATION",
+    "invalid_structure": "SCHEMA_VIOLATION",
+    "response_schema_violation": "SCHEMA_VIOLATION",
+    "missing_scenario_rank_changes": "LAW_FAMILY_MISMATCH",
+    "unexpected_scenario_rank_changes": "LAW_FAMILY_MISMATCH",
+    "mismatched_scenario_rank_changes": "LAW_FAMILY_MISMATCH",
+    "missing_supporting_evidence": "GROUNDING_GAP",
+    "unexpected_supporting_evidence": "GROUNDING_GAP",
+    "mismatched_supporting_evidence": "GROUNDING_GAP",
+    "forbidden_revision_touched": "PRESERVATION_BREACH",
+    "missing_preserved_items": "PRESERVATION_BREACH",
+    "named_evidence_artifact_mismatch": "GROUNDING_GAP",
+}
+for _field_name in _CHANGE_FIELDS:
+    _EXPLICIT_REASON_FAMILY_CLASS[f"missing_{_field_name}"] = "LAW_FAMILY_MISMATCH"
+    _EXPLICIT_REASON_FAMILY_CLASS[f"unexpected_{_field_name}"] = (
+        "LAW_FAMILY_MISMATCH"
+    )
+    _EXPLICIT_REASON_FAMILY_CLASS[f"mismatched_{_field_name}"] = (
+        "LAW_FAMILY_MISMATCH"
+    )
 
 _SOURCE_OP_PATH_RE = re.compile(
     r"^\$\.(?P<section>[^\[]+)\[id='(?P<item_id>[^']+)'\]"
@@ -133,6 +190,12 @@ def run_diagnostic_retry(
     }
     if dry_run:
         result["retry"] = {"called": False, "reason": "dry_run"}
+        result["no_regression_guard"] = write_best_candidate_artifacts(
+            case_output_dir=case_output_dir,
+            baseline_delta=baseline_delta,
+            baseline_verification=baseline_verification,
+            baseline_gap=baseline_gap,
+        )
         _write_json(case_output_dir / "training_summary.json", result)
         print(json.dumps(result, indent=2, sort_keys=True, ensure_ascii=False))
         return result
@@ -159,6 +222,12 @@ def run_diagnostic_retry(
             "failure_path": failure_path.as_posix(),
             "failure": retry_result.model_dump(mode="json"),
         }
+        result["no_regression_guard"] = write_best_candidate_artifacts(
+            case_output_dir=case_output_dir,
+            baseline_delta=baseline_delta,
+            baseline_verification=baseline_verification,
+            baseline_gap=baseline_gap,
+        )
         _write_json(case_output_dir / "training_summary.json", result)
         print(json.dumps(result, indent=2, sort_keys=True, ensure_ascii=False))
         return result
@@ -199,6 +268,15 @@ def run_diagnostic_retry(
         "ledger_committed": ledger_commit is not None,
         "ledger_commit": ledger_commit,
     }
+    result["no_regression_guard"] = write_best_candidate_artifacts(
+        case_output_dir=case_output_dir,
+        baseline_delta=baseline_delta,
+        baseline_verification=baseline_verification,
+        baseline_gap=baseline_gap,
+        retry_delta=retry_delta,
+        retry_verification=retry_verification,
+        retry_gap=retry_gap,
+    )
     result["training_effect"] = summarize_training_effect(
         baseline_verification=baseline_verification,
         baseline_gap=baseline_gap,
@@ -217,9 +295,14 @@ def build_repair_instruction(
     gap_report: Mapping[str, Any],
     expected_delta: Mapping[str, Any],
 ) -> dict[str, Any]:
+    failure_family = classify_failure_family(verification, gap_report)
     source_op_requirements = _source_op_requirements(gap_report)
     support_map = _string_list_map(expected_delta.get("supporting_evidence_map", {}))
     required_fields: dict[str, Any] = {
+        "exact_expected_fragments": _exact_expected_fragments(
+            verification,
+            expected_delta,
+        ),
         "source_op_ids_required": source_op_requirements,
         "scenario_rank_changes": expected_delta.get("scenario_rank_changes", []),
         "supporting_evidence_map_required": support_map,
@@ -242,8 +325,9 @@ def build_repair_instruction(
     return {
         "candidate_kind": "repair_instruction",
         "case_id": case_id,
-        "failure_family": classify_failure_family(verification, gap_report),
+        "failure_family": failure_family,
         "target_operation_id": op_ids[0] if len(op_ids) == 1 else "multiple",
+        "repair_template": REPAIR_INSTRUCTION_TEMPLATES.get(failure_family, ""),
         "required_fields": required_fields,
         "grounding_evidence_ids": _evidence_ids_from_support_map(support_map),
         "preservation_constraints": expected_delta.get("preserved_items", []),
@@ -256,16 +340,26 @@ def classify_failure_family(
     verification: DeltaVerificationResult,
     gap_report: Mapping[str, Any],
 ) -> str:
+    if verification.accepted and not verification.reason_families:
+        return "ACCEPTED"
     families = set(verification.reason_families)
-    if families & {"invalid_json", "invalid_structure", "response_schema_violation"}:
-        return "SCHEMA_VIOLATION"
-    if _source_op_requirements(gap_report) or any(
-        "supporting_evidence" in family for family in families
-    ):
+    unknown = sorted(families - set(_EXPLICIT_REASON_FAMILY_CLASS))
+    if unknown:
+        raise ValueError(
+            "unclassified verifier reason families: " + ", ".join(unknown)
+        )
+    classes = {_EXPLICIT_REASON_FAMILY_CLASS[family] for family in families}
+    if _source_op_requirements(gap_report):
         return "GROUNDING_GAP"
-    if families & {"forbidden_revision_touched", "missing_preserved_items"}:
+    if "SCHEMA_VIOLATION" in classes:
+        return "SCHEMA_VIOLATION"
+    if "PRESERVATION_BREACH" in classes:
         return "PRESERVATION_BREACH"
-    return "LAW_FAMILY_MISMATCH"
+    if "GROUNDING_GAP" in classes:
+        return "GROUNDING_GAP"
+    if "LAW_FAMILY_MISMATCH" in classes:
+        return "LAW_FAMILY_MISMATCH"
+    raise ValueError("cannot classify verifier rejection with no reason families")
 
 
 def build_retry_prompt(
@@ -292,6 +386,8 @@ def build_retry_prompt(
         "Return one complete corrected RevisionDelta JSON object.",
         "Do not return commentary, markdown, or a patch.",
         "Apply only the repair_instruction target changes.",
+        "Copy every object in exact_expected_fragments exactly.",
+        "Do not alter baseline objects that are already verifier-clean.",
         "Remove unexpected items named in remove_unexpected_items.",
         "Preserve every ID in preservation_constraints.",
         "Use before_rank: null for newly introduced scenarios.",
@@ -362,6 +458,59 @@ def summarize_training_effect(
         "improved": retry_verification.accepted
         or retry_score > baseline_score
         or len(retry_verification.reasons) < len(baseline_verification.reasons),
+    }
+
+
+def write_best_candidate_artifacts(
+    *,
+    case_output_dir: Path,
+    baseline_delta: Mapping[str, Any],
+    baseline_verification: DeltaVerificationResult,
+    baseline_gap: Mapping[str, Any],
+    retry_delta: Mapping[str, Any] | None = None,
+    retry_verification: DeltaVerificationResult | None = None,
+    retry_gap: Mapping[str, Any] | None = None,
+) -> dict[str, Any]:
+    baseline_rank = _candidate_rank(baseline_verification, baseline_gap)
+    retry_rank = None
+    selected = "baseline"
+    selected_delta = baseline_delta
+    selected_verification = baseline_verification
+    selected_gap = baseline_gap
+
+    if retry_delta is not None and retry_verification is not None and retry_gap:
+        retry_rank = _candidate_rank(retry_verification, retry_gap)
+        if retry_rank > baseline_rank:
+            selected = "retry"
+            selected_delta = retry_delta
+            selected_verification = retry_verification
+            selected_gap = retry_gap
+
+    best_delta_path = case_output_dir / "model_delta.json"
+    best_gap_path = case_output_dir / "gap_report.json"
+    best_verification_path = case_output_dir / "verification.json"
+    best_delta_path.write_bytes(dumps_canonical(selected_delta))
+    _write_json(best_gap_path, selected_gap)
+    _write_json(best_verification_path, selected_verification.to_dict())
+
+    return {
+        "selection_rule": (
+            "accepted > similarity_score_percent > fewer_verifier_reasons; "
+            "baseline wins ties"
+        ),
+        "selected_candidate": selected,
+        "retry_improved": retry_rank is not None and retry_rank > baseline_rank,
+        "retry_regressed": retry_rank is not None and retry_rank < baseline_rank,
+        "baseline_rank": _rank_summary(baseline_verification, baseline_gap),
+        "retry_rank": (
+            _rank_summary(retry_verification, retry_gap)
+            if retry_verification is not None and retry_gap
+            else None
+        ),
+        "next_baseline_dir": case_output_dir.as_posix(),
+        "best_model_delta_path": best_delta_path.as_posix(),
+        "best_gap_report_path": best_gap_path.as_posix(),
+        "best_verification_path": best_verification_path.as_posix(),
     }
 
 
@@ -521,6 +670,70 @@ def _reason_ids(reason: str) -> list[str]:
     return [item for item in raw_ids.split(",") if item]
 
 
+def _exact_expected_fragments(
+    verification: DeltaVerificationResult,
+    expected_delta: Mapping[str, Any],
+) -> dict[str, Any]:
+    fragments: dict[str, Any] = {}
+    list_fields = {
+        "changed_states": "id",
+        "changed_edges": "id",
+        "changed_events": "id",
+        "new_unknowns": "id",
+        "resolved_unknowns": "id",
+        "scenario_rank_changes": "scenario_id",
+    }
+    for field_name, id_key in list_fields.items():
+        ids = _reason_target_ids(verification, field_name)
+        if not ids:
+            continue
+        expected_items = _index_expected_items(expected_delta.get(field_name), id_key)
+        matched = [
+            expected_items[item_id]
+            for item_id in ids
+            if item_id in expected_items
+        ]
+        if matched:
+            fragments[field_name] = matched
+
+    support_ids = _reason_target_ids(verification, "supporting_evidence")
+    support_map = _string_list_map(expected_delta.get("supporting_evidence_map", {}))
+    matched_support = {
+        item_id: support_map[item_id]
+        for item_id in sorted(support_ids)
+        if item_id in support_map
+    }
+    if matched_support:
+        fragments["supporting_evidence_map"] = matched_support
+    return fragments
+
+
+def _reason_target_ids(
+    verification: DeltaVerificationResult,
+    field_name: str,
+) -> list[str]:
+    prefixes = (
+        f"missing_{field_name}:",
+        f"mismatched_{field_name}:",
+        f"unexpected_{field_name}:",
+    )
+    target_ids: set[str] = set()
+    for reason in verification.reasons:
+        if reason.startswith(prefixes):
+            target_ids.update(_reason_ids(reason))
+    return sorted(target_ids)
+
+
+def _index_expected_items(value: Any, id_key: str) -> dict[str, Any]:
+    if not isinstance(value, list):
+        return {}
+    indexed: dict[str, Any] = {}
+    for item in value:
+        if isinstance(item, Mapping) and isinstance(item.get(id_key), str):
+            indexed[str(item[id_key])] = item
+    return indexed
+
+
 def _string_list_map(value: Any) -> dict[str, list[str]]:
     if not isinstance(value, Mapping):
         return {}
@@ -544,6 +757,29 @@ def _similarity_score(gap_report: Mapping[str, Any]) -> float:
         return 0.0
     value = summary.get("similarity_score_percent", 0.0)
     return float(value) if isinstance(value, int | float) else 0.0
+
+
+def _candidate_rank(
+    verification: DeltaVerificationResult,
+    gap_report: Mapping[str, Any],
+) -> tuple[int, float, int]:
+    return (
+        int(verification.accepted),
+        _similarity_score(gap_report),
+        -len(verification.reasons),
+    )
+
+
+def _rank_summary(
+    verification: DeltaVerificationResult,
+    gap_report: Mapping[str, Any],
+) -> dict[str, Any]:
+    return {
+        "accepted": verification.accepted,
+        "similarity_score_percent": _similarity_score(gap_report),
+        "verifier_reason_count": len(verification.reasons),
+        "reason_families": verification.reason_families,
+    }
 
 
 def _json_block(value: Any) -> str:

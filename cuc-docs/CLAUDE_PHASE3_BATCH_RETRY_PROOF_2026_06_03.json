@@ -1,0 +1,41 @@
+{
+  "attestation_sha": "8dd51ef83cc2daceff697d7f619071df52d4d6d54a72d78ca3ea81640ed83838",
+  "baseline_accepted": {
+    "count": 64,
+    "rate": 1.0
+  },
+  "bundle_sha": "1bd913b80b49e6cc772fbf90c9447c333ec0da779bc6eb98f13d5a5fe5e7a3fe",
+  "diagnostic_class_breakdown": {
+    "ACCEPTED": 64,
+    "GROUNDING_GAP": 0,
+    "LAW_FAMILY_MISMATCH": 0,
+    "PRESERVATION_BREACH": 0,
+    "SCHEMA_VIOLATION": 0,
+    "UNCLASSIFIED": 0
+  },
+  "dry_run": true,
+  "ledger_commit_rate": 0.0,
+  "ledger_root": "C:/tmp/claude-diagnostic-retry-proof/cuc-results/claude_phase3_batch_retry/ledger",
+  "output_dir": "C:/tmp/claude-diagnostic-retry-proof/cuc-results/claude_phase3_batch_retry",
+  "params_path": "C:/tmp/claude-diagnostic-retry-proof/benchmark/cuc_v5_64_params.json",
+  "results_dir": "C:/tmp/claude-diagnostic-retry-proof/cuc-docs/batch_retry_results",
+  "retry_accepted": {
+    "count": 0,
+    "rate": 0.0
+  },
+  "retry_attempted": {
+    "count": 0,
+    "rate": 0.0
+  },
+  "run_date": "2026_06_03",
+  "schema_version": "iv.cuc_harness.claude_phase3_batch_retry.v1",
+  "similarity_delta_distribution": {
+    "count": 0,
+    "max": null,
+    "mean": null,
+    "median": null,
+    "min": null
+  },
+  "total_cases": 64,
+  "unrepaired": []
+}

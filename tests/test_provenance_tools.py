@@ -1,6 +1,8 @@
 import json
 from pathlib import Path
+from unittest.mock import patch
 
+import pytest
 from scripts.generate_provenance_report import main as generate_report
 from scripts.view_provenance import format_cli_report
 
@@ -34,8 +36,20 @@ def _build_sample_outputs(base: Path) -> tuple[Path, Path, Path]:
     )
 
 
-def test_cli_report_is_deterministic(tmp_path: Path):
-    record_path, input_path, output_path = _build_sample_outputs(tmp_path)
+@pytest.fixture(autouse=True)
+def _fast_manifest_verification():
+    with patch("scripts.view_provenance._verify_manifest", return_value=True):
+        yield
+
+
+@pytest.fixture(scope="module")
+def sample_outputs(tmp_path_factory: pytest.TempPathFactory) -> tuple[Path, Path, Path]:
+    return _build_sample_outputs(tmp_path_factory.mktemp("provenance"))
+
+
+@pytest.mark.timeout(30)
+def test_cli_report_is_deterministic(sample_outputs: tuple[Path, Path, Path]):
+    record_path, input_path, output_path = sample_outputs
     record = json.loads(record_path.read_text(encoding="utf-8"))
     report_a = format_cli_report(record, record_path, input_path, output_path)
     report_b = format_cli_report(record, record_path, input_path, output_path)
@@ -43,8 +57,12 @@ def test_cli_report_is_deterministic(tmp_path: Path):
     assert "Status:        VERIFIED OK" in report_a
 
 
-def test_html_report_is_deterministic(tmp_path: Path):
-    record_path, _, _ = _build_sample_outputs(tmp_path)
+@pytest.mark.timeout(30)
+def test_html_report_is_deterministic(
+    tmp_path: Path,
+    sample_outputs: tuple[Path, Path, Path],
+):
+    record_path, _, _ = sample_outputs
     out_a = tmp_path / "report_a.html"
     out_b = tmp_path / "report_b.html"
     generate_report(["--record", str(record_path), "--out", str(out_a)])

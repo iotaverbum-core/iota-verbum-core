@@ -35,6 +35,7 @@ INCLUDE_GLOBS = [
     "cuc-docs/DEEPSEEK_V4_PHASE3_DIAGNOSTIC_RETRY_PROOF_*.json",
     "cuc-docs/DEEPSEEK_V4_PHASE3_DIAGNOSTIC_RETRY_PROOF_*.md",
     "cuc-docs/batch_retry_results/*.json",
+    "cuc-docs/training_room_evidence/**/*",
     "benchmark/**/*",
     "rulesets/**/*",
     ".pre-commit-config.yaml",

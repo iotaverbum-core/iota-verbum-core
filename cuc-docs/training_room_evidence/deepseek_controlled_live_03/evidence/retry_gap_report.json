@@ -1,0 +1,11 @@
+{
+  "extra_fields": [],
+  "missing_fields": [],
+  "summary": {
+    "compared_fields": 91,
+    "matching_fields": 91,
+    "similarity_score_percent": 100.0
+  },
+  "type_mismatches": [],
+  "value_differences": []
+}

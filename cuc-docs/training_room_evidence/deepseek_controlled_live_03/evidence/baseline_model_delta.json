@@ -1,0 +1,170 @@
+{
+  "changed_edges": [
+    {
+      "after": {
+        "edge_id": "edge:primary_support",
+        "evidence_ids": [
+          "evidence:primary"
+        ],
+        "from_id": "evidence:primary",
+        "relation": "supports",
+        "strength": "strong",
+        "to_id": "state:primary"
+      },
+      "before": {
+        "edge_id": "edge:primary_support",
+        "evidence_ids": [
+          "evidence:primary"
+        ],
+        "from_id": "evidence:primary",
+        "relation": "supports",
+        "strength": "weak",
+        "to_id": "state:primary"
+      },
+      "change_type": "modified",
+      "id": "edge:primary_support",
+      "source_op_ids": []
+    },
+    {
+      "after": {
+        "edge_id": "edge:corroboration_support",
+        "evidence_ids": [
+          "evidence:corroboration"
+        ],
+        "from_id": "evidence:corroboration",
+        "relation": "corroborates",
+        "strength": "strong",
+        "to_id": "state:primary"
+      },
+      "before": null,
+      "change_type": "added",
+      "id": "edge:corroboration_support",
+      "source_op_ids": []
+    }
+  ],
+  "changed_events": [],
+  "changed_states": [
+    {
+      "after": {
+        "attributes": {
+          "authoring_role": "revise_branch"
+        },
+        "confidence_band": "medium",
+        "evidence_ids": [
+          "evidence:corroboration",
+          "evidence:primary"
+        ],
+        "object": "true",
+        "predicate": "external_session_attribution",
+        "state_id": "state:primary",
+        "status": "supported",
+        "subject_id": "entity:asset",
+        "time": {
+          "kind": "exact",
+          "value": "2026-04-20T10:00:00Z"
+        }
+      },
+      "before": {
+        "attributes": {
+          "authoring_role": "revise_branch"
+        },
+        "confidence_band": "low",
+        "evidence_ids": [
+          "evidence:primary"
+        ],
+        "object": "true",
+        "predicate": "external_session_attribution",
+        "state_id": "state:primary",
+        "status": "contested",
+        "subject_id": "entity:asset",
+        "time": {
+          "kind": "exact",
+          "value": "2026-04-20T10:00:00Z"
+        }
+      },
+      "change_type": "modified",
+      "id": "state:primary",
+      "source_op_ids": []
+    }
+  ],
+  "forbidden_revisions": [
+    "state:secondary",
+    "state:bg_1",
+    "state:bg_2",
+    "edge:secondary_support",
+    "edge:bg_1",
+    "edge:bg_2",
+    "unknown:secondary",
+    "unknown:bg_1"
+  ],
+  "must_preserve_claims": [
+    "state:secondary"
+  ],
+  "must_revise_claims": [
+    "state:primary"
+  ],
+  "named_evidence_artifact": "evidence:corroboration",
+  "new_conflicts": [],
+  "new_unknowns": [],
+  "preservation_notes": "Preserved restoration branch (secondary) and background context branches unchanged.",
+  "preserved_items": [
+    "state:secondary",
+    "state:bg_1",
+    "state:bg_2",
+    "edge:secondary_support",
+    "edge:bg_1",
+    "edge:bg_2",
+    "unknown:secondary",
+    "unknown:bg_1"
+  ],
+  "pruned_conflicts": [],
+  "resolved_unknowns": [
+    {
+      "after": {
+        "category": "fact",
+        "evidence_ids": [
+          "evidence:corroboration",
+          "evidence:primary"
+        ],
+        "question": "Is the primary conclusion about identity bridge still valid at the checkpoint?",
+        "resolution_value": "confirmed",
+        "status": "resolved",
+        "target_id": "state:primary",
+        "unknown_id": "unknown:primary"
+      },
+      "before": {
+        "category": "fact",
+        "evidence_ids": [
+          "evidence:primary"
+        ],
+        "question": "Is the primary conclusion about identity bridge still valid at the checkpoint?",
+        "status": "open",
+        "target_id": "state:primary",
+        "unknown_id": "unknown:primary"
+      },
+      "change_type": "resolved",
+      "id": "unknown:primary",
+      "source_op_ids": []
+    }
+  ],
+  "revision_notes": "Strengthened primary attribution with corroborating forensic evidence, resolved associated unknown, added new corroboration edge, upgraded state to supported and medium confidence.",
+  "scenario_rank_changes": [],
+  "schema_version": "1.0.0",
+  "structural_invariant": "Under-revision would leave the primary attribution contested and the edge weak; over-revision would alter the preserved restoration or background branches.",
+  "supporting_evidence_map": {
+    "edge:corroboration_support": [
+      "evidence:corroboration"
+    ],
+    "edge:primary_support": [
+      "evidence:primary"
+    ],
+    "state:primary": [
+      "evidence:corroboration",
+      "evidence:primary"
+    ],
+    "unknown:primary": [
+      "evidence:corroboration",
+      "evidence:primary"
+    ]
+  }
+}

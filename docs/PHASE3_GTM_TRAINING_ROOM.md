@@ -74,3 +74,17 @@ Accepted retry ledgers seal the current `MANIFEST.sha256` digest and must pass
 strict-manifest replay. Reusing an output directory clears attempt-specific
 retry artifacts first, so an accepted rerun cannot retain a stale failure file
 from an earlier API or authentication error.
+
+## Customer Evidence Package
+
+Use `scripts/build_phase3_customer_evidence.py` after a controlled accepted
+session. The builder validates the scorecard, diagnostic repair, no-regression
+selection, ledger hashes, and strict replay against the exact sealed repository
+manifest. It also proves that the sealed manifest is the `MANIFEST.sha256`
+stored at the named repository commit. The builder then writes a customer-facing
+Markdown report, a machine-readable report, a canonical-JSON baseline and retry
+audit trail, and a byte-exact replayable ledger.
+
+The package deliberately preserves the proof boundary: it demonstrates one
+verified in-context diagnostic-repair session. It does not claim fine-tuning,
+persistent weight changes, or broad benchmark improvement.

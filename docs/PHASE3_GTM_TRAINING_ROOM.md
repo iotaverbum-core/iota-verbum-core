@@ -81,9 +81,11 @@ Use `scripts/build_phase3_customer_evidence.py` after a controlled accepted
 session. The builder validates the scorecard, diagnostic repair, no-regression
 selection, ledger hashes, and strict replay against the exact sealed repository
 manifest. It also proves that the sealed manifest is the `MANIFEST.sha256`
-stored at the named repository commit. The builder then writes a customer-facing
-Markdown report, a machine-readable report, a canonical-JSON baseline and retry
-audit trail, and a byte-exact replayable ledger.
+stored at the named repository commit and that the packaged retry delta exactly
+matches the delta committed in the packaged ledger output under canonical JSON
+byte comparison. The builder then writes a customer-facing Markdown report, a
+machine-readable report, a canonical-JSON baseline and retry audit trail, and a
+byte-exact replayable ledger.
 
 The package deliberately preserves the proof boundary: it demonstrates one
 verified in-context diagnostic-repair session. It does not claim fine-tuning,

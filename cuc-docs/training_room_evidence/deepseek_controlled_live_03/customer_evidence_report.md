@@ -36,6 +36,7 @@ In one controlled live session, deepseek-v4-pro moved from a verifier-rejected 7
 - Sealed manifest SHA-256: `03882175de86507a0c830e2a2da68d628cb633ae666370677b82ec55e8c67e9e`
 - Sealed repository commit: `64b83b9d1dcc061a9bbffc1bda9ce94564099bc2`
 - Sealed commit manifest match: `verified`
+- Packaged retry delta canonical-byte match: `verified`
 - Strict replay status: `verified_ok`
 - Strict replay warnings: `0`
 

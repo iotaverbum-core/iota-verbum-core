@@ -1,0 +1,232 @@
+{
+  "candidate_kind": "repair_instruction",
+  "case_id": "CUCV5A-GROUNDING-02-CONFLICT-RECONCILIATION-SECURITY-INCIDENT",
+  "failure_family": "GROUNDING_GAP",
+  "gap_summary": {
+    "compared_fields": 103,
+    "matching_fields": 74,
+    "similarity_score_percent": 71.84
+  },
+  "grounding_evidence_ids": [
+    "evidence:corroboration",
+    "evidence:primary"
+  ],
+  "preservation_constraints": [
+    "state:secondary",
+    "edge:secondary_support",
+    "unknown:secondary"
+  ],
+  "repair_template": "Patch only the cited grounding gap: add the missing source_op_ids and supporting_evidence_map entries, and remove any unsupported evidence references.",
+  "required_fields": {
+    "exact_expected_fragments": {
+      "changed_edges": [
+        {
+          "after": {
+            "edge_id": "edge:primary_support",
+            "evidence_ids": [
+              "evidence:primary"
+            ],
+            "from_id": "evidence:primary",
+            "relation": "supports",
+            "strength": "strong",
+            "to_id": "state:primary"
+          },
+          "before": {
+            "edge_id": "edge:primary_support",
+            "evidence_ids": [
+              "evidence:primary"
+            ],
+            "from_id": "evidence:primary",
+            "relation": "supports",
+            "strength": "weak",
+            "to_id": "state:primary"
+          },
+          "change_type": "strengthened",
+          "id": "edge:primary_support",
+          "source_op_ids": [
+            "op:003"
+          ]
+        }
+      ],
+      "changed_states": [
+        {
+          "after": {
+            "attributes": {
+              "exception_active": false,
+              "rule_version": "v1",
+              "scope": "global"
+            },
+            "confidence_band": "medium",
+            "evidence_ids": [
+              "evidence:corroboration",
+              "evidence:primary"
+            ],
+            "object": "true",
+            "predicate": "external_session_attribution",
+            "state_id": "state:primary",
+            "status": "supported",
+            "subject_id": "entity:asset",
+            "time": {
+              "kind": "exact",
+              "value": "2026-04-20T10:00:00Z"
+            }
+          },
+          "before": {
+            "attributes": {
+              "exception_active": false,
+              "rule_version": "v1",
+              "scope": "global"
+            },
+            "confidence_band": "medium",
+            "evidence_ids": [
+              "evidence:primary"
+            ],
+            "object": "true",
+            "predicate": "external_session_attribution",
+            "state_id": "state:primary",
+            "status": "contested",
+            "subject_id": "entity:asset",
+            "time": {
+              "kind": "exact",
+              "value": "2026-04-20T10:00:00Z"
+            }
+          },
+          "change_type": "modified",
+          "id": "state:primary",
+          "source_op_ids": [
+            "op:002",
+            "op:004"
+          ]
+        }
+      ],
+      "resolved_unknowns": [
+        {
+          "after": {
+            "category": "fact",
+            "evidence_ids": [
+              "evidence:corroboration",
+              "evidence:primary"
+            ],
+            "question": "Is the primary conclusion about identity bridge still valid at the checkpoint?",
+            "resolution_value": "confirmed",
+            "status": "resolved",
+            "target_id": "state:primary",
+            "unknown_id": "unknown:primary"
+          },
+          "before": {
+            "category": "fact",
+            "evidence_ids": [
+              "evidence:primary"
+            ],
+            "question": "Is the primary conclusion about identity bridge still valid at the checkpoint?",
+            "status": "open",
+            "target_id": "state:primary",
+            "unknown_id": "unknown:primary"
+          },
+          "change_type": "resolved",
+          "id": "unknown:primary",
+          "source_op_ids": [
+            "op:005"
+          ]
+        }
+      ],
+      "supporting_evidence_map": {
+        "scenario:primary": [
+          "evidence:corroboration",
+          "evidence:primary"
+        ]
+      }
+    },
+    "forbidden_revisions": [
+      "state:secondary",
+      "edge:secondary_support",
+      "unknown:secondary"
+    ],
+    "must_preserve_claims": [
+      "state:secondary"
+    ],
+    "must_revise_claims": [
+      "state:primary"
+    ],
+    "named_evidence_artifact": "evidence:corroboration",
+    "preserved_items": [
+      "state:secondary",
+      "edge:secondary_support",
+      "unknown:secondary"
+    ],
+    "remove_unexpected_items": [
+      "changed_states[id='state:primary'].after.attributes.authoring_role",
+      "changed_states[id='state:primary'].before.attributes.authoring_role",
+      "forbidden_revisions[value='edge:bg_1']",
+      "forbidden_revisions[value='edge:bg_2']",
+      "forbidden_revisions[value='state:bg_1']",
+      "forbidden_revisions[value='state:bg_2']",
+      "forbidden_revisions[value='unknown:bg_1']",
+      "preserved_items[value='edge:bg_1']",
+      "preserved_items[value='edge:bg_2']",
+      "preserved_items[value='state:bg_1']",
+      "preserved_items[value='state:bg_2']",
+      "preserved_items[value='unknown:bg_1']"
+    ],
+    "scenario_rank_changes": [],
+    "source_op_ids_required": {
+      "edge:primary_support": [
+        "op:003"
+      ],
+      "state:primary": [
+        "op:002",
+        "op:004"
+      ],
+      "unknown:primary": [
+        "op:005"
+      ]
+    },
+    "source_op_ids_required_on": [
+      "edge:primary_support",
+      "state:primary",
+      "unknown:primary"
+    ],
+    "source_op_ids_value": [
+      "op:002",
+      "op:003",
+      "op:004",
+      "op:005"
+    ],
+    "supporting_evidence_map_required": {
+      "edge:corroboration_support": [
+        "evidence:corroboration"
+      ],
+      "edge:primary_support": [
+        "evidence:primary"
+      ],
+      "scenario:primary": [
+        "evidence:corroboration",
+        "evidence:primary"
+      ],
+      "state:primary": [
+        "evidence:corroboration",
+        "evidence:primary"
+      ],
+      "unknown:primary": [
+        "evidence:corroboration",
+        "evidence:primary"
+      ]
+    }
+  },
+  "target_operation_id": "multiple",
+  "verifier_feedback": {
+    "accepted": false,
+    "reason_families": [
+      "mismatched_changed_states",
+      "mismatched_changed_edges",
+      "mismatched_resolved_unknowns",
+      "missing_supporting_evidence"
+    ],
+    "reasons": [
+      "mismatched_changed_states:state:primary",
+      "mismatched_changed_edges:edge:primary_support",
+      "mismatched_resolved_unknowns:unknown:primary",
+      "missing_supporting_evidence:scenario:primary"
+    ]
+  }
+}

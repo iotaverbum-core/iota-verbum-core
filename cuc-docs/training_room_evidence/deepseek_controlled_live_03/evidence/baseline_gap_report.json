@@ -1,0 +1,63 @@
+{
+  "extra_fields": [
+    "$.changed_states[id='state:primary'].after.attributes.authoring_role",
+    "$.changed_states[id='state:primary'].before.attributes.authoring_role",
+    "$.forbidden_revisions[value='edge:bg_1']",
+    "$.forbidden_revisions[value='edge:bg_2']",
+    "$.forbidden_revisions[value='state:bg_1']",
+    "$.forbidden_revisions[value='state:bg_2']",
+    "$.forbidden_revisions[value='unknown:bg_1']",
+    "$.preserved_items[value='edge:bg_1']",
+    "$.preserved_items[value='edge:bg_2']",
+    "$.preserved_items[value='state:bg_1']",
+    "$.preserved_items[value='state:bg_2']",
+    "$.preserved_items[value='unknown:bg_1']"
+  ],
+  "missing_fields": [
+    "$.changed_edges[id='edge:primary_support'].source_op_ids[value='op:003']",
+    "$.changed_states[id='state:primary'].after.attributes.exception_active",
+    "$.changed_states[id='state:primary'].after.attributes.rule_version",
+    "$.changed_states[id='state:primary'].after.attributes.scope",
+    "$.changed_states[id='state:primary'].before.attributes.exception_active",
+    "$.changed_states[id='state:primary'].before.attributes.rule_version",
+    "$.changed_states[id='state:primary'].before.attributes.scope",
+    "$.changed_states[id='state:primary'].source_op_ids[value='op:002']",
+    "$.changed_states[id='state:primary'].source_op_ids[value='op:004']",
+    "$.resolved_unknowns[id='unknown:primary'].source_op_ids[value='op:005']",
+    "$.supporting_evidence_map[\"scenario:primary\"][0]",
+    "$.supporting_evidence_map[\"scenario:primary\"][1]"
+  ],
+  "summary": {
+    "compared_fields": 103,
+    "matching_fields": 74,
+    "similarity_score_percent": 71.84
+  },
+  "type_mismatches": [],
+  "value_differences": [
+    {
+      "gold_value": "strengthened",
+      "model_value": "modified",
+      "path": "$.changed_edges[id='edge:primary_support'].change_type"
+    },
+    {
+      "gold_value": "medium",
+      "model_value": "low",
+      "path": "$.changed_states[id='state:primary'].before.confidence_band"
+    },
+    {
+      "gold_value": "Preserve the restoration-complete branch and the stable background security context.",
+      "model_value": "Preserved restoration branch (secondary) and background context branches unchanged.",
+      "path": "$.preservation_notes"
+    },
+    {
+      "gold_value": "Strengthen the contested attribution branch with the supplemental forensic corroboration and mark the prior open attribution unknown as resolved.",
+      "model_value": "Strengthened primary attribution with corroborating forensic evidence, resolved associated unknown, added new corroboration edge, upgraded state to supported and medium confidence.",
+      "path": "$.revision_notes"
+    },
+    {
+      "gold_value": "A model that sees the stronger forensic corroboration but leaves the attribution branch contested has stopped too early. A model that rewrites the restoration branch without contrary evidence has over-revised.",
+      "model_value": "Under-revision would leave the primary attribution contested and the edge weak; over-revision would alter the preserved restoration or background branches.",
+      "path": "$.structural_invariant"
+    }
+  ]
+}

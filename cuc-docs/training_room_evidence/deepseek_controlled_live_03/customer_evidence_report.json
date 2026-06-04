@@ -1,0 +1,124 @@
+{
+  "artifact_hashes": [
+    {
+      "bytes": 51850,
+      "path": "MANIFEST.sha256",
+      "sha256": "03882175de86507a0c830e2a2da68d628cb633ae666370677b82ec55e8c67e9e"
+    },
+    {
+      "bytes": 3158,
+      "path": "evidence/baseline_gap_report.json",
+      "sha256": "792edf06d091a480fe013b08c761a76dbb4095e864884abe28200c45eb225858"
+    },
+    {
+      "bytes": 4661,
+      "path": "evidence/baseline_model_delta.json",
+      "sha256": "31a1d16de6052b8698c08adc93125b218e6d16fd97c327feb4dd51876af31163"
+    },
+    {
+      "bytes": 410,
+      "path": "evidence/baseline_verification.json",
+      "sha256": "de5c1018b47dccaa31c21c71a1dd379dcbd093c1dcc7b0d26e82749416e4f6a4"
+    },
+    {
+      "bytes": 6719,
+      "path": "evidence/repair_instruction.json",
+      "sha256": "86b551b3dc6f9cc7f6979a39eeb5f9b3988f97c5eff670d14b57da229d7650a2"
+    },
+    {
+      "bytes": 213,
+      "path": "evidence/retry_gap_report.json",
+      "sha256": "06517d6a6de86bbb56c18a2840db0d866e7d0f5d929203313104a2f4f5c44863"
+    },
+    {
+      "bytes": 4794,
+      "path": "evidence/retry_model_delta.json",
+      "sha256": "2414cdd0ff3b0a530274aa0aa7d91d5897a2db97ce958538ecc7450553206242"
+    },
+    {
+      "bytes": 3855,
+      "path": "evidence/scorecard.json",
+      "sha256": "711833ee6f171d7f59aabb764794ba2a5f6df3c740a1e6db2ff874ea65a33f27"
+    },
+    {
+      "bytes": 4922,
+      "path": "evidence/training_summary.json",
+      "sha256": "3fa802b2dc9f19da162fed890890c4c81e744cdc9983e8bd6f1d03699ed04590"
+    },
+    {
+      "bytes": 65,
+      "path": "evidence/verification.json",
+      "sha256": "e290f117d3f920271a755e3845927edbb6afacfb412a746c74aa5cd8eaeacfec"
+    },
+    {
+      "bytes": 395,
+      "path": "ledger/f59bb947a47704349bcc7f0c64a9597c92c124143650d56e5416dfc08415f566/attestation.json",
+      "sha256": "773bb5aaf3082cc1be2e1274186b0ab041904e24d7052730a25afe0fc870a667"
+    },
+    {
+      "bytes": 20921,
+      "path": "ledger/f59bb947a47704349bcc7f0c64a9597c92c124143650d56e5416dfc08415f566/bundle.json",
+      "sha256": "f59bb947a47704349bcc7f0c64a9597c92c124143650d56e5416dfc08415f566"
+    },
+    {
+      "bytes": 3659,
+      "path": "ledger/f59bb947a47704349bcc7f0c64a9597c92c124143650d56e5416dfc08415f566/output.json",
+      "sha256": "2c873500c3341121c92e4aa40e0909f1f63f8beb2a3a8e77879afbbbb2f5bf84"
+    }
+  ],
+  "case_id": "CUCV5A-GROUNDING-02-CONFLICT-RECONCILIATION-SECURITY-INCIDENT",
+  "created_at_utc": "2026-06-04T04:59:19Z",
+  "diagnostic_repair": {
+    "failure_family": "GROUNDING_GAP",
+    "grounding_evidence_ids": [
+      "evidence:corroboration",
+      "evidence:primary"
+    ],
+    "preservation_constraints": [
+      "state:secondary",
+      "edge:secondary_support",
+      "unknown:secondary"
+    ],
+    "repair_template": "Patch only the cited grounding gap: add the missing source_op_ids and supporting_evidence_map entries, and remove any unsupported evidence references.",
+    "target_operation_id": "multiple"
+  },
+  "evidence_kind": "iota_training_room_customer_evidence",
+  "evidence_status": "strict_replay_verified",
+  "ledger_attestation": {
+    "attestation_sha256": "773bb5aaf3082cc1be2e1274186b0ab041904e24d7052730a25afe0fc870a667",
+    "bundle_sha256": "f59bb947a47704349bcc7f0c64a9597c92c124143650d56e5416dfc08415f566",
+    "core_version": "0.3.0",
+    "manifest_sha256": "03882175de86507a0c830e2a2da68d628cb633ae666370677b82ec55e8c67e9e",
+    "output_sha256": "2c873500c3341121c92e4aa40e0909f1f63f8beb2a3a8e77879afbbbb2f5bf84",
+    "ruleset_id": "ruleset.cuc_harness.structured_delta.v1"
+  },
+  "model": "deepseek-v4-pro",
+  "proof_boundary": "This package proves one live, one-case, in-context diagnostic-repair session. It does not establish broad benchmark improvement, persistent weight-level model improvement, fine-tuning, or performance outside the sealed case and verifier contract.",
+  "provider": "deepseek",
+  "schema_version": "iv.phase3.customer_evidence.v1",
+  "sealed_repository_commit": "64b83b9d1dcc061a9bbffc1bda9ce94564099bc2",
+  "sealed_repository_manifest_verified": true,
+  "session_result": {
+    "accepted_after": true,
+    "accepted_before": false,
+    "retry_regressed": false,
+    "selected_candidate": "retry",
+    "similarity_after": 100.0,
+    "similarity_before": 71.84,
+    "similarity_delta": 28.16,
+    "training_pass_count": 1,
+    "verifier_reason_count_after": 0,
+    "verifier_reason_count_before": 4
+  },
+  "source_case_id": "CUCV4-GROUNDING-02-CONFLICT-RECONCILIATION-SECURITY-INCIDENT",
+  "strict_replay": {
+    "attestation_sha256": "773bb5aaf3082cc1be2e1274186b0ab041904e24d7052730a25afe0fc870a667",
+    "bundle_sha256": "f59bb947a47704349bcc7f0c64a9597c92c124143650d56e5416dfc08415f566",
+    "ok": true,
+    "output_sha256": "2c873500c3341121c92e4aa40e0909f1f63f8beb2a3a8e77879afbbbb2f5bf84",
+    "status": "verified_ok",
+    "sub_step": "completed",
+    "warnings": []
+  },
+  "supported_claim": "In one controlled live session, deepseek-v4-pro moved from a verifier-rejected 71.84% baseline to a verifier-accepted 100.00% candidate after one deterministic Iota diagnostic repair pass, then produced a ledger artifact that passed strict-manifest replay."
+}

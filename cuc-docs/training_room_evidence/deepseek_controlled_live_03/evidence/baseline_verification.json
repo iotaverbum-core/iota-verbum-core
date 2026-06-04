@@ -1,0 +1,15 @@
+{
+  "accepted": false,
+  "reason_families": [
+    "mismatched_changed_states",
+    "mismatched_changed_edges",
+    "mismatched_resolved_unknowns",
+    "missing_supporting_evidence"
+  ],
+  "reasons": [
+    "mismatched_changed_states:state:primary",
+    "mismatched_changed_edges:edge:primary_support",
+    "mismatched_resolved_unknowns:unknown:primary",
+    "missing_supporting_evidence:scenario:primary"
+  ]
+}

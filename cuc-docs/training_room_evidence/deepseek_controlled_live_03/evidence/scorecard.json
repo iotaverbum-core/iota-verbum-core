@@ -1,0 +1,86 @@
+{
+  "allow_live_model": true,
+  "artifacts": {
+    "ledger_root": "C:/iotaverbum/iota-verbum-core/cuc-results/phase3_training_room/deepseek_controlled_live_03/ledger",
+    "output_dir": "C:/iotaverbum/iota-verbum-core/cuc-results/phase3_training_room/deepseek_controlled_live_03",
+    "scorecard_path": "C:/iotaverbum/iota-verbum-core/cuc-results/phase3_training_room/deepseek_controlled_live_03/CUCV5A-GROUNDING-02-CONFLICT-RECONCILIATION-SECURITY-INCIDENT/scorecard.json"
+  },
+  "baseline": {
+    "accepted": false,
+    "gap_report_path": "C:/iotaverbum/iota-verbum-core/cuc-results/deepseek_v4_live_single_case/CUCV5A-GROUNDING-02-CONFLICT-RECONCILIATION-SECURITY-INCIDENT/gap_report.json",
+    "label": "baseline",
+    "ledger_commit": null,
+    "ledger_committed": false,
+    "model_delta_path": "C:/iotaverbum/iota-verbum-core/cuc-results/deepseek_v4_live_single_case/CUCV5A-GROUNDING-02-CONFLICT-RECONCILIATION-SECURITY-INCIDENT/model_delta.json",
+    "similarity_score_percent": 71.84,
+    "verifier_reason_count": 4,
+    "verifier_reason_families": [
+      "mismatched_changed_states",
+      "mismatched_changed_edges",
+      "mismatched_resolved_unknowns",
+      "missing_supporting_evidence"
+    ],
+    "verifier_reasons": [
+      "mismatched_changed_states:state:primary",
+      "mismatched_changed_edges:edge:primary_support",
+      "mismatched_resolved_unknowns:unknown:primary",
+      "missing_supporting_evidence:scenario:primary"
+    ]
+  },
+  "best_candidate": {
+    "accepted": true,
+    "gap_report_path": "C:/iotaverbum/iota-verbum-core/cuc-results/phase3_training_room/deepseek_controlled_live_03/passes/pass_001/CUCV5A-GROUNDING-02-CONFLICT-RECONCILIATION-SECURITY-INCIDENT/retry_gap_report.json",
+    "label": "retry",
+    "ledger_commit": {
+      "attestation_sha256": "773bb5aaf3082cc1be2e1274186b0ab041904e24d7052730a25afe0fc870a667",
+      "bundle_sha256": "f59bb947a47704349bcc7f0c64a9597c92c124143650d56e5416dfc08415f566",
+      "output_sha256": "2c873500c3341121c92e4aa40e0909f1f63f8beb2a3a8e77879afbbbb2f5bf84",
+      "run_dir": "C:/iotaverbum/iota-verbum-core/cuc-results/phase3_training_room/deepseek_controlled_live_03/ledger/f59bb947a47704349bcc7f0c64a9597c92c124143650d56e5416dfc08415f566"
+    },
+    "ledger_committed": true,
+    "model_delta_path": "C:/iotaverbum/iota-verbum-core/cuc-results/phase3_training_room/deepseek_controlled_live_03/passes/pass_001/CUCV5A-GROUNDING-02-CONFLICT-RECONCILIATION-SECURITY-INCIDENT/retry_model_delta.json",
+    "similarity_score_percent": 100.0,
+    "verifier_reason_count": 0,
+    "verifier_reason_families": [],
+    "verifier_reasons": []
+  },
+  "case_id": "CUCV5A-GROUNDING-02-CONFLICT-RECONCILIATION-SECURITY-INCIDENT",
+  "provider": "deepseek",
+  "schema_version": "iv.phase3.training_room_wrapper.v1",
+  "service_kind": "iota_training_room",
+  "source_case_id": "CUCV4-GROUNDING-02-CONFLICT-RECONCILIATION-SECURITY-INCIDENT",
+  "stop_reason": "accepted",
+  "training_effect": {
+    "accepted_after": true,
+    "accepted_before": false,
+    "improved": true,
+    "similarity_after": 100.0,
+    "similarity_before": 71.84,
+    "similarity_delta": 28.16,
+    "verifier_reason_count_after": 0,
+    "verifier_reason_count_before": 4
+  },
+  "training_passes": [
+    {
+      "accepted": true,
+      "called": true,
+      "ledger_committed": true,
+      "pass_index": 1,
+      "retry_regressed": false,
+      "selected_candidate": "retry",
+      "similarity_score_percent": 100.0,
+      "training_effect": {
+        "accepted_after": true,
+        "accepted_before": false,
+        "improved": true,
+        "similarity_after": 100.0,
+        "similarity_before": 71.84,
+        "similarity_delta": 28.16,
+        "verifier_reason_count_after": 0,
+        "verifier_reason_count_before": 4
+      },
+      "training_summary_path": null,
+      "verifier_reason_count": 0
+    }
+  ]
+}

@@ -17,3 +17,60 @@ The Phase 3 addendum seals doctrine constants in `SEALED_DOCTRINE` and carries
 that context through the verifier, diagnostic loop, session ledger, and trust
 chain. The demo surface at `demo/iota_verbum_e2e.html` visualizes each proposed
 claim-graph transition before and after verifier judgment.
+
+## Paid Wrapper
+
+The first production wrapper is `scripts/phase3_training_room_wrapper.py`.
+It does not call a model unless `--allow-live-model` is explicitly present.
+
+The wrapper has two service boundaries:
+
+1. Benchmark test: run the customer's model once with the existing Claude or
+   DeepSeek CUC runner and keep the failed or accepted `model_delta.json` plus
+   `gap_report.json` as the sealed baseline.
+2. Iota training: point the wrapper at that baseline, run bounded diagnostic
+   retry passes, preserve the best verifier state with the no-regression guard,
+   and emit a scorecard.
+
+Example score-only or planning run:
+
+```powershell
+python scripts/phase3_training_room_wrapper.py `
+  --provider deepseek `
+  --case-id CUCV5A-GROUNDING-02-CONFLICT-RECONCILIATION-SECURITY-INCIDENT `
+  --params-json benchmark/cuc_v5a_candidate_params.json `
+  --baseline-dir cuc-results/deepseek_v4_live_single_case `
+  --output-dir cuc-results/phase3_training_room/deepseek_demo `
+  --max-training-passes 1
+```
+
+Because `--allow-live-model` is omitted, the command writes a deterministic
+training plan and scorecard without spending API budget.
+
+Live training run:
+
+```powershell
+python scripts/phase3_training_room_wrapper.py `
+  --provider deepseek `
+  --case-id CUCV5A-GROUNDING-02-CONFLICT-RECONCILIATION-SECURITY-INCIDENT `
+  --params-json benchmark/cuc_v5a_candidate_params.json `
+  --baseline-dir cuc-results/deepseek_v4_live_single_case `
+  --output-dir cuc-results/phase3_training_room/deepseek_demo `
+  --max-training-passes 3 `
+  --allow-live-model `
+  --model deepseek-v4-pro `
+  --fallback-model ""
+```
+
+The scorecard records:
+
+- baseline acceptance, similarity, verifier reason families, and artifact paths;
+- every training pass, including whether the retry was called and accepted;
+- best candidate selected by `accepted > similarity > fewer verifier reasons`;
+- no-regression handoff paths for the next baseline;
+- ledger commit metadata when the accepted retry seals.
+
+Accepted retry ledgers seal the current `MANIFEST.sha256` digest and must pass
+strict-manifest replay. Reusing an output directory clears attempt-specific
+retry artifacts first, so an accepted rerun cannot retain a stale failure file
+from an earlier API or authentication error.

@@ -10,6 +10,7 @@ from core.cuc_harness.verifier import DeltaVerificationResult
 from core.determinism.canonical_json import dumps_canonical
 from core.determinism.finalize import finalize
 from core.determinism.ledger import write_run
+from core.determinism.manifest_hash import compute_manifest_sha256
 
 CUC_LEDGER_RULESET_ID = "ruleset.cuc_harness.structured_delta.v1"
 CUC_LEDGER_OUTPUT_SCHEMA_VERSION = "iv.cuc_harness.ledgered_revision.v1"
@@ -41,7 +42,7 @@ def commit_verified_revision_delta(
     verification: DeltaVerificationResult,
     ledger_root: Path,
     expected_delta: Mapping[str, Any] | None = None,
-    manifest_sha256: str = "0" * 64,
+    manifest_sha256: str | None = None,
     core_version: str = "0.3.0",
     created_utc: str | None = None,
     ruleset_id: str = CUC_LEDGER_RULESET_ID,
@@ -67,10 +68,15 @@ def commit_verified_revision_delta(
         "delta": _as_payload(delta),
         "verifier": verification.to_dict(),
     }
+    effective_manifest_sha256 = (
+        manifest_sha256
+        if manifest_sha256 is not None
+        else compute_manifest_sha256()
+    )
     sealed = finalize(
         evidence_bundle,
         output_obj,
-        manifest_sha256=manifest_sha256,
+        manifest_sha256=effective_manifest_sha256,
         core_version=core_version,
         ruleset_id=ruleset_id,
         created_utc=timestamp,

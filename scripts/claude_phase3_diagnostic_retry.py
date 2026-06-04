@@ -151,6 +151,7 @@ def run_diagnostic_retry(
     case_output_dir = output_dir / _safe_name(case_id)
     case_output_dir.mkdir(parents=True, exist_ok=True)
     ledger_root.mkdir(parents=True, exist_ok=True)
+    _clear_attempt_artifacts(case_output_dir)
 
     _write_json(case_output_dir / "baseline_model_delta.json", baseline_delta)
     _write_json(case_output_dir / "baseline_gap_report.json", baseline_gap)
@@ -788,6 +789,21 @@ def _json_block(value: Any) -> str:
 
 def _read_json(path: Path) -> Any:
     return json.loads(path.read_text(encoding="utf-8"))
+
+
+def _clear_attempt_artifacts(case_output_dir: Path) -> None:
+    for name in (
+        "retry_failure.json",
+        "retry_model_delta.json",
+        "retry_gap_report.json",
+        "training_summary.json",
+        "model_delta.json",
+        "gap_report.json",
+        "verification.json",
+    ):
+        path = case_output_dir / name
+        if path.is_file():
+            path.unlink()
 
 
 def _write_json(path: Path, payload: Any) -> None:

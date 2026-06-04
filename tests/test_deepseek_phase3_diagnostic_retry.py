@@ -114,6 +114,9 @@ def test_dry_run_writes_repair_instruction_without_live_api(tmp_path: Path) -> N
         baseline_case_dir / "gap_report.json",
         compare_deltas(rejected_delta, gold_delta).to_dict(),
     )
+    stale_failure_path = tmp_path / "out" / CASE_ID / "retry_failure.json"
+    stale_failure_path.parent.mkdir(parents=True)
+    _write_json(stale_failure_path, {"error_type": "stale_failure"})
 
     result = run_diagnostic_retry(
         case_id=CASE_ID,
@@ -146,6 +149,7 @@ def test_dry_run_writes_repair_instruction_without_live_api(tmp_path: Path) -> N
     )
     assert result["no_regression_guard"]["selected_candidate"] == "baseline"
     assert (tmp_path / "out" / CASE_ID / "model_delta.json").is_file()
+    assert not stale_failure_path.exists()
 
 
 def test_no_regression_guard_keeps_baseline_when_retry_gets_worse(

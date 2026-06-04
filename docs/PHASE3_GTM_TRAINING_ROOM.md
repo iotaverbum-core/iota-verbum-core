@@ -69,3 +69,8 @@ The scorecard records:
 - best candidate selected by `accepted > similarity > fewer verifier reasons`;
 - no-regression handoff paths for the next baseline;
 - ledger commit metadata when the accepted retry seals.
+
+Accepted retry ledgers seal the current `MANIFEST.sha256` digest and must pass
+strict-manifest replay. Reusing an output directory clears attempt-specific
+retry artifacts first, so an accepted rerun cannot retain a stale failure file
+from an earlier API or authentication error.

@@ -17,6 +17,7 @@ if str(SRC_ROOT) not in sys.path:
     sys.path.insert(0, str(SRC_ROOT))
 
 from scripts.claude_phase3_diagnostic_retry import (  # noqa: E402
+    _clear_attempt_artifacts,
     _json_block,
     _load_or_compare_gap_report,
     _read_json,
@@ -84,6 +85,7 @@ def run_diagnostic_retry(
     case_output_dir = output_dir / _safe_name(case_id)
     case_output_dir.mkdir(parents=True, exist_ok=True)
     ledger_root.mkdir(parents=True, exist_ok=True)
+    _clear_attempt_artifacts(case_output_dir)
 
     _write_json(case_output_dir / "baseline_model_delta.json", baseline_delta)
     _write_json(case_output_dir / "baseline_gap_report.json", baseline_gap)

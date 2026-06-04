@@ -10,6 +10,8 @@ from core.cuc_harness.ledger_commit import (
     commit_verified_revision_delta,
 )
 from core.cuc_harness.verifier import verify_revision_delta
+from core.determinism.manifest_hash import compute_manifest_sha256
+from core.determinism.replay import verify_run_deterministic
 
 FIXTURE_DIR = Path(
     "benchmark/kaggle/fixtures/"
@@ -66,6 +68,14 @@ def test_commit_verified_revision_delta_writes_ledger_run(tmp_path: Path) -> Non
     assert output["verifier"]["accepted"] is True
     assert (commit.run_dir / "bundle.json").is_file()
     assert (commit.run_dir / "attestation.json").is_file()
+    attestation = json.loads(
+        (commit.run_dir / "attestation.json").read_text(encoding="utf-8")
+    )
+    assert attestation["manifest_sha256"] == compute_manifest_sha256()
+    assert verify_run_deterministic(
+        commit.run_dir.as_posix(),
+        strict_manifest=True,
+    )["ok"] is True
 
 
 def _read_json(path: Path) -> dict:

@@ -52,6 +52,7 @@ def test_build_customer_evidence_package_replays_and_avoids_overclaim(
     assert report["strict_replay"]["ok"] is True
     assert report["strict_replay"]["warnings"] == []
     assert report["sealed_repository_manifest_verified"] is True
+    assert report["packaged_delta_ledger_match_verified"] is True
     assert "persistent weight-level model improvement" in report["proof_boundary"]
     assert (
         package_dir / "MANIFEST.sha256"
@@ -86,6 +87,37 @@ def test_build_customer_evidence_package_rejects_stale_failure(
             session_root=session_root,
             case_id=CASE_ID,
             sealed_manifest=Path("MANIFEST.sha256"),
+            sealed_repository_commit="1" * 40,
+            package_dir=tmp_path / "package",
+        )
+
+
+def test_build_customer_evidence_package_rejects_uncommitted_retry_delta(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    session_root = _write_session(tmp_path)
+    retry_delta_path = (
+        session_root / "passes" / "pass_001" / CASE_ID / "retry_model_delta.json"
+    )
+    retry_delta = _read_json(retry_delta_path)
+    retry_delta["revision_notes"] = "Tampered after ledger commit."
+    _write_json(retry_delta_path, retry_delta)
+    sealed_manifest = Path("MANIFEST.sha256").resolve()
+    monkeypatch.setattr(
+        evidence_builder,
+        "_manifest_at_commit",
+        lambda _commit_sha: sealed_manifest.read_bytes(),
+    )
+
+    with pytest.raises(
+        ValueError,
+        match="packaged retry_model_delta.json does not match ledger output delta",
+    ):
+        build_customer_evidence_package(
+            session_root=session_root,
+            case_id=CASE_ID,
+            sealed_manifest=sealed_manifest,
             sealed_repository_commit="1" * 40,
             package_dir=tmp_path / "package",
         )

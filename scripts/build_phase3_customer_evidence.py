@@ -89,6 +89,7 @@ def build_customer_evidence_package(
             _copy_exact(source_path, destination)
 
     package_ledger_dir = package_dir / "ledger" / bundle_sha256
+    _validate_packaged_delta_binding(package_dir, package_ledger_dir)
     replay = _strict_replay_with_packaged_manifest(package_dir, package_ledger_dir)
     if replay["ok"] is not True or replay["warnings"]:
         raise ValueError(f"strict replay failed: {replay}")
@@ -175,6 +176,7 @@ def render_customer_report(report: Mapping[str, Any]) -> str:
         f"- Sealed manifest SHA-256: `{ledger['manifest_sha256']}`",
         f"- Sealed repository commit: `{report['sealed_repository_commit']}`",
         "- Sealed commit manifest match: `verified`",
+        "- Packaged retry delta canonical-byte match: `verified`",
         f"- Strict replay status: `{replay['status']}`",
         f"- Strict replay warnings: `{len(replay['warnings'])}`",
         "",
@@ -341,6 +343,7 @@ def _build_report(
         "source_case_id": scorecard["source_case_id"],
         "sealed_repository_commit": sealed_repository_commit,
         "sealed_repository_manifest_verified": True,
+        "packaged_delta_ledger_match_verified": True,
         "supported_claim": supported_claim,
         "proof_boundary": proof_boundary,
         "session_result": {
@@ -431,6 +434,20 @@ def _strict_replay_with_packaged_manifest(
         )
 
 
+def _validate_packaged_delta_binding(package_dir: Path, ledger_dir: Path) -> None:
+    packaged_delta = _read_object(
+        package_dir / "evidence" / "retry_model_delta.json"
+    )
+    ledger_output = _read_object(ledger_dir / "output.json")
+    committed_delta = _object(ledger_output.get("delta"), "ledger output delta")
+    if _canonical_json_bytes(packaged_delta) != _canonical_json_bytes(
+        committed_delta
+    ):
+        raise ValueError(
+            "packaged retry_model_delta.json does not match ledger output delta"
+        )
+
+
 def _manifest_at_commit(commit_sha: str) -> bytes:
     try:
         result = subprocess.run(
@@ -498,6 +515,15 @@ def _similarity(gap_report: Mapping[str, Any]) -> float:
 
 def _sha256_file(path: Path) -> str:
     return sha256_bytes(path.read_bytes())
+
+
+def _canonical_json_bytes(value: Mapping[str, Any]) -> bytes:
+    return json.dumps(
+        value,
+        sort_keys=True,
+        separators=(",", ":"),
+        ensure_ascii=True,
+    ).encode("utf-8")
 
 
 def _expect(condition: bool) -> None:

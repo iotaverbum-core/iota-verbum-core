@@ -93,6 +93,7 @@
     "ruleset_id": "ruleset.cuc_harness.structured_delta.v1"
   },
   "model": "deepseek-v4-pro",
+  "packaged_delta_ledger_match_verified": true,
   "proof_boundary": "This package proves one live, one-case, in-context diagnostic-repair session. It does not establish broad benchmark improvement, persistent weight-level model improvement, fine-tuning, or performance outside the sealed case and verifier contract.",
   "provider": "deepseek",
   "schema_version": "iv.phase3.customer_evidence.v1",

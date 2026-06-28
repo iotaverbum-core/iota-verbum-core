@@ -43,8 +43,12 @@ from iota_verbum_api.schemas import (
     AnalyseJsonRequest,
     CasefileGenerateRequest,
     CasefileVerifyRequest,
+    DecisionDiffRequest,
+    DecisionSealRequest,
+    ExaminerPackRequest,
 )
 from iota_verbum_api.security import AuthContext, authenticate_api_key
+from iota_verbum_api.services import decisions as decisions_service
 from iota_verbum_api.services.audit import create_audit_entry
 from iota_verbum_api.services.extraction import (
     UnsupportedDomainLanguage,
@@ -644,3 +648,82 @@ def casefile_verify(
             verification.get("reason", "replay verification failed")
         )
     return response
+
+
+@app.post("/v1/decisions")
+def seal_decision_endpoint(
+    payload: DecisionSealRequest,
+    auth: AuthContext = Depends(authenticate_api_key),
+):
+    try:
+        return decisions_service.seal(auth.tenant_id, payload.model_dump())
+    except decisions_service.InvalidRecordId as exc:
+        raise HTTPException(
+            status_code=400,
+            detail={"error": "invalid_record_id", "record_id": str(exc)},
+        ) from exc
+
+
+@app.get("/v1/decisions/{record_id}/verify")
+def verify_decision_endpoint(
+    record_id: str,
+    auth: AuthContext = Depends(authenticate_api_key),
+):
+    try:
+        return decisions_service.verify(auth.tenant_id, record_id)
+    except decisions_service.InvalidRecordId as exc:
+        raise HTTPException(
+            status_code=400,
+            detail={"error": "invalid_record_id", "record_id": str(exc)},
+        ) from exc
+    except decisions_service.DecisionNotFound as exc:
+        raise HTTPException(
+            status_code=404,
+            detail={"error": "record_not_found", "record_id": str(exc)},
+        ) from exc
+
+
+@app.post("/v1/decisions/diff")
+def diff_decisions_endpoint(
+    payload: DecisionDiffRequest,
+    auth: AuthContext = Depends(authenticate_api_key),
+):
+    try:
+        return decisions_service.diff(
+            auth.tenant_id,
+            payload.prior_record_id,
+            payload.current_record_id,
+        )
+    except decisions_service.InvalidRecordId as exc:
+        raise HTTPException(
+            status_code=400,
+            detail={"error": "invalid_record_id", "record_id": str(exc)},
+        ) from exc
+    except decisions_service.DecisionNotFound as exc:
+        raise HTTPException(
+            status_code=404,
+            detail={"error": "record_not_found", "record_id": str(exc)},
+        ) from exc
+
+
+@app.post("/v1/exports")
+def export_decisions_endpoint(
+    payload: ExaminerPackRequest,
+    auth: AuthContext = Depends(authenticate_api_key),
+):
+    try:
+        return decisions_service.export(
+            auth.tenant_id,
+            payload.generated_utc,
+            payload.record_ids,
+        )
+    except decisions_service.InvalidRecordId as exc:
+        raise HTTPException(
+            status_code=400,
+            detail={"error": "invalid_record_id", "record_id": str(exc)},
+        ) from exc
+    except decisions_service.DecisionNotFound as exc:
+        raise HTTPException(
+            status_code=404,
+            detail={"error": "record_not_found", "record_id": str(exc)},
+        ) from exc

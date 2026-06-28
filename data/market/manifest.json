@@ -1,11 +1,12 @@
 {
-  "domain": "market_realtime",
-  "version": "1.0",
-  "entries": [
-    {
-      "ref": "DJI-2026-03-19",
-      "file": "data/market/dji_20260319.json",
-      "sha256": ""
+  "dataset": "market_realtime_sample",
+  "schema_version": "1.0",
+  "records": {
+    "DJI-2026-03-19": {
+      "file": "dji_20260319.json",
+      "sha256": "600f5b00f5172d52aff7cea31c3ce9203eb38f339cc11c9a49678455ab30ff6c",
+      "record_type": "index_snapshot",
+      "validated": true
     }
-  ]
+  }
 }

@@ -84,6 +84,16 @@ The v5a full sweep also has a dedicated importer:
 
 - `scripts/import_cuc_v5a_64_case_model_sweep.py`
 
+## Deterministic Multi-Domain Engine
+
+The `deterministic-ai` CLI runs the core extraction engine across five
+registered domains (`biblical_text`, `credit_scoring`, `clinical_records`,
+`legal_contract`, `market_realtime`). Each `--input-ref` is resolved against a
+domain manifest and rejected unless the input bytes match the recorded SHA-256,
+so every output bundle is tied to a verified input.
+
+- usage and per-domain commands: `docs/DETERMINISTIC_AI_CLI.md`
+
 ## Integrity and Verification
 
 Trust-loop entry points:

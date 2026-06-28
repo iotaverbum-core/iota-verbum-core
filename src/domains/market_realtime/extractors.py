@@ -689,27 +689,42 @@ class MarketManifestBuilder:
         """
         Build a manifest dict from a list of entries.
 
+        The output uses the canonical ``records`` shape consumed by
+        ``core.manifest.resolve_input`` — identical to the scripture, credit,
+        clinical, and legal manifests — so the market domain resolves through
+        the same integrity-checked path as every other domain.
+
         Each entry:
             ref:      the input reference (e.g. "DJI-2026-03-19")
-            file:     path to the data file
+            file:     data file name, relative to the manifest directory
             sha256:   SHA-256 of the data file bytes
         """
+        records: dict[str, dict] = {}
+        for entry in entries:
+            ref = entry["ref"]
+            records[ref] = {
+                key: value for key, value in entry.items() if key != "ref"
+            }
         return {
-            "domain":  "market_realtime",
-            "version": "1.0",
-            "entries": entries,
+            "dataset": "market_realtime_sample",
+            "schema_version": "1.0",
+            "records": records,
         }
 
     @staticmethod
     def entry_from_file(ref: str, file_path: str) -> dict:
-        """Build a manifest entry from a file path."""
+        """Build a manifest entry from a file path.
+
+        ``file`` is stored as a bare filename so ``resolve_input`` resolves it
+        relative to the manifest directory, matching the other domains.
+        """
         from pathlib import Path
-        path  = Path(file_path)
-        data  = path.read_bytes()
+        path = Path(file_path)
+        data = path.read_bytes()
         sha256 = hashlib.sha256(data).hexdigest()
         return {
-            "ref":    ref,
-            "file":   file_path,
+            "ref": ref,
+            "file": path.name,
             "sha256": sha256,
         }
 

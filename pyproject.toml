@@ -55,6 +55,7 @@ include = ["core", "core.*", "domains", "domains.*", "iota_verbum_api", "iota_ve
 core = ["schemas/*.json", "rulesets/*.json"]
 domains = ["**/*.json"]
 iota_verbum_api = ["static/**/*"]
+provenant = ["sample_data/*.json"]
 
 [tool.ruff]
 cache-dir = ".ruff_cache"
@@ -85,6 +86,7 @@ select = ["E", "F", "I"]
 "scripts/import_cuc_v4_candidate_five_model_sweep.py" = ["E501", "F401", "I001"]
 "scripts/import_cuc_v5a_64_case_model_sweep.py" = ["E501", "F541", "I001"]
 "src/core/world/forward_projection.py" = ["E501", "F401", "I001"]
+"src/provenant/report.py" = ["E501"]
 "src/domains/market_realtime/extractors.py" = ["E501", "F401", "F841", "I001"]
 "tests/test_build_cuc_v5a_candidate_task.py" = ["E501"]
 "tests/test_cuc_v4_candidate_notebook_stub.py" = ["E501"]

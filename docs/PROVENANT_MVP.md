@@ -9,6 +9,39 @@ Target customer: risk/compliance + ML leaders at digital lenders running ML/LLMs
 in underwriting who must defend specific decisions to bank partners, examiners,
 and the CFPB.
 
+## Phase 1 demo (one command)
+
+The fastest way to see the product — and the artifact to show on a sales call:
+
+```bash
+./scripts/provenant_demo.sh
+# or: PYTHONPATH=src python -m provenant.demo
+```
+
+It runs the full story on a **bundled sample lending portfolio**
+(`src/provenant/sample_data/portfolio.json`): a lender comparing its live
+underwriting model (v1) against a candidate model (v2) before promotion. The
+demo seals all 12 decisions, verifies them, diffs v1→v2 per applicant, checks
+compliance, and writes a customer-facing report to `outputs/provenant_demo/`.
+
+**What it finds (planted in the sample data):**
+
+- `12` decisions sealed and **all independently verifiable** (chain of custody).
+- `1` **compliance gap** — a denial issued with no ECOA / Reg B reason codes.
+- `2` **silent regressions** — applicants whose outcome flipped (DENY↔APPROVE)
+  between model versions, which a metrics dashboard would miss.
+
+**Artifacts produced:**
+
+| File | Audience | Purpose |
+| --- | --- | --- |
+| `audit_report.html` | risk/compliance lead | shareable, plain-language report |
+| `audit_report.md` | same | copy/paste into a memo |
+| `examiner_pack.json` | auditor / machine | deterministic, hash-stamped evidence |
+
+The run is deterministic: the same portfolio always produces byte-identical
+artifacts and the same `pack_sha256`.
+
 ## The four primitives
 
 | Command | What it does | Customer value |

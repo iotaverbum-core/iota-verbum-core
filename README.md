@@ -94,6 +94,24 @@ so every output bundle is tied to a verified input.
 
 - usage and per-domain commands: `docs/DETERMINISTIC_AI_CLI.md`
 
+## Provenant — verifiable AI decision records (product MVP)
+
+Provenant is a product layer on the deterministic engine that turns each
+AI-assisted decision (e.g. an underwriting outcome) into a tamper-evident,
+reproducible record, detects decisions that silently flipped between model
+versions, and renders a customer-facing audit report.
+
+Run the one-command demo on bundled sample data:
+
+```bash
+./scripts/provenant_demo.sh
+```
+
+It writes `outputs/provenant_demo/audit_report.html` (open in a browser) plus a
+deterministic `examiner_pack.json`.
+
+- product + CLI + API: `docs/PROVENANT_MVP.md`
+
 ## Integrity and Verification
 
 Trust-loop entry points:

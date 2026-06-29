@@ -20,6 +20,7 @@ class Settings:
     )
     retention_days_audit_log: int = int(os.getenv("RETENTION_DAYS_AUDIT_LOG", "2555"))
     rate_limit_per_minute: int = int(os.getenv("RATE_LIMIT_PER_MINUTE", "60"))
+    provenant_storage_dir: str = os.getenv("PROVENANT_STORAGE_DIR", "outputs/provenant")
 
     @property
     def api_keys(self) -> dict[str, str]:
